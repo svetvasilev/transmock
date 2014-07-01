@@ -19,14 +19,11 @@ namespace TransMock.Wcf.Adapter
         // Scheme associated with the adapter
         internal const string SCHEME = "mock";
         // Namespace for the proxy that will be generated from the adapter schema
-        internal const string SERVICENAMESPACE = "http://www.transmock.com/Adapter/BizTalk";
+        internal const string SERVICENAMESPACE = "http://www.transmock.com/Wcf/Adapter";
         // Initializes the AdapterEnvironmentSettings class
         private static AdapterEnvironmentSettings environmentSettings = new AdapterEnvironmentSettings();
 
         #region Custom Generated Fields
-
-        //private string uRI;
-
 
         private string encoding;
 
@@ -38,7 +35,7 @@ namespace TransMock.Wcf.Adapter
         #region  Constructor
 
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapter class
+        /// Initializes a new instance of the MockAdapter class
         /// </summary>
         public MockAdapter()
             : base(environmentSettings)
@@ -47,12 +44,11 @@ namespace TransMock.Wcf.Adapter
         }
 
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapter class with a binding
+        /// Initializes a new instance of the MockAdapter class with a binding
         /// </summary>
         public MockAdapter(MockAdapter binding)
             : base(binding)
-        {
-            //this.URI = binding.URI;
+        {   
             this.Encoding = binding.Encoding;
             this.PromotedProperties = binding.PromotedProperties;
         }
@@ -60,21 +56,6 @@ namespace TransMock.Wcf.Adapter
         #endregion Constructor
 
         #region Custom Generated Properties
-
-        //[System.Configuration.ConfigurationProperty("uRI", DefaultValue = "mock://")]
-        //public string URI
-        //{
-        //    get
-        //    {
-        //        return this.uRI;
-        //    }
-        //    set
-        //    {
-        //        this.uRI = value;
-        //    }
-        //}
-
-
 
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding

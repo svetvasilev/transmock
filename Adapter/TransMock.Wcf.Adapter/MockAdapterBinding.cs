@@ -39,11 +39,7 @@ namespace TransMock.Wcf.Adapter
         /// Applies the current configuration to the WCFMockAdapterBindingCollectionElement
         /// </summary>
         private void ApplyConfiguration(string configurationName)
-        {
-            
-            //
-            // TODO : replace the <The config name of your adapter> below with the configuration name of your adapter
-            //
+        {   
             BindingsSection bindingsSection = (BindingsSection)System.Configuration.ConfigurationManager.GetSection("system.serviceModel/bindings");
             MockAdapterBindingCollectionElement bindingCollectionElement = (MockAdapterBindingCollectionElement)bindingsSection["mockBinding"];
             MockAdapterBindingElement element = bindingCollectionElement.Bindings[configurationName];
@@ -65,9 +61,7 @@ namespace TransMock.Wcf.Adapter
 
         #endregion Private Fields
 
-        #region Custom Generated Fields
-
-        //private string uRI;
+        #region Custom Generated Fields        
 
         private string host;
 
@@ -141,19 +135,6 @@ namespace TransMock.Wcf.Adapter
         #endregion Public Properties
 
         #region Custom Generated Properties
-
-        //[System.Configuration.ConfigurationProperty("URI", DefaultValue = "mock://")]
-        //public string URI
-        //{
-        //    get
-        //    {
-        //        return this.uRI;
-        //    }
-        //    set
-        //    {
-        //        this.uRI = value;
-        //    }
-        //}
 
         [System.Configuration.ConfigurationProperty("Host", DefaultValue = "localhost")]
         public string Host
@@ -233,7 +214,7 @@ namespace TransMock.Wcf.Adapter
             {
                 if (binding == null)
                     binding = new MockAdapter();
-                //binding.URI = this.URI;
+                
                 binding.Encoding = this.Encoding;
                 binding.PromotedProperties = this.PromotedProperties;
                 return binding;

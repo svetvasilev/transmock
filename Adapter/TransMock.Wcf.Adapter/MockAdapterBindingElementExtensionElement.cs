@@ -49,21 +49,6 @@ namespace TransMock.Wcf.Adapter
 
         #region Custom Generated Properties
 
-        [System.Configuration.ConfigurationProperty("uRI", DefaultValue = "mock://")]
-        public string URI
-        {
-            get
-            {
-                return ((string)(base["URI"]));
-            }
-            set
-            {
-                base["URI"] = value;
-            }
-        }
-
-
-
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding
         {
@@ -113,9 +98,10 @@ namespace TransMock.Wcf.Adapter
             get
             {
                 ConfigurationPropertyCollection configProperties = base.Properties;
-                configProperties.Add(new ConfigurationProperty("URI", typeof(System.String), "mock://", null, null, ConfigurationPropertyOptions.None));
+                
                 configProperties.Add(new ConfigurationProperty("Encoding", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
                 configProperties.Add(new ConfigurationProperty("PromotedProperties", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
+
                 return configProperties;
             }
         }
@@ -128,6 +114,7 @@ namespace TransMock.Wcf.Adapter
         {
             MockAdapter adapter = new MockAdapter();
             this.ApplyConfiguration(adapter);
+
             return adapter;
         }
 
@@ -139,7 +126,7 @@ namespace TransMock.Wcf.Adapter
         {
             base.ApplyConfiguration(bindingElement);
             MockAdapter adapterBinding = ((MockAdapter)(bindingElement));
-            //adapterBinding.URI = (System.String)this["URI"];
+            
             adapterBinding.Encoding = (System.String)this["Encoding"];
             adapterBinding.PromotedProperties = (System.String)this["PromotedProperties"];
         }
@@ -152,7 +139,7 @@ namespace TransMock.Wcf.Adapter
         {
             base.InitializeFrom(bindingElement);
             MockAdapter adapterBinding = ((MockAdapter)(bindingElement));
-            //this["URI"] = adapterBinding.URI;
+            
             this["Encoding"] = adapterBinding.Encoding;
             this["PromotedProperties"] = adapterBinding.PromotedProperties;
         }
@@ -165,7 +152,7 @@ namespace TransMock.Wcf.Adapter
         {
             base.CopyFrom(from);
             MockAdapterBindingElementExtensionElement adapterBinding = ((MockAdapterBindingElementExtensionElement)(from));
-            //this["URI"] = adapterBinding.URI;
+            
             this["Encoding"] = adapterBinding.Encoding;
             this["PromotedProperties"] = adapterBinding.PromotedProperties;
         }

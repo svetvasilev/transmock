@@ -45,21 +45,6 @@ namespace TransMock.Wcf.Adapter
 
         #region Custom Generated Properties
 
-        [System.Configuration.ConfigurationProperty("uRI", DefaultValue = "mock://")]
-        public string URI
-        {
-            get
-            {
-                return ((string)(base["URI"]));
-            }
-            set
-            {
-                base["URI"] = value;
-            }
-        }
-
-
-
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding
         {
@@ -114,7 +99,7 @@ namespace TransMock.Wcf.Adapter
         {
             base.InitializeFrom(binding);
             MockAdapterBinding adapterBinding = (MockAdapterBinding)binding;
-            //this["URI"] = adapterBinding.URI;
+            
             this["Encoding"] = adapterBinding.Encoding;
             this["PromotedProperties"] = adapterBinding.PromotedProperties;
         }
@@ -128,7 +113,7 @@ namespace TransMock.Wcf.Adapter
                 throw new ArgumentNullException("binding");
 
             MockAdapterBinding adapterBinding = (MockAdapterBinding)binding;
-            //adapterBinding.URI = (System.String)this["URI"];
+            
             adapterBinding.Encoding = (System.String)this["Encoding"];
             adapterBinding.PromotedProperties = (System.String)this["PromotedProperties"];
         }
@@ -143,7 +128,7 @@ namespace TransMock.Wcf.Adapter
                 if (this.properties == null)
                 {
                     ConfigurationPropertyCollection configProperties = base.Properties;
-                    //configProperties.Add(new ConfigurationProperty("URI", typeof(System.String), "mock://", null, null, ConfigurationPropertyOptions.None));
+                    
                     configProperties.Add(new ConfigurationProperty("Encoding", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("PromotedProperties", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
                     this.properties = configProperties;
