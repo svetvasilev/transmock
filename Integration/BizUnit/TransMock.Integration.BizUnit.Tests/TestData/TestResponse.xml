@@ -1,0 +1,4 @@
+﻿<SomeTestResponse>
+	<Element1 attribute1="attributeValue"></Element1>
+	<Element2>Some element content</Element2>
+</SomeTestResponse>
