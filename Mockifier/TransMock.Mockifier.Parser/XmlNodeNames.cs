@@ -6,7 +6,7 @@ using System.Text;
 namespace TransMock.Mockifier.Parser
 {
     /// <summary>
-    /// Contains the names of the various XML node names as constances
+    /// Contains the names of the various XML node names as constants
     /// </summary>
     public static class XmlNodeNames
     {

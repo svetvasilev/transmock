@@ -83,7 +83,6 @@ namespace TransMock.Deploy.CustomActions
 
         /// <summary>
         /// Registers the adapter with the WCF configuration
-        /// NOTE: The 
         /// </summary>
         public void AddMachineConfigurationInfo()
         {
