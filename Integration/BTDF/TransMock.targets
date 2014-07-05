@@ -1,0 +1,16 @@
+﻿<!--
+This targets file overrides the CustomDeployTarget target from BTDF in order to 
+execute the Mockifier.exe which will mock the marked endpoints
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Installer">
+	<PropertyGroup>
+		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">C:\Program Files\TransMock</TransMockHomeDir>
+		<!--<TransMockHomeDir Condition="'$(TransMockHomeDir)' == '' And '$(Is64bitOS)' == 'false'">&quot;C:\Program Files\TransMock&quot;</TransMockHomeDir>
+		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == '' And '$(Is64bitOS)' == 'true'">&quot;C:\Program Files (x86)\TransMock&quot;</TransMockHomeDir>-->		
+	</PropertyGroup>
+	<Target Name="CustomDeployTarget">
+		<Message Text="------ Extension point for TransMock. Invoking the Mockifier -----" />
+		<Exec Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;" ContinueOnError="false"></Exec>
+		<Message Text="------ Mockifier successfully invoked -------" />
+	</Target>	
+</Project>

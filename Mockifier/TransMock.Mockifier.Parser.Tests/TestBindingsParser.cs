@@ -199,6 +199,113 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        public void TestInlineParsing_SimpleMock_ClassOutputSpecified()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.xml", "TestApplication.BindingInfo_parsed.xml", ".");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants().Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                string sendPortName = sendPortElement.Attribute("Name").Value;
+                bool isTwoWay = bool.Parse(sendPortElement.Attribute("IsTwoWay").Value);
+                //fetch the primary transport element
+                var primaryTransportElement = sendPortElement.Element("PrimaryTransport");
+                //assert the address
+                string address = primaryTransportElement.Element("Address").Value;
+
+                Assert.AreEqual(string.Format("mock://localhost/{0}", sendPortName), address, "The address is not correct");
+                //Assert the transport type settings
+                var transportTypeElement = primaryTransportElement.Element("TransportType");
+
+                Assert.AreEqual(transportTypeElement.Attribute("Name").Value, "WCF-Custom", "Transport type name is not correct");
+                Assert.AreEqual(transportTypeElement.Attribute("Capabilities").Value, "907", "Transport type capabilities is not correct");
+                Assert.AreEqual(transportTypeElement.Attribute("ConfigurationClsid").Value, "af081f69-38ca-4d5b-87df-f0344b12557a", "Transport type configuraiton is not correct");
+
+                //Assert the send handler transport type settings
+                var handlerTransportTypeElement = primaryTransportElement.Descendants()
+                    .Where(e => e.Name == "TransportType" && e.Parent.Name == "SendHandler").First();
+
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("Name").Value, "WCF-Custom", "Transport type name is not correct");
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("Capabilities").Value, "907", "Transport type capabilities is not correct");
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("ConfigurationClsid").Value, "af081f69-38ca-4d5b-87df-f0344b12557a", "Transport type configuraiton is not correct");
+
+                //Assert the transport type data
+                var transportData = primaryTransportElement.Element("TransportTypeData");
+                if (isTwoWay)
+                {
+                    Assert.AreEqual(transportData.Value, SendPortMockTwoWayTransportData.Replace("{Encoding}", "UTF-8"), "Transport type data is not correct");
+                }
+                else
+                    Assert.AreEqual(transportData.Value, SendPortMockOneWayTransportData.Replace("{Encoding}", "UTF-8"), "Transport type data is not correct");
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants().Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                string receiveLocationName = receiveLocationElement.Attribute("Name").Value;
+                bool isTwoWay = bool.Parse(receiveLocationElement.Parent.Parent.Attribute("IsTwoWay").Value);
+                //fetch the primary transport element
+                // var receiveLocationTransportElement = receiveLocationElement.Element("ReceiveLocationTransportType");
+                //assert the address
+                string address = receiveLocationElement.Element("Address").Value;
+
+                Assert.AreEqual(string.Format("mock://localhost/{0}", receiveLocationName), address, "The address is not correct");
+                //Assert the transport type settings
+                var transportTypeElement = receiveLocationElement.Element("ReceiveLocationTransportType");
+
+                Assert.AreEqual(transportTypeElement.Attribute("Name").Value, "WCF-Custom", "Transport type name is not correct");
+                Assert.AreEqual(transportTypeElement.Attribute("Capabilities").Value, "907", "Transport type capabilities is not correct");
+                Assert.AreEqual(transportTypeElement.Attribute("ConfigurationClsid").Value, "af081f69-38ca-4d5b-87df-f0344b12557a", "Transport type configuraiton is not correct");
+
+                //Assert the receive handler transport type settings
+                var handlerTransportTypeElement = receiveLocationElement.Descendants()
+                    .Where(e => e.Name == "TransportType" && e.Parent.Name == "ReceiveHandler").First();
+
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("Name").Value, "WCF-Custom", "Transport type name is not correct");
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("Capabilities").Value, "907", "Transport type capabilities is not correct");
+                Assert.AreEqual(handlerTransportTypeElement.Attribute("ConfigurationClsid").Value, "af081f69-38ca-4d5b-87df-f0344b12557a", "Transport type configuraiton is not correct");
+                //Assert the transport type data
+                var transportData = receiveLocationElement.Element("ReceiveLocationTransportTypeData");
+                string expectedTransportData = null;
+                if (isTwoWay)
+                {
+                    expectedTransportData = ReceiveLocationMockTwoWayTransportData
+                        .Replace("{Encoding}", "UTF-8")
+                        .Replace("{PromotedProperties}", string.Empty);
+
+                    Assert.AreEqual(expectedTransportData, transportData.Value, "Transport type data is not correct");
+                }
+                else
+                {
+                    expectedTransportData = ReceiveLocationMockOneWayTransportData
+                        .Replace("{Encoding}", "UTF-8")
+                        .Replace("{PromotedProperties}", string.Empty);
+
+                    Assert.AreEqual(expectedTransportData, transportData.Value, "Transport type data is not correct");
+                }
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContents, classContents, "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
         public void TestInlineParsing_SimpleMock_MockedFileWriter()
         {
             //Creating a mock for the file writer

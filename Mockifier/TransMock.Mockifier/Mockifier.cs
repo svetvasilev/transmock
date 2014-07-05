@@ -33,21 +33,56 @@ namespace TransMock.Mockifier
     {
         static void Main(string[] args)
         {
+            Console.Out.WriteLine("TransMock Mockifier tool starting. Copyright 2014, Svetoslav Vasilev");
             try
             {
                 var parsedArguments = new MockifierArguments();
 
                 if (CommandLine.Parser.Default.ParseArguments(args, parsedArguments))
                 {
+                    Console.Out.WriteLine("About to execute with the following parameters:");                    
                     //Parsing the arguments was successfull, parsing the bindings file
                     BizTalkBindingsParser bindingsParser = new BizTalkBindingsParser();
 
-                    if (string.IsNullOrEmpty(parsedArguments.OutputBindings))
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings, parsedArguments.InputBindings);//Saving to the same file as the input
-                    else
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings, parsedArguments.OutputBindings);
+                    if (string.IsNullOrEmpty(parsedArguments.OutputBindings) && string.IsNullOrEmpty(parsedArguments.OutputClass))
+                    {
+                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
 
-                    Console.Out.WriteLine("Bindings mockified successfully!");
+                        bindingsParser.ParseBindings(parsedArguments.InputBindings, 
+                            parsedArguments.InputBindings);//Saving to the same file as the input
+                    }
+                    else if (!string.IsNullOrEmpty(parsedArguments.OutputBindings) && string.IsNullOrEmpty(parsedArguments.OutputClass))
+                    {
+                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                        Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
+
+                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            parsedArguments.OutputBindings);
+                    }
+                    else if (string.IsNullOrEmpty(parsedArguments.OutputBindings) && !string.IsNullOrEmpty(parsedArguments.OutputClass))
+                    {
+                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                        Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+
+                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            parsedArguments.InputBindings, parsedArguments.OutputClass);
+                    }
+                    else if (!string.IsNullOrEmpty(parsedArguments.OutputBindings) && !string.IsNullOrEmpty(parsedArguments.OutputClass))
+                    {
+                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                        Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
+                        Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+
+                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            parsedArguments.OutputBindings,
+                            parsedArguments.OutputClass);
+                    }
+                    else
+                    {
+                        Console.Out.WriteLine("Mockifying with mock map is still not supported!");
+                    }
+
+                    Console.Out.WriteLine("Bindings mockified successfully!Exiting...");
                 }
             }
             catch (Exception ex)
@@ -66,11 +101,15 @@ namespace TransMock.Mockifier
         public string InputBindings { get; set; }
 
         [Option('o', "output", Required = false,
-            HelpText = "Path to the processed bindings file.")]
+            HelpText = "The path to where the processed bindings file will be stored.Optional.")]
         public string OutputBindings { get; set; }
 
+        [Option('c', "classOutput", Required = false,
+            HelpText = "The path to where the mocked URL helper class file will be stored. Optional.")]
+        public string OutputClass { get; set; }
+
         [Option('m', "mockmap", Required = false,
-            HelpText = "Path to the mock mapping file.")]
+            HelpText = "The path to the mock mapping file.")]
         public string MockMap { get; set; }
 
         [Option('v', "verbose", DefaultValue = false,

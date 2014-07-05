@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BindingInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Assembly="Microsoft.BizTalk.Deployment, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Version="3.5.1.0" BindingStatus="NoBindings" BoundEndpoints="0" TotalEndpoints="0">
+  <Timestamp>2014-03-07T23:06:14.3949069+01:00</Timestamp>
+  <ModuleRefCollection>
+    <ModuleRef Name="[Application:TestApplication]" Version="" Culture="" PublicKeyToken="" FullName="[Application:TestApplication], Version=, Culture=, PublicKeyToken=">
+      <Services />
+      <TrackedSchemas />
+    </ModuleRef>
+  </ModuleRefCollection>
+  <SendPortCollection>
+    <SendPort Name="OneWaySendFILE" IsStatic="true" IsTwoWay="false" BindingOption="0">
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <PrimaryTransport>
+        <!-- <Mock />-->
+        <Address>mock://localhost/OneWaySendFILE</Address>
+        <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+        <TransportTypeData>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="UTF-8" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8" /&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Xml&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;/CustomProps&amp;gt;</TransportTypeData>
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>true</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler Name="BizTalkServerApplication" HostTrusted="false">
+          <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+        </SendHandler>
+      </PrimaryTransport>
+      <SecondaryTransport>
+        <Address />
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>false</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler xsi:nil="true" />
+      </SecondaryTransport>
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
+    <SendPort Name="TwoWayTestSendWCF" IsStatic="true" IsTwoWay="true" BindingOption="0">
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <PrimaryTransport>
+        <!-- <Mock />-->
+        <Address>mock://localhost/TwoWayTestSendWCF</Address>
+        <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+        <TransportTypeData>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="UTF-8" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;/CustomProps&amp;gt;</TransportTypeData>
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>true</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler Name="BizTalkServerApplication" HostTrusted="false">
+          <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+        </SendHandler>
+      </PrimaryTransport>
+      <SecondaryTransport>
+        <Address />
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>false</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler xsi:nil="true" />
+      </SecondaryTransport>
+      <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <InboundTransforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
+  </SendPortCollection>
+  <DistributionListCollection />
+  <ReceivePortCollection>
+    <ReceivePort Name="OneWayTestReceive" IsTwoWay="false" BindingOption="0">
+      <Description xsi:nil="true" />
+      <ReceiveLocations>
+        <ReceiveLocation Name="OneWayReceive_FILE">
+          <!-- <Mock />-->
+          <Description xsi:nil="true" />
+          <Address>mock://localhost/OneWayReceive_FILE</Address>
+          <PublicAddress />
+          <Primary>true</Primary>
+          <ReceiveLocationServiceWindowEnabled>false</ReceiveLocationServiceWindowEnabled>
+          <ReceiveLocationFromTime>2014-02-18T23:00:00</ReceiveLocationFromTime>
+          <ReceiveLocationToTime>2014-02-19T22:59:59</ReceiveLocationToTime>
+          <ReceiveLocationStartDateEnabled>false</ReceiveLocationStartDateEnabled>
+          <ReceiveLocationStartDate>2014-02-19T00:00:00</ReceiveLocationStartDate>
+          <ReceiveLocationEndDateEnabled>false</ReceiveLocationEndDateEnabled>
+          <ReceiveLocationEndDate>2014-02-20T00:00:00</ReceiveLocationEndDate>
+          <ReceiveLocationTransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+          <ReceiveLocationTransportTypeData>&amp;lt;CustomProps&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="UTF-8" PromotedProperties="" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;/CustomProps&amp;gt;</ReceiveLocationTransportTypeData>
+          <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+          <ReceivePipelineData xsi:nil="true" />
+          <SendPipeline xsi:nil="true" />
+          <SendPipelineData xsi:nil="true" />
+          <Enable>false</Enable>
+          <ReceiveHandler Name="BizTalkServerApplication" HostTrusted="false">
+            <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+          </ReceiveHandler>
+        </ReceiveLocation>
+      </ReceiveLocations>
+      <SendPipelineData xsi:nil="true" />
+      <Authentication>0</Authentication>
+      <Tracking>0</Tracking>
+      <Transforms />
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </ReceivePort>
+    <ReceivePort Name="TwoWayTestReceive" IsTwoWay="true" BindingOption="0">
+      <Description xsi:nil="true" />
+      <ReceiveLocations>
+        <ReceiveLocation Name="TwoWayTestReceive_WCF">
+          <!-- <Mock />-->
+          <Description xsi:nil="true" />
+          <Address>mock://localhost/TwoWayTestReceive_WCF</Address>
+          <PublicAddress />
+          <Primary>true</Primary>
+          <ReceiveLocationServiceWindowEnabled>false</ReceiveLocationServiceWindowEnabled>
+          <ReceiveLocationFromTime>2014-02-18T23:00:00</ReceiveLocationFromTime>
+          <ReceiveLocationToTime>2014-02-19T22:59:59</ReceiveLocationToTime>
+          <ReceiveLocationStartDateEnabled>false</ReceiveLocationStartDateEnabled>
+          <ReceiveLocationStartDate>2014-02-19T00:00:00</ReceiveLocationStartDate>
+          <ReceiveLocationEndDateEnabled>false</ReceiveLocationEndDateEnabled>
+          <ReceiveLocationEndDate>2014-02-20T00:00:00</ReceiveLocationEndDate>
+          <ReceiveLocationTransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+          <ReceiveLocationTransportTypeData>&amp;lt;CustomProps&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="UTF-8" PromotedProperties="" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;/CustomProps&amp;gt;</ReceiveLocationTransportTypeData>
+          <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+          <ReceivePipelineData xsi:nil="true" />
+          <SendPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+          <SendPipelineData xsi:nil="true" />
+          <Enable>false</Enable>
+          <ReceiveHandler Name="BizTalkServerIsolatedHost" HostTrusted="false">
+            <TransportType Name="WCF-Custom" Capabilities="907" ConfigurationClsid="af081f69-38ca-4d5b-87df-f0344b12557a" />
+          </ReceiveHandler>
+        </ReceiveLocation>
+      </ReceiveLocations>
+      <SendPipelineData xsi:nil="true" />
+      <Authentication>0</Authentication>
+      <Tracking>0</Tracking>
+      <Transforms />
+      <OutboundTransforms />
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </ReceivePort>
+  </ReceivePortCollection>
+  <PartyCollection xsi:nil="true" />
+</BindingInfo>

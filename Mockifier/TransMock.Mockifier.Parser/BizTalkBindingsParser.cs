@@ -26,6 +26,9 @@ using System.IO;
 
 namespace TransMock.Mockifier.Parser
 {
+    /// <summary>
+    /// This class implements the logic for parsing bindings files by replacing the tagged with the  <![CDATA[<Mock />]]> tag receive location's and send port's transports with the mock adapter
+    /// </summary>
     public class BizTalkBindingsParser
     {
         private const string SendPortMockOneWayTransportData = "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\" /&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;";
@@ -77,10 +80,25 @@ namespace TransMock.Mockifier.Parser
             resourceReader = new ResourceReader();
             endpointMockUrls = new Dictionary<string, string>(5);
         }
-
+        /// <summary>
+        /// Parses bindings for mocked endpoints when the source bintings path and the output bindings path are defined
+        /// </summary>
+        /// <param name="srcBindingsPath">The source path to the bindings file</param>
+        /// <param name="outBindingsPath">The output path to the bindings file</param>
         public void ParseBindings(string srcBindingsPath, string outBindingsPath)
         {
-            XDocument xDoc = XDocument.Load(srcBindingsPath);           
+            ParseBindings(srcBindingsPath, outBindingsPath, null);
+        }
+
+        /// <summary>
+        /// Parses bindings for mocked endpoints when the source bintings path, the output bindings path and the output class path are defined
+        /// </summary>
+        /// <param name="srcBindingsPath">The source path to the bindings file</param>
+        /// <param name="outBindingsPath">The output path to the bindings file</param>
+        /// <param name="outClassPath">The output path to the URL helper class file</param>
+        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string outClassPath)
+        {
+            XDocument xDoc = XDocument.Load(srcBindingsPath);
 
             //Mock the send ports
             ParseSendPorts(xDoc.Root);
@@ -89,7 +107,7 @@ namespace TransMock.Mockifier.Parser
             //Save the parsed bindings file
             xDoc.Save(outBindingsPath);
             //Generate the helper class with the mocked urls.
-            GenerateURLHelperClass(xDoc.Root, outBindingsPath);
+            GenerateURLHelperClass(xDoc.Root, outClassPath ?? outBindingsPath);
         }
 
         private void GenerateURLHelperClass(XElement root, string classFilePath)
@@ -208,10 +226,7 @@ namespace TransMock.Mockifier.Parser
 
             return mockSettings;
         }
-
-        public void ParseBindings(string srcBindingsPath, string mockPointDefPath, string outBindingsPath)
-        {
-        }
+        
 
         private void ReplaceSendTransportConfiguration(XElement transportElement, string operation, string encoding = "UTF-8")
         {
