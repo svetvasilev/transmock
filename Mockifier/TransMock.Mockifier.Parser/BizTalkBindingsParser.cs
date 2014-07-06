@@ -124,19 +124,42 @@ namespace TransMock.Mockifier.Parser
                 .Replace("]",string.Empty);
 
             //Generating the namespace definition
-            string helperClassContent = string.Format("\r\nnamespace {0}.Test {{",
-                applicationName);
+            StringBuilder helperClassBuilder = new StringBuilder(512);
+
+            helperClassBuilder.AppendLine()
+            .AppendFormat("namespace {0}.Test {{",
+                applicationName)//Namespace definition start
             //Generating the class definition
-            helperClassContent += string.Format("\r\n\tpublic static class {0}MockAddresses {{", 
-                applicationName.Replace(".", string.Empty));
+            .AppendLine()
+                .Append("\t").AppendFormat("public static class {0}MockAddresses {{", 
+                    applicationName.Replace(".", string.Empty));//URL helper class definition start
 
             foreach (var mockEndpoint in endpointMockUrls)
             {
-                helperClassContent += string.Format("\r\n\t\tpublic static string {0}\r\n\t\t{{\r\n\t\t\tget\r\n\t\t\t{{\r\n\t\t\t\treturn \"{1}\";\r\n\t\t\t}}\r\n\t\t}}\r\n", 
-                    mockEndpoint.Key, mockEndpoint.Value);                
+                helperClassBuilder.AppendLine();
+                helperClassBuilder.Append("\t\t");
+                helperClassBuilder.AppendFormat("public static string {0}",
+                    mockEndpoint.Key)//Property definition start
+                .AppendLine()
+                    .Append("\t\t").Append("{")
+                    .AppendLine()
+                        .Append("\t\t\t").Append("get")//Getter definition start
+                        .AppendLine()
+                            .Append("\t\t\t").Append("{")//Opening the property getter
+                            .AppendLine()
+                                .Append("\t\t\t\t").AppendFormat("return \"{0}\";",
+                                    mockEndpoint.Value)//The getter body
+                                .AppendLine()                                
+                            .Append("\t\t\t").Append("}")//Closing the property getter
+                        .AppendLine()
+                    .Append("\t\t").Append("}")//Closing the property
+                    .AppendLine();
             }
 
-            helperClassContent += "\r\n\t}\r\n}";
+            helperClassBuilder.AppendLine()
+                .Append("\t").Append("}")//Closing the class
+            .AppendLine()
+            .Append("}");//Closing the namespace
 
             classFilePath = Path.GetDirectoryName(classFilePath);
             classFilePath = Path.Combine(classFilePath, applicationName + "MockAddresses");
@@ -144,7 +167,7 @@ namespace TransMock.Mockifier.Parser
             //Saving the class to a file
             if (fileWriter != null)
             {
-                fileWriter.WriteTextFile(Path.ChangeExtension(classFilePath, "cs"), helperClassContent);
+                fileWriter.WriteTextFile(Path.ChangeExtension(classFilePath, "cs"), helperClassBuilder.ToString());
             }
         }
 
