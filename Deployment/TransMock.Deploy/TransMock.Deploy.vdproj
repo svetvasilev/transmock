@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_181ED7466D1C07B215C60CD9F5D0464F"
+        "MsmKey" = "8:_0836C30A8CE61549F09EC7E10126C9A2"
         "OwnerKey" = "8:_51DEE9B51A2A4DDFA2306CBE3ACDD0EF"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -39,8 +39,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D9EEFCE44FC121A42DCB46A9B7525E4"
-        "OwnerKey" = "8:_51DEE9B51A2A4DDFA2306CBE3ACDD0EF"
+        "MsmKey" = "8:_5739BE568AD24EDDBA61592FC92898C2"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -53,6 +53,12 @@
         {
         "MsmKey" = "8:_8CF372FAE8F0152F25FA259B3F077FDA"
         "OwnerKey" = "8:_B65FBF18D38C4A17BC0A545777DDC269"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ACE3B439DFD4B256983D9F37C676D862"
+        "OwnerKey" = "8:_51DEE9B51A2A4DDFA2306CBE3ACDD0EF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,19 +82,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1B90036A87E34A2F8B09E9AC7850A6CC"
+        "OwnerKey" = "8:_0836C30A8CE61549F09EC7E10126C9A2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_181ED7466D1C07B215C60CD9F5D0464F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D9EEFCE44FC121A42DCB46A9B7525E4"
+        "OwnerKey" = "8:_ACE3B439DFD4B256983D9F37C676D862"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -101,6 +101,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8CF372FAE8F0152F25FA259B3F077FDA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1B90036A87E34A2F8B09E9AC7850A6CC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -236,14 +242,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_181ED7466D1C07B215C60CD9F5D0464F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0836C30A8CE61549F09EC7E10126C9A2"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_181ED7466D1C07B215C60CD9F5D0464F"
+                    "_0836C30A8CE61549F09EC7E10126C9A2"
                     {
                     "Name" = "8:CommandLine.dll"
                     "Attributes" = "3:512"
@@ -267,20 +273,40 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D9EEFCE44FC121A42DCB46A9B7525E4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5739BE568AD24EDDBA61592FC92898C2"
+            {
+            "SourcePath" = "8:..\\..\\Integration\\BTDF\\TransMock.targets"
+            "TargetName" = "8:TransMock.targets"
+            "Tag" = "8:"
+            "Folder" = "8:_1989323447AA48189AD86202914B42D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8CF372FAE8F0152F25FA259B3F077FDA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Transmock.Mockifier.Parser, Version=0.9.5294.36828, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_6D9EEFCE44FC121A42DCB46A9B7525E4"
+                    "_8CF372FAE8F0152F25FA259B3F077FDA"
                     {
-                    "Name" = "8:Transmock.Mockifier.Parser.dll"
+                    "Name" = "8:Microsoft.ServiceModel.Channels.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Transmock.Mockifier.Parser.dll"
+            "SourcePath" = "8:Microsoft.ServiceModel.Channels.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1989323447AA48189AD86202914B42D9"
@@ -298,20 +324,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8CF372FAE8F0152F25FA259B3F077FDA"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ACE3B439DFD4B256983D9F37C676D862"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Transmock.Mockifier.Parser, Version=0.9.5300.34096, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8CF372FAE8F0152F25FA259B3F077FDA"
+                    "_ACE3B439DFD4B256983D9F37C676D862"
                     {
-                    "Name" = "8:Microsoft.ServiceModel.Channels.dll"
+                    "Name" = "8:Transmock.Mockifier.Parser.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:Microsoft.ServiceModel.Channels.dll"
+            "SourcePath" = "8:Transmock.Mockifier.Parser.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1989323447AA48189AD86202914B42D9"
@@ -946,7 +972,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_207E4C0266274D88B44575886593A11A"
             {
-            "SourcePath" = "8:..\\..\\Adapter\\TransMock.Adapter\\obj\\Debug\\TransMock.Adapter.dll"
+            "SourcePath" = "8:..\\..\\Adapter\\TransMock.Wcf.Adapter\\obj\\Debug\\TransMock.Wcf.Adapter.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3B5AA949B21E44BBBC33F482D2D814E0"
@@ -1002,7 +1028,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B65FBF18D38C4A17BC0A545777DDC269"
             {
-            "SourcePath" = "8:..\\..\\Adapter\\TransMock.Adapter\\obj\\Debug\\TransMock.Adapter.dll"
+            "SourcePath" = "8:..\\..\\Adapter\\TransMock.Wcf.Adapter\\obj\\Debug\\TransMock.Wcf.Adapter.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1989323447AA48189AD86202914B42D9"
