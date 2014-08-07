@@ -81,7 +81,7 @@ namespace TransMock.Deploy.CustomActions.Tests
         [TestMethod]
         public void TestInstall()
         {
-            TransMockInstaller.TestAddConfiguration(@"..\..\..\Adapter\TransMock.Adapter\bin\Debug");
+            TransMockInstaller.TestAddConfiguration(@"..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug");
             
             Configuration config = ConfigurationManager.OpenMachineConfiguration();
             Assert.IsNotNull(config , "Machine.Config returned null");
@@ -96,7 +96,7 @@ namespace TransMock.Deploy.CustomActions.Tests
         [TestMethod]        
         public void TestUninstall()
         {
-            TransMockInstaller.TestRemoveConfiguration(@"..\..\..\Adapter\TransMock.Adapter\bin\Debug");
+            TransMockInstaller.TestRemoveConfiguration(@"..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug");
 
             Configuration config = ConfigurationManager.OpenMachineConfiguration();
             Assert.IsNotNull(config, "Machine.Config returned null");

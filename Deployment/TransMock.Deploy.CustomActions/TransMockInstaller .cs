@@ -72,8 +72,26 @@ namespace TransMock.Deploy.CustomActions
                 
                 bindingElementExtensionType = adapterAssembly.GetType(BINDINGELEM_TYPE, true);
                 Debug.Assert(bindingElementExtensionType != null, "Binding element extension type is null.");
+
+                System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
+                Debug.Assert(config != null, "Machine.Config returned null");
+
+                AddMachineConfigurationInfo(config);
+
+                if (System.Environment.Is64BitOperatingSystem)
+                {
+                    //For 64-Bit operating system there should be updated the 32-bit machine config as well
+                    string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
+                        .GetRuntimeDirectory().Replace("Framework64", "Framework");
+
+                    ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
+
+                    config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
+                    Debug.Assert(config != null, "Machine.Config for 32-bit returned null");
+
+                    AddMachineConfigurationInfo(config);
+                }
                 
-                AddMachineConfigurationInfo();
             }
             catch (Exception ex)
             {
@@ -84,10 +102,8 @@ namespace TransMock.Deploy.CustomActions
         /// <summary>
         /// Registers the adapter with the WCF configuration
         /// </summary>
-        public void AddMachineConfigurationInfo()
-        {
-            System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
-            Debug.Assert(config != null, "Machine.Config returned null");
+        public void AddMachineConfigurationInfo(System.Configuration.Configuration config)
+        {   
             // add <client><endpoint>             
             ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
             if (sectionGroup != null)
@@ -152,7 +168,24 @@ namespace TransMock.Deploy.CustomActions
         {
             try
             {
-                RemoveMachineConfigurationInfo();
+                System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
+                Debug.Assert(config != null, "Machine.Config returned null");
+
+                RemoveMachineConfigurationInfo(config);
+
+                if (System.Environment.Is64BitOperatingSystem)
+                {
+                    //For 64-Bit operating system there should be updated the 32-bit machine config as well
+                    string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
+                        .GetRuntimeDirectory().Replace("Framework64", "Framework");
+
+                    ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
+
+                    config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
+                    Debug.Assert(config != null, "Machine.Config for 32-bit returned null");
+
+                    RemoveMachineConfigurationInfo(config);
+                }
             }
             catch (Exception ex)
             {
@@ -163,11 +196,8 @@ namespace TransMock.Deploy.CustomActions
         /// <summary>
         /// Unregisters the adapter with WCF configuration
         /// </summary>
-        public void RemoveMachineConfigurationInfo()
-        {
-            Configuration config = ConfigurationManager.OpenMachineConfiguration();
-            Debug.Assert(config != null, "Machine.Config returned null");
-            
+        public void RemoveMachineConfigurationInfo(System.Configuration.Configuration config)
+        {   
             ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
             ChannelEndpointElement elemToRemove = null;
             
