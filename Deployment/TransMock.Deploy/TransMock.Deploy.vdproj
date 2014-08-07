@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_27F36EB8A662465E8A0F84C3EEDC1E71"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_51DEE9B51A2A4DDFA2306CBE3ACDD0EF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -83,6 +89,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_51DEE9B51A2A4DDFA2306CBE3ACDD0EF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_27F36EB8A662465E8A0F84C3EEDC1E71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -215,7 +227,7 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_661E4122B6B3442D981BB54F02A6149B"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8FCEB887B6494E8C898E59FF79797257"
             {
             "Name" = "8:Primary output from TransMock.Deploy.CustomActions (Active)"
             "Condition" = "8:"
@@ -225,11 +237,11 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_DB1CA9B8_3181_4473_84EA_F7E208C4AD21"
+            "Identifier" = "8:_0603394A_22F2_45D8_9A0C_8FAE47736087"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:/INSTALLDIR=\"[TARGETDIR]\\\""
             }
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_8637CFF290C5428598B836F78B8180A4"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_A84085512CFD4356937B8E02B8DC9B64"
             {
             "Name" = "8:Primary output from TransMock.Deploy.CustomActions (Active)"
             "Condition" = "8:"
@@ -239,7 +251,7 @@
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_4FDC3F4D_A054_4630_BD23_C62385CA6B89"
+            "Identifier" = "8:_1932987F_1F29_47B8_A3D8_110EC62CF60C"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:/INSTALLDIR=\"[TARGETDIR]\\\""
             }
@@ -383,7 +395,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Transmock.Mockifier.Parser, Version=0.9.5304.41109, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Transmock.Mockifier.Parser, Version=0.9.5332.30898, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_ACE3B439DFD4B256983D9F37C676D862"
@@ -406,7 +418,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -478,7 +490,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TransMock"
         "ProductCode" = "8:{57214E1E-1FD2-4D8E-97B3-16FE8F647E45}"
-        "PackageCode" = "8:{9735E063-4F82-43E5-A3E9-9F1E4A376BD9}"
+        "PackageCode" = "8:{73F6AE23-0D7A-49BA-B259-04961F5F7B82}"
         "UpgradeCode" = "8:{40CF4F78-90AC-4345-89C0-2180244F30F7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1048,6 +1060,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{1F8B806E-B479-4DB0-9896-1D29E288A2F2}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_27F36EB8A662465E8A0F84C3EEDC1E71"
+            {
+            "SourcePath" = "8:..\\..\\Mockifier\\TransMock.Mockifier.Parser\\obj\\Debug\\Transmock.Mockifier.Parser.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1989323447AA48189AD86202914B42D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{B3EDC765-D278-420D-8E10-E408ACF1067A}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
