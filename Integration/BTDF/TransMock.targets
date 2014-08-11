@@ -19,8 +19,9 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Installer">
 	<PropertyGroup>
 		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>			
-	</PropertyGroup>
-	<Target Name="CustomDeployTarget">
+	</PropertyGroup>	
+	<!-- Extension point for BTDF. Executed in case deploying to local or shared development environment only -->
+	<Target Name="CustomDeployTarget" Condition="$(SettingsFilePath.EndsWith('Exported_LocalSettings.xml')) Or $(SettingsFilePath.EndsWith('Exported_DevSettings.xml'))">
 		<!-- Redefining the TransMockHomeDir property in case it was not assigned a value -->
 		<!-- In case TransMock was not installed in the default folder the property should be assigned 
 			the actual path in the PropertyGroup section in the BTDFPROJ file -->

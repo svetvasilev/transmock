@@ -11,11 +11,15 @@
     <ProjectName>BizTalkTests</ProjectName>
     <ProjectVersion>1.0</ProjectVersion>
     <IncludeOrchestrations>False</IncludeOrchestrations>
-    <IncludeTransforms>False</IncludeTransforms>
+	<IncludeSchemas>False</IncludeSchemas>
+	<IncludePipelines>False</IncludePipelines>
+	<IncludeTransforms>False</IncludeTransforms>
     <UsingMasterBindings>True</UsingMasterBindings>
     <RequireXmlPreprocessDirectives>False</RequireXmlPreprocessDirectives>
     <ApplyXmlEscape>True</ApplyXmlEscape>
     <IncludeSettingsSpreadsheetInMsi>False</IncludeSettingsSpreadsheetInMsi>
+	  <SkipIISReset>True</SkipIISReset>
+	  <SkipHostInstancesRestart>True</SkipHostInstancesRestart>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Properties related to building an MSI for server deployments -->
@@ -61,13 +65,13 @@
   <!-- Add ItemGroup elements that contain one or more Schemas, Orchestrations, Transforms, etc. elements that describe -->
   <!-- the specific artifacts in your solution that need to be deployed. Use IntelliSense as a guide. -->
   <ItemGroup>
-    <!--<Schemas Include="YourSchemas.dll">
+    <!--<Schemas Include="BizTalkTests.Schemas.dll">
       <LocationPath>..\$(ProjectName)\bin\$(Configuration)</LocationPath>
     </Schemas>-->
   </ItemGroup>
   <!-- !!! TODO !!! -->
   <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
-  <Import Project="C:\Projects\TransMock\MAIN\Src\Integration\BTDF\TransMock.targets" />
+	<Import Project="C:\Projects\TransMock\MAIN\Src\Integration\BTDF\TransMock.targets" />
   <!--
     The Deployment Framework automatically packages most files into the server install MSI.
     However, if there are special folders that you need to include in the MSI, you can
@@ -76,4 +80,6 @@
   -->
   <Target Name="CustomRedist">
   </Target>
+	
+
 </Project>
