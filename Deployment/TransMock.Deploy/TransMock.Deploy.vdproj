@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:TransMock.Deploy.x86"
+"ProjectName" = "8:TransMock.Deploy"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -94,43 +94,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_27F36EB8A662465E8A0F84C3EEDC1E71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A1751107818A4CBCA905738E41E87826"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_92FB2FF333F4F805E4872B796C8E101A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B65FBF18D38C4A17BC0A545777DDC269"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0836C30A8CE61549F09EC7E10126C9A2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ACE3B439DFD4B256983D9F37C676D862"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_207E4C0266274D88B44575886593A11A"
+        "OwnerKey" = "8:_1B90036A87E34A2F8B09E9AC7850A6CC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -142,7 +106,43 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1B90036A87E34A2F8B09E9AC7850A6CC"
+        "OwnerKey" = "8:_207E4C0266274D88B44575886593A11A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_ACE3B439DFD4B256983D9F37C676D862"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_0836C30A8CE61549F09EC7E10126C9A2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B65FBF18D38C4A17BC0A545777DDC269"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_92FB2FF333F4F805E4872B796C8E101A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A1751107818A4CBCA905738E41E87826"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_27F36EB8A662465E8A0F84C3EEDC1E71"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -285,11 +285,6 @@
             "AssemblyAsmDisplayName" = "8:CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0836C30A8CE61549F09EC7E10126C9A2"
-                    {
-                    "Name" = "8:CommandLine.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:CommandLine.dll"
             "TargetName" = "8:"
@@ -336,11 +331,6 @@
             "AssemblyAsmDisplayName" = "8:Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8CF372FAE8F0152F25FA259B3F077FDA"
-                    {
-                    "Name" = "8:Microsoft.ServiceModel.Channels.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Microsoft.ServiceModel.Channels.dll"
             "TargetName" = "8:"
@@ -367,11 +357,6 @@
             "AssemblyAsmDisplayName" = "8:BizUnit, Version=4.0.154.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_92FB2FF333F4F805E4872B796C8E101A"
-                    {
-                    "Name" = "8:BizUnit.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:BizUnit.dll"
             "TargetName" = "8:"
@@ -398,11 +383,6 @@
             "AssemblyAsmDisplayName" = "8:Transmock.Mockifier.Parser, Version=0.9.5332.31270, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_ACE3B439DFD4B256983D9F37C676D862"
-                    {
-                    "Name" = "8:Transmock.Mockifier.Parser.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Transmock.Mockifier.Parser.dll"
             "TargetName" = "8:"
@@ -489,15 +469,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TransMock"
-        "ProductCode" = "8:{9AC56897-615F-4556-9C64-B66DFDC34959}"
-        "PackageCode" = "8:{3CB3E832-20F6-47E0-BD41-668A3A920642}"
+        "ProductCode" = "8:{C4B2B4C2-E464-404C-A66B-FC52ED03CDB1}"
+        "PackageCode" = "8:{366428BE-37A9-4664-8F7E-5642CFB241CE}"
         "UpgradeCode" = "8:{40CF4F78-90AC-4345-89C0-2180244F30F7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.9.1"
+        "ProductVersion" = "8:0.9.2"
         "Manufacturer" = "8:TransMock Community"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -80,14 +80,14 @@ namespace TransMock.Deploy.CustomActions
 
                 if (System.Environment.Is64BitOperatingSystem)
                 {
-                    //For 64-Bit operating system there should be updated the 32-bit machine config as well
+                    //For 64-Bit operating system there should be updated the 64-bit machine config as well
                     string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
-                        .GetRuntimeDirectory().Replace("Framework64", "Framework");
+                        .GetRuntimeDirectory().Replace("Framework", "Framework64");
 
                     ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
 
                     config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
-                    Debug.Assert(config != null, "Machine.Config for 32-bit returned null");
+                    Debug.Assert(config != null, "Machine.Config for 64-bit returned null");
 
                     AddMachineConfigurationInfo(config);
                 }
@@ -175,14 +175,14 @@ namespace TransMock.Deploy.CustomActions
 
                 if (System.Environment.Is64BitOperatingSystem)
                 {
-                    //For 64-Bit operating system there should be updated the 32-bit machine config as well
+                    //For 64-Bit operating system there should be updated the 64-bit machine config as well
                     string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
-                        .GetRuntimeDirectory().Replace("Framework64", "Framework");
+                        .GetRuntimeDirectory().Replace("Framework", "Framework64");
 
                     ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
 
                     config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
-                    Debug.Assert(config != null, "Machine.Config for 32-bit returned null");
+                    Debug.Assert(config != null, "Machine.Config for 64-bit returned null");
 
                     RemoveMachineConfigurationInfo(config);
                 }
