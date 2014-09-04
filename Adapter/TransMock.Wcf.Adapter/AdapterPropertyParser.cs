@@ -24,7 +24,7 @@ using System.Xml;
 namespace TransMock.Wcf.Adapter
 {
     /// <summary>
-    /// This class implements the logic for promoting properties in a message context that are related to the original receive adapter that is mocked
+    /// This class implements logic for promoting properties in a message context that are related to the original receive adapter that is mocked
     /// </summary>
     internal class AdapterPropertyParser
     {
