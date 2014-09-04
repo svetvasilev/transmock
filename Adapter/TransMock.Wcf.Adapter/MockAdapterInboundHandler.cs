@@ -45,10 +45,14 @@ namespace TransMock.Wcf.Adapter
         /// </summary>
         private IAsyncResult openAsyncResult;
         /// <summary>
+        /// 
         /// Holds the reference to the async object returned upon beginning read operation from the pipe
         /// </summary>
         private IAsyncResult readAsyncResult;
 
+        /// <summary>
+        /// Dictionary that keeps track of all currently opened named pipe connections
+        /// </summary>
         private Dictionary<int, NamedPipeServerStream> pipeServers;
 
         /// <summary>
@@ -62,6 +66,15 @@ namespace TransMock.Wcf.Adapter
         private object inboundQueueSyncLock = new object();
         private object pipeSyncLock = new object();
 
+        /// <summary>
+        /// Holds the list of promoted properties as configured in the adapter UI
+        /// </summary>
+        private string propertiesToPromote;
+
+        /// <summary>
+        /// The parser for property promotion
+        /// </summary>
+        private AdapterPropertyParser propertyParser;
 
         /// <summary>
         /// Initializes a new instance of the WCFMockAdapterInboundHandler class
@@ -70,7 +83,8 @@ namespace TransMock.Wcf.Adapter
             , MetadataLookup metadataLookup)
             : base(connection, metadataLookup)
         {
-            
+            propertiesToPromote = connection.ConnectionFactory.Adapter.PromotedProperties;
+            propertyParser = new AdapterPropertyParser();
         }
 
         #region IInboundHandler Members
@@ -80,6 +94,8 @@ namespace TransMock.Wcf.Adapter
         /// </summary>
         public void StartListener(string[] actions, TimeSpan timeout)
         {
+            ParsePropertiesForPromotion();
+
             lock (inboundQueueSyncLock)
             {
                 inboundQueue = new Queue<MessageConnectionPair>(3);
@@ -91,8 +107,8 @@ namespace TransMock.Wcf.Adapter
             }
 
             CreatePipeServer();            
-        }        
-
+        }
+        
         /// <summary>
         /// Stop the listener
         /// </summary>
@@ -100,6 +116,8 @@ namespace TransMock.Wcf.Adapter
         {            
             try
             {
+                propertyParser.Clear();
+
                 if (inboundQueue != null)
                 {
                     lock (inboundQueueSyncLock)
@@ -137,8 +155,10 @@ namespace TransMock.Wcf.Adapter
                 }
                 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("StopListener threw an exception: " + ex.Message);
+
                 throw;
             }
             finally
@@ -384,7 +404,9 @@ namespace TransMock.Wcf.Adapter
                     XmlReader xr = XmlReader.Create(new StringReader(msgContents));
 
                     inMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, xr);
-                    
+
+                    //Add any configured properties in the message context
+                    propertyParser.PromoteProperties(inMsg);                    
                     
                     if (inMsg != null)
                     {
@@ -400,6 +422,20 @@ namespace TransMock.Wcf.Adapter
 	        //}
         }
 
+        #endregion
+
+        #region Property promotion methods
+        private void ParsePropertiesForPromotion()
+        {
+            try
+            {
+                propertyParser.Init(propertiesToPromote);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("ParsePropertiesForPromotion threw an exception: " + ex.Message);
+            }
+        }    
         #endregion
     }
 

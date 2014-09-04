@@ -85,6 +85,7 @@
     <Compile Include="MockAdapterTrace.cs" />
     <Compile Include="MockAdapterConnectionUri.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AdapterPropertyParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
