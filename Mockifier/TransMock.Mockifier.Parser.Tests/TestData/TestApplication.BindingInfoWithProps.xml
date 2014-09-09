@@ -142,7 +142,14 @@
       <Description xsi:nil="true" />
       <ReceiveLocations>
         <ReceiveLocation Name="TwoWayTestReceive_WCF">
-		  <!-- <Mock />-->
+			<!-- 
+			<Mock>
+				<PromotedProperties>
+					<Property Name="WCF.FakeAction" Value="TestAction" />
+					<Property Name="WCF.FakeAddress" Value="TestAddress" />
+				</PromotedProperties>
+			</Mock>
+			-->
           <Description xsi:nil="true" />
           <Address>/TestApp/TestService.svc</Address>
           <PublicAddress />

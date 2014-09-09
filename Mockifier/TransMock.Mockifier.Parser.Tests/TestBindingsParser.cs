@@ -495,7 +495,8 @@ namespace TransMock.Mockifier.Parser.Tests
                 {
                     expectedTransportData = ReceiveLocationMockTwoWayTransportData
                         .Replace("{Encoding}", "UTF-8")
-                        .Replace("{PromotedProperties}", string.Empty);
+                        .Replace("{PromotedProperties}", 
+                            "WCF.FakeAction=TestAction;WCF.FakeAddress=TestAddress;");
 
                     Assert.AreEqual(expectedTransportData, transportData.Value, "Transport type data is not correct");
                 }
@@ -503,7 +504,8 @@ namespace TransMock.Mockifier.Parser.Tests
                 {
                     expectedTransportData = ReceiveLocationMockOneWayTransportData
                         .Replace("{Encoding}", "UTF-8")
-                        .Replace("{PromotedProperties}", "FILE.ReceivedFileName=TestFileName.xml;");
+                        .Replace("{PromotedProperties}", 
+                            "FILE.ReceivedFileName=TestFileName.xml;");
 
                     Assert.AreEqual(expectedTransportData, transportData.Value, "Transport type data is not correct");
                 }                
