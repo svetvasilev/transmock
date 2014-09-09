@@ -65,7 +65,10 @@ namespace TransMock.Integration.BizUnit
             _encoding = System.Text.Encoding.GetEncoding(this.Encoding);
             _endpointUri = new Uri(Url);
 
-            SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
+            if (SubSteps == null)
+            {
+                SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
+            }
         }
     }
 }
