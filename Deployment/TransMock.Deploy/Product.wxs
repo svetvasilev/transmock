@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="TransMock.Deploy" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="c1b44889-912b-4098-9ab1-fbb59ef4dca1">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate />
+    <Feature Id="ProductFeature" Title="TransMock.Deploy" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="TransMock.Wcf.Adapter.BTS2013.Binaries" />
+      <ComponentGroupRef Id="TransMock.Deploy.CustomActions.BTS2013.Binaries" />
+      <ComponentGroupRef Id="TransMock.Integration.BizUnit.BTS2013.Binaries" />
+      <ComponentGroupRef Id="TransMock.Mockifier.BTS2013.Binaries" />
+      <ComponentGroupRef Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
+      <ComponentRef Id="comp_281E9E94_6B24_4EC3_A7E1_CCE61C71A3BE" />
+    </Feature>
+  </Product>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="TransMock" />
+      </Directory>
+      <Directory Id="GAC">
+        <Directory Id="TransMock.Wcf.Adapter.BTS2013.Binaries" />
+      </Directory>
+      <Directory Id="dir_4E5997A4_CA30_4F4C_839D_E4EF8EC5BF53" Name="BTS2013">
+        <Component Id="comp_281E9E94_6B24_4EC3_A7E1_CCE61C71A3BE" Guid="2654E770-0051-4545-B123-AE6CF4155F40" Permanent="no" SharedDllRefCount="no" Transitive="no">
+          <File Id="_659B7CC2_B790_4E8C_AAF2_73FA741D3A96" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" Vital="yes" Name="TransMock.targets" Source="..\..\Integration\BTDF\TransMock.targets" KeyPath="yes" />
+        </Component>
+        <Directory Id="TransMock.Deploy.CustomActions.BTS2013.Binaries" />
+        <Directory Id="TransMock.Integration.BizUnit.BTS2013.Binaries" />
+        <Directory Id="TransMock.Mockifier.BTS2013.Binaries" />
+        <Directory Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
+      </Directory>
+    </Directory>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+    </ComponentGroup>
+  </Fragment>
+</Wix>
