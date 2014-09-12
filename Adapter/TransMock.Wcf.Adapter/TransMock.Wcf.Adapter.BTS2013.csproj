@@ -75,6 +75,7 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AdapterPropertyParser.cs" />
     <Compile Include="MockAdapter.cs" />
     <Compile Include="MockAdapterBinding.cs" />
     <Compile Include="MockAdapterBindingElement.cs" />

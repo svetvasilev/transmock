@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BizUnit">
-      <HintPath>..\..\..\..\..\..\..\Program Files\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
