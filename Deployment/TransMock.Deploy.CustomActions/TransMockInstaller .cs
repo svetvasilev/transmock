@@ -8,6 +8,7 @@ using System.Reflection;
 using System.ServiceModel.Configuration;
 using System.Diagnostics;
 
+using TransMock.Deploy.Utils;
 
 namespace TransMock.Deploy.CustomActions
 {
@@ -76,20 +77,24 @@ namespace TransMock.Deploy.CustomActions
                 System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
                 Debug.Assert(config != null, "Machine.Config returned null");
 
-                AddMachineConfigurationInfo(config);
+                MachineConfigManager.AddMachineConfigurationInfo(
+                    this.Context.Parameters[INSTALLER_PARM_INSTALLDIR], config);
 
                 if (System.Environment.Is64BitOperatingSystem)
                 {
                     //For 64-Bit operating system there should be updated the 64-bit machine config as well
-                    string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
+                    string machineConfigPathFor64Bit = System.Runtime.InteropServices.RuntimeEnvironment
                         .GetRuntimeDirectory().Replace("Framework", "Framework64");
 
-                    ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
+                    ConfigurationFileMap configMap = new ConfigurationFileMap(
+                        System.IO.Path.Combine(machineConfigPathFor64Bit,
+                            "Config","machine.config"));
 
                     config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
                     Debug.Assert(config != null, "Machine.Config for 64-bit returned null");
 
-                    AddMachineConfigurationInfo(config);
+                    MachineConfigManager.AddMachineConfigurationInfo(
+                        this.Context.Parameters[INSTALLER_PARM_INSTALLDIR], config);
                 }
                 
             }
@@ -97,66 +102,6 @@ namespace TransMock.Deploy.CustomActions
             {
                 throw new InstallException("Error while adding adapter configuration information. " + ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Registers the adapter with the WCF configuration
-        /// </summary>
-        public void AddMachineConfigurationInfo(System.Configuration.Configuration config)
-        {   
-            // add <client><endpoint>             
-            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
-            if (sectionGroup != null)
-            {
-
-                bool channelEndpointElementExists = false;
-                // this call can throw an exception if there is problem 
-                // loading endpoint configurations - e.g. each endpoint
-                // tries to load binding which in turn loads the DLL
-                ClientSection clientSection = sectionGroup.Client;
-                foreach (ChannelEndpointElement elem in clientSection.Endpoints)
-                {
-                    if (elem.Binding.Equals(BINDING_NAME, StringComparison.OrdinalIgnoreCase) && 
-                        elem.Name.Equals(BINDING_SCHEME, StringComparison.OrdinalIgnoreCase) && 
-                        elem.Contract.Equals("IMetadataExchange", StringComparison.OrdinalIgnoreCase))
-                    {
-                        channelEndpointElementExists = true;
-                        break;
-                    }
-                }
-                if (!channelEndpointElementExists)
-                {
-                    Debug.WriteLine("Adding ChannelEndpointElement for : " + BINDING_NAME);
-
-                    ChannelEndpointElement elem = new ChannelEndpointElement();
-                    elem.Binding = BINDING_NAME;
-                    elem.Name = BINDING_SCHEME;
-                    elem.Contract = "IMetadataExchange";
-                    sectionGroup.Client.Endpoints.Add(elem);
-
-                    Debug.WriteLine("Added ChannelEndpointElement for : " + BINDING_NAME);
-                }
-
-                // add <bindingElementExtension>
-                if (!sectionGroup.Extensions.BindingElementExtensions.ContainsKey(BINDINGELEM_NAME))
-                {
-                    ExtensionElement ext = new ExtensionElement(BINDINGELEM_NAME, 
-                        bindingElementExtensionType.FullName + ", " + bindingElementExtensionType.Assembly.FullName);
-                    sectionGroup.Extensions.BindingElementExtensions.Add(ext);
-                }
-
-                // add <bindingExtension>
-                if (!sectionGroup.Extensions.BindingExtensions.ContainsKey(BINDING_NAME))
-                {
-                    ExtensionElement ext = new ExtensionElement(BINDING_NAME, 
-                        bindingSectionType.FullName + ", " + bindingSectionType.Assembly.FullName);
-                    sectionGroup.Extensions.BindingExtensions.Add(ext);
-                }
-
-                config.Save();
-            }
-            else 
-                throw new InstallException("Machine.Config doesn't contain system.serviceModel node");
         }
 
         /// <summary>
@@ -171,73 +116,27 @@ namespace TransMock.Deploy.CustomActions
                 System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
                 Debug.Assert(config != null, "Machine.Config returned null");
 
-                RemoveMachineConfigurationInfo(config);
+                MachineConfigManager.RemoveMachineConfigurationInfo(config);
 
                 if (System.Environment.Is64BitOperatingSystem)
                 {
                     //For 64-Bit operating system there should be updated the 64-bit machine config as well
-                    string machineConfigPathFor32Bit = System.Runtime.InteropServices.RuntimeEnvironment
+                    string machineConfigPathFor64Bit = System.Runtime.InteropServices.RuntimeEnvironment
                         .GetRuntimeDirectory().Replace("Framework", "Framework64");
 
-                    ConfigurationFileMap configMap = new ConfigurationFileMap(machineConfigPathFor32Bit);
+                    ConfigurationFileMap configMap = new ConfigurationFileMap(
+                        System.IO.Path.Combine(machineConfigPathFor64Bit,
+                            "Config", "machine.config"));
 
                     config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
                     Debug.Assert(config != null, "Machine.Config for 64-bit returned null");
 
-                    RemoveMachineConfigurationInfo(config);
+                    MachineConfigManager.RemoveMachineConfigurationInfo(config);
                 }
             }
             catch (Exception ex)
             {
                 throw new InstallException("Error while removing adapter configuration information" + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Unregisters the adapter with WCF configuration
-        /// </summary>
-        public void RemoveMachineConfigurationInfo(System.Configuration.Configuration config)
-        {   
-            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
-            ChannelEndpointElement elemToRemove = null;
-            
-            if (sectionGroup != null)
-            {
-                // Remove <client><endpoint>
-                foreach (ChannelEndpointElement elem in sectionGroup.Client.Endpoints)
-                {
-                    if (elem.Binding.Equals(BINDING_NAME, StringComparison.OrdinalIgnoreCase) && 
-                        elem.Name.Equals(BINDING_SCHEME, StringComparison.OrdinalIgnoreCase) && 
-                        elem.Contract.Equals("IMetadataExchange", StringComparison.OrdinalIgnoreCase))
-                    {
-                        elemToRemove = elem;
-                        break;
-                    }
-                }
-                if (elemToRemove != null)
-                {
-                    Debug.WriteLine("Removing ChannelEndpointElement for : " + BINDING_NAME);
-                    
-                    sectionGroup.Client.Endpoints.Remove(elemToRemove);
-                    
-                    Debug.WriteLine("Removed ChannelEndpointElement for : " + BINDING_NAME);
-                }
-                // Remove <bindingExtension> for this adapter
-                if (sectionGroup.Extensions.BindingExtensions.ContainsKey(BINDING_NAME))
-                {
-                    sectionGroup.Extensions.BindingExtensions.RemoveAt(BINDING_NAME);
-                }
-                // Remove <bindingElementExtension> for this adapter
-                if (sectionGroup.Extensions.BindingElementExtensions.ContainsKey(BINDINGELEM_NAME))
-                {
-                    sectionGroup.Extensions.BindingElementExtensions.RemoveAt(BINDINGELEM_NAME);
-                }
-
-                config.Save();
-            }
-            else
-            {
-                throw new InstallException("Machine.Config doesn't contain system.serviceModel node");
             }
         }
 
