@@ -85,6 +85,12 @@
     <Content Include="XSLT\_TransMock.Mockifier.Parser.BTS2013.xml" />
     <Content Include="XSLT\_TransMock.Wcf.Adapter.BTS2013.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
     <MakeDir Directories="$(IntermediateOutputPath)Harvested XML" />

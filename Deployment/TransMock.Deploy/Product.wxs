@@ -14,11 +14,40 @@
       <ComponentGroupRef Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
       <ComponentRef Id="comp_281E9E94_6B24_4EC3_A7E1_CCE61C71A3BE" />
     </Feature>
+    
+    <UIRef Id="WixUI_InstallDir" />
+    
+    <Binary Id="CustomActionsAssembly" src="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.CustomActions.dll"></Binary>
+    <Binary Id="TransMockDeployUtils" src="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.Utils.dll"></Binary>
+
+    <CustomAction Id="SetInstallDir" Property="INSTALLDIR" Value="TRANSMOCKFOLDER">
+      
+    </CustomAction>
+    <CustomAction Id="AfterInstallAction" BinaryKey="CustomActionsAssembly" 
+                  Execute="immediate" Return="check" 
+                  DllEntry="AfterInstall">      
+    </CustomAction>
+
+    <CustomAction Id="BeforUninstallAction" BinaryKey="CustomActionsAssembly"
+                  Execute="immediate" Return="check"
+                  DllEntry="BeforeUinstall">
+    </CustomAction>
+
+    <InstallExecuteSequence>
+      <Custom Action="SetInstallDir" After="CostFinalize"></Custom>
+      <Custom Action="AfterInstallAction" Before="InstallFinalize">
+        NOT Installed
+      </Custom>
+      <Custom Action="BeforUninstallAction" Before="InstallFinalize">
+        Installed AND NOT UPGRADINGPRODUCTCODE
+      </Custom>
+    </InstallExecuteSequence>
+    
   </Product>
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="TransMock" />
+        <Directory Id="TRANSMOCKFOLDER" Name="TransMock" />
       </Directory>
       <Directory Id="GAC">
         <Directory Id="TransMock.Wcf.Adapter.BTS2013.Binaries" />
@@ -33,9 +62,10 @@
         <Directory Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
       </Directory>
     </Directory>
+    <Property Id="WIXUI_INSTALLDIR" Value="TRANSMOCKFOLDER" />
   </Fragment>
   <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+    <ComponentGroup Id="ProductComponents" Directory="TRANSMOCKFOLDER">
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
        <Component Id="Adapter" Guid="ADAFC951-B0D0-4E23-85D0-D1F715783C55"> 
       <!-- TODO: Insert files, registry keys, and other resources here. -->
@@ -51,6 +81,9 @@
         <File Source="$(var.TransMock.Integration.BizUnit.BTS2013.TargetPath)" Name="TransMock.Integration.BizUnit.dll" Id="BizUnitSteps" KeyPath="yes"></File>
         <File Source="$(var.TransMock.Integration.BizUnit.BTS2013.TargetPath)" Name="TransMock.Targets" Id="BTDFExtension"></File>
       </Component>
+      <!--<Component Id="CustomActions" Guid="7CDD4698-1E07-4960-ACC9-B5F0F3134D0A">
+        <File Source="$(var.TransMock.Deploy.CustomActions.BTS2013.TargetPath)" Name="TransMock.Deploy.CustomActions.dll" Id="CustomActionsDll" KeyPath="yes"></File>
+      </Component>-->
     </ComponentGroup>
   </Fragment>
 </Wix>

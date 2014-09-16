@@ -30,17 +30,8 @@ namespace TransMock.Deploy.CustomActions
 
     [RunInstaller(true)]
     public partial class TransMockInstaller : Installer
-    {
-        private Assembly adapterAssembly;
-        private Type bindingSectionType;
-        private Type bindingElementExtensionType;
-        const string INSTALLER_PARM_INSTALLDIR = "INSTALLDIR";
-        const string BINDING_ASSEMBLY_NAME = "TransMock.Wcf.Adapter.dll";
-        const string BINDINGELEM_NAME = "mockTransport";
-        const string BINDINGELEM_TYPE = "TransMock.Wcf.Adapter.MockAdapterBindingElementExtensionElement";
-        const string BINDING_NAME = "mockBinding";
-        const string BINDING_TYPE = "TransMock.Wcf.Adapter.MockAdapterBindingCollectionElement";
-        const string BINDING_SCHEME = "mock";
+    {       
+        const string INSTALLER_PARM_INSTALLDIR = "INSTALLDIR";       
 
         /// <summary>
         /// Constructor - initialize the components and register the event handlers
@@ -63,17 +54,6 @@ namespace TransMock.Deploy.CustomActions
             {
                 Debug.Assert(this.Context != null, "Context of this installation is null.");
                 
-                string path = System.IO.Path.Combine(this.Context.Parameters[INSTALLER_PARM_INSTALLDIR], BINDING_ASSEMBLY_NAME);
-                adapterAssembly = Assembly.LoadFrom(path);
-                
-                Debug.Assert(adapterAssembly != null, "Adapter assembly is null.");
-                
-                bindingSectionType = adapterAssembly.GetType(BINDING_TYPE, true);
-                Debug.Assert(bindingSectionType != null, "Binding type is null.");
-                
-                bindingElementExtensionType = adapterAssembly.GetType(BINDINGELEM_TYPE, true);
-                Debug.Assert(bindingElementExtensionType != null, "Binding element extension type is null.");
-
                 System.Configuration.Configuration config = ConfigurationManager.OpenMachineConfiguration();
                 Debug.Assert(config != null, "Machine.Config returned null");
 
