@@ -16,12 +16,12 @@ namespace TestCustomAction
     /// </summary>
     public class CustomActions
     {
-        const string INSTALLER_PARM_INSTALLDIR = "INSTALLDIR"; 
+        const string INSTALLER_PARM_INSTALLDIR = "TRANSMOCKFOLDER"; 
 
         [CustomAction]
         public static ActionResult AfterInstall(Session session)
         {
-            session.Log("Begin CustomAction1");
+            session.Log("Begin AfterInstall");
 
             try
             {
@@ -50,14 +50,17 @@ namespace TestCustomAction
                         session[INSTALLER_PARM_INSTALLDIR], config);
                 }
 
+                session.Log("End AfterInstall with success.");
+
                 return ActionResult.Success;
 
             }
             catch (Exception ex)
             {
                 session.Log("Error while adding adapter configuration information. " + ex.Message);
+                session.Log("End AfterInstall with error.");
 
-                return ActionResult.Success;
+                return ActionResult.Failure;
             }
         }
 
@@ -89,11 +92,14 @@ namespace TestCustomAction
                     MachineConfigManager.RemoveMachineConfigurationInfo(config);
                 }
 
+                session.Log("End BeforeUninstall with success.");
+
                 return ActionResult.Success;
             }
             catch (Exception ex)
             {
                 session.Log("Error while removing adapter configuration information" + ex.Message);
+                session.Log("End BeforeUninstall with error.");
 
                 return ActionResult.Failure;
             }

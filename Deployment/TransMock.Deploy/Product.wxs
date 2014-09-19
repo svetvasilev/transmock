@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.2.0" Manufacturer="TransMock Community" UpgradeCode="c1b44889-912b-4098-9ab1-fbb59ef4dca1">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x86"/>
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
     <!--<Media Id="1" Cabinet="cab1.cab" EmbedCab="yes" />-->
@@ -17,28 +17,29 @@
     
     <UIRef Id="WixUI_InstallDir" />
     
-    <Binary Id="CustomActionsAssembly" src="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.CustomActions.dll"></Binary>
-    <Binary Id="TransMockDeployUtils" src="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.Utils.dll"></Binary>
+    <WixVariable Id="WixUILicenseRtf" Value="eula.rtf" />
+    
+    <Binary Id="CustomActionsAssembly" SourceFile="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.CustomActions.CA.dll"></Binary>    
 
-    <CustomAction Id="SetInstallDir" Property="INSTALLDIR" Value="TRANSMOCKFOLDER">
-      
-    </CustomAction>
+    <!--<CustomAction Id="SetInstallDir" Property="INSTALLDIR" Value="[WIXUI_INSTALLDIR]" Execute="firstSequence">      
+    </CustomAction>-->
+    
     <CustomAction Id="AfterInstallAction" BinaryKey="CustomActionsAssembly" 
                   Execute="immediate" Return="check" 
                   DllEntry="AfterInstall">      
     </CustomAction>
 
-    <CustomAction Id="BeforUninstallAction" BinaryKey="CustomActionsAssembly"
+    <CustomAction Id="BeforeUninstallAction" BinaryKey="CustomActionsAssembly"
                   Execute="immediate" Return="check"
-                  DllEntry="BeforeUinstall">
+                  DllEntry="BeforeUninstall">
     </CustomAction>
 
     <InstallExecuteSequence>
-      <Custom Action="SetInstallDir" After="CostFinalize"></Custom>
+      <!--<Custom Action="SetInstallDir" After="InstallFiles"></Custom>-->
       <Custom Action="AfterInstallAction" Before="InstallFinalize">
         NOT Installed
       </Custom>
-      <Custom Action="BeforUninstallAction" Before="InstallFinalize">
+      <Custom Action="BeforeUninstallAction" Before="InstallFinalize">
         Installed AND NOT UPGRADINGPRODUCTCODE
       </Custom>
     </InstallExecuteSequence>
