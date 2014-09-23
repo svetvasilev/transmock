@@ -31,21 +31,27 @@ namespace TransMock.Mockifier.Parser
     /// </summary>
     public class BizTalkBindingsParser
     {
-        private const string SendPortMockOneWayTransportData = "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\" /&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;";
+        private const string SendPortOneWayMockTransportKey = "SendPortOneWay";
 
-        private const string SendPortMockTwoWayTransportData = "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;";
+        private const string SendPortTwoWayMockTransportKey = "SendPortTwoWays";
 
-        private const string ReceiveLocationMockOneWayTransportData = "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;";
+        private const string ReceiveLocationOneWayMockTransportKey = "ReceiveLocationOneWay";
 
-        private const string ReceiveLocationMockTwoWayTransportData = "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;";
+        private const string ReceiveLocationTwoWayMockTransportKey = "ReceiveLocationTwoWays";
 
         private const string MockAddressTemplate = "mock://localhost/{0}";
 
-        private const string MockTransportName="WCF-Custom";
+        private const string InprocTransportName="WCF-Custom";
 
-        private const string MockTransportCapabilities="907";
+        private const string InprocTransportCapabilities="907";
 
-        private const string MockTransportConfigurationClsid = "af081f69-38ca-4d5b-87df-f0344b12557a";        
+        private const string InprocTransportConfigurationClsid = "af081f69-38ca-4d5b-87df-f0344b12557a";
+
+        private const string IsolatedTransportName = "WCF-CustomIsolated";
+
+        private const string IsolatedTransportCapabilities = "641";
+
+        private const string IsolatedTransportConfigurationClsid = "16824334-968f-42db-b33b-6f8d62ed1ebc"; 
 
         private IResourceReader resourceReader;
 
@@ -91,19 +97,30 @@ namespace TransMock.Mockifier.Parser
         }
 
         /// <summary>
+        /// Parses bindings for mocked endpoints when the source bintings path and the output bindings path are defined
+        /// </summary>
+        /// <param name="srcBindingsPath">The source path to the bindings file</param>
+        /// <param name="outBindingsPath">The output path to the bindings file</param>
+        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string btsVersion)
+        {
+            ParseBindings(srcBindingsPath, outBindingsPath, null, btsVersion);
+        }
+
+        /// <summary>
         /// Parses bindings for mocked endpoints when the source bintings path, the output bindings path and the output class path are defined
         /// </summary>
         /// <param name="srcBindingsPath">The source path to the bindings file</param>
         /// <param name="outBindingsPath">The output path to the bindings file</param>
         /// <param name="outClassPath">The output path to the URL helper class file</param>
-        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string outClassPath)
+        /// <param name="btsVersion">The version of BizTalk serever the bindings are intended to. Default is the latest version.</param>
+        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string outClassPath, string btsVersion="2013")
         {
             XDocument xDoc = XDocument.Load(srcBindingsPath);
 
             //Mock the send ports
-            ParseSendPorts(xDoc.Root);
+            ParseSendPorts(xDoc.Root, btsVersion);
             //Mock the receive locations
-            ParseReceiveLocations(xDoc.Root);
+            ParseReceiveLocations(xDoc.Root, btsVersion);
             //Save the parsed bindings file
             xDoc.Save(outBindingsPath);
             //Generate the helper class with the mocked urls.
@@ -171,9 +188,10 @@ namespace TransMock.Mockifier.Parser
             }
         }
 
-        private void ParseReceiveLocations(XElement root)
+        private void ParseReceiveLocations(XElement root, string btsVersion)
         {
-            var receiveLocationsWithComments = root.DescendantNodes().Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "ReceiveLocation");
+            var receiveLocationsWithComments = root.DescendantNodes()
+                .Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "ReceiveLocation");
 
             foreach (var transportComment in receiveLocationsWithComments)
             {
@@ -185,12 +203,12 @@ namespace TransMock.Mockifier.Parser
                 {
                     //We fetch the adapter settings in the binding and replace those with the mock ones
                     ReplaceReceiveTransportConfiguration(transportComment.Parent,
-                        mockSettings);
+                        mockSettings, btsVersion);
                 }
             }
         }
 
-        private void ParseSendPorts(XElement root)
+        private void ParseSendPorts(XElement root, string btsVersion)
         {
             var sendPortTranpsortsWithComments = root.DescendantNodes().Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "PrimaryTransport");
                         
@@ -204,7 +222,8 @@ namespace TransMock.Mockifier.Parser
                 {                                  
                     //We fetch the adapter settings in the binding and replace those with the mock ones
                     ReplaceSendTransportConfiguration(transportComment.Parent, 
-                        mockSettings.Operation, mockSettings.Encoding ?? "UTF-8");
+                        mockSettings.Operation, btsVersion,
+                        mockSettings.Encoding ?? "UTF-8");
                 }
             }
         }
@@ -251,7 +270,10 @@ namespace TransMock.Mockifier.Parser
         }
         
 
-        private void ReplaceSendTransportConfiguration(XElement transportElement, string operation, string encoding = "UTF-8")
+        private void ReplaceSendTransportConfiguration(XElement transportElement, 
+            string operation, 
+            string btsVersion,
+            string encoding = "UTF-8")
         {
             System.Diagnostics.Debug.WriteLine("Replacing the transport settings");
             //Find out if this is one or two way port
@@ -281,9 +303,9 @@ namespace TransMock.Mockifier.Parser
             #region Setting the TransportType element
             var transportTypeElement = transportElement.Element(XmlNodeNames.TransportType);
 
-            transportTypeElement.SetAttributeValue(XmlNodeNames.Name, MockTransportName);
-            transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, MockTransportCapabilities);
-            transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, MockTransportConfigurationClsid);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
 
             System.Diagnostics.Debug.WriteLine("Transport type values set");
             #endregion
@@ -292,9 +314,9 @@ namespace TransMock.Mockifier.Parser
             var handlerTransportTypeElement = transportElement.Descendants()
                 .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.SendHandler).First();
 
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, MockTransportName);
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, MockTransportCapabilities);
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, MockTransportConfigurationClsid);
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
 
             System.Diagnostics.Debug.WriteLine("Transport type values set");
             #endregion
@@ -306,17 +328,28 @@ namespace TransMock.Mockifier.Parser
             string mockTransportData = null;
             if (isTwoWay)
             {
-                mockTransportData = SendPortMockTwoWayTransportData.Replace("{Encoding}", encoding);
+                mockTransportData = resourceReader.GetMockTransportConfig(btsVersion,
+                    SendPortTwoWayMockTransportKey);
+
+                mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
+
                 transportInfo.SetValue(mockTransportData);
             }
             else
             {
-                mockTransportData = SendPortMockOneWayTransportData.Replace("{Encoding}", encoding);
+                mockTransportData = resourceReader.GetMockTransportConfig(btsVersion,
+                    SendPortOneWayMockTransportKey);
+
+                mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
+                
                 transportInfo.SetValue(mockTransportData);
             }            
         }
 
-        private void ReplaceReceiveTransportConfiguration(XElement receiveLocationElement, MockSettings mockSettings)
+        private void ReplaceReceiveTransportConfiguration(
+            XElement receiveLocationElement, 
+            MockSettings mockSettings,
+            string btsVersion)
         {
             System.Diagnostics.Debug.WriteLine("Replacing the receive transport settings");
             //Find out if this is one or two way port
@@ -342,27 +375,51 @@ namespace TransMock.Mockifier.Parser
             System.Diagnostics.Debug.WriteLine("Mock address set to: " + mockAddress);
             #endregion
 
+            #region Setting the ReceiveHandler.TransportType element
+            var hanlderElement = receiveLocationElement.Descendants()
+                .Where(e => e.Name == XmlNodeNames.ReceiveHandler).First();
+
+            bool isHostIsolated = hanlderElement.Attribute("Name")
+                .Value.ToLower().Contains("isolated");
+
+            var handlerTransportTypeElement = receiveLocationElement.Descendants()
+                .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.ReceiveHandler).First();           
+            
+            if (isHostIsolated)
+            {
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, IsolatedTransportName);
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, IsolatedTransportCapabilities);
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, IsolatedTransportConfigurationClsid);
+            }
+            else
+            {
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
+            }
+
+            System.Diagnostics.Debug.WriteLine("Transport type values set");
+            #endregion
+
             #region Setting the TransportType element
             var transportTypeElement = receiveLocationElement.Element(XmlNodeNames.ReceiveLocationTransportType);
 
-            transportTypeElement.SetAttributeValue(XmlNodeNames.Name, MockTransportName);
-            transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, MockTransportCapabilities);
-            transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, MockTransportConfigurationClsid);
+            if (isHostIsolated)
+            {
+                transportTypeElement.SetAttributeValue(XmlNodeNames.Name, IsolatedTransportName);
+                transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, IsolatedTransportCapabilities);
+                transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, IsolatedTransportConfigurationClsid);
+            }
+            else
+            {
+                transportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+                transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+                transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
 
-            System.Diagnostics.Debug.WriteLine("Transport type values set");
+                System.Diagnostics.Debug.WriteLine("Transport type values for Inproc host set");
+            }
             #endregion
-
-            #region Setting the ReceiveHandler.TransportType element
-            var handlerTransportTypeElement = receiveLocationElement.Descendants()
-                .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.ReceiveHandler).First();
-
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, MockTransportName);
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, MockTransportCapabilities);
-            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, MockTransportConfigurationClsid);
-
-            System.Diagnostics.Debug.WriteLine("Transport type values set");
-            #endregion
-
+            
             bool isTwoWay = bool.Parse(receivePortElement.Attribute(XmlNodeNames.IsTwoWay).Value);
             //we navigate to the element containing the transport configuration
             var transportInfo = receiveLocationElement.Element(XmlNodeNames.ReceiveLocationTransportTypeData);
@@ -371,11 +428,16 @@ namespace TransMock.Mockifier.Parser
             string mockTransportData = null;
             if (isTwoWay)
             {
-                mockTransportData = ReceiveLocationMockTwoWayTransportData.Replace("{Encoding}", mockSettings.Encoding ?? "UTF-8");                
+                mockTransportData = resourceReader.GetMockTransportConfig(btsVersion, 
+                    ReceiveLocationTwoWayMockTransportKey);
+
+                mockTransportData = mockTransportData.Replace("{Encoding}", mockSettings.Encoding ?? "UTF-8");                
             }
             else
             {
-                mockTransportData = ReceiveLocationMockOneWayTransportData.Replace("{Encoding}", mockSettings.Encoding ?? "UTF-8");                
+                mockTransportData = resourceReader.GetMockTransportConfig(btsVersion,
+                    ReceiveLocationOneWayMockTransportKey);
+                mockTransportData = mockTransportData.Replace("{Encoding}", mockSettings.Encoding ?? "UTF-8");                
             }
             //Preparing the list of promoted properties if such are defined
             if (mockSettings.PromotedProperties.Count > 0)

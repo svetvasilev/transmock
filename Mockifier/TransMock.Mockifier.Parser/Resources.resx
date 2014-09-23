@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BTS2010_ReceiveLocationOneWay" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="{Encoding}" PromotedProperties="{PromotedProperties}" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for one way receive location for Biztalk 2010</comment>
+  </data>
+  <data name="BTS2010_ReceiveLocationTwoWays" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="{Encoding}" PromotedProperties="{PromotedProperties}" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for two way receive location for Biztalk 2010</comment>
+  </data>
+  <data name="BTS2010_SendPortOneWay" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="{Encoding}" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8" /&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Xml&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for one way send port for Biztalk 2010</comment>
+  </data>
+  <data name="BTS2010_SendPortTwoWays" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="{Encoding}" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for two ways send port for Biztalk 2010</comment>
+  </data>
+  <data name="BTS2013_ReceiveLocationOneWay" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;lt;binding name="mockBinding" Encoding="{Encoding}" PromotedProperties="{PromotedProperties}" /&amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for one way receive location for Biztalk 2013</comment>
+  </data>
+  <data name="BTS2013_ReceiveLocationTwoWays" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;lt;binding name="mockBinding" Encoding="{Encoding}" PromotedProperties="{PromotedProperties}" /&amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;DisableLocationOnFailure vt="11"&amp;gt;0&amp;lt;/DisableLocationOnFailure&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;ServiceBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="ServiceBehavior" /&amp;amp;gt;&amp;lt;/ServiceBehaviorConfiguration&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;IncludeExceptionDetailInFaults vt="11"&amp;gt;-1&amp;lt;/IncludeExceptionDetailInFaults&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;CredentialType vt="8"&amp;gt;None&amp;lt;/CredentialType&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;SuspendMessageOnFailure vt="11"&amp;gt;-1&amp;lt;/SuspendMessageOnFailure&amp;gt;&amp;lt;OrderedProcessing vt="11"&amp;gt;0&amp;lt;/OrderedProcessing&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for two way receive location for Biztalk 2013</comment>
+  </data>
+  <data name="BTS2013_SendPortOneWay" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;amp;lt;binding name="mockBinding" Encoding="{Encoding}" /&amp;amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8" /&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyElement&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Xml&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for one way send port for Biztalk 2013</comment>
+  </data>
+  <data name="BTS2013_SendPortTwoWays" xml:space="preserve">
+    <value>&amp;lt;CustomProps&amp;gt;&amp;lt;BindingType vt="8"&amp;gt;mockBinding&amp;lt;/BindingType&amp;gt;&amp;lt;BindingConfiguration vt="8"&amp;gt;&amp;lt;binding name="mockBinding" Encoding="{Encoding}" /&amp;gt;&amp;lt;/BindingConfiguration&amp;gt;&amp;lt;InboundBodyPathExpression vt="8"&amp;gt;/MessageContent&amp;lt;/InboundBodyPathExpression&amp;gt;&amp;lt;OutboundBodyLocation vt="8"&amp;gt;UseTemplate&amp;lt;/OutboundBodyLocation&amp;gt;&amp;lt;AffiliateApplicationName vt="8" /&amp;gt;&amp;lt;StaticAction vt="8" /&amp;gt;&amp;lt;ProxyUserName vt="8" /&amp;gt;&amp;lt;ProxyAddress vt="8" /&amp;gt;&amp;lt;UserName vt="8" /&amp;gt;&amp;lt;InboundBodyLocation vt="8"&amp;gt;UseBodyPath&amp;lt;/InboundBodyLocation&amp;gt;&amp;lt;EndpointBehaviorConfiguration vt="8"&amp;gt;&amp;amp;lt;behavior name="EndpointBehavior" /&amp;amp;gt;&amp;lt;/EndpointBehaviorConfiguration&amp;gt;&amp;lt;OutboundXmlTemplate vt="8"&amp;gt;&amp;amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&amp;amp;gt;&amp;lt;/OutboundXmlTemplate&amp;gt;&amp;lt;PropagateFaultMessage vt="11"&amp;gt;-1&amp;lt;/PropagateFaultMessage&amp;gt;&amp;lt;InboundNodeEncoding vt="8"&amp;gt;Base64&amp;lt;/InboundNodeEncoding&amp;gt;&amp;lt;IsolationLevel vt="8"&amp;gt;Serializable&amp;lt;/IsolationLevel&amp;gt;&amp;lt;UseSSO vt="11"&amp;gt;0&amp;lt;/UseSSO&amp;gt;&amp;lt;EnableTransaction vt="11"&amp;gt;0&amp;lt;/EnableTransaction&amp;gt;&amp;lt;/CustomProps&amp;gt;</value>
+    <comment>Mock transport type data for two ways send port for Biztalk 2013</comment>
+  </data>
+</root>

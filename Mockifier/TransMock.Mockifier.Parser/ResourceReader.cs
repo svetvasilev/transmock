@@ -21,6 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Xml;
+using System.Resources;
 
 namespace TransMock.Mockifier.Parser
 {
@@ -30,6 +31,8 @@ namespace TransMock.Mockifier.Parser
     public interface IResourceReader
     {
        Stream MockSchema { get; }
+
+       string GetMockTransportConfig(string btsVersion, string configKey);
     }
 
     /// <summary>
@@ -37,11 +40,43 @@ namespace TransMock.Mockifier.Parser
     /// </summary>
     public class ResourceReader : IResourceReader
     {
+        private ResourceManager rm;
+
+        public ResourceReader()
+        {
+            
+        }
+
+        /// <summary>
+        /// Gets the stream to the embedded Mock.xsd schema file
+        /// </summary>
         public Stream MockSchema
         {
             get 
             {
                 return Assembly.GetExecutingAssembly().GetManifestResourceStream("TransMock.Mockifier.Parser.Mock.xsd");               
+            }
+        }
+
+        /// <summary>
+        /// Gets the config data of the mock adapter transport
+        /// </summary>
+        /// <param name="btsVersion">The version of the BizTalk server</param>
+        /// <param name="configKey">The key for the specific configuration</param>
+        /// <returns></returns>
+        public string GetMockTransportConfig(string btsVersion, string configKey)
+        {
+            try
+            {
+                return Resources.ResourceManager
+                    .GetString(string.Format("BTS{0}_{1}",
+                        btsVersion, configKey));           
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("GetMocktransportConfig faile with an exception: " + ex.Message);
+
+                return "Not able to fetch the resource";
             }
         }
     }
