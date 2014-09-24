@@ -40,46 +40,79 @@ namespace TransMock.Mockifier
 
                 if (CommandLine.Parser.Default.ParseArguments(args, parsedArguments))
                 {
-                    Console.Out.WriteLine("About to execute with the following parameters:");                    
+                    Console.Out.WriteLine("About to execute with the following parameters:");                 
                     //Parsing the arguments was successfull, parsing the bindings file
+                    ParameterCombination paramCombination = parsedArguments.EvaluateParametersCombination();
+
                     BizTalkBindingsParser bindingsParser = new BizTalkBindingsParser();
 
-                    if (string.IsNullOrEmpty(parsedArguments.OutputBindings) && string.IsNullOrEmpty(parsedArguments.OutputClass))
+                    switch (paramCombination)
                     {
-                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                        case ParameterCombination.NoParams:
+                            break;
+                        case ParameterCombination.DefaultParams:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
 
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings, 
-                            parsedArguments.InputBindings);//Saving to the same file as the input
-                    }
-                    else if (!string.IsNullOrEmpty(parsedArguments.OutputBindings) && string.IsNullOrEmpty(parsedArguments.OutputClass))
-                    {
-                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                        Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings, 
+                                parsedArguments.InputBindings);//Saving to the same file as the input
+                            break;
+                        case ParameterCombination.OutputBindingsOnly:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
 
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
-                            parsedArguments.OutputBindings);
-                    }
-                    else if (string.IsNullOrEmpty(parsedArguments.OutputBindings) && !string.IsNullOrEmpty(parsedArguments.OutputClass))
-                    {
-                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                        Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                                parsedArguments.OutputBindings);
+                            break;
+                        case ParameterCombination.OutputClassOnly:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
 
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
-                            parsedArguments.InputBindings, parsedArguments.OutputClass);
-                    }
-                    else if (!string.IsNullOrEmpty(parsedArguments.OutputBindings) && !string.IsNullOrEmpty(parsedArguments.OutputClass))
-                    {
-                        Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                        Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-                        Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                                parsedArguments.InputBindings, parsedArguments.OutputClass);
+                            break;
+                        case ParameterCombination.OutputBindingsAndClassOutput:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
 
-                        bindingsParser.ParseBindings(parsedArguments.InputBindings,
-                            parsedArguments.OutputBindings,
-                            parsedArguments.OutputClass);
-                    }
-                    else
-                    {
-                        Console.Out.WriteLine("Mockifying with mock map is still not supported!");
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                                parsedArguments.OutputBindings,
+                                parsedArguments.OutputClass);
+                            break;
+                        case ParameterCombination.OutputBindingsAndBtsVersion:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
+                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
+
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings, 
+                                parsedArguments.OutputBindings,
+                                parsedArguments.BtsVersion);
+                            break;
+                        case ParameterCombination.OutputClassAndBtsVersion:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
+
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                                parsedArguments.InputBindings,
+                                parsedArguments.OutputClass,
+                                parsedArguments.BtsVersion);
+                            break;
+                        case ParameterCombination.AllParams:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
+
+                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                                parsedArguments.InputBindings,
+                                parsedArguments.OutputClass,
+                                parsedArguments.BtsVersion);
+                            break;
+                        default:
+                            Console.Out.WriteLine("Mockifying with mock map is still not supported!");
+                            break;
                     }
 
                     Console.Out.WriteLine("Bindings mockified successfully!Exiting...");
@@ -112,6 +145,11 @@ namespace TransMock.Mockifier
             HelpText = "The path to the mock mapping file.")]
         public string MockMap { get; set; }
 
+        [Option('r', "btsVersion", Required = false,
+             DefaultValue="2013",
+            HelpText = "The BizTalk server version. Default is the latest version. Optional.")]
+        public string BtsVersion { get; set; }
+
         [Option('v', "verbose", DefaultValue = false,
           HelpText = "Prints all messages to standard output.")]
         public bool Verbose { get; set; }
@@ -126,5 +164,65 @@ namespace TransMock.Mockifier
               (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }
 
+        public ParameterCombination EvaluateParametersCombination()
+        {
+            if (string.IsNullOrEmpty(OutputBindings) && string.IsNullOrEmpty(OutputClass))
+            {
+                return ParameterCombination.DefaultParams;
+            }
+            else if (!string.IsNullOrEmpty(OutputBindings) && string.IsNullOrEmpty(OutputClass))
+            {
+                if (BtsVersion == "2013")
+                {
+                    return ParameterCombination.OutputBindingsOnly;
+                }
+                else
+                {
+                    return ParameterCombination.OutputBindingsAndBtsVersion;
+                }
+            }
+            else if (string.IsNullOrEmpty(OutputBindings) && !string.IsNullOrEmpty(OutputClass))
+            {
+                if (BtsVersion == "2013")
+                {
+                    return ParameterCombination.OutputClassOnly;   
+                }
+                else
+                {
+                    return ParameterCombination.OutputClassAndBtsVersion;
+                }
+                
+            }
+            else if (!string.IsNullOrEmpty(OutputBindings) && !string.IsNullOrEmpty(OutputClass))
+            {
+                if (BtsVersion == "2013")
+                {
+                    return ParameterCombination.OutputBindingsAndClassOutput;
+                }
+                else
+                {
+                    return ParameterCombination.AllParams;
+                }                
+            }
+            else
+            {
+                return ParameterCombination.NoParams;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Enumeration that depicts the combination of passed parameters
+    /// </summary>
+    public enum ParameterCombination
+    {
+        NoParams,
+        DefaultParams,
+        OutputBindingsOnly,
+        OutputClassOnly,
+        OutputBindingsAndClassOutput,
+        OutputBindingsAndBtsVersion,
+        OutputClassAndBtsVersion,
+        AllParams
     }
 }

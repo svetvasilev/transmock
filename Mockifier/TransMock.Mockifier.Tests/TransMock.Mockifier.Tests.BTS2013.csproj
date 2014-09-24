@@ -61,7 +61,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.BTS2013.csproj">
       <Project>{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}</Project>
-      <Name>TransMock.Mockifier</Name>
+      <Name>TransMock.Mockifier.BTS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

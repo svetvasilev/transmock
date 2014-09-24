@@ -69,7 +69,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2013.csproj">
       <Project>{B3EDC765-D278-420D-8E10-E408ACF1067A}</Project>
-      <Name>TransMock.Mockifier.Parser</Name>
+      <Name>TransMock.Mockifier.Parser.BTS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

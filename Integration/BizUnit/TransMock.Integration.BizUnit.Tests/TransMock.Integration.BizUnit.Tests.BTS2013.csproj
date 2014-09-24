@@ -70,15 +70,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj">
       <Project>{1F8B806E-B479-4DB0-9896-1D29E288A2F2}</Project>
-      <Name>TransMock.Wcf.Adapter</Name>
+      <Name>TransMock.Wcf.Adapter.BTS2013</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013.csproj">
       <Project>{5891035F-5346-4A15-BB61-09018D5CC4AE}</Project>
-      <Name>TransMock.TestUtils</Name>
+      <Name>TransMock.TestUtils.BTS2013</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj">
       <Project>{B32C1509-3952-4492-B097-6886CEC675FB}</Project>
-      <Name>TransMock.Integration.BizUnit</Name>
+      <Name>TransMock.Integration.BizUnit.BTS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
