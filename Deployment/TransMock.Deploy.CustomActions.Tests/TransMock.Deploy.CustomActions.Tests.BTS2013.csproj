@@ -61,7 +61,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Deploy.CustomActions\TransMock.Deploy.CustomActions.BTS2013.csproj">
       <Project>{F28847B9-75C3-4130-B7A4-650689D23FAF}</Project>
-      <Name>TransMock.Deploy.CustomActions</Name>
+      <Name>TransMock.Deploy.CustomActions.BTS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
