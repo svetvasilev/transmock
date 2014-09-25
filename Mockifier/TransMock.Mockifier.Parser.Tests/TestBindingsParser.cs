@@ -36,14 +36,6 @@ namespace TransMock.Mockifier.Parser.Tests
     [TestClass]
     public class TestBindingsParser
     {
-        private const string SendPortMockOneWayTransportData = "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\" /&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;";
-
-        private const string SendPortMockTwoWayTransportData = "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;";
-
-        private const string ReceiveLocationMockOneWayTransportData = "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;";
-
-        private const string ReceiveLocationMockTwoWayTransportData = "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;";
-
         private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\tpublic static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestSendWCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
 
         private static Dictionary<string, string> expectedTransportConfig;
@@ -161,7 +153,48 @@ namespace TransMock.Mockifier.Parser.Tests
                     "The generated MockAddresses class has wrong contents");                
             }
             
-        }        
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        public void TestInlineParsing_SimpleMock_Unescape_BTS2010()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.xml", 
+                "TestApplication.BindingInfo_parsed.xml", "2010", true);
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2010", true);
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2010", null, true);
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContents, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        } 
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
@@ -329,6 +362,47 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        public void TestInlineParsing_SimpleMock_Unescape_BTS2013()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.xml", 
+                "TestApplication.BindingInfo2013_parsed.xml", "2013", true);
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo2013_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2013", true);
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2013", null, true);
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContents, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
         public void TestInlineParsing_SimpleMock_ClassOutputSpecified_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -451,7 +525,10 @@ namespace TransMock.Mockifier.Parser.Tests
             }
         }
 
-        private void VerifyReceiceLocationConfig(XElement receiveLocationElement, string btsVersion, string promotedProperties=null)
+        private void VerifyReceiceLocationConfig(XElement receiveLocationElement, 
+            string btsVersion, 
+            string promotedProperties=null,
+            bool unescape=false)
         {
             string receiveLocationName = receiveLocationElement.Attribute("Name").Value;
             bool isTwoWay = bool.Parse(receiveLocationElement.Parent.Parent.Attribute("IsTwoWay").Value);
@@ -493,6 +570,14 @@ namespace TransMock.Mockifier.Parser.Tests
                    .Replace("{Encoding}", "UTF-8")
                    .Replace("{PromotedProperties}", promotedProperties ?? string.Empty);
 
+            if (unescape)
+            {
+                expectedTransportData = expectedTransportData
+                    .Replace("&amp;", "&")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">");
+            }
+
             Assert.AreEqual(expectedTransportData, transportData.Value, 
                 "Transport type data is not correct for receive location:" + receiveLocationName);
         }
@@ -529,7 +614,7 @@ namespace TransMock.Mockifier.Parser.Tests
             }            
         }
 
-        private void VerifySendPortConfig(XElement sendPortElement, string btsVersion)
+        private void VerifySendPortConfig(XElement sendPortElement, string btsVersion, bool unescape=false)
         {
             string sendPortName = sendPortElement.Attribute("Name").Value;
             bool isTwoWay = bool.Parse(sendPortElement.Attribute("IsTwoWay").Value);
@@ -563,6 +648,14 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             string expectedTransportData = expectedTransportConfig[transportDataKey];
+
+            if (unescape)
+            {
+                expectedTransportData = expectedTransportData
+                    .Replace("&amp;", "&")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">");
+            }
 
             Assert.AreEqual(transportData.Value, 
                 expectedTransportData.Replace("{Encoding}", "UTF-8"), 

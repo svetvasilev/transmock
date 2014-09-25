@@ -70,6 +70,12 @@ namespace TransMock.Mockifier
                             bindingsParser.ParseBindings(parsedArguments.InputBindings,
                                 parsedArguments.InputBindings, parsedArguments.OutputClass);
                             break;
+                        case ParameterCombination.OutputBindingsAndUnescape:
+                            //TODO:
+                            break;
+                        case ParameterCombination.OutputClassAndUnescape:
+                            //TODO:
+                            break;
                         case ParameterCombination.OutputBindingsAndClassOutput:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
@@ -79,6 +85,9 @@ namespace TransMock.Mockifier
                                 parsedArguments.OutputBindings,
                                 parsedArguments.OutputClass);
                             break;
+                        case ParameterCombination.OutputBindingsAndClassOutputAndUnescape:
+                            //TODO:
+                            break;
                         case ParameterCombination.OutputBindingsAndBtsVersion:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
@@ -87,7 +96,7 @@ namespace TransMock.Mockifier
                             bindingsParser.ParseBindings(parsedArguments.InputBindings, 
                                 parsedArguments.OutputBindings,
                                 parsedArguments.BtsVersion);
-                            break;
+                            break;                        
                         case ParameterCombination.OutputClassAndBtsVersion:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("output: " + parsedArguments.InputBindings);
@@ -98,6 +107,9 @@ namespace TransMock.Mockifier
                                 parsedArguments.InputBindings,
                                 parsedArguments.OutputClass,
                                 parsedArguments.BtsVersion);
+                            break;
+                        case ParameterCombination.OutputBindingsAndBtsVersionAndUnescape:
+                            //TODO:
                             break;
                         case ParameterCombination.AllParams:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
@@ -134,7 +146,7 @@ namespace TransMock.Mockifier
         public string InputBindings { get; set; }
 
         [Option('o', "output", Required = false,
-            HelpText = "The path to where the processed bindings file will be stored.Optional.")]
+            HelpText = "The path to where the processed bindings file will be stored. Optional.")]
         public string OutputBindings { get; set; }
 
         [Option('c', "classOutput", Required = false,
@@ -149,6 +161,11 @@ namespace TransMock.Mockifier
              DefaultValue="2013",
             HelpText = "The BizTalk server version. Default is the latest version. Optional.")]
         public string BtsVersion { get; set; }
+
+        [Option('u', "unescape", Required = false,
+             DefaultValue = false,
+            HelpText = "Specifies whether the transport configuration should be unescaped. Default is false. Optional.")]
+        public bool Unescape { get; set; }
 
         [Option('v', "verbose", DefaultValue = false,
           HelpText = "Prints all messages to standard output.")]
@@ -174,22 +191,50 @@ namespace TransMock.Mockifier
             {
                 if (BtsVersion == "2013")
                 {
-                    return ParameterCombination.OutputBindingsOnly;
+                    if (Unescape)
+                    {
+                        return ParameterCombination.OutputBindingsAndUnescape;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputBindingsOnly;
+                    }                    
                 }
                 else
                 {
-                    return ParameterCombination.OutputBindingsAndBtsVersion;
+                    if (Unescape)
+                    {
+                        return ParameterCombination.OutputBindingsAndBtsVersionAndUnescape;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputBindingsAndBtsVersion;
+                    }                    
                 }
             }
             else if (string.IsNullOrEmpty(OutputBindings) && !string.IsNullOrEmpty(OutputClass))
             {
                 if (BtsVersion == "2013")
                 {
-                    return ParameterCombination.OutputClassOnly;   
+                    if (Unescape)
+                    {
+                        return ParameterCombination.OutputClassAndUnescape;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputClassOnly; 
+                    }                      
                 }
                 else
                 {
-                    return ParameterCombination.OutputClassAndBtsVersion;
+                    if (Unescape)
+                    {
+                        return ParameterCombination.OutputClassAndBtsVersionAndUnescape;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputClassAndBtsVersion;
+                    } 
                 }
                 
             }
@@ -197,11 +242,25 @@ namespace TransMock.Mockifier
             {
                 if (BtsVersion == "2013")
                 {
-                    return ParameterCombination.OutputBindingsAndClassOutput;
+                    if (Unescape)
+                    {
+                        return ParameterCombination.OutputBindingsAndClassOutputAndUnescape;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputBindingsAndClassOutput;
+                    }                    
                 }
                 else
                 {
-                    return ParameterCombination.AllParams;
+                    if (Unescape)
+                    {
+                        return ParameterCombination.AllParams;
+                    }
+                    else
+                    {
+                        return ParameterCombination.OutputBindingsAndClassOutputAndBtsVersion;
+                    }                    
                 }                
             }
             else
@@ -220,9 +279,15 @@ namespace TransMock.Mockifier
         DefaultParams,
         OutputBindingsOnly,
         OutputClassOnly,
+        OutputBindingsAndUnescape,
+        OutputClassAndUnescape,
         OutputBindingsAndClassOutput,
+        OutputBindingsAndClassOutputAndUnescape,
         OutputBindingsAndBtsVersion,
+        OutputBindingsAndBtsVersionAndUnescape,
         OutputClassAndBtsVersion,
-        AllParams
+        OutputClassAndBtsVersionAndUnescape,
+        OutputBindingsAndClassOutputAndBtsVersion,
+        AllParams        
     }
 }

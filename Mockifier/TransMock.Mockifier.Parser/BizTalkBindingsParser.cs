@@ -101,9 +101,22 @@ namespace TransMock.Mockifier.Parser
         /// </summary>
         /// <param name="srcBindingsPath">The source path to the bindings file</param>
         /// <param name="outBindingsPath">The output path to the bindings file</param>
+        /// <param name="btsVersion">The version of BizTalk serever the bindings are intended to</param>
         public void ParseBindings(string srcBindingsPath, string outBindingsPath, string btsVersion)
         {
             ParseBindings(srcBindingsPath, outBindingsPath, null, btsVersion);
+        }
+
+        /// <summary>
+        /// Parses bindings for mocked endpoints when the source bintings path and the output bindings path are defined
+        /// </summary>
+        /// <param name="srcBindingsPath">The source path to the bindings file</param>
+        /// <param name="outBindingsPath">The output path to the bindings file</param>
+        /// <param name="btsVersion">The version of BizTalk serever the bindings are intended to</param>
+        /// <param name="unescape">Flag indicating whether to unscape the transport configuration</param>
+        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string btsVersion, bool unescape)
+        {
+            ParseBindings(srcBindingsPath, outBindingsPath, null, btsVersion, unescape);
         }
 
         /// <summary>
@@ -113,14 +126,19 @@ namespace TransMock.Mockifier.Parser
         /// <param name="outBindingsPath">The output path to the bindings file</param>
         /// <param name="outClassPath">The output path to the URL helper class file</param>
         /// <param name="btsVersion">The version of BizTalk serever the bindings are intended to. Default is the latest version.</param>
-        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string outClassPath, string btsVersion="2013")
+        /// <param name="unescape">Flag indicating whether to unscape the transport configuration. Default is false</param>
+        public void ParseBindings(string srcBindingsPath, 
+            string outBindingsPath, 
+            string outClassPath, 
+            string btsVersion="2013", 
+            bool unescape=false)
         {
             XDocument xDoc = XDocument.Load(srcBindingsPath);
 
             //Mock the send ports
-            ParseSendPorts(xDoc.Root, btsVersion);
+            ParseSendPorts(xDoc.Root, btsVersion, unescape);
             //Mock the receive locations
-            ParseReceiveLocations(xDoc.Root, btsVersion);
+            ParseReceiveLocations(xDoc.Root, btsVersion, unescape);
             //Save the parsed bindings file
             xDoc.Save(outBindingsPath);
             //Generate the helper class with the mocked urls.
@@ -188,7 +206,7 @@ namespace TransMock.Mockifier.Parser
             }
         }
 
-        private void ParseReceiveLocations(XElement root, string btsVersion)
+        private void ParseReceiveLocations(XElement root, string btsVersion, bool unescape)
         {
             var receiveLocationsWithComments = root.DescendantNodes()
                 .Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "ReceiveLocation");
@@ -203,12 +221,12 @@ namespace TransMock.Mockifier.Parser
                 {
                     //We fetch the adapter settings in the binding and replace those with the mock ones
                     ReplaceReceiveTransportConfiguration(transportComment.Parent,
-                        mockSettings, btsVersion);
+                        mockSettings, btsVersion, unescape);
                 }
             }
         }
 
-        private void ParseSendPorts(XElement root, string btsVersion)
+        private void ParseSendPorts(XElement root, string btsVersion, bool unescape)
         {
             var sendPortTranpsortsWithComments = root.DescendantNodes().Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "PrimaryTransport");
                         
@@ -222,7 +240,7 @@ namespace TransMock.Mockifier.Parser
                 {                                  
                     //We fetch the adapter settings in the binding and replace those with the mock ones
                     ReplaceSendTransportConfiguration(transportComment.Parent, 
-                        mockSettings.Operation, btsVersion,
+                        mockSettings.Operation, btsVersion, unescape,
                         mockSettings.Encoding ?? "UTF-8");
                 }
             }
@@ -273,6 +291,7 @@ namespace TransMock.Mockifier.Parser
         private void ReplaceSendTransportConfiguration(XElement transportElement, 
             string operation, 
             string btsVersion,
+            bool unescape,
             string encoding = "UTF-8")
         {
             System.Diagnostics.Debug.WriteLine("Replacing the transport settings");
@@ -332,8 +351,6 @@ namespace TransMock.Mockifier.Parser
                     SendPortTwoWayMockTransportKey);
 
                 mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
-
-                transportInfo.SetValue(mockTransportData);
             }
             else
             {
@@ -341,15 +358,24 @@ namespace TransMock.Mockifier.Parser
                     SendPortOneWayMockTransportKey);
 
                 mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
-                
-                transportInfo.SetValue(mockTransportData);
-            }            
+            }
+
+            if (unescape)
+            {
+                mockTransportData = mockTransportData
+                    .Replace("&amp;", "&")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">");
+            }
+
+            transportInfo.SetValue(mockTransportData);
         }
 
         private void ReplaceReceiveTransportConfiguration(
             XElement receiveLocationElement, 
             MockSettings mockSettings,
-            string btsVersion)
+            string btsVersion,
+            bool unescape)
         {
             System.Diagnostics.Debug.WriteLine("Replacing the receive transport settings");
             //Find out if this is one or two way port
@@ -454,6 +480,14 @@ namespace TransMock.Mockifier.Parser
             else
             {
                 mockTransportData = mockTransportData.Replace("{PromotedProperties}", string.Empty);
+            }
+
+            if (unescape)
+            {
+                mockTransportData = mockTransportData
+                    .Replace("&amp;", "&")
+                    .Replace("&lt;", "<")
+                    .Replace("&gt;", ">");
             }
 
             transportInfo.SetValue(mockTransportData);
