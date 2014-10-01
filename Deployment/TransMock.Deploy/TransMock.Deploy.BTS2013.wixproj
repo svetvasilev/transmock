@@ -32,7 +32,7 @@
       <DoNotHarvest>
       </DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+      <RefTargetDir>TRANSMOCKBIN</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj">
       <Name>TransMock.Integration.BizUnit.BTS2013</Name>
@@ -41,7 +41,7 @@
       <DoNotHarvest>
       </DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+      <RefTargetDir>TRANSMOCKEXT</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2013.csproj">
       <Name>TransMock.Mockifier.Parser.BTS2013</Name>
@@ -50,7 +50,7 @@
       <DoNotHarvest>
       </DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+      <RefTargetDir>TRANSMOCKBIN</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier\TransMock.Mockifier.BTS2013.csproj">
       <Name>TransMock.Mockifier.BTS2013</Name>
@@ -59,15 +59,14 @@
       <DoNotHarvest>
       </DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+      <RefTargetDir>TRANSMOCKBIN</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Deploy.CustomActions\TransMock.Deploy.CustomActions.BTS2013.csproj">
       <Name>TransMock.Deploy.CustomActions.BTS2013</Name>
       <Project>{f28847b9-75c3-4130-b7a4-650689d23faf}</Project>
       <Private>True</Private>
-      <DoNotHarvest>
-      </DoNotHarvest>
-      <RefProjectOutputGroups>Content;Satellites;Binaries</RefProjectOutputGroups>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
   </ItemGroup>

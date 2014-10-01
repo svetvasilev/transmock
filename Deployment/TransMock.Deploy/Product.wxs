@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.2.0" Manufacturer="TransMock Community" UpgradeCode="c1b44889-912b-4098-9ab1-fbb59ef4dca1">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x86" />
+  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.3.0" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
+    <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" Platform="x86"  />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
-    <!--<Media Id="1" Cabinet="cab1.cab" EmbedCab="yes" />-->
-    <Feature Id="ProductFeature" Title="TransMock Binaries" Level="1">
+   
+    <Feature Id="ProductBinaries" Title="Binaries" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentGroupRef Id="TransMock.Wcf.Adapter.BTS2013.Binaries" />
-      <ComponentGroupRef Id="TransMock.Deploy.CustomActions.BTS2013.Binaries" />
-      <ComponentGroupRef Id="TransMock.Integration.BizUnit.BTS2013.Binaries" />
-      <ComponentGroupRef Id="TransMock.Mockifier.BTS2013.Binaries" />
-      <ComponentGroupRef Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
-      <ComponentRef Id="comp_281E9E94_6B24_4EC3_A7E1_CCE61C71A3BE" />
+      <ComponentGroupRef Id="ProductExtensions" />      
+    </Feature>
+
+    <Feature Id="ProductDocs" Title="Documentation" Level="1">
+      
     </Feature>
     
     <UIRef Id="WixUI_InstallDir" />
@@ -20,9 +19,6 @@
     <WixVariable Id="WixUILicenseRtf" Value="eula.rtf" />
     
     <Binary Id="CustomActionsAssembly" SourceFile="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.CustomActions.CA.dll"></Binary>    
-
-    <!--<CustomAction Id="SetInstallDir" Property="INSTALLDIR" Value="[WIXUI_INSTALLDIR]" Execute="firstSequence">      
-    </CustomAction>-->
     
     <CustomAction Id="AfterInstallAction" BinaryKey="CustomActionsAssembly" 
                   Execute="immediate" Return="check" 
@@ -35,11 +31,11 @@
     </CustomAction>
 
     <InstallExecuteSequence>
-      <!--<Custom Action="SetInstallDir" After="InstallFiles"></Custom>-->
-      <Custom Action="AfterInstallAction" Before="InstallFinalize">
+      
+      <Custom Action="AfterInstallAction" After="InstallFinalize">
         NOT Installed
       </Custom>
-      <Custom Action="BeforeUninstallAction" Before="InstallFinalize">
+      <Custom Action="BeforeUninstallAction" After="InstallFinalize">
         Installed AND NOT UPGRADINGPRODUCTCODE
       </Custom>
     </InstallExecuteSequence>
@@ -48,40 +44,46 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="TRANSMOCKFOLDER" Name="TransMock" />
-      </Directory>
-      <Directory Id="GAC">
-        <Directory Id="TransMock.Wcf.Adapter.BTS2013.Binaries" />
-      </Directory>
-      <Directory Id="dir_4E5997A4_CA30_4F4C_839D_E4EF8EC5BF53" Name="BTS2013">
-        <Component Id="comp_281E9E94_6B24_4EC3_A7E1_CCE61C71A3BE" Guid="2654E770-0051-4545-B123-AE6CF4155F40" Permanent="no" SharedDllRefCount="no" Transitive="no">
-          <File Id="_659B7CC2_B790_4E8C_AAF2_73FA741D3A96" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" Vital="yes" Name="TransMock.targets" Source="..\..\Integration\BTDF\TransMock.targets" KeyPath="yes" />
-        </Component>
-        <Directory Id="TransMock.Deploy.CustomActions.BTS2013.Binaries" />
-        <Directory Id="TransMock.Integration.BizUnit.BTS2013.Binaries" />
-        <Directory Id="TransMock.Mockifier.BTS2013.Binaries" />
-        <Directory Id="TransMock.Mockifier.Parser.BTS2013.Binaries" />
-      </Directory>
+        <Directory Id="TRANSMOCKROOT" Name="TransMock" >
+          <Directory Id="TRANSMOCKFOLDER" Name="BTS2013">
+            <Directory Id="TRANSMOCKBIN" Name="Bin" />
+            <Directory Id="TRANSMOCKEXT" Name="Ext" />
+            <Directory Id="TRANSMOCKDOC" Name="Doc" />
+          </Directory>
+        </Directory>
+      </Directory>      
     </Directory>
     <Property Id="WIXUI_INSTALLDIR" Value="TRANSMOCKFOLDER" />
   </Fragment>
   <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="TRANSMOCKFOLDER">
+    <ComponentGroup Id="ProductComponents" Directory="TRANSMOCKBIN">
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-       <Component Id="Adapter" Guid="ADAFC951-B0D0-4E23-85D0-D1F715783C55"> 
+       <Component Id="Adapter" Guid="861C120A-4E45-4CE8-9288-324C34222BC8" Permanent="no" Transitive="no"> 
       <!-- TODO: Insert files, registry keys, and other resources here. -->
-         <File Source="$(var.TransMock.Wcf.Adapter.BTS2013.TargetPath)" Name="TransMock.Wcf.Adapter.dll" Id="TransMockAdapter" KeyPath="yes"></File>         
-       </Component>
-      <Component Id="Mockifier" Guid="A92DA3F1-21FD-4F45-8BC3-CFC36B72F307">
+         <File Source="$(var.TransMock.Wcf.Adapter.BTS2013.TargetPath)" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>         
+       </Component>      
+      <Component Id="Mockifier" Guid="12236B58-F3EE-4BF0-A66D-4F6D8176E576" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.Mockifier.BTS2013.TargetPath)" Name="TransMock.Mockifier.exe" Id="Mockifier" KeyPath="yes"></File>
-        <File Source="$(var.TransMock.Mockifier.Parser.BTS2013.TargetPath)" Name="TransMock.Mockifier.Parser.dll" Id="MockifierParser"></File>
+        <File Source="$(var.TransMock.Mockifier.BTS2013.TargetPath)" Name="TransMock.Mockifier.exe" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
       </Component>
-      <Component Id="Integration" Guid="AC0C5265-3CC9-4560-908E-EF1B96D85363">
+      <Component Id="MockifierParser" Guid="B55D51E6-E022-40BA-8DFF-647555C6A0E9" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->        
+        <File Source="$(var.TransMock.Mockifier.Parser.BTS2013.TargetPath)" Name="TransMock.Mockifier.Parser.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ProductExtensions" Directory="TRANSMOCKEXT">      
+      <Component Id="BizUnitIntegration" Guid="B511A2C0-6B31-4737-8233-81F1A3F0AE0F" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.Integration.BizUnit.BTS2013.TargetPath)" Name="TransMock.Integration.BizUnit.dll" Id="BizUnitSteps" KeyPath="yes"></File>
-        <File Source="$(var.TransMock.Integration.BizUnit.BTS2013.TargetPath)" Name="TransMock.Targets" Id="BTDFExtension"></File>
-      </Component>      
+        <File Source="$(var.TransMock.Integration.BizUnit.BTS2013.TargetPath)" Name="TransMock.Integration.BizUnit.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
+      </Component>
+      <Component Id="BTDFIntegration" Guid="D165B1A7-FF17-4510-B9CC-EA5A426C6EFF" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->        
+        <File Source="..\..\Integration\BTDF\TransMock.Targets" Name="TransMock.Targets" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
+      </Component>
+      <Component Id="GACAdapter" Guid="2A48904D-B3F0-483D-BB3C-04C185C14945" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.Wcf.Adapter.BTS2013.TargetPath)" Id="TransMock.Wcf.Adapter.dll.GAC" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Assembly=".net" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
     </ComponentGroup>
   </Fragment>
 </Wix>

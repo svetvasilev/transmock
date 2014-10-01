@@ -16,7 +16,7 @@ namespace TestCustomAction
     /// </summary>
     public class CustomActions
     {
-        const string INSTALLER_PARM_INSTALLDIR = "TRANSMOCKFOLDER"; 
+        const string INSTALLER_PARM_INSTALLDIR = "TRANSMOCKBIN"; 
 
         [CustomAction]
         public static ActionResult AfterInstall(Session session)
