@@ -35,7 +35,7 @@
       <Custom Action="AfterInstallAction" After="InstallFinalize">
         NOT Installed
       </Custom>
-      <Custom Action="BeforeUninstallAction" After="InstallFinalize">
+      <Custom Action="BeforeUninstallAction" Before="InstallFinalize">
         Installed AND NOT UPGRADINGPRODUCTCODE
       </Custom>
     </InstallExecuteSequence>
@@ -69,6 +69,10 @@
       <Component Id="MockifierParser" Guid="B55D51E6-E022-40BA-8DFF-647555C6A0E9" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->        
         <File Source="$(var.TransMock.Mockifier.Parser.BTS2013.TargetPath)" Name="TransMock.Mockifier.Parser.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+      <Component Id="CommandLineLib" Guid="329F7F8E-540D-4E26-B028-5822A3911022" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="..\..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll" Name="CommandLine.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="ProductExtensions" Directory="TRANSMOCKEXT">      
