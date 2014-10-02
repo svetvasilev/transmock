@@ -18,7 +18,8 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 -->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Installer">
 	<PropertyGroup>
-		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>			
+		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>
+    <BTSVersion Condition="'$(BTSVersion)' == ''">2013</BTSVersion>
 	</PropertyGroup>	
 	<!-- Extension point for BTDF. Executed in case deploying to local or shared development environment only -->
 	<Target Name="CustomDeployTarget" Condition="$(SettingsFilePath.EndsWith('Exported_LocalSettings.xml')) Or $(SettingsFilePath.EndsWith('Exported_DevSettings.xml'))">
@@ -30,7 +31,12 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == '' And '$(Is64bitOS)' == 'true'">C:\Program Files (x86)\TransMock</TransMockHomeDir>
 		</PropertyGroup>
 		<Message Text="------ Extension point for TransMock. Invoking the Mockifier -----" />		
-		<Exec Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;" ContinueOnError="false"></Exec>
+		<Exec Condition="'$(BTSVersion)' != '2013'"
+      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot; -r $(BTSVersion) -u $(ApplyXmlEscape)" 
+      ContinueOnError="false"></Exec>
+    <Exec Condition="'$(BTSVersion)' == '2013'"
+      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot; -u $(ApplyXmlEscape)"
+      ContinueOnError="false"></Exec>
 		<Message Text="------ The Mockifier execution completed. -------" />
 	</Target>	
 </Project>

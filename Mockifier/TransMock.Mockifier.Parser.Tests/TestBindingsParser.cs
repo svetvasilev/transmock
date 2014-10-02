@@ -121,7 +121,7 @@ namespace TransMock.Mockifier.Parser.Tests
         {            
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
 
-            parser.ParseBindings("TestApplication.BindingInfo.xml", "TestApplication.BindingInfo_parsed.xml", "2010");
+            parser.ParseBindings("TestApplication.BindingInfo.xml", "TestApplication.BindingInfo_parsed.xml", null, "2010");
 
             XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo_parsed.xml");
 
@@ -249,7 +249,7 @@ namespace TransMock.Mockifier.Parser.Tests
             BizTalkBindingsParser parser = new BizTalkBindingsParser(fileWriterMock.Object);
 
             parser.ParseBindings("TestApplication.BindingInfo.xml", 
-                "TestApplication.BindingInfo_parsed.xml", "2010");
+                "TestApplication.BindingInfo_parsed.xml", null, "2010");
 
             XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo_parsed.xml");
 
@@ -284,7 +284,7 @@ namespace TransMock.Mockifier.Parser.Tests
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
 
             parser.ParseBindings("TestApplication.BindingInfoWithProps.xml", 
-                "TestApplication.BindingInfoWithProps_parsed.xml", "2010");
+                "TestApplication.BindingInfoWithProps_parsed.xml", null, "2010");
 
             XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfoWithProps_parsed.xml");
 

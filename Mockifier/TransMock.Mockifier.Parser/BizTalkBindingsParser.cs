@@ -95,18 +95,7 @@ namespace TransMock.Mockifier.Parser
         {
             ParseBindings(srcBindingsPath, outBindingsPath, null);
         }
-
-        /// <summary>
-        /// Parses bindings for mocked endpoints when the source bintings path and the output bindings path are defined
-        /// </summary>
-        /// <param name="srcBindingsPath">The source path to the bindings file</param>
-        /// <param name="outBindingsPath">The output path to the bindings file</param>
-        /// <param name="btsVersion">The version of BizTalk serever the bindings are intended to</param>
-        public void ParseBindings(string srcBindingsPath, string outBindingsPath, string btsVersion)
-        {
-            ParseBindings(srcBindingsPath, outBindingsPath, null, btsVersion);
-        }
-
+        
         /// <summary>
         /// Parses bindings for mocked endpoints when the source bintings path and the output bindings path are defined
         /// </summary>

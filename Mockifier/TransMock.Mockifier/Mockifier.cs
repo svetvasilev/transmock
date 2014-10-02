@@ -53,35 +53,57 @@ namespace TransMock.Mockifier
                         case ParameterCombination.DefaultParams:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings, 
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings, 
                                 parsedArguments.InputBindings);//Saving to the same file as the input
                             break;
                         case ParameterCombination.OutputBindingsOnly:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
                                 parsedArguments.OutputBindings);
                             break;
                         case ParameterCombination.OutputClassOnly:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
-                                parsedArguments.InputBindings, parsedArguments.OutputClass);
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
+                                parsedArguments.InputBindings, 
+                                parsedArguments.OutputClass);
                             break;
                         case ParameterCombination.OutputBindingsAndUnescape:
-                            //TODO:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
+                                parsedArguments.OutputBindings, 
+                                null,
+                                "2013", true);
                             break;
                         case ParameterCombination.OutputClassAndUnescape:
                             //TODO:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
+
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
+                                parsedArguments.InputBindings, 
+                                parsedArguments.OutputClass,
+                                "2013", 
+                                parsedArguments.Unescape);
                             break;
                         case ParameterCombination.OutputBindingsAndClassOutput:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
                             Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
                             Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
                                 parsedArguments.OutputBindings,
                                 parsedArguments.OutputClass);
                             break;
@@ -93,7 +115,8 @@ namespace TransMock.Mockifier
                             Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
                             Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings, 
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings, 
                                 parsedArguments.OutputBindings,
                                 parsedArguments.BtsVersion);
                             break;                        
@@ -103,24 +126,39 @@ namespace TransMock.Mockifier
                             Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
                             Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
                                 parsedArguments.InputBindings,
                                 parsedArguments.OutputClass,
                                 parsedArguments.BtsVersion);
                             break;
                         case ParameterCombination.OutputBindingsAndBtsVersionAndUnescape:
+                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.InputBindings);                            
+                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
+                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
+
+                            bindingsParser.ParseBindings(
+                                parsedArguments.InputBindings,
+                                parsedArguments.OutputBindings,
+                                null,
+                                parsedArguments.BtsVersion,
+                                parsedArguments.Unescape);
                             //TODO:
                             break;
                         case ParameterCombination.AllParams:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
                             Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
                             Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
+                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
 
-                            bindingsParser.ParseBindings(parsedArguments.InputBindings,
+                            bindingsParser.ParseBindings(
                                 parsedArguments.InputBindings,
+                                parsedArguments.OutputBindings,
                                 parsedArguments.OutputClass,
-                                parsedArguments.BtsVersion);
+                                parsedArguments.BtsVersion,
+                                parsedArguments.Unescape);
                             break;
                         default:
                             Console.Out.WriteLine("Mockifying with mock map is still not supported!");
