@@ -75,36 +75,167 @@ namespace TransMock.Mockifier.Parser.Tests
 
             if (expectedTransportConfig.Count == 0)
             {
-                expectedTransportConfig.Add("BTS2010_ReceiveLocationOneWay",
-                    "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;");
+                StringBuilder sb = new StringBuilder(256);
 
+                sb.Append("<CustomProps>")
+                    .Append("<OrderedProcessing vt=\"11\">0</OrderedProcessing>")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
+                    .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")                    
+                    .Append("<OutboundBodyLocation vt=\"8\">UseBodyElement</OutboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
+                    .Append("<DisableLocationOnFailure vt=\"11\">0</DisableLocationOnFailure>")
+                    .Append("<UserName vt=\"8\" />")
+                    .Append("<ServiceBehaviorConfiguration vt=\"8\">&lt;behavior name=\"ServiceBehavior\" /&gt;</ServiceBehaviorConfiguration>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<IncludeExceptionDetailInFaults vt=\"11\">-1</IncludeExceptionDetailInFaults>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding>")
+                    .Append("<CredentialType vt=\"8\">None</CredentialType>")
+                    .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;</BindingConfiguration>")
+                    .Append("<SuspendMessageOnFailure vt=\"11\">-1</SuspendMessageOnFailure>")
+                    .Append("</CustomProps>");
+
+                expectedTransportConfig.Add("BTS2010_ReceiveLocationOneWay",
+                     sb.ToString());
+                
+                sb.Clear();
+                sb.Append("<CustomProps>")
+                    .Append("<OrderedProcessing vt=\"11\">0</OrderedProcessing>")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
+                    .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
+                    .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
+                    .Append("<DisableLocationOnFailure vt=\"11\">0</DisableLocationOnFailure>")
+                    .Append("<UserName vt=\"8\" />")
+                    .Append("<ServiceBehaviorConfiguration vt=\"8\">&lt;behavior name=\"ServiceBehavior\" /&gt;</ServiceBehaviorConfiguration>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<IncludeExceptionDetailInFaults vt=\"11\">-1</IncludeExceptionDetailInFaults>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding>")
+                    .Append("<CredentialType vt=\"8\">None</CredentialType>")
+                    .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;</BindingConfiguration>")
+                    .Append("<SuspendMessageOnFailure vt=\"11\">-1</SuspendMessageOnFailure>")
+                    .Append("</CustomProps>");
+                
                 expectedTransportConfig.Add("BTS2010_ReceiveLocationTwoWays",
-                    "&lt;CustomProps&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;/CustomProps&gt;");
+                    sb.ToString());
+
+                sb.Clear();
+                sb.Append("<CustomProps>")
+                    .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&gt;</BindingConfiguration>")
+                    .Append("<InboundBodyPathExpression vt=\"8\" />")                    
+                    .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<EnableTransaction vt=\"11\">0</EnableTransaction>")
+                    .Append("<StaticAction vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
+                    .Append("<ProxyAddress vt=\"8\" />")
+                    .Append("<UserName vt=\"8\" />")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyElement</InboundBodyLocation>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<PropagateFaultMessage vt=\"11\">-1</PropagateFaultMessage>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Xml</InboundNodeEncoding>")
+                    .Append("<ProxyUserName vt=\"8\" />")
+                    .Append("<IsolationLevel vt=\"8\">Serializable</IsolationLevel>")
+                    .Append("<UseSSO vt=\"11\">0</UseSSO>")
+                    .Append("</CustomProps>");
 
                 expectedTransportConfig.Add("BTS2010_SendPortOneWay",
-                    "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\" /&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;");
+                    sb.ToString());
+
+                sb.Clear();
+                sb.Append("<CustomProps>")
+                    .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&gt;</BindingConfiguration>")
+                    .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
+                    .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<EnableTransaction vt=\"11\">0</EnableTransaction>")
+                    .Append("<StaticAction vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
+                    .Append("<ProxyAddress vt=\"8\" />")
+                    .Append("<UserName vt=\"8\" />")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<PropagateFaultMessage vt=\"11\">-1</PropagateFaultMessage>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding>")
+                    .Append("<ProxyUserName vt=\"8\" />")
+                    .Append("<IsolationLevel vt=\"8\">Serializable</IsolationLevel>")
+                    .Append("<UseSSO vt=\"11\">0</UseSSO>")
+                    .Append("</CustomProps>");
 
                 expectedTransportConfig.Add("BTS2010_SendPortTwoWays",
-                    "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;");
+                    sb.ToString());
 
+                sb.Clear();
+                sb.Append("<CustomProps>")
+                    .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /></BindingConfiguration>")
+                    .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")                    
+                    .Append("<DisableLocationOnFailure vt=\"11\">0</DisableLocationOnFailure>")
+                    .Append("<UserName vt=\"8\" />")                    
+                    .Append("<ServiceBehaviorConfiguration vt=\"8\">&lt;behavior name=\"ServiceBehavior\" /&gt;</ServiceBehaviorConfiguration>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<IncludeExceptionDetailInFaults vt=\"11\">-1</IncludeExceptionDetailInFaults>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding>")
+                    .Append("<CredentialType vt=\"8\">None</CredentialType>")
+                    .Append("<OutboundBodyLocation vt=\"8\">UseBodyElement</OutboundBodyLocation>")                    
+                    .Append("<SuspendMessageOnFailure vt=\"11\">-1</SuspendMessageOnFailure>")
+                    .Append("<OrderedProcessing vt=\"11\">0</OrderedProcessing>")
+                    .Append("</CustomProps>");
+                
                 expectedTransportConfig.Add("BTS2013_ReceiveLocationOneWay",
-                    "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"xml\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;/CustomProps&gt;");
+                    sb.ToString());
+
+                sb.Clear();
+                sb.Append("<CustomProps>")
+                    .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /></BindingConfiguration>")
+                    .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
+                    .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
+                    .Append("<AffiliateApplicationName vt=\"8\" />")
+                    .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
+                    .Append("<DisableLocationOnFailure vt=\"11\">0</DisableLocationOnFailure>")
+                    .Append("<UserName vt=\"8\" />")                    
+                    .Append("<ServiceBehaviorConfiguration vt=\"8\">&lt;behavior name=\"ServiceBehavior\" /&gt;</ServiceBehaviorConfiguration>")
+                    .Append("<EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration>")
+                    .Append("<OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate>")
+                    .Append("<IncludeExceptionDetailInFaults vt=\"11\">-1</IncludeExceptionDetailInFaults>")
+                    .Append("<InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding>")
+                    .Append("<CredentialType vt=\"8\">None</CredentialType>")
+                    .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
+                    .Append("<SuspendMessageOnFailure vt=\"11\">-1</SuspendMessageOnFailure>")
+                    .Append("<OrderedProcessing vt=\"11\">0</OrderedProcessing>")
+                    .Append("</CustomProps>");                
 
                 expectedTransportConfig.Add("BTS2013_ReceiveLocationTwoWays",
-                    "&lt;CustomProps&gt;&lt;BindingConfiguration vt=\"8\"&gt;&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;DisableLocationOnFailure vt=\"11\"&gt;0&lt;/DisableLocationOnFailure&gt;&lt;UserName vt=\"8\" /&gt;&lt;ServiceBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"ServiceBehavior\" /&amp;gt;&lt;/ServiceBehaviorConfiguration&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;IncludeExceptionDetailInFaults vt=\"11\"&gt;-1&lt;/IncludeExceptionDetailInFaults&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;CredentialType vt=\"8\"&gt;None&lt;/CredentialType&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;SuspendMessageOnFailure vt=\"11\"&gt;-1&lt;/SuspendMessageOnFailure&gt;&lt;OrderedProcessing vt=\"11\"&gt;0&lt;/OrderedProcessing&gt;&lt;/CustomProps&gt;");
+                    sb.ToString());
 
+                //TODO: migrate to StringBuilder
                 expectedTransportConfig.Add("BTS2013_SendPortOneWay",
-                    "&lt;CustomProps&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&amp;lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&amp;gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\" /&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;/CustomProps&gt;");
+                    "<CustomProps><BindingType vt=\"8\">mockBinding</BindingType><BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" /></BindingConfiguration><InboundBodyPathExpression vt=\"8\" /><OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation><AffiliateApplicationName vt=\"8\" /><StaticAction vt=\"8\" /><ProxyUserName vt=\"8\" /><ProxyAddress vt=\"8\" /><UserName vt=\"8\" /><InboundBodyLocation vt=\"8\">UseBodyElement</InboundBodyLocation><EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration><OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate><PropagateFaultMessage vt=\"11\">-1</PropagateFaultMessage><InboundNodeEncoding vt=\"8\">Xml</InboundNodeEncoding><IsolationLevel vt=\"8\">Serializable</IsolationLevel><UseSSO vt=\"11\">0</UseSSO><EnableTransaction vt=\"11\">0</EnableTransaction></CustomProps>");
 
                 expectedTransportConfig.Add("BTS2013_SendPortTwoWays",
-                    "&lt;CustomProps&gt;&lt;BindingType vt=\"8\"&gt;mockBinding&lt;/BindingType&gt;&lt;BindingConfiguration vt=\"8\"&gt;&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&gt;&lt;/BindingConfiguration&gt;&lt;InboundBodyPathExpression vt=\"8\"&gt;/MessageContent&lt;/InboundBodyPathExpression&gt;&lt;OutboundBodyLocation vt=\"8\"&gt;UseTemplate&lt;/OutboundBodyLocation&gt;&lt;AffiliateApplicationName vt=\"8\" /&gt;&lt;StaticAction vt=\"8\" /&gt;&lt;ProxyUserName vt=\"8\" /&gt;&lt;ProxyAddress vt=\"8\" /&gt;&lt;UserName vt=\"8\" /&gt;&lt;InboundBodyLocation vt=\"8\"&gt;UseBodyPath&lt;/InboundBodyLocation&gt;&lt;EndpointBehaviorConfiguration vt=\"8\"&gt;&amp;lt;behavior name=\"EndpointBehavior\" /&amp;gt;&lt;/EndpointBehaviorConfiguration&gt;&lt;OutboundXmlTemplate vt=\"8\"&gt;&amp;lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;PropagateFaultMessage vt=\"11\"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;InboundNodeEncoding vt=\"8\"&gt;Base64&lt;/InboundNodeEncoding&gt;&lt;IsolationLevel vt=\"8\"&gt;Serializable&lt;/IsolationLevel&gt;&lt;UseSSO vt=\"11\"&gt;0&lt;/UseSSO&gt;&lt;EnableTransaction vt=\"11\"&gt;0&lt;/EnableTransaction&gt;&lt;/CustomProps&gt;");
+                    "<CustomProps><BindingType vt=\"8\">mockBinding</BindingType><BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" /></BindingConfiguration><InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression><OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation><AffiliateApplicationName vt=\"8\" /><StaticAction vt=\"8\" /><ProxyUserName vt=\"8\" /><ProxyAddress vt=\"8\" /><UserName vt=\"8\" /><InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation><EndpointBehaviorConfiguration vt=\"8\">&lt;behavior name=\"EndpointBehavior\" /&gt;</EndpointBehaviorConfiguration><OutboundXmlTemplate vt=\"8\">&lt;bts-msg-body xmlns=\"http://www.microsoft.com/schemas/bts2007\" encoding=\"base64\"/&gt;</OutboundXmlTemplate><PropagateFaultMessage vt=\"11\">-1</PropagateFaultMessage><InboundNodeEncoding vt=\"8\">Base64</InboundNodeEncoding><IsolationLevel vt=\"8\">Serializable</IsolationLevel><UseSSO vt=\"11\">0</UseSSO><EnableTransaction vt=\"11\">0</EnableTransaction></CustomProps>");
             }
         }
         
         // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
+        [ClassCleanup()]
+        public static void TestSuiteCleanup() 
+        {
+            if (expectedTransportConfig != null)
+            {
+                expectedTransportConfig.Clear();
+                
+            }
+        }
+        
         // Use TestInitialize to run code before running each test 
         // [TestInitialize()]
         // public void MyTestInitialize() { }
@@ -326,7 +457,8 @@ namespace TransMock.Mockifier.Parser.Tests
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
 
-            parser.ParseBindings("TestApplication.BindingInfo.xml", "TestApplication.BindingInfo2013_parsed.xml", "2013");
+            parser.ParseBindings("TestApplication.BindingInfo.xml", 
+                "TestApplication.BindingInfo2013_parsed.xml", "2013", false);
 
             XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo2013_parsed.xml");
 
@@ -578,7 +710,8 @@ namespace TransMock.Mockifier.Parser.Tests
                     .Replace("&gt;", ">");
             }
 
-            Assert.AreEqual(expectedTransportData, transportData.Value, 
+            Assert.AreEqual(expectedTransportData,
+                transportData.Value, 
                 "Transport type data is not correct for receive location:" + receiveLocationName);
         }
 
@@ -657,8 +790,8 @@ namespace TransMock.Mockifier.Parser.Tests
                     .Replace("&gt;", ">");
             }
 
-            Assert.AreEqual(transportData.Value, 
-                expectedTransportData.Replace("{Encoding}", "UTF-8"), 
+            Assert.AreEqual(expectedTransportData.Replace("{Encoding}", "UTF-8"), 
+                transportData.Value,                  
                 "Transport type data is not correct for send port:" + sendPortName);
         }
 

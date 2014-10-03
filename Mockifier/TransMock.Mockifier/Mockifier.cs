@@ -76,13 +76,16 @@ namespace TransMock.Mockifier
                             break;
                         case ParameterCombination.OutputBindingsAndUnescape:
                             Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
+                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
                             Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
+                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
 
                             bindingsParser.ParseBindings(
                                 parsedArguments.InputBindings,
                                 parsedArguments.OutputBindings, 
                                 null,
-                                "2013", true);
+                                "2013", 
+                                parsedArguments.Unescape);
                             break;
                         case ParameterCombination.OutputClassAndUnescape:
                             //TODO:

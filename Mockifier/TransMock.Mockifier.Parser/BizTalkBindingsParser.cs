@@ -357,7 +357,7 @@ namespace TransMock.Mockifier.Parser
                     .Replace("&gt;", ">");
             }
 
-            transportInfo.SetValue(mockTransportData);
+            transportInfo.Value = mockTransportData;
         }
 
         private void ReplaceReceiveTransportConfiguration(
@@ -479,7 +479,7 @@ namespace TransMock.Mockifier.Parser
                     .Replace("&gt;", ">");
             }
 
-            transportInfo.SetValue(mockTransportData);
+            transportInfo.Value = mockTransportData;
         }
     }
 }
