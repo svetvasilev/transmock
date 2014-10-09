@@ -1,0 +1,19 @@
+﻿<CustomProps>
+  <BindingConfiguration vt="8">&lt;binding name="mockBinding" Encoding="{Encoding}" /&gt;</BindingConfiguration>
+  <InboundBodyPathExpression vt="8" />
+  <OutboundBodyLocation vt="8">UseTemplate</OutboundBodyLocation>
+  <AffiliateApplicationName vt="8" />
+  <EnableTransaction vt="11">0</EnableTransaction>
+  <StaticAction vt="8" />
+  <BindingType vt="8">mockBinding</BindingType>
+  <ProxyAddress vt="8" />
+  <UserName vt="8" />
+  <InboundBodyLocation vt="8">UseBodyElement</InboundBodyLocation>
+  <EndpointBehaviorConfiguration vt="8">&lt;behavior name="EndpointBehavior" /&gt;</EndpointBehaviorConfiguration>
+  <OutboundXmlTemplate vt="8">&lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="base64"/&gt;</OutboundXmlTemplate>
+  <PropagateFaultMessage vt="11">-1</PropagateFaultMessage>
+  <InboundNodeEncoding vt="8">Xml</InboundNodeEncoding>
+  <ProxyUserName vt="8" />
+  <IsolationLevel vt="8">Serializable</IsolationLevel>
+  <UseSSO vt="11">0</UseSSO>
+</CustomProps>
