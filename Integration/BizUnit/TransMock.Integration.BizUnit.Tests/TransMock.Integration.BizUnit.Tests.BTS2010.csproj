@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{64EB65BC-8DAA-48E0-82F8-8A1F37F19429}</ProjectGuid>
+    <ProjectGuid>{FCBD2200-2998-4A52-8D49-FC17F21A4750}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wiretap.Deploy.CustomActions.Tests</RootNamespace>
-    <AssemblyName>Wiretap.Deploy.CustomActions.Tests</AssemblyName>
+    <RootNamespace>Wiretap.Integration.BizUnit.Tests</RootNamespace>
+    <AssemblyName>Wiretap.Integration.BizUnit.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -37,14 +37,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BizUnit">
+      <HintPath>..\..\..\..\..\..\..\Program Files\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\..\..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -52,8 +58,39 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestMockSolicitResponseStep.cs" />
+    <Compile Include="TestMockSendStep.cs" />
+    <Compile Include="TestMockRequestResponseStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestTransMockInstaller.cs" />
+    <Compile Include="TestMockReceiveStep.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2010.csproj">
+      <Project>{1F8B806E-B479-4DB0-9896-1D29E288A2F2}</Project>
+      <Name>TransMock.Wcf.Adapter.BTS2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2010.csproj">
+      <Project>{5891035F-5346-4A15-BB61-09018D5CC4AE}</Project>
+      <Name>TransMock.TestUtils.BTS2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2010.csproj">
+      <Project>{B32C1509-3952-4492-B097-6886CEC675FB}</Project>
+      <Name>TransMock.Integration.BizUnit.BTS2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\TestRequest.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
