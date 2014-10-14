@@ -25,6 +25,8 @@ using System.ServiceModel.Configuration;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using TransMock.Deploy.Utils;
+
 
 namespace TransMock.Deploy.CustomActions.Tests
 {
@@ -34,6 +36,8 @@ namespace TransMock.Deploy.CustomActions.Tests
     [TestClass]
     public class TestTransMockInstaller
     {
+        private static System.Reflection.Assembly adapterAssembly;
+
         public TestTransMockInstaller()
         {            
         }
@@ -61,13 +65,60 @@ namespace TransMock.Deploy.CustomActions.Tests
         // You can use the following additional attributes as you write your tests:
         //
         // Use ClassInitialize to run code before running the first test in the class
-        // [ClassInitialize()]
-        // public static void MyClassInitialize(TestContext testContext) { }
-        //
+        [ClassInitialize()]
+        public static void TestSuitSetup(TestContext testContext) 
+        { 
+            //Loading the Adapter assembly in memory
+            //adapterAssembly = System.Reflection.Assembly.LoadFrom(
+            //     @"..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug\TransMock.Wcf.Adapter.dll");
+
+            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin;";
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
+            procInfo.FileName = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil.exe";
+            //procInfo.WorkingDirectory = @"C:\Program files (x86)\Microsoft Visual Studio 11.0\VC";
+            procInfo.Arguments = @"/if ..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug\TransMock.Wcf.Adapter.dll";
+            procInfo.CreateNoWindow = true;
+            procInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            procInfo.UseShellExecute = false;
+
+            using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+            {
+                p.StartInfo = procInfo;
+                p.Start();
+                p.WaitForExit();
+            }                      
+
+        }
+        
         // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
+        [ClassCleanup()]
+        public static void TestSuitCleanUp() 
+        {
+            //adapterAssembly = null;
+
+            System.Collections.Specialized.StringDictionary pathCollection = new System.Collections.Specialized.StringDictionary();            
+            
+            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
+            //procInfo.WorkingDirectory = @"C:\Program files (x86)\Microsoft Visual Studio 11.0\VC";
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin;";
+            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
+            procInfo.FileName = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil.exe";
+            procInfo.Arguments = @"/u TransMock.Wcf.Adapter";
+            procInfo.CreateNoWindow = true;
+            procInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            procInfo.UseShellExecute = false;
+
+            using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+            {
+                p.StartInfo = procInfo;
+                p.Start();
+                p.WaitForExit();
+            }
+        }
+        
         // Use TestInitialize to run code before running each test 
         // [TestInitialize()]
         // public void MyTestInitialize() { }
@@ -78,33 +129,116 @@ namespace TransMock.Deploy.CustomActions.Tests
         //
         #endregion
 
-        [TestMethod]
-        public void TestInstall()
-        {
-            TransMockInstaller.TestAddConfiguration(@"..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug");
-            
-            Configuration config = ConfigurationManager.OpenMachineConfiguration();
-            Assert.IsNotNull(config , "Machine.Config returned null");
-
-            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
-
-            //Assert.IsTrue(sectionGroup.Client.Endpoints.ContainsKey("mockBinding"), "The mockBinding is not present in the machine.config");
-            Assert.IsTrue(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"), "The mockBinding element extension is not present in the machine.config");
-            Assert.IsTrue(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"), "The mockBinding extention is not present in the machine.config");
-        }
-
         [TestMethod]        
-        public void TestUninstall()
-        {
-            TransMockInstaller.TestRemoveConfiguration(@"..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug");
-
+        public void TestInstall_32Bit()
+        {            
             Configuration config = ConfigurationManager.OpenMachineConfiguration();
+
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            MachineConfigManager.AddMachineConfigurationInfo(
+                @"..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug",
+                config);
+
+            config = ConfigurationManager.OpenMachineConfiguration();
+
             Assert.IsNotNull(config, "Machine.Config returned null");
 
             ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
-            
-            Assert.IsFalse(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"), "The mockBinding element extension is still present in the machine.config");
-            Assert.IsFalse(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"), "The mockBinding extention is still present in the machine.config");
+                        
+            Assert.IsTrue(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"),
+                "The mockBinding element extension is not present in the machine.config");
+
+            Assert.IsTrue(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"),
+                "The mockBinding extention is not present in the machine.config");
         }
+
+        [TestMethod]
+        public void TestInstall_64Bit()
+        {
+            if (!System.Environment.Is64BitOperatingSystem)
+            {
+                return;
+            }
+
+            Configuration config = Get64bitMachineConfig();
+
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            MachineConfigManager.AddMachineConfigurationInfo(
+                @"..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug",
+                config);
+
+            config = Get64bitMachineConfig();
+
+            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
+
+            Assert.IsTrue(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"),
+                "The mockBinding element extension is not present in the machine.config");
+
+            Assert.IsTrue(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"),
+                "The mockBinding extention is not present in the machine.config");
+        }
+
+        [TestMethod]        
+        public void TestUninstall_32bit()
+        {
+            Configuration config = ConfigurationManager.OpenMachineConfiguration();
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            MachineConfigManager.RemoveMachineConfigurationInfo(config);
+
+            config = ConfigurationManager.OpenMachineConfiguration();
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
+                        
+            Assert.IsFalse(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"),
+                "The mockBinding element extension is not present in the machine.config");
+
+            Assert.IsFalse(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"),
+                "The mockBinding extention is not present in the machine.config");
+        }
+
+        [TestMethod]
+        public void TestUninstall_64bit()
+        {
+            if (!System.Environment.Is64BitOperatingSystem)
+            {
+                return;
+            }
+
+            Configuration config = Get64bitMachineConfig();
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            MachineConfigManager.RemoveMachineConfigurationInfo(config);
+
+            config = Get64bitMachineConfig();
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            ServiceModelSectionGroup sectionGroup = config.GetSectionGroup("system.serviceModel") as ServiceModelSectionGroup;
+
+            Assert.IsFalse(sectionGroup.Extensions.BindingElementExtensions.ContainsKey("mockTransport"),
+                "The mockBinding element extension is not present in the machine.config");
+
+            Assert.IsFalse(sectionGroup.Extensions.BindingExtensions.ContainsKey("mockBinding"),
+                "The mockBinding extention is not present in the machine.config");
+        }
+
+        private static Configuration Get64bitMachineConfig()
+        {
+            string machineConfigPathFor64Bit = System.Runtime.InteropServices.RuntimeEnvironment
+                .GetRuntimeDirectory().Replace("Framework", "Framework64");
+
+            ConfigurationFileMap configMap = new ConfigurationFileMap(
+                System.IO.Path.Combine(machineConfigPathFor64Bit,
+                    "Config", "machine.config"));
+
+            Configuration config = ConfigurationManager.OpenMappedMachineConfiguration(configMap);
+            
+            Assert.IsNotNull(config, "Machine.Config returned null");
+            
+            return config;
+        }        
     }
 }
