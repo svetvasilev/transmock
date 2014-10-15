@@ -69,14 +69,10 @@ namespace TransMock.Deploy.CustomActions.Tests
         public static void TestSuitSetup(TestContext testContext) 
         { 
             //Loading the Adapter assembly in memory
-            //adapterAssembly = System.Reflection.Assembly.LoadFrom(
-            //     @"..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug\TransMock.Wcf.Adapter.dll");
+            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();            
 
-            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin;";
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
-            procInfo.FileName = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil.exe";
+            procInfo.EnvironmentVariables["PATH"] = CreatePathVariable();
+            procInfo.FileName = @"gacutil.exe";
             //procInfo.WorkingDirectory = @"C:\Program files (x86)\Microsoft Visual Studio 11.0\VC";
             procInfo.Arguments = @"/if ..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug\TransMock.Wcf.Adapter.dll";
             procInfo.CreateNoWindow = true;
@@ -91,21 +87,36 @@ namespace TransMock.Deploy.CustomActions.Tests
             }                      
 
         }
+
+        private static string CreatePathVariable()
+        {
+            string pathVar = System.Environment.GetEnvironmentVariable("PATH");
+            if (!pathVar.Contains(@"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;"))
+            {
+                pathVar += @";C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
+            }
+
+            if (!pathVar.Contains(@"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin"))
+            {
+                pathVar += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin";
+            }
+
+            if (!pathVar.Contains(@"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;"))
+            {
+                pathVar += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
+            }
+
+            return pathVar;
+        }
         
         // Use ClassCleanup to run code after all tests in a class have run
         [ClassCleanup()]
         public static void TestSuitCleanUp() 
         {
-            //adapterAssembly = null;
-
-            System.Collections.Specialized.StringDictionary pathCollection = new System.Collections.Specialized.StringDictionary();            
-            
             System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
-            //procInfo.WorkingDirectory = @"C:\Program files (x86)\Microsoft Visual Studio 11.0\VC";
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin;";
-            //procInfo.EnvironmentVariables["PATH"] += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
-            procInfo.FileName = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil.exe";
+
+            procInfo.EnvironmentVariables["PATH"] = CreatePathVariable();
+            procInfo.FileName = @"gacutil.exe";
             procInfo.Arguments = @"/u TransMock.Wcf.Adapter";
             procInfo.CreateNoWindow = true;
             procInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
