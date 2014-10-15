@@ -67,7 +67,9 @@ namespace TransMock.Deploy.CustomActions.Tests
         // Use ClassInitialize to run code before running the first test in the class
         [ClassInitialize()]
         public static void TestSuitSetup(TestContext testContext) 
-        { 
+        {
+            //First create a temp copy of the machine.config files
+            BackupConfigFiles();
             //Loading the Adapter assembly in memory
             System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();            
 
@@ -87,10 +89,38 @@ namespace TransMock.Deploy.CustomActions.Tests
             }                      
 
         }
+        
+        // Use ClassCleanup to run code after all tests in a class have run
+        [ClassCleanup()]
+        public static void TestSuitCleanUp() 
+        {
+            //Restore config files
+            RestoreConfigFiles();
+
+            System.Reflection.Assembly adapterAssembly = 
+                System.Reflection.Assembly.LoadFrom(@"..\..\..\..\Adapter\TransMock.Wcf.Adapter\bin\Debug\TransMock.Wcf.Adapter.dll");
+
+            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
+
+            procInfo.EnvironmentVariables["PATH"] = CreatePathVariable();
+            procInfo.FileName = @"gacutil.exe";
+            procInfo.Arguments = @"/u " + adapterAssembly.FullName.Replace(" ", string.Empty);
+            procInfo.CreateNoWindow = true;
+            procInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            procInfo.UseShellExecute = false;
+
+            using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+            {
+                p.StartInfo = procInfo;
+                p.Start();
+                p.WaitForExit();
+            }
+        }
 
         private static string CreatePathVariable()
         {
             string pathVar = System.Environment.GetEnvironmentVariable("PATH");
+            
             if (!pathVar.Contains(@"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;"))
             {
                 pathVar += @";C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools;";
@@ -106,28 +136,59 @@ namespace TransMock.Deploy.CustomActions.Tests
                 pathVar += @"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools;";
             }
 
+            System.Environment.SetEnvironmentVariable("PATH", pathVar);
+
             return pathVar;
         }
-        
-        // Use ClassCleanup to run code after all tests in a class have run
-        [ClassCleanup()]
-        public static void TestSuitCleanUp() 
+
+        private static void BackupConfigFiles()
         {
-            System.Diagnostics.ProcessStartInfo procInfo = new System.Diagnostics.ProcessStartInfo();
+            Configuration config = ConfigurationManager.OpenMachineConfiguration();
 
-            procInfo.EnvironmentVariables["PATH"] = CreatePathVariable();
-            procInfo.FileName = @"gacutil.exe";
-            procInfo.Arguments = @"/u TransMock.Wcf.Adapter";
-            procInfo.CreateNoWindow = true;
-            procInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            procInfo.UseShellExecute = false;
+            Assert.IsNotNull(config, "Machine.Config returned null");
 
-            using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+            config.SaveAs(
+                Path.Combine(Path.GetDirectoryName(config.FilePath), 
+                "machine.config.test"));
+
+            if (Environment.Is64BitOperatingSystem)
             {
-                p.StartInfo = procInfo;
-                p.Start();
-                p.WaitForExit();
+                config = Get64bitMachineConfig();
+
+                Assert.IsNotNull(config, "Machine.Config returned null");
+
+                config.SaveAs(
+                    Path.Combine(Path.GetDirectoryName(config.FilePath),
+                    "machine.config.test"));
             }
+        }
+
+        private static void RestoreConfigFiles()
+        {
+            Configuration config = ConfigurationManager.OpenMachineConfiguration();
+
+            Assert.IsNotNull(config, "Machine.Config returned null");
+
+            string path = System.IO.Path.GetDirectoryName(config.FilePath);
+
+            if (File.Exists(Path.Combine(path, "machine.config.test")))
+            {
+                System.IO.File.Copy(Path.Combine(path, "machine.config.test"), config.FilePath, true);
+            }
+
+            if (Environment.Is64BitOperatingSystem)
+            {
+                config = Get64bitMachineConfig();
+
+                Assert.IsNotNull(config, "Machine.Config returned null");
+
+                path = Path.GetDirectoryName(config.FilePath);
+
+                if (File.Exists(Path.Combine(path, "machine.config.test")))
+                {
+                    File.Copy(Path.Combine(path, "machine.config.test"), config.FilePath, true);
+                }
+            }            
         }
         
         // Use TestInitialize to run code before running each test 
