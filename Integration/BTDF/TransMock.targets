@@ -34,12 +34,9 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 		<Exec Condition="'$(BTSVersion)' != '2013'"
       Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot; -r $(BTSVersion)" 
       ContinueOnError="false"></Exec>
-    <!--<Exec Condition="'$(BTSVersion)' == '2013'"
-      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;"
-      ContinueOnError="false"></Exec>-->
     <Exec Condition="'$(BTSVersion)' == '2013'"
-      Command="&quot;C:\Projects\TransMock\master\Mockifier\TransMock.Mockifier\bin\Debug\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;"
-      ContinueOnError="false"></Exec>
+      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;"
+      ContinueOnError="false"></Exec>    
 		<Message Text="------ The Mockifier execution completed. -------" />
 	</Target>	
 </Project>
