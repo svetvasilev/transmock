@@ -55,6 +55,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTransMockInstaller.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransMock.Deploy.Utils\TransMock.Deploy.Utils.BTS2010.csproj">
+      <Project>{911d72d4-c2b8-48e6-900e-88d8edc86e14}</Project>
+      <Name>TransMock.Deploy.Utils.BTS2010</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
