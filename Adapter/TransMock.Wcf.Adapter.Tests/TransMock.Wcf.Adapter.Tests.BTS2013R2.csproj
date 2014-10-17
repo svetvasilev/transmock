@@ -76,7 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MockAdapterTest.BindingInfo.xml" />
+    <Content Include="MockAdapterTest.BindingInfo.BTS2013.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
