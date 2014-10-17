@@ -392,26 +392,15 @@ namespace TransMock.Mockifier.Parser
 
             #region Setting the ReceiveHandler.TransportType element
             var hanlderElement = receiveLocationElement.Descendants()
-                .Where(e => e.Name == XmlNodeNames.ReceiveHandler).First();
-
-            bool isHostIsolated = hanlderElement.Attribute("Name")
-                .Value.ToLower().Contains("isolated");
+                .Where(e => e.Name == XmlNodeNames.ReceiveHandler).First();            
 
             var handlerTransportTypeElement = receiveLocationElement.Descendants()
                 .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.ReceiveHandler).First();           
             
-            if (isHostIsolated)
-            {
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, IsolatedTransportName);
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, IsolatedTransportCapabilities);
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, IsolatedTransportConfigurationClsid);
-            }
-            else
-            {
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
-                handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
-            }
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+            handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
+           
 
             System.Diagnostics.Debug.WriteLine("Transport type values set");
             #endregion
@@ -419,20 +408,11 @@ namespace TransMock.Mockifier.Parser
             #region Setting the TransportType element
             var transportTypeElement = receiveLocationElement.Element(XmlNodeNames.ReceiveLocationTransportType);
 
-            if (isHostIsolated)
-            {
-                transportTypeElement.SetAttributeValue(XmlNodeNames.Name, IsolatedTransportName);
-                transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, IsolatedTransportCapabilities);
-                transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, IsolatedTransportConfigurationClsid);
-            }
-            else
-            {
-                transportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
-                transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
-                transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
+            transportTypeElement.SetAttributeValue(XmlNodeNames.ConfigurationClsid, InprocTransportConfigurationClsid);
 
-                System.Diagnostics.Debug.WriteLine("Transport type values for Inproc host set");
-            }
+            System.Diagnostics.Debug.WriteLine("Transport type values for Inproc host set");            
             #endregion
             
             bool isTwoWay = bool.Parse(receivePortElement.Attribute(XmlNodeNames.IsTwoWay).Value);

@@ -548,17 +548,16 @@ namespace TransMock.Mockifier.Parser.Tests
             Assert.AreEqual(string.Format("mock://localhost/{0}", receiveLocationName), address, "The address is not correct");
 
             var receiveHandler = receiveLocationElement.Element("ReceiveHandler");
-            bool isHostIsolated = receiveHandler.Attribute("Name").Value
-                .ToLower().Contains("isolated"); 
+             
             //Assert the transport type settings
             var transportTypeElement = receiveLocationElement.Element("ReceiveLocationTransportType");
 
-            VerifyReceiveLocationHandler(transportTypeElement, isHostIsolated);
+            VerifyReceiveLocationHandler(transportTypeElement);
 
             //Assert the receive handler transport type settings
             var handlerTransportTypeElement = receiveHandler.Element("TransportType");
 
-            VerifyReceiveLocationHandler(handlerTransportTypeElement, isHostIsolated);
+            VerifyReceiveLocationHandler(handlerTransportTypeElement);
             //Assert the transport type data
             var transportData = receiveLocationElement.Element("ReceiveLocationTransportTypeData");
             string expectedTransportData = null;
@@ -591,23 +590,8 @@ namespace TransMock.Mockifier.Parser.Tests
                 "Transport type data is not correct for receive location:" + receiveLocationName);
         }
 
-        private void VerifyReceiveLocationHandler(XElement configElement, bool isHostIsolated)
-        {
-            if (isHostIsolated)
-            {
-                Assert.AreEqual("WCF-CustomIsolated",
-                configElement.Attribute("Name").Value,
-                "Transport type name is not correct");
-
-                Assert.AreEqual("641",
-                    configElement.Attribute("Capabilities").Value,
-                    "Transport type capabilities is not correct");
-
-                Assert.AreEqual("16824334-968f-42db-b33b-6f8d62ed1ebc",
-                    configElement.Attribute("ConfigurationClsid").Value,
-                    "Transport type configuraiton is not correct");
-            }
-            else
+        private void VerifyReceiveLocationHandler(XElement configElement)
+        {            
             {
                 Assert.AreEqual("WCF-Custom",
                 configElement.Attribute("Name").Value,
