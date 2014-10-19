@@ -11,15 +11,18 @@
     <ProjectName>BizTalkTests</ProjectName>
     <ProjectVersion>1.0</ProjectVersion>
     <IncludeOrchestrations>False</IncludeOrchestrations>
-	<IncludeSchemas>False</IncludeSchemas>
-	<IncludePipelines>False</IncludePipelines>
-	<IncludeTransforms>False</IncludeTransforms>
+	  <IncludeSchemas>False</IncludeSchemas>
+	  <IncludePipelines>False</IncludePipelines>
+	  <IncludeTransforms>False</IncludeTransforms>
     <UsingMasterBindings>True</UsingMasterBindings>
     <RequireXmlPreprocessDirectives>False</RequireXmlPreprocessDirectives>
     <ApplyXmlEscape>True</ApplyXmlEscape>
     <IncludeSettingsSpreadsheetInMsi>False</IncludeSettingsSpreadsheetInMsi>
 	  <SkipIISReset>True</SkipIISReset>
 	  <SkipHostInstancesRestart>True</SkipHostInstancesRestart>
+
+    <TransMockAddressClassDir>..\UnitTests</TransMockAddressClassDir>
+    <TransMockDebug>true</TransMockDebug>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Properties related to building an MSI for server deployments -->

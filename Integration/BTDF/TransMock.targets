@@ -20,6 +20,8 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 	<PropertyGroup>
 		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>
     <BTSVersion Condition="'$(BTSVersion)' == ''">2013</BTSVersion>
+    <TransMockAddressClassDir Condition="'$(TransMockAddressClassDir)' == ''"></TransMockAddressClassDir>
+    <TransMockDebug Condition="'$(TransMockDebug)' == ''">false</TransMockDebug>
 	</PropertyGroup>	
 	<!-- Extension point for BTDF. Executed in case deploying to local or shared development environment only -->
 	<Target Name="CustomDeployTarget" Condition="$(SettingsFilePath.EndsWith('Exported_LocalSettings.xml')) Or $(SettingsFilePath.EndsWith('Exported_DevSettings.xml'))">
@@ -30,13 +32,27 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == '' And '$(Is64bitOS)' == 'false'">C:\Program Files\TransMock</TransMockHomeDir>
 			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == '' And '$(Is64bitOS)' == 'true'">C:\Program Files (x86)\TransMock</TransMockHomeDir>
 		</PropertyGroup>
-		<Message Text="------ Extension point for TransMock. Invoking the Mockifier -----" />		
-		<Exec Condition="'$(BTSVersion)' != '2013'"
-      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot; -r $(BTSVersion)" 
+    
+    <CreateProperty Value="$(TransMockAddressClassDir)" Condition="'$(TransMockAddressClassDir)' != ''">
+      <Output TaskParameter="Value" PropertyName="MockAddressHelperClassDir" />      
+    </CreateProperty>
+
+    <CreateProperty Value="$(MSBuildProjectDirectory)"  Condition="'$(TransMockAddressClassDir)' == ''">
+      <Output TaskParameter="Value" PropertyName="MockAddressHelperClassDir" />
+    </CreateProperty>
+		
+    <Message Text="------ Extension point for TransMock. Invoking the Mockifier -----" />
+    
+    <Message Text="DEBUG: value of MockAddressHelperClassDir is: $(MockAddressHelperClassDir)" Condition="'$(TransMockDebug)' == 'true'"/>
+		
+    <Exec Condition="'$(BTSVersion)' != '2013'"
+      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot; -r $(BTSVersion)" 
       ContinueOnError="false"></Exec>
+    
     <Exec Condition="'$(BTSVersion)' == '2013'"
-      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MSBuildProjectDirectory)&quot;"
-      ContinueOnError="false"></Exec>    
+      Command="&quot;$(TransMockHomeDir)\BTS$(BTSVersion)\Bin\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot;"
+      ContinueOnError="false"></Exec>
+    
 		<Message Text="------ The Mockifier execution completed. -------" />
 	</Target>	
 </Project>

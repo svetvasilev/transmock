@@ -184,10 +184,10 @@ namespace TransMock.Mockifier.Parser
                 .Append("\t").Append("}")//Closing the class
             .AppendLine()
             .Append("}");//Closing the namespace
-
-            classFilePath = Path.GetDirectoryName(classFilePath);
+                       
             classFilePath = Path.Combine(classFilePath, applicationName + "MockAddresses");
             classFilePath = Path.ChangeExtension(classFilePath, "cs");
+            
             //Saving the class to a file
             if (fileWriter != null)
             {
