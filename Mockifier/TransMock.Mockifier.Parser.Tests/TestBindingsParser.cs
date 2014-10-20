@@ -676,7 +676,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
             sb.Append("<CustomProps>")
                 .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
-                .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" /></BindingConfiguration>")
+                .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&gt;</BindingConfiguration>")
                 .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
                 .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
                 .Append("<AffiliateApplicationName vt=\"8\" />")
@@ -703,7 +703,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
             sb.Append("<CustomProps>")
                 .Append("<BindingType vt=\"8\">mockBinding</BindingType>")
-                .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" /></BindingConfiguration>")
+                .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" /&gt;</BindingConfiguration>")
                 .Append("<InboundBodyPathExpression vt=\"8\" />")
                 .Append("<OutboundBodyLocation vt=\"8\">UseTemplate</OutboundBodyLocation>")
                 .Append("<AffiliateApplicationName vt=\"8\" />")
@@ -729,7 +729,7 @@ namespace TransMock.Mockifier.Parser.Tests
             StringBuilder sb = new StringBuilder(256);
 
             sb.Append("<CustomProps>")
-                .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /></BindingConfiguration>")
+                .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;</BindingConfiguration>")
                 .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
                 .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
                 .Append("<AffiliateApplicationName vt=\"8\" />")
@@ -755,7 +755,7 @@ namespace TransMock.Mockifier.Parser.Tests
             StringBuilder sb = new StringBuilder(256);
 
             sb.Append("<CustomProps>")
-                .Append("<BindingConfiguration vt=\"8\"><binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /></BindingConfiguration>")
+                .Append("<BindingConfiguration vt=\"8\">&lt;binding name=\"mockBinding\" Encoding=\"{Encoding}\" PromotedProperties=\"{PromotedProperties}\" /&gt;</BindingConfiguration>")
                 .Append("<InboundBodyPathExpression vt=\"8\">/MessageContent</InboundBodyPathExpression>")
                 .Append("<InboundBodyLocation vt=\"8\">UseBodyPath</InboundBodyLocation>")
                 .Append("<AffiliateApplicationName vt=\"8\" />")
