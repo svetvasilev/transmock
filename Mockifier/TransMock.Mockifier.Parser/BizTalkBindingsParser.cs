@@ -47,11 +47,7 @@ namespace TransMock.Mockifier.Parser
 
         private const string InprocTransportConfigurationClsid = "af081f69-38ca-4d5b-87df-f0344b12557a";
 
-        private const string IsolatedTransportName = "WCF-CustomIsolated";
-
-        private const string IsolatedTransportCapabilities = "641";
-
-        private const string IsolatedTransportConfigurationClsid = "16824334-968f-42db-b33b-6f8d62ed1ebc"; 
+        private const string DefaultHostName = "BizTalkServerApplication";
 
         private IResourceReader resourceReader;
 
@@ -184,6 +180,12 @@ namespace TransMock.Mockifier.Parser
                 .Append("\t").Append("}")//Closing the class
             .AppendLine()
             .Append("}");//Closing the namespace
+
+            if (!Directory.Exists(classFilePath))
+            {
+                //In case the path is not a directory, we get the path to it.
+                classFilePath = Path.GetDirectoryName(classFilePath);
+            }
                        
             classFilePath = Path.Combine(classFilePath, applicationName + "MockAddresses");
             classFilePath = Path.ChangeExtension(classFilePath, "cs");
@@ -317,10 +319,15 @@ namespace TransMock.Mockifier.Parser
 
             System.Diagnostics.Debug.WriteLine("Transport type values set");
             #endregion
-
+            
             #region Setting the SendHandler.TransportType element
-            var handlerTransportTypeElement = transportElement.Descendants()
-                .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.SendHandler).First();
+            var sendHandlerElement = transportElement.Element(XmlNodeNames.SendHandler);
+
+            //Set the host name
+            sendHandlerElement.Attribute("Name").Value = DefaultHostName;
+
+            var handlerTransportTypeElement = sendHandlerElement
+                .Element(XmlNodeNames.TransportType);
 
             handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Name, InprocTransportName);
             handlerTransportTypeElement.SetAttributeValue(XmlNodeNames.Capabilities, InprocTransportCapabilities);
@@ -391,8 +398,11 @@ namespace TransMock.Mockifier.Parser
             #endregion
 
             #region Setting the ReceiveHandler.TransportType element
-            var hanlderElement = receiveLocationElement.Descendants()
-                .Where(e => e.Name == XmlNodeNames.ReceiveHandler).First();            
+            var handlerElement = receiveLocationElement.Descendants()
+                .Where(e => e.Name == XmlNodeNames.ReceiveHandler).First();
+           
+            //Setting the default host name
+            handlerElement.Attribute("Name").Value = DefaultHostName;
 
             var handlerTransportTypeElement = receiveLocationElement.Descendants()
                 .Where(e => e.Name == XmlNodeNames.TransportType && e.Parent.Name == XmlNodeNames.ReceiveHandler).First();           

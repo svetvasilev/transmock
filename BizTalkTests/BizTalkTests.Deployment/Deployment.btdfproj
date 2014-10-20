@@ -20,6 +20,8 @@
     <IncludeSettingsSpreadsheetInMsi>False</IncludeSettingsSpreadsheetInMsi>
 	  <SkipIISReset>True</SkipIISReset>
 	  <SkipHostInstancesRestart>True</SkipHostInstancesRestart>
+
+	  <BTSVersion>2010</BTSVersion>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Properties related to building an MSI for server deployments -->
