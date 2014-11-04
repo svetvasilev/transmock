@@ -89,11 +89,19 @@ namespace TransMock.Integration.BizUnit
         {
             try
             {
+                //Setting up pipe security
+                PipeSecurity ps = new PipeSecurity();
+
+                ps.AddAccessRule(new PipeAccessRule("Users",
+                    PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite,
+                    System.Security.AccessControl.AccessControlType.Allow));
                 //Creating the named pipe server
                 pipeServer = new NamedPipeServerStream(
                     _endpointUri.AbsolutePath,
-                    PipeDirection.InOut, 1, PipeTransmissionMode.Message,
-                    PipeOptions.Asynchronous, 4096, 4096);
+                    PipeDirection.InOut, 1, 
+                    PipeTransmissionMode.Message,
+                    PipeOptions.Asynchronous, 
+                    4096, 4096, ps);
 
                 System.Diagnostics.Debug.WriteLine("Starting listening for client connections");
 
