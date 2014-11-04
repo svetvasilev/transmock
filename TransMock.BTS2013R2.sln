@@ -54,6 +54,10 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "TransMock.Deploy.BTS2013R2"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Deploy.Utils.BTS2013R2", "Deployment\TransMock.Deploy.Utils\TransMock.Deploy.Utils.BTS2013R2.csproj", "{911D72D4-C2B8-48E6-900E-88D8EDC86E14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.BTS2013R2", "Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013R2.csproj", "{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.Tests.BTS2013R2", "Test\TransMock.TestUtils.BizTalk.Tests\TransMock.TestUtils.BizTalk.Tests.BTS2013R2.csproj", "{CBA39921-3716-4CBE-8742-086727D383B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -194,6 +198,26 @@ Global
 		{911D72D4-C2B8-48E6-900E-88D8EDC86E14}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{911D72D4-C2B8-48E6-900E-88D8EDC86E14}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{911D72D4-C2B8-48E6-900E-88D8EDC86E14}.Release|x86.ActiveCfg = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|x86.ActiveCfg = Release|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,6 +238,8 @@ Global
 		{2E880E69-F61D-488A-BD6B-7A44D5103FB3} = {E83982C3-5D5E-4051-94CF-E1EC859249C3}
 		{D20DCAC5-29D8-450B-8FC0-D6C2364FD98F} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
 		{911D72D4-C2B8-48E6-900E-88D8EDC86E14} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
+		{CBA39921-3716-4CBE-8742-086727D383B0} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TransMock.vsmdi
