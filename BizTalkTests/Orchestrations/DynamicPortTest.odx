@@ -1,0 +1,222 @@
+﻿#if __DESIGNER_DATA
+#error Do not define __DESIGNER_DATA.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<om:MetaModel MajorVersion="1" MinorVersion="3" Core="2b131234-7959-458d-834f-2dc0769ce683" ScheduleModel="66366196-361d-448d-976f-cab5e87496d2" xmlns:om="http://schemas.microsoft.com/BizTalk/2003/DesignerData">
+    <om:Element Type="Module" OID="0288fb21-56cc-4755-9ce1-638d8faea8b4" LowerBound="1.1" HigherBound="62.1">
+        <om:Property Name="ReportToAnalyst" Value="True" />
+        <om:Property Name="Name" Value="Orchestrations" />
+        <om:Property Name="Signal" Value="False" />
+        <om:Element Type="PortType" OID="c7df1d21-ccee-4060-a813-5ae7632ff4c3" ParentLink="Module_PortType" LowerBound="4.1" HigherBound="11.1">
+            <om:Property Name="Synchronous" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="InStartPortType" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="OperationDeclaration" OID="929b7b7f-5862-40a3-b6ec-c52ebbc2d286" ParentLink="PortType_OperationDeclaration" LowerBound="6.1" HigherBound="10.1">
+                <om:Property Name="OperationType" Value="OneWay" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="StartProcess" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="MessageRef" OID="0cfe3469-e3ef-45ae-89de-c40e08d08f32" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.31">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Request" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+        <om:Element Type="PortType" OID="195d4e9b-f9fb-4d6e-80fa-48138680d87c" ParentLink="Module_PortType" LowerBound="11.1" HigherBound="18.1">
+            <om:Property Name="Synchronous" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="OutPortType" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="OperationDeclaration" OID="0e785c24-c511-4c87-b981-63700a812d0e" ParentLink="PortType_OperationDeclaration" LowerBound="13.1" HigherBound="17.1">
+                <om:Property Name="OperationType" Value="OneWay" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="SendOutMessage" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="MessageRef" OID="727c0eb1-f138-4efe-b520-851a8bc55aa0" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="15.13" HigherBound="15.31">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Request" />
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+        <om:Element Type="ServiceDeclaration" OID="46407f26-7ea6-480f-b878-fadb82f6029e" ParentLink="Module_ServiceDeclaration" LowerBound="18.1" HigherBound="61.1">
+            <om:Property Name="InitializedTransactionType" Value="False" />
+            <om:Property Name="IsInvokable" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="DynamicPortTest" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="VariableDeclaration" OID="23691428-c322-456b-8162-b7f529649511" ParentLink="ServiceDeclaration_VariableDeclaration" LowerBound="27.1" HigherBound="28.1">
+                <om:Property Name="UseDefaultConstructor" Value="True" />
+                <om:Property Name="Type" Value="TransMock.TestUtils.BizTalk.MockTransportConfig" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="MockConfig" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="MessageDeclaration" OID="c46f75a0-0106-49de-9c4c-a07f087cd5d7" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="25.1" HigherBound="26.1">
+                <om:Property Name="Type" Value="Schemas.TestSchema" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="StartMsg" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="MessageDeclaration" OID="52ef2607-5e54-4f39-b74a-35eae6224d43" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="26.1" HigherBound="27.1">
+                <om:Property Name="Type" Value="Schemas.TestSchema" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="OutMsg" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="ServiceBody" OID="f923d87a-7af8-494c-8c23-791d328fd45a" ParentLink="ServiceDeclaration_ServiceBody">
+                <om:Property Name="Signal" Value="False" />
+                <om:Element Type="Receive" OID="6a90e946-3fe5-4b43-88b7-0dbd375f20ba" ParentLink="ServiceBody_Statement" LowerBound="30.1" HigherBound="33.1">
+                    <om:Property Name="Activate" Value="True" />
+                    <om:Property Name="PortName" Value="PortIn" />
+                    <om:Property Name="MessageName" Value="StartMsg" />
+                    <om:Property Name="OperationName" Value="StartProcess" />
+                    <om:Property Name="OperationMessageName" Value="Request" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Rcv_Start" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+                <om:Element Type="Construct" OID="c7b21aad-1b9c-4a9b-a8d5-4ca6c5b1f65c" ParentLink="ServiceBody_Statement" LowerBound="33.1" HigherBound="45.1">
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Construct_OutMsg" />
+                    <om:Property Name="Signal" Value="True" />
+                    <om:Element Type="MessageAssignment" OID="107eaaf6-5e0a-4432-b905-5a2cb0ec1eba" ParentLink="ComplexStatement_Statement" LowerBound="36.1" HigherBound="44.1">
+                        <om:Property Name="Expression" Value="OutMsg = StartMsg;&#xD;&#xA;&#xD;&#xA;MockConfig = TransMock.TestUtils.BizTalk.&#xD;&#xA;    DynamicSendPortMockHelper.MockDynamicSendPort(&#xD;&#xA;        &quot;PortOut&quot;, OutMsg);&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+                        <om:Property Name="ReportToAnalyst" Value="False" />
+                        <om:Property Name="Name" Value="MessageAssignment_1" />
+                        <om:Property Name="Signal" Value="True" />
+                    </om:Element>
+                    <om:Element Type="MessageRef" OID="e46950e4-6650-4883-b5eb-59dc4ac4e7e1" ParentLink="Construct_MessageRef" LowerBound="34.23" HigherBound="34.29">
+                        <om:Property Name="Ref" Value="OutMsg" />
+                        <om:Property Name="ReportToAnalyst" Value="True" />
+                        <om:Property Name="Signal" Value="False" />
+                    </om:Element>
+                </om:Element>
+                <om:Element Type="VariableAssignment" OID="9954bb91-157c-463b-9f20-0d679132d5d5" ParentLink="ServiceBody_Statement" LowerBound="45.1" HigherBound="57.1">
+                    <om:Property Name="Expression" Value="if(MockConfig != null)&#xD;&#xA;{&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.Address) = MockConfig.Address;&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = MockConfig.TransportType;&#xD;&#xA;}&#xD;&#xA;else&#xD;&#xA;{&#xD;&#xA;    //Carry out with the actual send port settings&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.Address) = &quot;c:\\temp\temp.tmp&quot;;&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = &quot;FILE&quot;;&#xD;&#xA;}" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Configure_SendPort" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+                <om:Element Type="Send" OID="52bfae6b-4347-4e34-8279-da58de86183a" ParentLink="ServiceBody_Statement" LowerBound="57.1" HigherBound="59.1">
+                    <om:Property Name="PortName" Value="PortOut" />
+                    <om:Property Name="MessageName" Value="OutMsg" />
+                    <om:Property Name="OperationName" Value="SendOutMessage" />
+                    <om:Property Name="OperationMessageName" Value="Request" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Snd_Out" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+            </om:Element>
+            <om:Element Type="PortDeclaration" OID="cd18ced6-59ef-406c-87f8-fd18fdc5c9d8" ParentLink="ServiceDeclaration_PortDeclaration" LowerBound="21.1" HigherBound="23.1">
+                <om:Property Name="PortModifier" Value="Implements" />
+                <om:Property Name="Orientation" Value="Left" />
+                <om:Property Name="PortIndex" Value="-1" />
+                <om:Property Name="IsWebPort" Value="False" />
+                <om:Property Name="OrderedDelivery" Value="False" />
+                <om:Property Name="DeliveryNotification" Value="None" />
+                <om:Property Name="Type" Value="Orchestrations.InStartPortType" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="PortIn" />
+                <om:Property Name="Signal" Value="False" />
+                <om:Element Type="LogicalBindingAttribute" OID="033d7a13-ecb3-487b-b5d3-0a6d4804253b" ParentLink="PortDeclaration_CLRAttribute" LowerBound="21.1" HigherBound="22.1">
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+            <om:Element Type="PortDeclaration" OID="f12a3bd2-045b-4b08-8c69-9f720f3b64f9" ParentLink="ServiceDeclaration_PortDeclaration" LowerBound="23.1" HigherBound="25.1">
+                <om:Property Name="PortModifier" Value="Uses" />
+                <om:Property Name="Orientation" Value="Right" />
+                <om:Property Name="PortIndex" Value="-1" />
+                <om:Property Name="IsWebPort" Value="False" />
+                <om:Property Name="OrderedDelivery" Value="False" />
+                <om:Property Name="DeliveryNotification" Value="None" />
+                <om:Property Name="Type" Value="Orchestrations.OutPortType" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="PortOut" />
+                <om:Property Name="Signal" Value="False" />
+                <om:Element Type="PhysicalBindingAttribute" OID="a28a7dfd-34dd-4278-8604-2a32856cba19" ParentLink="PortDeclaration_CLRAttribute" LowerBound="23.1" HigherBound="24.1">
+                    <om:Property Name="InPipeline" Value="Microsoft.BizTalk.DefaultPipelines.XMLReceive" />
+                    <om:Property Name="OutPipeline" Value="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" />
+                    <om:Property Name="TransportType" Value="HTTP" />
+                    <om:Property Name="URI" Value="http://tempURI" />
+                    <om:Property Name="IsDynamic" Value="True" />
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+    </om:Element>
+</om:MetaModel>
+#endif // __DESIGNER_DATA
+[Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+module Orchestrations
+{
+    internal porttype InStartPortType
+    {
+        oneway StartProcess
+        {
+            Schemas.TestSchema
+        };
+    };
+    internal porttype OutPortType
+    {
+        oneway SendOutMessage
+        {
+            Schemas.TestSchema
+        };
+    };
+    [Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+    internal service DynamicPortTest
+    {
+        [Microsoft.XLANGs.BaseTypes.LogicalBinding()]
+        port implements InStartPortType PortIn;
+        [Microsoft.XLANGs.BaseTypes.PhysicalBinding(typeof(Microsoft.BizTalk.DefaultPipelines.PassThruTransmit))]
+        port uses dynamic OutPortType PortOut;
+        message Schemas.TestSchema StartMsg;
+        message Schemas.TestSchema OutMsg;
+        TransMock.TestUtils.BizTalk.MockTransportConfig MockConfig;
+        body ()
+        {
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("6a90e946-3fe5-4b43-88b7-0dbd375f20ba")]
+            activate receive (PortIn.StartProcess, StartMsg);
+            MockConfig = new TransMock.TestUtils.BizTalk.MockTransportConfig();
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("c7b21aad-1b9c-4a9b-a8d5-4ca6c5b1f65c")]
+            construct OutMsg
+            {
+                [Microsoft.XLANGs.BaseTypes.DesignerPosition("107eaaf6-5e0a-4432-b905-5a2cb0ec1eba")]
+                OutMsg = StartMsg;
+                
+                MockConfig = TransMock.TestUtils.BizTalk.
+                    DynamicSendPortMockHelper.MockDynamicSendPort(
+                        "PortOut", OutMsg);
+                
+                
+            }
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("9954bb91-157c-463b-9f20-0d679132d5d5")]
+            if(MockConfig != null)
+            {
+                PortOut(Microsoft.XLANGs.BaseTypes.Address) = MockConfig.Address;
+                PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = MockConfig.TransportType;
+            }
+            else
+            {
+                //Carry out with the actual send port settings
+                PortOut(Microsoft.XLANGs.BaseTypes.Address) = "c:\\temp\temp.tmp";
+                PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = "FILE";
+            }
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("52bfae6b-4347-4e34-8279-da58de86183a")]
+            send (PortOut.SendOutMessage, OutMsg);
+        }
+    }
+}
+
