@@ -9,8 +9,8 @@
     <ProjectGuid>{1AE03E84-CD2E-4F67-B953-6D3CEE410315}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mockifier.Parser.Tests</RootNamespace>
-    <AssemblyName>Mockifier.Parser.Tests</AssemblyName>
+    <RootNamespace>TransMock.Mockifier.Parser.Tests</RootNamespace>
+    <AssemblyName>TransMock.Mockifier.Parser.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

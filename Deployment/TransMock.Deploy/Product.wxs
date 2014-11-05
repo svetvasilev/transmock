@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.5.0" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
+  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.5.1" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
     <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" Platform="x86"  />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
