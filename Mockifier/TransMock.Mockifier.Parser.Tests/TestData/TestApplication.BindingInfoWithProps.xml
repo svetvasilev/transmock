@@ -4,15 +4,58 @@
   <ModuleRefCollection>
     <ModuleRef Name="[Application:TestApplication]" Version="" Culture="" PublicKeyToken="" FullName="[Application:TestApplication], Version=, Culture=, PublicKeyToken=">
       <Services />
+      <TrackedSchemas>
+        <Schema FullName="Schemas.TestSchema" RootName="Root" AssemblyQualifiedName="Schemas.TestSchema,Schemas, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b" AlwaysTrackAllProperties="false">
+          <TrackedPropertyNames />
+        </Schema>
+      </TrackedSchemas>
+    </ModuleRef>
+    <ModuleRef Name="Schemas" Version="1.0.0.0" Culture="neutral" PublicKeyToken="ac50b018392a433b" FullName="Schemas, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b">
+      <Services />
+      <TrackedSchemas />
+    </ModuleRef>
+    <ModuleRef Name="Orchestrations" Version="1.0.0.0" Culture="neutral" PublicKeyToken="ac50b018392a433b" FullName="Orchestrations, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b">
+      <Services>
+        <Service Name="Orchestrations.DynamicPortTest" State="Started" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents">
+          <Ports>
+            <Port Name="PortIn" Modifier="2" BindingOption="1">
+              <SendPortRef xsi:nil="true" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef Name="BTS.OneWayTestReceive" />
+            </Port>
+            <Port Name="PortOut" Modifier="1" BindingOption="4">
+              <SendPortRef Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTest_PortOut_ac50b018392a433b" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef xsi:nil="true" />
+            </Port>
+          </Ports>
+          <Roles />
+          <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+        </Service>
+      </Services>
       <TrackedSchemas />
     </ModuleRef>
   </ModuleRefCollection>
   <SendPortCollection>
+    <SendPort Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTest_PortOut_ac50b018392a433b" IsStatic="false" IsTwoWay="false" BindingOption="4">
+      <!-- <Mock />-->
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" Description="" />
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
     <SendPort Name="OneWaySendFILE" IsStatic="true" IsTwoWay="false" BindingOption="0">
+      <!-- <Mock />-->
       <Description xsi:nil="true" />
       <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
-      <PrimaryTransport>
-		<!-- <Mock />-->
+      <PrimaryTransport>		
         <Address>C:\Projects\TestOut\%MessageID%.xml</Address>
         <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
         <TransportTypeData>&lt;CustomProps&gt;&lt;UseTempFileOnWrite vt="11"&gt;0&lt;/UseTempFileOnWrite&gt;&lt;AllowCacheOnWrite vt="11"&gt;0&lt;/AllowCacheOnWrite&gt;&lt;CopyMode vt="19"&gt;1&lt;/CopyMode&gt;&lt;FileName vt="8"&gt;%MessageID%.xml&lt;/FileName&gt;&lt;/CustomProps&gt;</TransportTypeData>
@@ -51,10 +94,10 @@
       <ApplicationName>TestApplication</ApplicationName>
     </SendPort>
     <SendPort Name="TwoWayTestSendWCF" IsStatic="true" IsTwoWay="true" BindingOption="0">
+      <!-- <Mock />-->
       <Description xsi:nil="true" />
       <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
-      <PrimaryTransport>
-		<!-- <Mock />-->
+      <PrimaryTransport>		
         <Address>http://localhost/TestApp/TestOutService.svc</Address>
         <TransportType Name="WCF-BasicHttp" Capabilities="899" ConfigurationClsid="467c1a52-373f-4f09-9008-27af6b985f14" />
         <TransportTypeData>&lt;CustomProps&gt;&lt;MessageEncoding vt="8"&gt;Text&lt;/MessageEncoding&gt;&lt;ServiceCertificate vt="8" /&gt;&lt;InboundBodyPathExpression vt="8" /&gt;&lt;OutboundBodyLocation vt="8"&gt;UseBodyElement&lt;/OutboundBodyLocation&gt;&lt;InboundNodeEncoding vt="8"&gt;Xml&lt;/InboundNodeEncoding&gt;&lt;CloseTimeout vt="8"&gt;00:01:00&lt;/CloseTimeout&gt;&lt;StaticAction vt="8" /&gt;&lt;ProxyAddress vt="8" /&gt;&lt;MaxReceivedMessageSize vt="3"&gt;65536&lt;/MaxReceivedMessageSize&gt;&lt;ClientCertificate vt="8" /&gt;&lt;AlgorithmSuite vt="8"&gt;Basic256&lt;/AlgorithmSuite&gt;&lt;ProxyUserName vt="8" /&gt;&lt;OutboundXmlTemplate vt="8"&gt;&amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;gt;&lt;/OutboundXmlTemplate&gt;&lt;TextEncoding vt="8"&gt;utf-8&lt;/TextEncoding&gt;&lt;PropagateFaultMessage vt="11"&gt;-1&lt;/PropagateFaultMessage&gt;&lt;SecurityMode vt="8"&gt;None&lt;/SecurityMode&gt;&lt;ProxyToUse vt="8"&gt;Default&lt;/ProxyToUse&gt;&lt;TransportClientCredentialType vt="8"&gt;None&lt;/TransportClientCredentialType&gt;&lt;OpenTimeout vt="8"&gt;00:01:00&lt;/OpenTimeout&gt;&lt;InboundBodyLocation vt="8"&gt;UseBodyElement&lt;/InboundBodyLocation&gt;&lt;MessageClientCredentialType vt="8"&gt;UserName&lt;/MessageClientCredentialType&gt;&lt;SendTimeout vt="8"&gt;00:01:00&lt;/SendTimeout&gt;&lt;UseSSO vt="11"&gt;0&lt;/UseSSO&gt;&lt;/CustomProps&gt;</TransportTypeData>

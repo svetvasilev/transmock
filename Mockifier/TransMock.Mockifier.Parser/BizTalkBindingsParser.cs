@@ -219,22 +219,63 @@ namespace TransMock.Mockifier.Parser
 
         private void ParseSendPorts(XElement root, string btsVersion, bool unescape)
         {
-            var sendPortTranpsortsWithComments = root.DescendantNodes().Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "PrimaryTransport");
-                        
-            foreach (var transportComment in sendPortTranpsortsWithComments)
+            var sendPortsComments = root.DescendantNodes()
+                .Where(n => n.NodeType == XmlNodeType.Comment && n.Parent.Name == "SendPort");
+
+            foreach (var portComment in sendPortsComments)
             {
                 System.Diagnostics.Debug.WriteLine("Iterating over comments");
 
-                MockSettings mockSettings = ParseComment(transportComment as XComment);
+                MockSettings mockSettings = ParseComment(portComment as XComment);
 
                 if (mockSettings != null)                
-                {                                  
-                    //We fetch the adapter settings in the binding and replace those with the mock ones
-                    ReplaceSendTransportConfiguration(transportComment.Parent, 
-                        mockSettings.Operation, btsVersion, unescape,
-                        mockSettings.Encoding ?? "UTF-8");
+                {
+                    //Check if the port is static
+                    var isDynamicAttribute = portComment.Parent.Attribute("IsStatic");
+                    bool isStaticPort = bool.Parse(isDynamicAttribute.Value);
+
+                    if (isStaticPort)
+                    {
+                        //We fetch the adapter settings in the binding and replace those with the mock ones
+                        ReplaceSendTransportConfiguration(
+                            portComment.Parent.Element("PrimaryTransport"),
+                            mockSettings.Operation, btsVersion, unescape,
+                            mockSettings.Encoding ?? "UTF-8");
+                    }
+                    else
+                    {
+                        //We process dynamic send ports in a different way
+                        ProcessDynamicSendPort(portComment.Parent);
+                    }
+                    
                 }
             }
+        }
+
+        private void ProcessDynamicSendPort(XElement dynamciSendPortElement)
+        {
+            var orchestrations = dynamciSendPortElement.Document.Root
+                    .Descendants()
+                    .Where(d => d.NodeType == XmlNodeType.Element &&
+                        d.Name == "ModuleRef" && d.Attribute("Name").Value == "Orchestrations");
+
+            var sendPortRefElement = orchestrations                
+                        .Descendants()
+                        .Where(d => d.NodeType == XmlNodeType.Element &&
+                            d.Name == "SendPortRef" &&
+                            d.Attribute("Name") != null &&
+                            d.Attribute("Name").Value == dynamciSendPortElement.Attribute("Name").Value)
+                            .SingleOrDefault();
+
+            if (sendPortRefElement != null)
+            {
+                string logicalPortName = sendPortRefElement.Parent.Attribute("Name").Value;
+
+                //Adding the mock endpoint URL for the dynamic port                 
+                endpointMockUrls.Add(logicalPortName,
+                    string.Format(MockAddressTemplate, logicalPortName));
+            }
+            
         }
 
         private MockSettings ParseComment(XComment comment)
