@@ -41,6 +41,8 @@ namespace TransMock.Mockifier.Parser
 
         private const string MockAddressTemplate = "mock://localhost/{0}";
 
+        private const string MockDynamicAddressTemplate = "mock://localhost/Dynamic{0}";
+
         private const string InprocTransportName="WCF-Custom";
 
         private const string InprocTransportCapabilities="907";
@@ -48,6 +50,10 @@ namespace TransMock.Mockifier.Parser
         private const string InprocTransportConfigurationClsid = "af081f69-38ca-4d5b-87df-f0344b12557a";
 
         private const string DefaultHostName = "BizTalkServerApplication";
+
+        private const string DefaultServiceBehaviorConfig = "&lt;behavior name=\"ServiceBehavior\" /&gt;";
+
+        private const string DefaultEndpointBehaviorConfig = "&lt;behavior name=\"EndpointBehavior\" /&gt;";
 
         private IResourceReader resourceReader;
 
@@ -273,7 +279,7 @@ namespace TransMock.Mockifier.Parser
 
                 //Adding the mock endpoint URL for the dynamic port                 
                 endpointMockUrls.Add(logicalPortName,
-                    string.Format(MockAddressTemplate, logicalPortName));
+                    string.Format(MockDynamicAddressTemplate, logicalPortName));
             }
             
         }
@@ -397,14 +403,22 @@ namespace TransMock.Mockifier.Parser
                 mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
             }
 
+            //Parse the original transport info and extract any custom service behaviors
+            string customEndpointBehaviors = ExtractCustomEndpointBehaviors(transportInfo.Value);
+
+            //Place any existing custom endpoint behaviors in the mocked transport data, otherwise place the default behaviors
+            mockTransportData = mockTransportData.Replace("{EndpointBehavior}",
+                !string.IsNullOrEmpty(customEndpointBehaviors) ?
+                customEndpointBehaviors : 
+                DefaultEndpointBehaviorConfig);
+
+            //In case unescaping was defined as an option
             if (unescape)
             {
-                mockTransportData = mockTransportData
-                    .Replace("&amp;", "&")
-                    .Replace("&lt;", "<")
-                    .Replace("&gt;", ">");
+                mockTransportData = UnescapeTransportConfig(mockTransportData);
             }
 
+            //Finally replace the current transport config with the mocked ones
             transportInfo.Value = mockTransportData;
         }
 
@@ -502,15 +516,103 @@ namespace TransMock.Mockifier.Parser
                 mockTransportData = mockTransportData.Replace("{PromotedProperties}", string.Empty);
             }
 
+            //Parse the original transport info and extract any custom service behaviors
+            string customServiceBehaviors = ExtractCustomServiceBehaviors(transportInfo.Value);
+
+            //Place any existing custom servince behaviors in the mocked transport data, otherwise place the default behaviors
+            mockTransportData = mockTransportData.Replace("{ServiceBehavior}",
+                !string.IsNullOrEmpty(customServiceBehaviors) ?
+                customServiceBehaviors : 
+                DefaultServiceBehaviorConfig);
+            
+
+            //Parse the original transport info and extract any custom service behaviors
+            string customEndpointBehaviors = ExtractCustomEndpointBehaviors(transportInfo.Value);
+
+            //Place any existing custom endpoint behaviors in the mocked transport data, otherwise place the default behaviors
+            mockTransportData = mockTransportData.Replace("{EndpointBehavior}",
+                !string.IsNullOrEmpty(customEndpointBehaviors) ?
+                customEndpointBehaviors : 
+                DefaultEndpointBehaviorConfig);
+
+            //In case unescaping was specified as an option
             if (unescape)
             {
-                mockTransportData = mockTransportData
-                    .Replace("&amp;", "&")
-                    .Replace("&lt;", "<")
-                    .Replace("&gt;", ">");
+                mockTransportData = UnescapeTransportConfig(mockTransportData);
             }
-
+            
+            //Finally replace the current transport config with the mocked ones
             transportInfo.Value = mockTransportData;
         }
+
+        private string ExtractCustomServiceBehaviors(string transportConfig)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("TransMock.Mockifier.Parser.ExtractCustomServiceBehaviors() called with parameter: " +
+                    transportConfig);
+
+                var transportConfigElement = GetCustomBehaviorConfigElement(transportConfig);
+
+                var customBehaviorConfig = transportConfigElement
+                    .Elements().Where(e => e.Name == "ServiceBehaviorConfiguration")
+                    .Single();
+
+                return customBehaviorConfig.Value;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("TransMock.Mockifier.Parser.ExtractCustomServiceBehaviors() threw exception: " +
+                    ex.Message);
+
+                return null;
+            }
+        }
+
+        private string ExtractCustomEndpointBehaviors(string transportConfig)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("TransMock.Mockifier.Parser.ExtractCustomEndpointBehaviors() called with parameter: " +
+                    transportConfig);
+
+                var transportConfigElement = GetCustomBehaviorConfigElement(transportConfig);
+
+                var customBehaviorConfig = transportConfigElement
+                    .Elements().Where(e => e.Name == "EndpointBehaviorConfiguration")
+                    .Single();
+
+                return customBehaviorConfig.Value;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("TransMock.Mockifier.Parser.ExtractCustomEndpointBehaviors() threw exception: " +
+                    ex.Message);
+
+                return null;
+            }
+        }
+
+        private XElement GetCustomBehaviorConfigElement(string transportConfig)
+        {
+            string unescapedTransportConfig = transportConfig
+                .Replace("&amp;", "&")
+                .Replace("&lt;", "<")
+                .Replace("&gt;", ">");
+
+            var transportConfigElement = XElement.Parse(unescapedTransportConfig);
+            return transportConfigElement;
+        }
+
+
+        private static string UnescapeTransportConfig(string mockTransportData)
+        {
+            mockTransportData = mockTransportData
+                .Replace("&amp;", "&")
+                .Replace("&lt;", "<")
+                .Replace("&gt;", ">");
+            return mockTransportData;
+        }
+
     }
 }

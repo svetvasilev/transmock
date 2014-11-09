@@ -4,15 +4,58 @@
   <ModuleRefCollection>
     <ModuleRef Name="[Application:BizTalkTests]" Version="" Culture="" PublicKeyToken="" FullName="[Application:BizTalkTests], Version=, Culture=, PublicKeyToken=">
       <Services />
+      <TrackedSchemas>
+        <Schema FullName="Schemas.TestSchema" RootName="Root" AssemblyQualifiedName="Schemas.TestSchema,Schemas, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b" AlwaysTrackAllProperties="false">
+          <TrackedPropertyNames />
+        </Schema>
+      </TrackedSchemas>
+    </ModuleRef>
+    <ModuleRef Name="Schemas" Version="1.0.0.0" Culture="neutral" PublicKeyToken="ac50b018392a433b" FullName="Schemas, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b">
+      <Services />
       <TrackedSchemas />
+    </ModuleRef>
+    <ModuleRef Name="Orchestrations" Version="1.0.0.0" Culture="neutral" PublicKeyToken="ac50b018392a433b" FullName="Orchestrations, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b">
+      <Services>
+        <Service Name="Orchestrations.DynamicPortTest" State="Started" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents">
+          <Ports>
+            <Port Name="PortIn" Modifier="2" BindingOption="1">
+              <SendPortRef xsi:nil="true" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef Name="BTS.OneWayTestReceive" />
+            </Port>
+            <Port Name="PortOut" Modifier="1" BindingOption="4">
+              <SendPortRef Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTest_PortOut_ac50b018392a433b" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef xsi:nil="true" />
+            </Port>
+          </Ports>
+          <Roles />
+          <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+        </Service>
+      </Services>
+      <TrackedSchemas />    
     </ModuleRef>
   </ModuleRefCollection>
   <SendPortCollection>
+    <SendPort Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTest_PortOut_ac50b018392a433b" IsStatic="false" IsTwoWay="false" BindingOption="4">
+      <!-- <Mock />-->
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" Description="" />
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
     <SendPort Name="BTS.OneWaySendFILE" IsStatic="true" IsTwoWay="false" BindingOption="0">
+      <!-- <Mock />-->
       <Description xsi:nil="true" />
       <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
       <PrimaryTransport>
-		<!-- <Mock />-->
         <Address>C:\Projects\BTS.TestOut\%MessageID%.xml</Address>
         <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
         <TransportTypeData>
@@ -58,10 +101,10 @@
       <ApplicationName>BizTalkTests</ApplicationName>
     </SendPort>
     <SendPort Name="BTS.TwoWayTestSendWCF" IsStatic="true" IsTwoWay="true" BindingOption="0">
+      <!-- <Mock />-->
       <Description xsi:nil="true" />
       <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
-      <PrimaryTransport>
-		<!-- <Mock />-->
+      <PrimaryTransport>		
         <Address>http://localhost/TestApp/BTS.TestOutService.svc</Address>
         <TransportType Name="WCF-BasicHttp" Capabilities="899" ConfigurationClsid="467c1a52-373f-4f09-9008-27af6b985f14" />
         <TransportTypeData>
@@ -134,7 +177,7 @@
       <Description xsi:nil="true" />
       <ReceiveLocations>
         <ReceiveLocation Name="BTS.OneWayReceive_FILE">
-		  <!-- <Mock />-->
+		      <!-- <Mock />-->
           <Description xsi:nil="true" />
           <Address>C:\Projects\BTS.Test\*.xml</Address>
           <PublicAddress />
@@ -161,7 +204,7 @@
 				  <BatchSize vt="19">20</BatchSize>
 			  </CustomProps>
 		  </ReceiveLocationTransportTypeData>
-          <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+          <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.XMLReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.XMLReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
           <ReceivePipelineData xsi:nil="true" />
           <SendPipeline xsi:nil="true" />
           <SendPipelineData xsi:nil="true" />
@@ -182,7 +225,7 @@
       <Description xsi:nil="true" />
       <ReceiveLocations>
         <ReceiveLocation Name="BTS.TwoWayTestReceive_WCF">
-		  <!-- <Mock />-->
+		      <!-- <Mock />-->
           <Description xsi:nil="true" />
           <Address>/TestApp/BTS.TestService.svc</Address>
           <PublicAddress />

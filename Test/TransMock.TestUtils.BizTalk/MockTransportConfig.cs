@@ -26,7 +26,7 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="endPointName"></param>
         public MockTransportConfig(string endPointName)
         {
-            address = string.Format("mock://localhost/{0}", endPointName);
+            address = string.Format("mock://localhost/Dynamic{0}", endPointName);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="endPointName"></param>
         public MockTransportConfig(string hostName, string endPointName)
         {
-            address = string.Format("mock://{0}/{1}", hostName, endPointName);
+            address = string.Format("mock://{0}/Dynamic{1}", hostName, endPointName);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="operationName"></param>
         public MockTransportConfig(string hostName, string endPointName, string operationName)
         {
-            address = string.Format("mock://{0}/{1}/{2}", hostName, endPointName, operationName);
+            address = string.Format("mock://{0}/{1}/Dynamic{2}", hostName, endPointName, operationName);
         }
 
         /// <summary>

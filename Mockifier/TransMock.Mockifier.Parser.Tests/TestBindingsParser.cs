@@ -37,7 +37,7 @@ namespace TransMock.Mockifier.Parser.Tests
     public class TestBindingsParser
     {
         private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\t" +
-            "public static string PortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/PortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string PortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
             "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
             "public static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestSendWCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
             "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+

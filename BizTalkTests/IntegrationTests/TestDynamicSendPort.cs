@@ -46,7 +46,7 @@ namespace BizTalkTest.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = "mock://localhost/PortOut",
+                Url = "mock://localhost/DynamicPortOut",
                 Encoding = "UTF-8",
                 Timeout = 10
             };
