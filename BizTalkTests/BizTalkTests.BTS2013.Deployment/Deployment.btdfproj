@@ -21,9 +21,10 @@
     <IncludeSettingsSpreadsheetInMsi>False</IncludeSettingsSpreadsheetInMsi>
 	  <SkipIISReset>True</SkipIISReset>
 	  <SkipHostInstancesRestart>False</SkipHostInstancesRestart>
-
-    <TransMockAddressClassDir>..\UnitTests</TransMockAddressClassDir>
+    
+    <TransMockAddressClassDir>..\IntegrationTests</TransMockAddressClassDir>
     <TransMockDebug>true</TransMockDebug>
+    
   </PropertyGroup>
   <PropertyGroup>
     <!-- Properties related to building an MSI for server deployments -->
@@ -80,9 +81,7 @@
       <LocationPath>..\..\Test\TransMock.TestUtils.BizTalk\bin\$(Configuration)</LocationPath>
     </Components>
   </ItemGroup>
-  <!-- !!! TODO !!! -->
-  <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
-	<Import Project="..\..\Integration\BTDF\TransMock.targets" />
+  
   <!--
     The Deployment Framework automatically packages most files into the server install MSI.
     However, if there are special folders that you need to include in the MSI, you can
@@ -91,6 +90,8 @@
   -->
   <Target Name="CustomRedist">
   </Target>
-	
+  <!-- !!! TODO !!! -->
+  <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
+  <Import Project="..\..\Integration\BTDF\TransMock.targets" />
 
 </Project>

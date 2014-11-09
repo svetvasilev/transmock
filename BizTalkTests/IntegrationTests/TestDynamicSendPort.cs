@@ -10,23 +10,16 @@ namespace BizTalkTest.IntegrationTests
     [TestClass]
     public class TestDynamicSendPort
     {
-        TransMockExecutionBeacon
-                testbeacon;
-
         [TestInitialize]
         public void TestSetup()
         {
-            testbeacon = new TransMockExecutionBeacon();
-
-            testbeacon.StartBecon();
-
+            TransMockExecutionBeacon.Start();
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            if (testbeacon != null)
-                testbeacon.StopBeacon();
+            TransMockExecutionBeacon.Stop();
         }
 
         [TestMethod]
@@ -47,6 +40,35 @@ namespace BizTalkTest.IntegrationTests
             var outMsgStep = new MockReceiveStep()
             {
                 Url = "mock://localhost/DynamicPortOut",
+                Encoding = "UTF-8",
+                Timeout = 10
+            };
+
+            testCase.ExecutionSteps.Add(outMsgStep);
+
+            BizUnit.BizUnit testRunner = new BizUnit.BizUnit(testCase);
+
+            testRunner.RunTest();
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\StartMessage.xml")]
+        public void TestHappyPath_HelperClass()
+        {
+            var testCase = new BizUnit.Xaml.TestCase();
+
+            var inMsgStep = new MockSendStep()
+            {
+                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE,
+                RequestPath = "StartMessage.xml",
+                Encoding = "UTF-8"
+            };
+
+            testCase.ExecutionSteps.Add(inMsgStep);
+
+            var outMsgStep = new MockReceiveStep()
+            {
+                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.DynamicPortOut,
                 Encoding = "UTF-8",
                 Timeout = 10
             };

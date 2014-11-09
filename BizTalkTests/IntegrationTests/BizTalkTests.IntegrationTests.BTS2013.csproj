@@ -62,6 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BizTalkTestsMockAddresses.cs" />
     <Compile Include="TestDynamicSendPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
