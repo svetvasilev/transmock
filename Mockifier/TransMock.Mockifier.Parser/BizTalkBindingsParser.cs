@@ -165,7 +165,9 @@ namespace TransMock.Mockifier.Parser
                 helperClassBuilder.AppendLine();
                 helperClassBuilder.Append("\t\t");
                 helperClassBuilder.AppendFormat("public static string {0}",
-                    mockEndpoint.Key)//Property definition start
+                    mockEndpoint.Key
+                    .Replace(".", "_")
+                    .Replace(" ", string.Empty))//Property definition start
                 .AppendLine()
                     .Append("\t\t").Append("{")
                     .AppendLine()
@@ -278,7 +280,8 @@ namespace TransMock.Mockifier.Parser
                 string logicalPortName = sendPortRefElement.Parent.Attribute("Name").Value;
 
                 //Adding the mock endpoint URL for the dynamic port                 
-                endpointMockUrls.Add(logicalPortName,
+                endpointMockUrls.Add(
+                    string.Format("Dynamic{0}", logicalPortName),
                     string.Format(MockDynamicAddressTemplate, logicalPortName));
             }
             
