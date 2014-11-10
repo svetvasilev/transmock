@@ -9,6 +9,14 @@ namespace BizTalkTests.Test {
 			}
 		}
 
+		public static string DynamicPortOut2Way
+		{
+			get
+			{
+				return "mock://localhost/DynamicPortOut2Way";
+			}
+		}
+
 		public static string BTS_OneWaySendFILE
 		{
 			get
@@ -30,6 +38,14 @@ namespace BizTalkTests.Test {
 			get
 			{
 				return "mock://localhost/BTS.OneWayReceive_FILE";
+			}
+		}
+
+		public static string BTS_OneWayReceive2_FILE
+		{
+			get
+			{
+				return "mock://localhost/BTS.OneWayReceive2_FILE";
 			}
 		}
 

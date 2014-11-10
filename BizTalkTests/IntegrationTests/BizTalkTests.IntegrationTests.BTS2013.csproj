@@ -67,6 +67,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\ResponseMessage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\StartMessage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -93,6 +93,13 @@
       <Link>TransMock.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <XLang Include="DynamicPortTwoWayTest.odx">
+      <TypeName>DynamicPortTwoWayTest</TypeName>
+      <Namespace>Orchestrations</Namespace>
+      <SubType>Task</SubType>
+    </XLang>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\BizTalk\BizTalkC.targets" />
 </Project>

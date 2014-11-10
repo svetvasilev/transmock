@@ -24,7 +24,7 @@ namespace BizTalkTest.IntegrationTests
 
         [TestMethod]
         [DeploymentItem(@"TestData\StartMessage.xml")]
-        public void TestHappyPath()
+        public void TestHappyPath_OneWay()
         {
             var testCase = new BizUnit.Xaml.TestCase();
 
@@ -53,7 +53,7 @@ namespace BizTalkTest.IntegrationTests
 
         [TestMethod]
         [DeploymentItem(@"TestData\StartMessage.xml")]
-        public void TestHappyPath_HelperClass()
+        public void TestHappyPath_OneWay_HelperClass()
         {
             var testCase = new BizUnit.Xaml.TestCase();
 
@@ -70,6 +70,37 @@ namespace BizTalkTest.IntegrationTests
             {
                 Url = BizTalkTests.Test.BizTalkTestsMockAddresses.DynamicPortOut,
                 Encoding = "UTF-8",
+                Timeout = 10
+            };
+
+            testCase.ExecutionSteps.Add(outMsgStep);
+
+            BizUnit.BizUnit testRunner = new BizUnit.BizUnit(testCase);
+
+            testRunner.RunTest();
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\StartMessage.xml")]
+        [DeploymentItem(@"TestData\ResponseMessage.xml")]
+        public void TestHappyPath_TwoWay_HelperClass()
+        {
+            var testCase = new BizUnit.Xaml.TestCase();
+
+            var inMsgStep = new MockSendStep()
+            {
+                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE,
+                RequestPath = "StartMessage.xml",
+                Encoding = "UTF-8"
+            };
+
+            testCase.ExecutionSteps.Add(inMsgStep);
+
+            var outMsgStep = new MockRequestResponseStep()
+            {
+                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.DynamicPortOut2Way,                
+                Encoding = "UTF-8",
+                ResponsePath = "ResponseMessage.xml",
                 Timeout = 10
             };
 

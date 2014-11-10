@@ -6,9 +6,8 @@ namespace Schemas {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [SchemaType(SchemaTypeEnum.Document)]
-    [Schema(@"http://Schemas.TestSchema",@"Root")]
     [System.SerializableAttribute()]
-    [SchemaRoots(new string[] {@"Root"})]
+    [SchemaRoots(new string[] {@"Root", @"Response"})]
     public sealed class TestSchema : Microsoft.XLANGs.BaseTypes.SchemaBase {
         
         [System.NonSerializedAttribute()]
@@ -18,6 +17,9 @@ namespace Schemas {
         private const string _strSchema = @"<?xml version=""1.0"" encoding=""utf-16""?>
 <xs:schema xmlns=""http://Schemas.TestSchema"" xmlns:b=""http://schemas.microsoft.com/BizTalk/2003"" targetNamespace=""http://Schemas.TestSchema"" xmlns:xs=""http://www.w3.org/2001/XMLSchema"">
   <xs:element name=""Root"">
+    <xs:complexType />
+  </xs:element>
+  <xs:element name=""Response"">
     <xs:complexType />
   </xs:element>
 </xs:schema>";
@@ -33,8 +35,9 @@ namespace Schemas {
         
         public override string[] RootNodes {
             get {
-                string[] _RootElements = new string [1];
+                string[] _RootElements = new string [2];
                 _RootElements[0] = "Root";
+                _RootElements[1] = "Response";
                 return _RootElements;
             }
         }
@@ -45,6 +48,76 @@ namespace Schemas {
             }
             set {
                 _rawSchema = value;
+            }
+        }
+        
+        [Schema(@"http://Schemas.TestSchema",@"Root")]
+        [System.SerializableAttribute()]
+        [SchemaRoots(new string[] {@"Root"})]
+        public sealed class Root : Microsoft.XLANGs.BaseTypes.SchemaBase {
+            
+            [System.NonSerializedAttribute()]
+            private static object _rawSchema;
+            
+            public Root() {
+            }
+            
+            public override string XmlContent {
+                get {
+                    return _strSchema;
+                }
+            }
+            
+            public override string[] RootNodes {
+                get {
+                    string[] _RootElements = new string [1];
+                    _RootElements[0] = "Root";
+                    return _RootElements;
+                }
+            }
+            
+            protected override object RawSchema {
+                get {
+                    return _rawSchema;
+                }
+                set {
+                    _rawSchema = value;
+                }
+            }
+        }
+        
+        [Schema(@"http://Schemas.TestSchema",@"Response")]
+        [System.SerializableAttribute()]
+        [SchemaRoots(new string[] {@"Response"})]
+        public sealed class Response : Microsoft.XLANGs.BaseTypes.SchemaBase {
+            
+            [System.NonSerializedAttribute()]
+            private static object _rawSchema;
+            
+            public Response() {
+            }
+            
+            public override string XmlContent {
+                get {
+                    return _strSchema;
+                }
+            }
+            
+            public override string[] RootNodes {
+                get {
+                    string[] _RootElements = new string [1];
+                    _RootElements[0] = "Response";
+                    return _RootElements;
+                }
+            }
+            
+            protected override object RawSchema {
+                get {
+                    return _rawSchema;
+                }
+                set {
+                    _rawSchema = value;
+                }
             }
         }
     }
