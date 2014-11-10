@@ -1,4 +1,20 @@
-﻿using System;
+﻿/***************************************
+//   Copyright 2014 - Svetoslav Vasilev
+
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+*****************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +37,7 @@ namespace TransMock.TestUtils.BizTalk
         /// Mocks a dynamic send port with the given name by setting the necessary transport properties on the outbound message
         /// </summary>
         /// <param name="portName">The name of the send port as defined in the orchestration</param>
-        /// <param name="outboundMessage">The outbound message instance that is to be send over the dynamic send port</param>
+        /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
         /// <returns>An instance of the MockTransportConfig class if the orchestration is executed within the context of a TransMock test case. Otherwise a null is returned.</returns>
         public static MockTransportConfig MockDynamicSendPort(string portName, XLANGMessage outboundMessage)
         {
@@ -57,7 +73,11 @@ namespace TransMock.TestUtils.BizTalk
                 return null;
             }
         }
-               
+         
+        /// <summary>
+        /// Checks whether a TransMock test case is currently under execution
+        /// </summary>
+        /// <returns>True if the TransMock beacon is on, otherwise false</returns>
         private static bool IsTransMockTestCaseExecuting()
         {
             try
@@ -88,6 +108,10 @@ namespace TransMock.TestUtils.BizTalk
             }
         }       
 
+        /// <summary>
+        /// Applies the TransMock transport configuration to the context of the provided message 
+        /// </summary>
+        /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
         private static void ApplyMockTransportConfig(XLANGMessage outboundMessage)
         {
             //Adding the mock binding properties to tme message context                    
