@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="9ECD217A-2226-40EA-B46D-7FBAB476FF9B" Name="TransMock For BizTalk Server 2010" Language="1033" Version="0.9.7.0" Manufacturer="TransMock Community" UpgradeCode="1DFFAB68-B74E-444B-82E0-E23FC6108ECA">
+  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.7.0" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
     <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" Platform="x86"  />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
@@ -45,7 +45,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="TRANSMOCKROOT" Name="TransMock" >
-          <Directory Id="TRANSMOCKFOLDER" Name="BTS2010">
+          <Directory Id="TRANSMOCKFOLDER" Name="BTS2013">
             <Directory Id="TRANSMOCKBIN" Name="Bin" />
             <Directory Id="TRANSMOCKEXT" Name="Ext" />
             <Directory Id="TRANSMOCKDOC" Name="Doc" />
@@ -60,15 +60,15 @@
       <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
        <Component Id="Adapter" Guid="861C120A-4E45-4CE8-9288-324C34222BC8" Permanent="no" Transitive="no"> 
       <!-- TODO: Insert files, registry keys, and other resources here. -->
-         <File Source="$(var.TransMock.Wcf.Adapter.BTS2010.TargetPath)" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>         
+         <File Source="$(var.TransMock.Wcf.Adapter.BTS2013R2.TargetPath)" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>         
        </Component>      
       <Component Id="Mockifier" Guid="12236B58-F3EE-4BF0-A66D-4F6D8176E576" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.Mockifier.BTS2010.TargetPath)" Name="TransMock.Mockifier.exe" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
+        <File Source="$(var.TransMock.Mockifier.BTS2013R2.TargetPath)" Name="TransMock.Mockifier.exe" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
       </Component>
       <Component Id="MockifierParser" Guid="B55D51E6-E022-40BA-8DFF-647555C6A0E9" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->        
-        <File Source="$(var.TransMock.Mockifier.Parser.BTS2010.TargetPath)" Name="TransMock.Mockifier.Parser.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+        <File Source="$(var.TransMock.Mockifier.Parser.BTS2013R2.TargetPath)" Name="TransMock.Mockifier.Parser.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
       </Component>
       <Component Id="CommandLineLib" Guid="329F7F8E-540D-4E26-B028-5822A3911022" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
@@ -78,7 +78,7 @@
     <ComponentGroup Id="ProductExtensions" Directory="TRANSMOCKEXT">      
       <Component Id="BizUnitIntegration" Guid="B511A2C0-6B31-4737-8233-81F1A3F0AE0F" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.Integration.BizUnit.BTS2010.TargetPath)" Name="TransMock.Integration.BizUnit.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
+        <File Source="$(var.TransMock.Integration.BizUnit.BTS2013R2.TargetPath)" Name="TransMock.Integration.BizUnit.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
       </Component>
       <Component Id="BTDFIntegration" Guid="D165B1A7-FF17-4510-B9CC-EA5A426C6EFF" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->        
@@ -86,11 +86,11 @@
       </Component>
       <Component Id="BizTalkTestUtils" Guid="FFF5CE2E-5CEA-45D0-A6B9-6CE7C305325E" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.TestUtils.BizTalk.BTS2010.TargetPath)" Name="TransMock.TestUtils.BizTalk.dll" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
+        <File Source="$(var.TransMock.TestUtils.BizTalk.BTS2013R2.TargetPath)" Name="TransMock.TestUtils.BizTalk.dll" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
       </Component>
       <Component Id="GACAdapter" Guid="2A48904D-B3F0-483D-BB3C-04C185C14945" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
-        <File Source="$(var.TransMock.Wcf.Adapter.BTS2010.TargetPath)" Id="TransMock.Wcf.Adapter.dll.GAC" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Assembly=".net" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+        <File Source="$(var.TransMock.Wcf.Adapter.BTS2013R2.TargetPath)" Id="TransMock.Wcf.Adapter.dll.GAC" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Assembly=".net" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
       </Component>
     </ComponentGroup>
   </Fragment>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.5.0" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
+  <Product Id="B4424921-8877-43A5-B6A5-5DAB90458BEF" Name="TransMock For BizTalk Server 2013" Language="1033" Version="0.9.7.0" Manufacturer="TransMock Community" UpgradeCode="B83E776F-A291-4303-AF5D-F32744800AB0">
     <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" Platform="x86"  />
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
@@ -83,6 +83,10 @@
       <Component Id="BTDFIntegration" Guid="D165B1A7-FF17-4510-B9CC-EA5A426C6EFF" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->        
         <File Source="..\..\Integration\BTDF\TransMock.Targets" Name="TransMock.Targets" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
+      </Component>
+      <Component Id="BizTalkTestUtils" Guid="FFF5CE2E-5CEA-45D0-A6B9-6CE7C305325E" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.TestUtils.BizTalk.BTS2013.TargetPath)" Name="TransMock.TestUtils.BizTalk.dll" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
       </Component>
       <Component Id="GACAdapter" Guid="2A48904D-B3F0-483D-BB3C-04C185C14945" Permanent="no" Transitive="no">
         <!-- TODO: Insert files, registry keys, and other resources here. -->
