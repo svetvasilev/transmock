@@ -84,10 +84,10 @@
                     <om:Property Name="Name" Value="Construct_OutMsg" />
                     <om:Property Name="Signal" Value="True" />
                     <om:Element Type="MessageAssignment" OID="f927af73-7984-4627-b599-dffcf96833f6" ParentLink="ComplexStatement_Statement" LowerBound="30.1" HigherBound="37.1">
-                        <om:Property Name="Expression" Value="OutMsg = StartMsg;&#xD;&#xA;&#xD;&#xA;MockConfig = TransMock.TestUtils.BizTalk.&#xD;&#xA;    DynamicSendPortMockHelper.MockDynamicSendPort(&#xD;&#xA;        &quot;PortOut2Way&quot;, OutMsg);&#xD;&#xA;&#xD;&#xA;" />
+                        <om:Property Name="Expression" Value="OutMsg = StartMsg;&#xD;&#xA;&#xD;&#xA;MockConfig = TransMock.TestUtils.BizTalk.&#xD;&#xA;    MockHelper.MockDynamicSendPort(&#xD;&#xA;        &quot;PortOut2Way&quot;, OutMsg);&#xD;&#xA;&#xD;&#xA;" />
                         <om:Property Name="ReportToAnalyst" Value="False" />
                         <om:Property Name="Name" Value="Assignment_OutMsg" />
-                        <om:Property Name="Signal" Value="True" />
+                        <om:Property Name="Signal" Value="False" />
                     </om:Element>
                     <om:Element Type="MessageRef" OID="6832d6fd-6d32-435b-8d38-f1bd3dff782c" ParentLink="Construct_MessageRef" LowerBound="28.23" HigherBound="28.29">
                         <om:Property Name="Ref" Value="OutMsg" />
@@ -195,7 +195,7 @@ module Orchestrations
                 OutMsg = StartMsg;
                 
                 MockConfig = TransMock.TestUtils.BizTalk.
-                    DynamicSendPortMockHelper.MockDynamicSendPort(
+                    MockHelper.MockDynamicSendPort(
                         "PortOut2Way", OutMsg);
                 
             }
