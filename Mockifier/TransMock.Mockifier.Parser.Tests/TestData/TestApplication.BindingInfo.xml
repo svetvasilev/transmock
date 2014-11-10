@@ -32,6 +32,22 @@
           <Roles />
           <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
+        <Service Name="Orchestrations.DynamicPortTwoWayTest" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents">
+          <Ports>
+            <Port Name="PortIn" Modifier="2" BindingOption="1">
+              <SendPortRef xsi:nil="true" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef Name="BTS.OneWayTestReceive" />
+            </Port>
+            <Port Name="PortOut2Way" Modifier="1" BindingOption="4">
+              <SendPortRef Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTwoWayTest_PortOut2Way_ac50b018392a433b" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef xsi:nil="true" />
+            </Port>
+          </Ports>
+          <Roles />
+          <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+        </Service>
       </Services>
       <TrackedSchemas />
     </ModuleRef>
@@ -45,6 +61,22 @@
       <Tracking>0</Tracking>
       <Filter />
       <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
+    <SendPort Name="Orchestrations_1.0.0.0_Orchestrations.DynamicPortTwoWayTest_PortOut2Way_ac50b018392a433b" IsStatic="false" IsTwoWay="true" BindingOption="4">
+      <!-- <Mock />-->
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" Description="" />
+      <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.XMLReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.XMLReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" Description="" />
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <InboundTransforms />
       <OrderedDelivery>false</OrderedDelivery>
       <Priority>5</Priority>
       <StopSendingOnFailure>false</StopSendingOnFailure>
