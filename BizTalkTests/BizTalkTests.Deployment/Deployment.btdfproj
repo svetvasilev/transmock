@@ -10,18 +10,22 @@
     <SchemaVersion>1.0</SchemaVersion>
     <ProjectName>BizTalkTests</ProjectName>
     <ProjectVersion>1.0</ProjectVersion>
-    <IncludeOrchestrations>False</IncludeOrchestrations>
-	<IncludeSchemas>False</IncludeSchemas>
-	<IncludePipelines>False</IncludePipelines>
-	<IncludeTransforms>False</IncludeTransforms>
+    <IncludeOrchestrations>True</IncludeOrchestrations>
+	  <IncludeSchemas>True</IncludeSchemas>
+	  <IncludePipelines>False</IncludePipelines>
+	  <IncludeTransforms>False</IncludeTransforms>
+    <IncludeComponents>True</IncludeComponents>
     <UsingMasterBindings>True</UsingMasterBindings>
     <RequireXmlPreprocessDirectives>False</RequireXmlPreprocessDirectives>
     <ApplyXmlEscape>True</ApplyXmlEscape>
     <IncludeSettingsSpreadsheetInMsi>False</IncludeSettingsSpreadsheetInMsi>
 	  <SkipIISReset>True</SkipIISReset>
-	  <SkipHostInstancesRestart>True</SkipHostInstancesRestart>
-
-	  <BTSVersion>2010</BTSVersion>
+	  <SkipHostInstancesRestart>False</SkipHostInstancesRestart>
+    
+    <TransMockAddressClassDir>..\IntegrationTests</TransMockAddressClassDir>
+    <TransMockDebug>true</TransMockDebug>
+	 <BTSVersion>2010</BTSVersion>
+    
   </PropertyGroup>
   <PropertyGroup>
     <!-- Properties related to building an MSI for server deployments -->
@@ -40,6 +44,7 @@
     <!-- NEVER change the ProductUpgradeCode. -->
     <ProductUpgradeCode>bc2dc6fa-8cac-4651-b057-bab20a541d27</ProductUpgradeCode>
   </PropertyGroup>
+  
   <!-- Under TFS Team Build, set CustomizableOutDir property to true in TFS 2005/2008/2010 UpgradeTemplate. -->
   <!-- With a workflow build, copy the default template then modify the MSBuild task for the solution build. Set OutDir to blank and -->
   <!-- CommandLineArguments to String.Format("/p:SkipInvalidConfigurations=true;TeamBuildOutDir=""{0}"" {1}", BinariesDirectory, MSBuildArguments). -->
@@ -67,13 +72,17 @@
   <!-- Add ItemGroup elements that contain one or more Schemas, Orchestrations, Transforms, etc. elements that describe -->
   <!-- the specific artifacts in your solution that need to be deployed. Use IntelliSense as a guide. -->
   <ItemGroup>
-    <!--<Schemas Include="BizTalkTests.Schemas.dll">
-      <LocationPath>..\$(ProjectName)\bin\$(Configuration)</LocationPath>
-    </Schemas>-->
+    <Schemas Include="Schemas.dll">
+      <LocationPath>..\Schemas\bin\$(Configuration)</LocationPath>
+    </Schemas>
+    <Orchestrations Include="Orchestrations.dll">
+      <LocationPath>..\Orchestrations\bin\$(Configuration)</LocationPath>
+    </Orchestrations>
+    <Components Include="TransMock.TestUtils.BizTalk.dll">
+      <LocationPath>..\..\Test\TransMock.TestUtils.BizTalk\bin\$(Configuration)</LocationPath>
+    </Components>
   </ItemGroup>
-  <!-- !!! TODO !!! -->
-  <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
-	<Import Project="..\..\Integration\BTDF\TransMock.targets" />
+  
   <!--
     The Deployment Framework automatically packages most files into the server install MSI.
     However, if there are special folders that you need to include in the MSI, you can
@@ -82,6 +91,8 @@
   -->
   <Target Name="CustomRedist">
   </Target>
-	
+  <!-- !!! TODO !!! -->
+  <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
+  <Import Project="..\..\Integration\BTDF\TransMock.targets" />
 
 </Project>

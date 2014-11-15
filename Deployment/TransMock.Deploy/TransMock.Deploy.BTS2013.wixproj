@@ -22,7 +22,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Product.wxs" />
+    <Compile Include="Product.BTS2013.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj">
@@ -60,6 +60,14 @@
       </DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>TRANSMOCKBIN</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013.csproj">
+      <Name>TransMock.TestUtils.BizTalk.BTS2013</Name>
+      <Project>{42f57394-8f3e-47e7-b1e6-acdea505af23}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Deploy.CustomActions\TransMock.Deploy.CustomActions.BTS2013.csproj">
       <Name>TransMock.Deploy.CustomActions.BTS2013</Name>

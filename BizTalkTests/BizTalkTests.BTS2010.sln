@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{FA08D049-061E-4FAF-88DB-ACFC4825C7A2}"
+	ProjectSection(SolutionItems) = preProject
+		BizTalkTests.Deployment\Deployment.btdfproj = BizTalkTests.Deployment\Deployment.btdfproj
+		BizTalkTests.Deployment\PortBindingsMaster.xml = BizTalkTests.Deployment\PortBindingsMaster.xml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schemas.BTS2010", "Schemas\Schemas.BTS2010.btproj", "{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orchestrations.BTS2010", "Orchestrations\Orchestrations.BTS2010.btproj", "{5C42327E-A089-4EB5-840A-622124D4D23B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.BTS2010", "..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj", "{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{303D84A3-991C-4354-8A6D-7E9B3B7CB2FB}"
+	ProjectSection(SolutionItems) = preProject
+		BizTalkTests.vsmdi = BizTalkTests.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BizTalkTests.IntegrationTests.BTS2010", "IntegrationTests\BizTalkTests.IntegrationTests.BTS2010.csproj", "{632BA754-AF2A-4E2A-829C-ED53BD431180}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = BizTalkTests.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C42327E-A089-4EB5-840A-622124D4D23B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{632BA754-AF2A-4E2A-829C-ED53BD431180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{632BA754-AF2A-4E2A-829C-ED53BD431180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{632BA754-AF2A-4E2A-829C-ED53BD431180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{632BA754-AF2A-4E2A-829C-ED53BD431180}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

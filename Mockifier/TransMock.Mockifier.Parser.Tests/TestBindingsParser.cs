@@ -36,7 +36,13 @@ namespace TransMock.Mockifier.Parser.Tests
     [TestClass]
     public class TestBindingsParser
     {
-        private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\tpublic static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestSendWCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tpublic static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
+        private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\t" +
+            "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
+            "public static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestSendWCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
+            "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
+            "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
 
         private static Dictionary<string, string> expectedTransportConfig;
 
@@ -613,6 +619,13 @@ namespace TransMock.Mockifier.Parser.Tests
             bool isTwoWay = bool.Parse(sendPortElement.Attribute("IsTwoWay").Value);
             //fetch the primary transport element
             var primaryTransportElement = sendPortElement.Element("PrimaryTransport");
+
+            if (primaryTransportElement == null)
+            {
+                //no further verification since it is a case of dynamic send port
+                return;
+            }
+
             //assert the address
             string address = primaryTransportElement.Element("Address").Value;
 

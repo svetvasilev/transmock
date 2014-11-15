@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21107</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}</ProjectGuid>
+    <ProjectGuid>{5C42327E-A089-4EB5-840A-622124D4D23B}</ProjectGuid>
     <ProjectTypeGuids>{EF7E3281-CD33-11D4-8326-00C04FA0CE8D};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>library</OutputType>
     <GenericProcessing>true</GenericProcessing>
-    <RootNamespace>Schemas</RootNamespace>
-    <AssemblyName>Schemas</AssemblyName>
+    <RootNamespace>Orchestrations</RootNamespace>
+    <AssemblyName>Orchestrations</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <BpelCompliance>True</BpelCompliance>
   </PropertyGroup>
@@ -32,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Key\TransMock.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -63,10 +69,29 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Schema Include="TestSchema.xsd">
-      <TypeName>TestSchema</TypeName>
-      <Namespace>Schemas</Namespace>
-    </Schema>
+    <XLang Include="DynamicPortTest.odx">
+      <TypeName>DynamicPortTest</TypeName>
+      <Namespace>Orchestrations.BTS2010</Namespace>
+    </XLang>
+    <XLang Include="DynamicPortTwoWayTest.odx">
+      <TypeName>DynamicPortTwoWayTest</TypeName>
+      <Namespace>Orchestrations.BTS2010</Namespace>
+    </XLang>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj">
+      <Project>{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}</Project>
+      <Name>TransMock.TestUtils.BizTalk.BTS2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Schemas\Schemas.BTS2010.btproj">
+      <Project>{9EADF47A-E60D-4CF0-B5DD-1E734A5DAC43}</Project>
+      <Name>Schemas.BTS2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Key\TransMock.snk">
+      <Link>TransMock.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\BizTalk\BizTalkC.targets" />

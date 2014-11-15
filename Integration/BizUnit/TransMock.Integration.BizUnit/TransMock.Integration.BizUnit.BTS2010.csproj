@@ -57,6 +57,7 @@
     <Compile Include="MockSendStep.cs" />
     <Compile Include="MockReceiveStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransMockExecutionBeacon.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
