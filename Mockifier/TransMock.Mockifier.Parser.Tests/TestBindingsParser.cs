@@ -291,6 +291,46 @@ namespace TransMock.Mockifier.Parser.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.BTDF.xml")]
+        public void TestInlineParsing_SimpleMock_BTDFdirectives_BTS2010()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.BTDF.xml", "TestApplication.BindingInfo.BTDF_parsed.xml", null, "2010");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo.BTDF_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2010");
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2010");
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContents, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.xml")]
         public void TestInlineParsing_WithPromotedProperties_BTS2010()
         {            
@@ -330,6 +370,49 @@ namespace TransMock.Mockifier.Parser.Tests
                 VerifyReceiceLocationConfig(receiveLocationElement, "BTS2010",
                     expectedPromotedProperties);
                 
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.BTDF.xml")]
+        public void TestInlineParsing_WithPromotedProperties_BTDFdirectives_BTS2010()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfoWithProps.BTDF.xml",
+                "TestApplication.BindingInfoWithProps.BTDF_parsed.xml", null, "2010");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfoWithProps.BTDF_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2010");
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            string expectedPromotedProperties = null;
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+
+                if (receiveLocationElement.Attribute("Name").Value == "OneWayReceive_FILE")
+                {
+                    expectedPromotedProperties = "FILE.ReceivedFileName=TestFileName.xml;";
+                }
+                else
+                {
+                    expectedPromotedProperties = "WCF.FakeAction=TestAction;WCF.FakeAddress=TestAddress;";
+                }
+
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2010",
+                    expectedPromotedProperties);
+
             }
         }
 
@@ -456,6 +539,47 @@ namespace TransMock.Mockifier.Parser.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.BTDF.xml")]
+        public void TestInlineParsing_SimpleMock_BTDFdirectives_BTS2013()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.BTDF.xml",
+                "TestApplication.BindingInfo2013.BTDF_parsed.xml", "2013", false);
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo2013.BTDF_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2013");
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2013");
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContents, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
         public void TestInlineParsing_SimpleMock_MockedFileWriter_BTS2013()
         {
@@ -506,6 +630,49 @@ namespace TransMock.Mockifier.Parser.Tests
                 "TestApplication.BindingInfoWithProps2013_parsed.xml", "2013");
 
             XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfoWithProps2013_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2013");
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            string expectedPromotedProperties = null;
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+
+                if (receiveLocationElement.Attribute("Name").Value == "OneWayReceive_FILE")
+                {
+                    expectedPromotedProperties = "FILE.ReceivedFileName=TestFileName.xml;";
+                }
+                else
+                {
+                    expectedPromotedProperties = "WCF.FakeAction=TestAction;WCF.FakeAddress=TestAddress;";
+                }
+
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2013",
+                    expectedPromotedProperties);
+
+            }
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.BTDF.xml")]
+        public void TestInlineParsing_WithPromotedProperties_BTDFdirectives_BTS2013()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfoWithProps.BTDF.xml",
+                "TestApplication.BindingInfoWithProps2013.BTDF_parsed.xml", "2013");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfoWithProps2013.BTDF_parsed.xml");
 
             //asserting the send ports
             var sendPortElements = parsedBindingsDoc.Root.Descendants()

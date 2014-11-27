@@ -61,6 +61,12 @@
     <Compile Include="TestBindingsParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\TestApplication.BindingInfoWithProps.BTDF.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestApplication.BindingInfo.BTDF.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestApplication.BindingInfoWithProps.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

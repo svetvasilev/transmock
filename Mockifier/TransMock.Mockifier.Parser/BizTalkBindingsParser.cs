@@ -290,39 +290,46 @@ namespace TransMock.Mockifier.Parser
         private MockSettings ParseComment(XComment comment)
         {
             System.Diagnostics.Debug.WriteLine("Parsing a commented send port");
-            //Check if the comment is with the correct, expected contents
-            //XmlReader xr = comment.CreateReader();
-            string commentContent = comment.Value;//xr.ReadOuterXml();
-
-            System.Diagnostics.Debug.WriteLine("Comment content is: " + commentContent);
-            //Here we compare the content againse the predefined expected values
-
             MockSettings mockSettings = null;
 
-            XDocument xMockSettings = XDocument.Parse(commentContent.Trim());
-            //Validating the content of the Xml against the Mock schema
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            schemaSet.Add(XmlSchema.Read(resourceReader.MockSchema, null));
-            xMockSettings.Validate(schemaSet, null);
+            try
+            {
+                string commentContent = comment.Value;
 
-            //validation is passed, we deserialize the object
-            mockSettings = new MockSettings()
-            {
-                Encoding = xMockSettings.Root.Attribute(XmlNodeNames.Encoding) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Encoding).Value,
-                Operation = xMockSettings.Root.Attribute(XmlNodeNames.Operation) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Operation).Value
-            };
-            //TODO: Add logic for parsing PromotedProperties collection
-            XElement xPromotedProperties = xMockSettings.Root.Element(XmlNodeNames.PromotedProperties);
-            
-            if (xPromotedProperties != null)
-            {
-                var xProperties = xPromotedProperties.Elements(XmlNodeNames.Property);
-                //Adding each property to the PromotedProperties collection
-                foreach (var xProperty in xProperties)
+                System.Diagnostics.Debug.WriteLine("Comment content is: " + commentContent);
+                //Here we compare the content againse the predefined expected values               
+
+                XDocument xMockSettings = XDocument.Parse(commentContent.Trim());
+                //Validating the content of the Xml against the Mock schema
+                XmlSchemaSet schemaSet = new XmlSchemaSet();
+                schemaSet.Add(XmlSchema.Read(resourceReader.MockSchema, null));
+                xMockSettings.Validate(schemaSet, null);
+
+                //validation is passed, we deserialize the object
+                mockSettings = new MockSettings()
                 {
-                    mockSettings.PromotedProperties.Add(xProperty.Attribute(XmlNodeNames.Name).Value, 
-                        xProperty.Attribute("Value").Value);                    
+                    Encoding = xMockSettings.Root.Attribute(XmlNodeNames.Encoding) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Encoding).Value,
+                    Operation = xMockSettings.Root.Attribute(XmlNodeNames.Operation) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Operation).Value
+                };
+                //Parsing PromotedProperties collection
+                XElement xPromotedProperties = xMockSettings.Root.Element(XmlNodeNames.PromotedProperties);
+
+                if (xPromotedProperties != null)
+                {
+                    var xProperties = xPromotedProperties.Elements(XmlNodeNames.Property);
+                    //Adding each property to the PromotedProperties collection
+                    foreach (var xProperty in xProperties)
+                    {
+                        mockSettings.PromotedProperties.Add(xProperty.Attribute(XmlNodeNames.Name).Value,
+                            xProperty.Attribute("Value").Value);
+                    }
                 }
+
+                System.Diagnostics.Debug.WriteLine("ParseComment succeeded. Returning a MockSettings object");                
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("ParseComments threw an exception: " + ex.Message);
             }
 
             return mockSettings;
