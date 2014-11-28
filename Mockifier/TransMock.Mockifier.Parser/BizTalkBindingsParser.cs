@@ -262,16 +262,11 @@ namespace TransMock.Mockifier.Parser
 
         private void ProcessDynamicSendPort(XElement dynamciSendPortElement)
         {
-            var orchestrations = dynamciSendPortElement.Document.Root
-                    .Descendants()
-                    .Where(d => d.NodeType == XmlNodeType.Element &&
-                        d.Name == "ModuleRef" && d.Attribute("Name").Value == "Orchestrations");
-
-            var sendPortRefElement = orchestrations                
+            var sendPortRefElement = dynamciSendPortElement.Document.Root                
                         .Descendants()
-                        .Where(d => d.NodeType == XmlNodeType.Element &&
-                            d.Name == "SendPortRef" &&
-                            d.Attribute("Name") != null &&
+                        .Where(d => d.NodeType == XmlNodeType.Element   &&
+                            d.Name == "SendPortRef"                     &&                            
+                            d.Attribute("Name") != null                 &&                            
                             d.Attribute("Name").Value == dynamciSendPortElement.Attribute("Name").Value)
                             .SingleOrDefault();
 
