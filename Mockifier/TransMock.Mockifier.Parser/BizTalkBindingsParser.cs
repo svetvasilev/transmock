@@ -247,8 +247,7 @@ namespace TransMock.Mockifier.Parser
                         //We fetch the adapter settings in the binding and replace those with the mock ones
                         ReplaceSendTransportConfiguration(
                             portComment.Parent.Element("PrimaryTransport"),
-                            mockSettings.Operation, btsVersion, unescape,
-                            mockSettings.Encoding ?? "UTF-8");
+                            mockSettings, btsVersion, unescape);
                     }
                     else
                     {
@@ -303,8 +302,12 @@ namespace TransMock.Mockifier.Parser
                 //validation is passed, we deserialize the object
                 mockSettings = new MockSettings()
                 {
-                    Encoding = xMockSettings.Root.Attribute(XmlNodeNames.Encoding) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Encoding).Value,
-                    Operation = xMockSettings.Root.Attribute(XmlNodeNames.Operation) == null ? null : xMockSettings.Root.Attribute(XmlNodeNames.Operation).Value
+                    EndpointName = xMockSettings.Root.Attribute(XmlNodeNames.EndpointName) == null ?
+                        null : xMockSettings.Root.Attribute(XmlNodeNames.EndpointName).Value,
+                    Encoding = xMockSettings.Root.Attribute(XmlNodeNames.Encoding) == null ? 
+                        null : xMockSettings.Root.Attribute(XmlNodeNames.Encoding).Value,
+                    Operation = xMockSettings.Root.Attribute(XmlNodeNames.Operation) == null ? 
+                        null : xMockSettings.Root.Attribute(XmlNodeNames.Operation).Value
                 };
                 //Parsing PromotedProperties collection
                 XElement xPromotedProperties = xMockSettings.Root.Element(XmlNodeNames.PromotedProperties);
@@ -315,7 +318,8 @@ namespace TransMock.Mockifier.Parser
                     //Adding each property to the PromotedProperties collection
                     foreach (var xProperty in xProperties)
                     {
-                        mockSettings.PromotedProperties.Add(xProperty.Attribute(XmlNodeNames.Name).Value,
+                        mockSettings.PromotedProperties.Add(
+                            xProperty.Attribute(XmlNodeNames.Name).Value,
                             xProperty.Attribute("Value").Value);
                     }
                 }
@@ -332,10 +336,9 @@ namespace TransMock.Mockifier.Parser
         
 
         private void ReplaceSendTransportConfiguration(XElement transportElement, 
-            string operation, 
+            MockSettings mockSettings, 
             string btsVersion,
-            bool unescape,
-            string encoding = "UTF-8")
+            bool unescape)
         {
             System.Diagnostics.Debug.WriteLine("Replacing the transport settings");
             //Find out if this is one or two way port
@@ -347,12 +350,7 @@ namespace TransMock.Mockifier.Parser
 
             var addressElement = transportElement.Element(XmlNodeNames.Address);
 
-            string mockAddress = string.Format(MockAddressTemplate, sendPortName);
-
-            if (!string.IsNullOrEmpty(operation))
-            {
-                mockAddress += string.Format("/{0}", operation);
-            }
+            string mockAddress = GenerateMockAddress(mockSettings, sendPortName);            
 
             addressElement.SetValue(mockAddress);
             
@@ -398,14 +396,16 @@ namespace TransMock.Mockifier.Parser
                 mockTransportData = resourceReader.GetMockTransportConfig(btsVersion,
                     SendPortTwoWayMockTransportKey);
 
-                mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
+                mockTransportData = mockTransportData.Replace("{Encoding}", 
+                    mockSettings.Encoding ?? "UTF-8");
             }
             else
             {
                 mockTransportData = resourceReader.GetMockTransportConfig(btsVersion,
                     SendPortOneWayMockTransportKey);
 
-                mockTransportData = mockTransportData.Replace("{Encoding}", encoding);
+                mockTransportData = mockTransportData.Replace("{Encoding}",
+                    mockSettings.Encoding ?? "UTF-8");
             }
 
             //Parse the original transport info and extract any custom service behaviors
@@ -443,12 +443,7 @@ namespace TransMock.Mockifier.Parser
 
             var addressElement = receiveLocationElement.Element(XmlNodeNames.Address);
 
-            string mockAddress = string.Format(MockAddressTemplate, receiveLocationName);
-
-            if (!string.IsNullOrEmpty(mockSettings.Operation))
-            {
-                mockAddress += string.Format("/{0}", mockSettings.Operation);
-            }
+            string mockAddress = GenerateMockAddress(mockSettings, receiveLocationName);
 
             addressElement.SetValue(mockAddress);
             //Adding the receive location name and the mocked address to the dictionary
@@ -548,6 +543,27 @@ namespace TransMock.Mockifier.Parser
             
             //Finally replace the current transport config with the mocked ones
             transportInfo.Value = mockTransportData;
+        }
+
+        private string GenerateMockAddress(MockSettings mockSettings, string bindingsEndpointName)
+        {
+            string mockAddress = null;
+
+            if (!string.IsNullOrEmpty(mockSettings.EndpointName))
+            {
+                mockAddress = string.Format(MockAddressTemplate, mockSettings.EndpointName);
+            }
+            else
+            {
+                mockAddress = string.Format(MockAddressTemplate, bindingsEndpointName);
+            }            
+
+            if (!string.IsNullOrEmpty(mockSettings.Operation))
+            {
+                mockAddress += string.Format("/{0}", mockSettings.Operation);
+            }
+
+            return mockAddress;
         }
 
         private string ExtractCustomServiceBehaviors(string transportConfig)

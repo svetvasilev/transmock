@@ -44,7 +44,17 @@ namespace TransMock.Mockifier.Parser.Tests
             "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
             "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
 
+        private const string GeneratedClassContentsCustomURL = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\t" +
+            "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayOutEndpoint\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayOutEndpoint/UpdateState\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayInEndpoint/StateChanged\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
+            "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayInEndpoint\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
+
         private static Dictionary<string, string> expectedTransportConfig;
+
+        private static Dictionary<string, string> expectedCustomURLs;
 
         public TestBindingsParser()
         {
@@ -105,6 +115,16 @@ namespace TransMock.Mockifier.Parser.Tests
                 expectedTransportConfig.Add("BTS2013_SendPortTwoWays",
                     CreateBTS2013TwoWaySendPortConfig());
             }
+
+            if (expectedCustomURLs == null)
+            {
+                expectedCustomURLs = new Dictionary<string, string>(4);
+
+                expectedCustomURLs.Add("OneWaySendFILE", "OneWayOutEndpoint");
+                expectedCustomURLs.Add("TwoWayTestSendWCF", "TwoWayOutEndpoint/UpdateState");
+                expectedCustomURLs.Add("OneWayReceive_FILE", "OneWayInEndpoint/StateChanged");
+                expectedCustomURLs.Add("TwoWayTestReceive_WCF", "TwoWayInEndpoint");
+            }
         }        
         
         // Use ClassCleanup to run code after all tests in a class have run
@@ -113,8 +133,12 @@ namespace TransMock.Mockifier.Parser.Tests
         {
             if (expectedTransportConfig != null)
             {
-                expectedTransportConfig.Clear();
-                
+                expectedTransportConfig.Clear();               
+            }
+
+            if (expectedCustomURLs != null)
+            {
+                expectedCustomURLs.Clear();                
             }
         }
         
@@ -122,10 +146,16 @@ namespace TransMock.Mockifier.Parser.Tests
         // [TestInitialize()]
         // public void MyTestInitialize() { }
         //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
+         //Use TestCleanup to run code after each test has run
+         [TestCleanup()]
+         public void TestCleanup() 
+         {
+             if (System.IO.File.Exists("TestApplicationMockAddresses.cs"))
+             {
+                 System.IO.File.Delete("TestApplicationMockAddresses.cs");
+             }
+         }
+        
         #endregion
 
         [TestMethod]
@@ -417,6 +447,48 @@ namespace TransMock.Mockifier.Parser.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.CustomURL.xml")]
+        public void TestInlineParsing_SimpleMock_CustomURL_BTS2010()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.CustomURL.xml", "TestApplication.BindingInfo.CustomURL_parsed.xml", null, "2010");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo.CustomURL_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2010", 
+                    hasCustomUrl: true);
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2010", 
+                    hasCustomUrl: true);
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContentsCustomURL, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
         public void TestInlineParsing_SimpleMock_BTS2013()
         {
@@ -580,6 +652,50 @@ namespace TransMock.Mockifier.Parser.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"TestData\TestApplication.BindingInfo.CustomURL.xml")]
+        public void TestInlineParsing_SimpleMock_CustomURL_BTS2013()
+        {
+            BizTalkBindingsParser parser = new BizTalkBindingsParser();
+
+            parser.ParseBindings("TestApplication.BindingInfo.CustomURL.xml", 
+                "TestApplication.BindingInfo.CustomURL_parsed.xml", 
+                null, "2013");
+
+            XDocument parsedBindingsDoc = XDocument.Load("./TestApplication.BindingInfo.CustomURL_parsed.xml");
+
+            //asserting the send ports
+            var sendPortElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "SendPort");
+
+            foreach (var sendPortElement in sendPortElements)
+            {
+                VerifySendPortConfig(sendPortElement, "BTS2013",
+                    hasCustomUrl: true);
+
+            }
+            //asserting the receive locations
+            var receiveLocationElements = parsedBindingsDoc.Root.Descendants()
+                .Where(e => e.Name == "ReceiveLocation");
+
+            foreach (var receiveLocationElement in receiveLocationElements)
+            {
+                VerifyReceiceLocationConfig(receiveLocationElement, "BTS2013",
+                    hasCustomUrl: true);
+
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            {
+                string classContents = sr.ReadToEnd();
+
+                Assert.AreEqual(GeneratedClassContentsCustomURL, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
+
+        }
+
+        [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
         public void TestInlineParsing_SimpleMock_MockedFileWriter_BTS2013()
         {
@@ -706,10 +822,12 @@ namespace TransMock.Mockifier.Parser.Tests
             }
         }
 
+
         private void VerifyReceiceLocationConfig(XElement receiveLocationElement, 
             string btsVersion, 
             string promotedProperties=null,
-            bool unescape=false)
+            bool unescape = false,
+            bool hasCustomUrl = false)
         {
             string receiveLocationName = receiveLocationElement.Attribute("Name").Value;
             bool isTwoWay = bool.Parse(receiveLocationElement.Parent.Parent.Attribute("IsTwoWay").Value);
@@ -718,7 +836,20 @@ namespace TransMock.Mockifier.Parser.Tests
             //assert the address
             string address = receiveLocationElement.Element("Address").Value;
 
-            Assert.AreEqual(string.Format("mock://localhost/{0}", receiveLocationName), address, "The address is not correct");
+            if (hasCustomUrl)
+            {
+                string customUrl = expectedCustomURLs[receiveLocationName];
+
+                Assert.IsNotNull(customUrl, "Custom URL noe specified for receive location " + receiveLocationName);
+
+                Assert.AreEqual(string.Format("mock://localhost/{0}", customUrl),
+                   address, "The custom address is not correct");
+            }
+            else
+            {
+                Assert.AreEqual(string.Format("mock://localhost/{0}", receiveLocationName), 
+                    address, "The address is not correct");
+            }
 
             var receiveHandler = receiveLocationElement.Element("ReceiveHandler");
              
@@ -780,7 +911,10 @@ namespace TransMock.Mockifier.Parser.Tests
             }            
         }
 
-        private void VerifySendPortConfig(XElement sendPortElement, string btsVersion, bool unescape=false)
+        private void VerifySendPortConfig(XElement sendPortElement, 
+            string btsVersion,
+            bool unescape=false,
+            bool hasCustomUrl=false)
         {
             string sendPortName = sendPortElement.Attribute("Name").Value;
             bool isTwoWay = bool.Parse(sendPortElement.Attribute("IsTwoWay").Value);
@@ -796,7 +930,21 @@ namespace TransMock.Mockifier.Parser.Tests
             //assert the address
             string address = primaryTransportElement.Element("Address").Value;
 
-            Assert.AreEqual(string.Format("mock://localhost/{0}", sendPortName), address, "The address is not correct");
+            if (hasCustomUrl)
+            {
+                string customUrl = expectedCustomURLs[sendPortName];
+
+                Assert.IsNotNull(customUrl, "Custom URL noe specified for send port " + sendPortName);
+
+                Assert.AreEqual(string.Format("mock://localhost/{0}", customUrl),
+                   address, "The custom address is not correct");
+            }
+            else
+            {
+                Assert.AreEqual(string.Format("mock://localhost/{0}", sendPortName),
+                   address, "The address is not correct");
+            }
+            
             //Assert the transport type settings
             var transportTypeElement = primaryTransportElement.Element("TransportType");
 
