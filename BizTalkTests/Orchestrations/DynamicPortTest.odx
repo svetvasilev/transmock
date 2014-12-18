@@ -2,7 +2,7 @@
 #error Do not define __DESIGNER_DATA.
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <om:MetaModel MajorVersion="1" MinorVersion="3" Core="2b131234-7959-458d-834f-2dc0769ce683" ScheduleModel="66366196-361d-448d-976f-cab5e87496d2" xmlns:om="http://schemas.microsoft.com/BizTalk/2003/DesignerData">
-    <om:Element Type="Module" OID="0288fb21-56cc-4755-9ce1-638d8faea8b4" LowerBound="1.1" HigherBound="62.1">
+    <om:Element Type="Module" OID="0288fb21-56cc-4755-9ce1-638d8faea8b4" LowerBound="1.1" HigherBound="64.1">
         <om:Property Name="ReportToAnalyst" Value="True" />
         <om:Property Name="Name" Value="Orchestrations" />
         <om:Property Name="Signal" Value="False" />
@@ -44,7 +44,7 @@
                 </om:Element>
             </om:Element>
         </om:Element>
-        <om:Element Type="ServiceDeclaration" OID="46407f26-7ea6-480f-b878-fadb82f6029e" ParentLink="Module_ServiceDeclaration" LowerBound="18.1" HigherBound="61.1">
+        <om:Element Type="ServiceDeclaration" OID="46407f26-7ea6-480f-b878-fadb82f6029e" ParentLink="Module_ServiceDeclaration" LowerBound="18.1" HigherBound="63.1">
             <om:Property Name="InitializedTransactionType" Value="False" />
             <om:Property Name="IsInvokable" Value="False" />
             <om:Property Name="TypeModifier" Value="Internal" />
@@ -85,15 +85,15 @@
                     <om:Property Name="Name" Value="Rcv_Start" />
                     <om:Property Name="Signal" Value="True" />
                 </om:Element>
-                <om:Element Type="Construct" OID="c7b21aad-1b9c-4a9b-a8d5-4ca6c5b1f65c" ParentLink="ServiceBody_Statement" LowerBound="33.1" HigherBound="45.1">
+                <om:Element Type="Construct" OID="c7b21aad-1b9c-4a9b-a8d5-4ca6c5b1f65c" ParentLink="ServiceBody_Statement" LowerBound="33.1" HigherBound="47.1">
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Construct_OutMsg" />
                     <om:Property Name="Signal" Value="True" />
-                    <om:Element Type="MessageAssignment" OID="107eaaf6-5e0a-4432-b905-5a2cb0ec1eba" ParentLink="ComplexStatement_Statement" LowerBound="36.1" HigherBound="44.1">
-                        <om:Property Name="Expression" Value="OutMsg = StartMsg;&#xD;&#xA;&#xD;&#xA;MockConfig = TransMock.TestUtils.BizTalk.&#xD;&#xA;    MockHelper.MockDynamicSendPort(&#xD;&#xA;        &quot;PortOut&quot;, OutMsg);&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
+                    <om:Element Type="MessageAssignment" OID="107eaaf6-5e0a-4432-b905-5a2cb0ec1eba" ParentLink="ComplexStatement_Statement" LowerBound="36.1" HigherBound="46.1">
+                        <om:Property Name="Expression" Value="OutMsg = StartMsg;&#xD;&#xA;&#xD;&#xA;OutMsg(FILE.CopyMode) = 2;&#xD;&#xA;&#xD;&#xA;MockConfig = TransMock.TestUtils.BizTalk.&#xD;&#xA;    MockHelper.MockDynamicSendPort(&#xD;&#xA;        &quot;PortOut&quot;, OutMsg);&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" />
                         <om:Property Name="ReportToAnalyst" Value="False" />
                         <om:Property Name="Name" Value="MessageAssignment_1" />
-                        <om:Property Name="Signal" Value="False" />
+                        <om:Property Name="Signal" Value="True" />
                     </om:Element>
                     <om:Element Type="MessageRef" OID="e46950e4-6650-4883-b5eb-59dc4ac4e7e1" ParentLink="Construct_MessageRef" LowerBound="34.23" HigherBound="34.29">
                         <om:Property Name="Ref" Value="OutMsg" />
@@ -101,13 +101,13 @@
                         <om:Property Name="Signal" Value="False" />
                     </om:Element>
                 </om:Element>
-                <om:Element Type="VariableAssignment" OID="9954bb91-157c-463b-9f20-0d679132d5d5" ParentLink="ServiceBody_Statement" LowerBound="45.1" HigherBound="57.1">
+                <om:Element Type="VariableAssignment" OID="9954bb91-157c-463b-9f20-0d679132d5d5" ParentLink="ServiceBody_Statement" LowerBound="47.1" HigherBound="59.1">
                     <om:Property Name="Expression" Value="if(MockConfig != null)&#xD;&#xA;{&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.Address) = MockConfig.Address;&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = MockConfig.TransportType;&#xD;&#xA;}&#xD;&#xA;else&#xD;&#xA;{&#xD;&#xA;    //Carry out with the actual send port settings&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.Address) = &quot;c:\\temp\temp.tmp&quot;;&#xD;&#xA;    PortOut(Microsoft.XLANGs.BaseTypes.TransportType) = &quot;FILE&quot;;&#xD;&#xA;}" />
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Configure_SendPort" />
                     <om:Property Name="Signal" Value="True" />
                 </om:Element>
-                <om:Element Type="Send" OID="52bfae6b-4347-4e34-8279-da58de86183a" ParentLink="ServiceBody_Statement" LowerBound="57.1" HigherBound="59.1">
+                <om:Element Type="Send" OID="52bfae6b-4347-4e34-8279-da58de86183a" ParentLink="ServiceBody_Statement" LowerBound="59.1" HigherBound="61.1">
                     <om:Property Name="PortName" Value="PortOut" />
                     <om:Property Name="MessageName" Value="OutMsg" />
                     <om:Property Name="OperationName" Value="SendOutMessage" />
@@ -195,6 +195,8 @@ module Orchestrations
             {
                 [Microsoft.XLANGs.BaseTypes.DesignerPosition("107eaaf6-5e0a-4432-b905-5a2cb0ec1eba")]
                 OutMsg = StartMsg;
+                
+                OutMsg(FILE.CopyMode) = 2;
                 
                 MockConfig = TransMock.TestUtils.BizTalk.
                     MockHelper.MockDynamicSendPort(
