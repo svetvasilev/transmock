@@ -85,8 +85,18 @@ namespace TransMock.Wcf.Adapter
                 pipeClient.WaitForPipeDrain();
 
                 System.Diagnostics.Debug.WriteLine("Outbound message delivered!");
-                //Check if the CorrelationToken prometed property is present
-                if (message.Properties.ContainsKey("http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken"))
+                //Check if the IsSolicitResponse context property is present and set to true
+                bool isTwoWay = false;
+                object isSolicitResponseValue;
+
+                if (message.Properties.TryGetValue(
+                    "http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse",
+                    out isSolicitResponseValue))
+                {
+                    isTwoWay = Convert.ToBoolean(isSolicitResponseValue);                 
+                }
+
+                if (isTwoWay)
                 {
                     //We are in a two-way communication scenario
                     System.Diagnostics.Debug.WriteLine("Two-way communication - reading the response message");
