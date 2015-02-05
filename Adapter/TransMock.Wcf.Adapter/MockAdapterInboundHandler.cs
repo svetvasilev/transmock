@@ -318,8 +318,8 @@ namespace TransMock.Wcf.Adapter
                     //Creating the named pipe server
                     NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                         this.Connection.ConnectionFactory.ConnectionUri.Uri.AbsolutePath,
-                        PipeDirection.InOut, 5, PipeTransmissionMode.Message,
-                        PipeOptions.Asynchronous, 4096, 4096);
+                        PipeDirection.InOut, 5, PipeTransmissionMode.Byte,
+                        PipeOptions.Asynchronous, int.MaxValue, int.MaxValue);
 
                     pipeServers.Add(pipeServer.GetHashCode(), pipeServer);
 
@@ -358,7 +358,7 @@ namespace TransMock.Wcf.Adapter
                     return;
                 }
 
-                byte[] inBuffer = new byte[pipeConnection.InBufferSize];
+                byte[] inBuffer = new byte[4096];
 
                 //Starting async read by passing the named pipe conenction as a async state parameter again.
                 readAsyncResult = pipeConnection.BeginRead(inBuffer, 0,
@@ -366,7 +366,7 @@ namespace TransMock.Wcf.Adapter
                     new AsyncReadState
                     {
                         PipeConnection = pipeConnection,
-                        InStream = new MemoryStream(pipeConnection.InBufferSize),
+                        InStream = new MemoryStream(4096),
                         RawData = inBuffer
                     });
             //}
@@ -377,25 +377,54 @@ namespace TransMock.Wcf.Adapter
         /// <param name="ar">The async result instanced passed to the method</param>
         private void PipeReadAsync(IAsyncResult ar)
         {
-            System.Diagnostics.Debug.WriteLine("Beginning reading from the pipe");
-            //Extracting the pipe connection from which the data is being read
-            var state = ar.AsyncState as AsyncReadState;
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Beginning reading from the pipe");
+                //Extracting the pipe connection from which the data is being read
+                var state = ar.AsyncState as AsyncReadState;
 
-            //lock (pipeSyncLock)
-            //{
+                //lock (pipeSyncLock)
+                //{
                 int bytesRead = state.PipeConnection.EndRead(ar);
-                
-                state.InStream.Write(state.RawData, 0, bytesRead);
+                bool eofReached = false;
 
-                if (!state.PipeConnection.IsMessageComplete)
+                System.Diagnostics.Debug.WriteLine(string.Format("Read {0} bytes", bytesRead));
+                
+                if (bytesRead > 0)
+                {
+                    if (bytesRead > 1)
+                    {
+                        eofReached = (state.RawData[bytesRead - 1] == 0x0 &&
+                            state.RawData[bytesRead - 2] == 0x0 );
+                    }
+                    else if (bytesRead == 1)
+                    {
+                        eofReached = state.RawData[bytesRead - 1] == 0x0;
+                    }
+
+                    state.InStream.Write(state.RawData, 0,
+                        eofReached ? bytesRead - 1 : bytesRead);
+
+                    System.Diagnostics.Debug.WriteLine(
+                        string.Format("Written {0} bytes to the internal stream",
+                        bytesRead));
+                }
+                else
+                    eofReached = true;
+                
+                if(!eofReached)
+                {
+                    //Not EOF, continue reading
                     readAsyncResult = state.PipeConnection.BeginRead(state.RawData, 0,
                         state.RawData.Length, cb => PipeReadAsync(cb), state);
+                }
                 else
                 {
+                    //EOF reached, constructing the message
                     System.Diagnostics.Debug.WriteLine("Message was read from the pipe");
                     //Writing the mem stream contents to a WCF Message object                                      
                     Message inMsg = null;
-                    
+
                     System.Diagnostics.Debug.WriteLine(string.Format("Writing the message contents to the message body"));
                     //Adding the message contents to a predefined XML structure
                     string msgContents = string.Format("<MessageContent>{0}</MessageContent>",
@@ -406,8 +435,8 @@ namespace TransMock.Wcf.Adapter
                     inMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, xr);
 
                     //Add any configured properties in the message context
-                    propertyParser.PromoteProperties(inMsg);                    
-                    
+                    propertyParser.PromoteProperties(inMsg);
+
                     if (inMsg != null)
                     {
                         lock (inboundQueueSyncLock)
@@ -419,6 +448,12 @@ namespace TransMock.Wcf.Adapter
 
                     //state = null;
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("PipeReadAsync threw an exception: " + ex.Message);
+            }
+            
 	        //}
         }
 
@@ -479,7 +514,23 @@ namespace TransMock.Wcf.Adapter
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("Sending a response message");
+                System.Diagnostics.Debug.WriteLine("Sending a response message");               
+
+                if (!pipeServer.IsConnected)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client disconnected. Exiting gracefully.");
+
+                    return;
+                }
+
+                if (message.IsEmpty)
+                {
+                    //Empty message is returned in case of one way communication. we simply return
+                    System.Diagnostics.Debug.WriteLine("Received empty message. Exiting gracefully.");
+
+                    return;
+                }
+
                 XmlDictionaryReader xdr = message.GetReaderAtBodyContents();
                 //Read the start element and extract its contents as a base64 encoded bytes                
                 if (xdr.NodeType == XmlNodeType.Element)
@@ -488,34 +539,52 @@ namespace TransMock.Wcf.Adapter
                     xdr.Read();
                 }
 
-                byte[] msgBuffer = xdr.ReadContentAsBase64();
+                int bytesRead = 0, contentLenght = 0;
+                byte[] msgBuffer = new byte[4096];                    
 
                 System.Diagnostics.Debug.WriteLine("Writing the response message to the pipe");
-                //Write it to the pipe                
-
-                pipeServer.Write(msgBuffer, 0, msgBuffer.Length);
-                pipeServer.Flush();
+                //Write it to the pipe
+                while ((bytesRead = xdr.ReadContentAsBase64(msgBuffer, 0, msgBuffer.Length)) > 0)
+                {
+                    contentLenght += bytesRead;
+                    pipeServer.Write(msgBuffer, 0, bytesRead);
+                }
 
                 System.Diagnostics.Debug.WriteLine("The response message was sent to the client");
+                //Write the EOF bytes
+                //pipeServer.Write(new byte[2] { 0x00, 0x00 }, 0, 2);
+                pipeServer.WriteByte(0x00);
+                //pipeServer.Flush();
 
-                pipeServer.WaitForPipeDrain();
+                pipeServer.WaitForPipeDrain();              
 
                 System.Diagnostics.Debug.WriteLine("The response message was read by the client");                
 
             }
             catch (XmlException xex)//Thrown when a message with empty body is sent as reply, in the case of one way communication
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("XML exception thrown upon sending response: {0}", xex.Message));
+                System.Diagnostics.Trace.WriteLine(string.Format("XML exception thrown upon sending response: {0}", xex.Message));
             }
             catch (ObjectDisposedException odex)//Thrown when the pipe has been already disposed
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("Disposed exception thrown upon sending response: {0}", odex.Message));
+                System.Diagnostics.Trace.WriteLine(string.Format("Disposed exception thrown upon sending response: {0}", odex.Message));
+            }
+            catch(System.IO.IOException iex)
+            {
+                System.Diagnostics.Trace.WriteLine(string.Format("IO exception thrown upon sending response: {0}", iex.Message));
+                
+                if (!message.IsEmpty)
+                {
+                    //We rethrow the exception only in case of non empty message, eg. 2 way communication
+                    throw;
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("General exception thrown upon sending response: {0}", ex.Message));
+                System.Diagnostics.Trace.WriteLine(string.Format("General exception thrown upon sending response: {0}\r\nStack trace: {1}", 
+                    ex.Message, ex.StackTrace));
 
-                throw ex;
+                throw;
             }
             finally
             {

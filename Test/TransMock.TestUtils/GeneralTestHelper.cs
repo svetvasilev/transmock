@@ -33,6 +33,19 @@ namespace TransMock.TestUtils
         /// <summary>
         /// Extracts the message body as a string
         /// </summary>
+        /// <param name="msg">The message from which the body will be extracted</param>        
+        /// <returns>The bytes of the message body</returns>
+        public static byte[] GetBodyAsBytes(Message msg)
+        {
+            XmlDictionaryReader xdr = msg.GetReaderAtBodyContents();
+            xdr.ReadStartElement("MessageContent");
+
+            return xdr.ReadContentAsBase64();
+        }
+
+        /// <summary>
+        /// Extracts the message body as a string
+        /// </summary>
         /// <param name="msg">The message from which the body will be extracted</param>
         /// <param name="encoding">The encoding in which the body is expected to be</param>
         /// <returns>The message body in string representation</returns>
@@ -40,8 +53,23 @@ namespace TransMock.TestUtils
         {
             XmlDictionaryReader xdr = msg.GetReaderAtBodyContents();
             xdr.ReadStartElement("MessageContent");
-            return encoding.GetString(xdr.ReadContentAsBase64());
-            //return xdr.ReadOuterXml();
+            return encoding.GetString(xdr.ReadContentAsBase64());            
+        }
+
+        /// <summary>
+        /// Extracts the message body as a string
+        /// </summary>
+        /// <param name="msg">The message from which the body will be extracted</param>
+        /// <param name="encoding">The encoding in which the body is expected to be</param>
+        /// <returns>The message body in string representation</returns>
+        public static string GetResponseBodyAsString(Message msg, Encoding encoding)
+        {
+            XmlDictionaryReader xdr = msg.GetReaderAtBodyContents();
+            xdr.ReadStartElement("MessageContent");
+
+            byte[] bodyBytes = xdr.ReadContentAsBase64();
+
+            return encoding.GetString(bodyBytes, 0, bodyBytes.Length - 2);
         }
 
         /// <summary>
@@ -55,6 +83,7 @@ namespace TransMock.TestUtils
         {
             string receivedResponseXml = encoding.GetString(
                 Convert.FromBase64String(Convert.ToBase64String(inBuffer, 0, bytesCountRead)));
+
             return receivedResponseXml;
         }
 
@@ -69,6 +98,21 @@ namespace TransMock.TestUtils
             Message responseMessage = Message.CreateMessage(MessageVersion.Default, 
                 string.Empty,
                 Convert.ToBase64String(encoding.GetBytes(bodyContents)));
+
+            return responseMessage;
+        }
+
+        /// <summary>
+        /// Creates a WCF message with a base64 encoded body
+        /// </summary>
+        /// <param name="bodyContents">The body contents as an array of bytes</param>        
+        /// <returns>WCF message with a base64 encoded body</returns>
+        public static Message CreateMessageWithBase64EncodedBody(byte[] bodyContents)
+        {
+            Message responseMessage = Message.CreateMessage(MessageVersion.Default,
+                string.Empty,
+                Convert.ToBase64String(bodyContents));
+
             return responseMessage;
         }
 
@@ -79,8 +123,37 @@ namespace TransMock.TestUtils
         public static Message CreateMessageWithEmptyBody()
         {
             Message responseMessage = Message.CreateMessage(MessageVersion.Default,
-                string.Empty, string.Empty);
+                string.Empty);
             return responseMessage;
+        }
+
+        /// <summary>
+        /// Calculates a MD5 hash of a file
+        /// </summary>
+        /// <param name="filePath">The path to the file for which the hash should be calculated</param>
+        /// <returns>Base64 encoded string of the hash</returns>
+        public static string CalculateFileHash(string filePath)
+        {
+            using (System.Security.Cryptography.MD5 md5Hash =
+                System.Security.Cryptography.MD5.Create())
+            {
+                return Convert.ToBase64String(
+                    md5Hash.ComputeHash(System.IO.File.ReadAllBytes(filePath)));
+            }
+        }
+
+        /// <summary>
+        /// Calculates a MD5 hash for an array of bytes
+        /// </summary>
+        /// <param name="contents">The content bytes for which the hash should be calculated</param>
+        /// <returns>Base64 encoded string of the hash</returns>
+        public static string CalculateBytesHash(byte[] contents)
+        {
+            using (System.Security.Cryptography.MD5 md5Hash =
+                System.Security.Cryptography.MD5.Create())
+            {
+                return Convert.ToBase64String(md5Hash.ComputeHash(contents));
+            }
         }
     }
 }

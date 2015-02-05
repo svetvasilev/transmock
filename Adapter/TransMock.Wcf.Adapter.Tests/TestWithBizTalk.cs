@@ -67,7 +67,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedXml = Encoding.UTF8.GetString(testHelper.outBuffer, 0, testHelper.bytesReadCount);
+                string receivedXml = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                 Assert.AreEqual(xml, receivedXml, "Contents of the received message is different");
             }            
@@ -102,7 +102,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedMsg = Encoding.UTF8.GetString(testHelper.outBuffer, 0, testHelper.bytesReadCount);
+                string receivedMsg = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                 Assert.AreEqual(ffContent, receivedMsg, "Contents of the received message is different");
             }
@@ -137,7 +137,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedMsg = Encoding.ASCII.GetString(testHelper.outBuffer, 0, testHelper.bytesReadCount);
+                string receivedMsg = Encoding.ASCII.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                 Assert.AreEqual(ffContent, receivedMsg, "Contents of the received message is different");
             }
@@ -172,7 +172,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedMsg = Encoding.GetEncoding("ISO-8859-1").GetString(testHelper.outBuffer, 0, testHelper.bytesReadCount);
+                string receivedMsg = Encoding.GetEncoding("ISO-8859-1").GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                 Assert.AreEqual(ffContent, receivedMsg, "Contents of the received message is different");
             }
@@ -209,7 +209,7 @@ namespace TransMock.Wcf.Adapter.Tests
                     //Here we wait for the event to be signalled
                     testHelper.syncEvent.WaitOne(10000);
                     //The event was signalled, we get the message stirng from the outBuffer
-                    string receivedXml = Encoding.UTF8.GetString(testHelper.outBuffer, 0, testHelper.bytesReadCount);
+                    string receivedXml = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                     Assert.AreEqual(xml, receivedXml, "Contents of received message is different");
                     //Here we read from the pipeClient the response message

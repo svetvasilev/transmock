@@ -102,60 +102,63 @@ namespace TransMock.Wcf.Adapter.Tests
 
         #region One way tests
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_XML()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
+            {   
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
+                pipeClient.Close();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+            
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_XML_Unicode()
         {
             adapter.Encoding = "Unicode";
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
+            {            
                 byte[] xmlBytes = Encoding.Unicode.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.Unicode), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
+                pipeClient.Close();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.Unicode), "Message contents of received message is different");        
         }
 
         [Ignore]
@@ -165,30 +168,134 @@ namespace TransMock.Wcf.Adapter.Tests
             adapter.Encoding = "ISO-8859-1";
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), "Message contents of received message is different");
+            
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
+        [DeploymentItem(@"TestData\SmallMessage.xml")]
+        public void TestOneWayReceive_XML_SmallMessage()
+        {
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+
+            byte[] xmlBytes = new byte[256];
+            int fileLength = 0;
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                pipeClient.Connect(10000);
+
+                int byteCountRead = 0;
+
+                using (FileStream fs = File.OpenRead("SmallMessage.xml"))
+                {
+                    fileLength = (int)fs.Length;
+
+                    while ((byteCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                    {
+                        pipeClient.Write(xmlBytes, 0, byteCountRead);
+                    }
+                }
+
+                pipeClient.WaitForPipeDrain();
+            }
+
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.IsNotNull(reply, "Reply instance was not returned");
+
+            byte[] receivedMessageBytes = GeneralTestHelper.GetBodyAsBytes(msg);
+
+            Assert.AreEqual(fileLength, receivedMessageBytes.Length, "The message length is wrong");
+
+            string fileHash = GeneralTestHelper.CalculateFileHash("SmallMessage.xml");
+            string messageHash = GeneralTestHelper.CalculateBytesHash(receivedMessageBytes);
+
+            Assert.AreEqual(fileHash, messageHash,
+                "Message contents of received message is different");            
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        public void TestOneWayReceive_XML_MediumMessage()
+        {
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+
+            byte[] xmlBytes = new byte[256];
+            int fileLength = 0;
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                pipeClient.Connect(10000);
+
+                int byteCountRead = 0;
+
+                using (FileStream fs = File.OpenRead("MediumMessage.xml"))
+                {
+                    fileLength = (int)fs.Length;
+
+                    while ((byteCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                    {
+                        pipeClient.Write(xmlBytes, 0, byteCountRead);
+                    }
+                }
+
+                pipeClient.WaitForPipeDrain();
+            }
+
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.IsNotNull(reply, "Reply instance was not returned");
+
+            byte[] receivedMessageBytes = GeneralTestHelper.GetBodyAsBytes(msg);
+
+            Assert.AreEqual(fileLength, receivedMessageBytes.Length, "The message length is wrong");
+
+            string fileHash = GeneralTestHelper.CalculateFileHash("MediumMessage.xml");
+            string messageHash = GeneralTestHelper.CalculateBytesHash(receivedMessageBytes);
+
+            Assert.AreEqual(fileHash, messageHash,
+                "Message contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_XML_TwoMessages()
         {
             //TODO: implement sending XML message to the inbound handler
@@ -203,128 +310,131 @@ namespace TransMock.Wcf.Adapter.Tests
             {
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received first message is different");
+                pipeClient.WaitForPipeDrain();                
             }
+
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received first message is different");
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received second message is different");
+                pipeClient.WaitForPipeDrain();                
             }
+            //Now we read the message in the inbound handler
+            
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received second message is different");
         }        
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_FlatFile()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+            
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
-
                 byte[] ffBytes = Encoding.UTF8.GetBytes(ffContent);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(ffContent,
-                    GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-                //Assert.AreEqual(string.Format("<FFContent>{0}</FFContent>", Convert.ToBase64String(ffBytes)),
-                //    GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(ffContent,
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+            //Assert.AreEqual(string.Format("<FFContent>{0}</FFContent>", Convert.ToBase64String(ffBytes)),
+            //    GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");        
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_FlatFile_Unicode()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {
-                //TODO: implement sending XML message to the inbound handler
-                string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
-
+            {   
                 byte[] ffBytes = Encoding.Unicode.GetBytes(ffContent);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(ffContent,
-                    GeneralTestHelper.GetBodyAsString(msg, Encoding.Unicode), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(ffContent,
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.Unicode), "Message contents of received message is different");        
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestOneWayReceive_FlatFile_ISO88591()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+                
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
-
+         
                 byte[] ffBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(ffContent);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(ffContent,
-                    GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), "Message contents of received message is different");
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(ffContent,
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), "Message contents of received message is different");
+        
         } 
         #endregion
 
         #region Property promotion tests
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteFileAdapterProperties()
         {
             //Initializing the inbound handler again and passing the desired property
@@ -332,45 +442,46 @@ namespace TransMock.Wcf.Adapter.Tests
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();
-                Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
-
-                var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
-                
-                VerifyPromotedProperty(propertiesList[0],
-                    "http://schemas.microsoft.com/BizTalk/2003/file-properties",
-                    "ReceivedFileName",
-                    @"C:\Test\In\File1.xml");                
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
+                
+            VerifyPromotedProperty(propertiesList[0],
+                "http://schemas.microsoft.com/BizTalk/2003/file-properties",
+                "ReceivedFileName",
+                @"C:\Test\In\File1.xml");
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteFTPAdapterProperties()
         {
             //Initializing the inbound handler again and passing the desired property
@@ -378,45 +489,46 @@ namespace TransMock.Wcf.Adapter.Tests
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();
-                Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
-
-                var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
-
-                VerifyPromotedProperty(propertiesList[0],
-                    "http://schemas.microsoft.com/BizTalk/2003/ftp-properties",
-                    "ReceivedFileName",
-                    "File1.xml");
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
+
+            VerifyPromotedProperty(propertiesList[0],
+                "http://schemas.microsoft.com/BizTalk/2003/ftp-properties",
+                "ReceivedFileName",
+                "File1.xml");        
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromotePOP3AdapterProperties()
         {
             const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties";
@@ -434,50 +546,50 @@ namespace TransMock.Wcf.Adapter.Tests
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();
-                Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
-
-                var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                Assert.AreEqual(propertiesList.Count, 5, "The element count in the promoted properties list differ");
-
-                for (int i = 0; i < propertiesList.Count; i++)
-                {
-                    string[] propertyDetails = propertyArray[i].Split('=');
-
-                    VerifyPromotedProperty(propertiesList[i],
-                        adapterNamespace,
-                        propertyDetails[0].Replace("POP3.", string.Empty),
-                        propertyDetails[1]);
-                }
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, 5, "The element count in the promoted properties list differ");
+
+            for (int i = 0; i < propertiesList.Count; i++)
+            {
+                string[] propertyDetails = propertyArray[i].Split('=');
+
+                VerifyPromotedProperty(propertiesList[i],
+                    adapterNamespace,
+                    propertyDetails[0].Replace("POP3.", string.Empty),
+                    propertyDetails[1]);
+            }        
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteMQAdapterProperties()
         {
             const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties";
@@ -504,51 +616,52 @@ namespace TransMock.Wcf.Adapter.Tests
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();
-                
-                Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
-
-                var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                Assert.AreEqual(propertiesList.Count, propertyArray.Length, "The element count in the promoted properties list differ");                
-                    
-                for (int i = 0; i < propertiesList.Count; i++)
-                {
-                    string[] propertyDetails = propertyArray[i].Split('=');
-
-                    VerifyPromotedProperty(propertiesList[i],
-                        adapterNamespace,
-                        propertyDetails[0].Replace('.','_'),
-                        propertyDetails[1]);                    
-                }              
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();
+                
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, propertyArray.Length, "The element count in the promoted properties list differ");                
+                    
+            for (int i = 0; i < propertiesList.Count; i++)
+            {
+                string[] propertyDetails = propertyArray[i].Split('=');
+
+                VerifyPromotedProperty(propertiesList[i],
+                    adapterNamespace,
+                    propertyDetails[0].Replace('.','_'),
+                    propertyDetails[1]);                    
+            }                      
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteMSMQAdapterProperties()
         {
             const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties";
@@ -567,52 +680,52 @@ namespace TransMock.Wcf.Adapter.Tests
                properties);
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+            
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();
-
-                Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
-
-                var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                Assert.AreEqual(propertiesList.Count, propertyArray.Length, "The element count in the promoted properties list differ");
-
-                for (int i = 0; i < propertiesList.Count; i++)
-                {
-                    string[] propertyDetails = propertyArray[i].Split('=');
-
-                    VerifyPromotedProperty(propertiesList[i],
-                        adapterNamespace,
-                        propertyDetails[0].Replace("MSMQ.", string.Empty),
-                        propertyDetails[1]);
-                }
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();
+
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, propertyArray.Length, "The element count in the promoted properties list differ");
+
+            for (int i = 0; i < propertiesList.Count; i++)
+            {
+                string[] propertyDetails = propertyArray[i].Split('=');
+
+                VerifyPromotedProperty(propertiesList[i],
+                    adapterNamespace,
+                    propertyDetails[0].Replace("MSMQ.", string.Empty),
+                    propertyDetails[1]);
+            }        
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestOneWayReceive_XML_PromoteImaginaryAdapterProperties()
         {
@@ -622,52 +735,56 @@ namespace TransMock.Wcf.Adapter.Tests
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
-                //Now we read the message in the inbound handler
-                Message msg = null;
-                IInboundReply reply;
-                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
-                //Sending empty message to emulate the exact behavior of BizTalk for one way communication
-                reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
-
-                Assert.IsNotNull(msg, "Message instance was not returned");
-                Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
-
-                //Verify the promoted properties
-                var promotedProperties = msg.Properties
-                    .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
-                    .Single();                
+                pipeClient.WaitForPipeDrain();
             }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .Single();                        
         }
         #endregion
 
         #region Two way tests
         [TestMethod]
+        [TestCategory("Two Way Tests")]
         public void TestTwoWayReceive_XML()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
-                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
-
                 byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
+                //pipeClient.WaitForPipeDrain();
+                //Send the EOF byte
+                pipeClient.WriteByte(0x00);                
+                pipeClient.WaitForPipeDrain();
+
                 //Now we read the message in the inbound handler
                 Message msg = null;
                 IInboundReply reply;
@@ -679,29 +796,34 @@ namespace TransMock.Wcf.Adapter.Tests
                 string responseXml = "<Response><Description>The request was successfully processed</Description></Response>";
                 Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(responseXml, Encoding.UTF8);
 
+                byte[] inBuffer = new byte[256];
+                int bytesCountRead = 0, eofCountRead = 0;
                 System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
                 //We queue up the reply so that it executes from the context of another thread.
                 System.Threading.ThreadPool.QueueUserWorkItem(cb =>
                     {
-                        reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
+                        //we try to read from the pipe
+                        bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
+                        //read the EOF bytes
+                        byte[] eofBytes = new byte[2];
+                        eofCountRead = pipeClient.Read(eofBytes, 0, 1);
+
                         manualEvent.Set();
                     }
                 );
+
+                reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
                 //We wait for the event to be signalled
                 manualEvent.WaitOne(10000);
-                //we try to read from the pipe
-                byte[] inBuffer = new byte[256];
-                int bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
                 
-
-                //string receivedResponseXml = Encoding.UTF8.GetString(inBuffer, 0, bytesCountRead);
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead, Encoding.UTF8);
+                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead - (1 - eofCountRead), Encoding.UTF8);
                      
                 Assert.AreEqual(responseXml, receivedResponseXml, "The received response is not correct");                
             }
         }             
 
         [TestMethod]
+        [TestCategory("Two Way Tests")]
         public void TestTwoWayReceive_XML_Unicode()
         {
             adapter.Encoding = "Unicode";
@@ -717,7 +839,10 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.Flush();
+                //Send the EOF bytes
+                //pipeClient.Write(new byte[] { 0x00, 0x00 }, 0, 2);  
+                pipeClient.WriteByte(0x00);
+                pipeClient.WaitForPipeDrain();
                 //Now we read the message in the inbound handler
                 Message msg = null;
                 IInboundReply reply;
@@ -728,34 +853,135 @@ namespace TransMock.Wcf.Adapter.Tests
                 //we send the response message
                 string responseXml = "<Response><Description>The request was successfully processed</Description></Response>";
                 Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(responseXml, Encoding.Unicode);
+                
+                byte[] inBuffer = new byte[256];
+                int bytesCountRead = 0, eofCountRead = 0;
                 System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
                 //We queue up the reply so that it executes from the context of another thread.
                 System.Threading.ThreadPool.QueueUserWorkItem(cb =>
                     {
-                        reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
+                        //we try to read from the pipe
+                        bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
+                        //read the EOF bytes.
+                        byte[] eofBytes = new byte[2];
+                        eofCountRead = pipeClient.Read(eofBytes, 0, 1);                        
+
                         manualEvent.Set();
                     }
                 );
+
+                reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
                 //We wait for the event to be signalled
                 manualEvent.WaitOne(10000);
-                //we try to read from the pipe
-                byte[] inBuffer = new byte[256];
-                int bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-                
 
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead, Encoding.Unicode);
+                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead - (1 - eofCountRead), Encoding.Unicode);
 
                 Assert.AreEqual(responseXml, receivedResponseXml, "The received response is not correct");
             }
-        }        
-        #endregion
+        }
 
+        [TestMethod]
+        [TestCategory("Two Way Tests")]
+        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        public void TestTwoWayReceive_XML_MediumRequestResponse()
+        {
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));            
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                int bytesCountRead = 0;
+                int fileLength = 0;
+                byte[] xmlBytes = new byte[256];
+
+                pipeClient.Connect(10000);
+
+                using (FileStream fs = File.OpenRead("MediumMessage.xml"))
+                {
+                    fileLength = (int)fs.Length;
+
+                    while ((bytesCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                    {
+                        pipeClient.Write(xmlBytes, 0, bytesCountRead);
+                    }                    
+                }
+                
+                //Send the EOF bytes
+                pipeClient.WriteByte(0x00);
+                pipeClient.WaitForPipeDrain();
+
+                //Now we read the message in the inbound handler
+                Message msg = null;
+                IInboundReply reply;
+                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+
+                Assert.IsNotNull(msg, "Message instance was not returned");
+
+                byte[] msgBytes = GeneralTestHelper.GetBodyAsBytes(msg);
+
+                Assert.AreEqual(fileLength, msgBytes.Length, "The message length is not correct");
+
+                string requestMessageHash = GeneralTestHelper.CalculateBytesHash(msgBytes);
+                string fileHash = GeneralTestHelper.CalculateFileHash("MediumMessage.xml");
+
+                Assert.AreEqual(fileHash,
+                    requestMessageHash, "Message contents of received message is different");
+                //we send the response message
+                
+                Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(File.ReadAllBytes("MediumMessage.xml"));
+
+                byte[] inBuffer = new byte[512];
+                
+                using (MemoryStream memStream = new MemoryStream(512))
+                {
+                    System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+                    //We queue up the reply so that it executes from the context of another thread.
+                    System.Threading.ThreadPool.QueueUserWorkItem(cb =>
+                    {
+                        bool eof = false;
+                        //we try to read from the pipe
+                        while (!eof)
+                        {
+                            bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
+
+                            if (bytesCountRead > 0)
+                            {
+                                //if (inBuffer[bytesCountRead - 1] == 0x00 &&
+                                //    inBuffer[bytesCountRead - 2] == 0x00)
+                                if (inBuffer[bytesCountRead - 1] == 0x00)
+                                {
+                                    eof = true;
+                                }
+
+                                memStream.Write(inBuffer, 0, !eof ? bytesCountRead : bytesCountRead - 1);
+                            }
+                            else
+                                eof = true;
+                        }
+
+                        manualEvent.Set();
+                    }
+                    );
+
+                    reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
+                    //We wait for the event to be signalled
+                    manualEvent.WaitOne(10000);
+
+                    string responseHash = GeneralTestHelper.CalculateBytesHash(memStream.ToArray());
+
+                    Assert.AreEqual(fileHash, responseHash,
+                        "The received response is not correct");
+                }
+            }
+        }
+        #endregion
+       
         private void InitInboundHandler(string address, string adapterProperties)
         {
             connectionUri = new MockAdapterConnectionUri(new Uri(address));
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
-            
+                        
             if (!string.IsNullOrEmpty(adapterProperties))
             {
                 adapter.PromotedProperties = adapterProperties;

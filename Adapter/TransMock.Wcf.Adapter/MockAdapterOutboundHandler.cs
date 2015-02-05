@@ -62,7 +62,7 @@ namespace TransMock.Wcf.Adapter
             if (xdr.NodeType == XmlNodeType.Element)//in case the content is nested in an element under the Body element
                 xdr.Read();
 
-            byte[] msgBuffer = xdr.ReadContentAsBase64();
+            byte[] msgBuffer = new byte[4096];
             
             string host = Connection.ConnectionFactory.ConnectionUri.Uri.Host;
             //The pipe name is the absolute URI without the starting /
@@ -73,12 +73,19 @@ namespace TransMock.Wcf.Adapter
             {   
                 pipeClient.Connect((int)timeout.TotalMilliseconds);
                 //Setting the pipe read mode to message
-                pipeClient.ReadMode = PipeTransmissionMode.Message;
+                pipeClient.ReadMode = PipeTransmissionMode.Byte;
 
                 System.Diagnostics.Debug.WriteLine("The pipe client was connected! Sending the outbound message over the pipe");
 
-                pipeClient.Write(msgBuffer, 0, msgBuffer.Length);
-                pipeClient.Flush();
+                int byteCountRead = 0;
+                while ((byteCountRead = xdr.ReadContentAsBase64(msgBuffer, 0, msgBuffer.Length)) > 0)
+                {
+                    pipeClient.Write(msgBuffer, 0, byteCountRead);
+                    pipeClient.Flush();
+                }
+
+                //Write the EOF byte
+                pipeClient.WriteByte(0x00);
 
                 System.Diagnostics.Debug.WriteLine("Outbound message sent!");
 
@@ -100,17 +107,35 @@ namespace TransMock.Wcf.Adapter
                 {
                     //We are in a two-way communication scenario
                     System.Diagnostics.Debug.WriteLine("Two-way communication - reading the response message");
-                    
+
+                    bool eofReached = false;
                     MemoryStream memStream = new MemoryStream(msgBuffer.Length);
                     //We proceed with waiting for the response
-                    do
+                    while(!eofReached)
                     {
-                        //Todo: Perform check on whether the time for this operation has elapsed
-                        int byteCount = pipeClient.Read(msgBuffer, 0, msgBuffer.Length);
-                        memStream.Write(msgBuffer, 0, byteCount);
+                        byteCountRead = pipeClient.Read(msgBuffer, 0, msgBuffer.Length);
+                        if (byteCountRead > 0)
+                        {
+                            if (byteCountRead > 1)
+                            {
+                                eofReached = (msgBuffer[byteCountRead - 1] == 0x0 &&
+                                    msgBuffer[byteCountRead - 2] == 0x0);
+                            }
+                            else if (byteCountRead == 1)
+                            {
+                                eofReached = msgBuffer[byteCountRead - 1] == 0x0;
+                            }
+
+                            memStream.Write(msgBuffer, 0,
+                            eofReached ? byteCountRead - 1 : byteCountRead);
+                        }
+                        else 
+                        { 
+                            eofReached = true;
+                        }                        
                     }
-                    while (!pipeClient.IsMessageComplete);
-                    
+
+                    System.Diagnostics.Debug.WriteLine("Response message read");
                     //We rewind the stream to the beginning
                     memStream.Seek(0, SeekOrigin.Begin);
 

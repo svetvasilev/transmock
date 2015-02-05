@@ -77,6 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MockAdapterTest.BindingInfo.BTS2013.xml" />
+    <Content Include="TestData\MediumMessage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\SmallMessage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
