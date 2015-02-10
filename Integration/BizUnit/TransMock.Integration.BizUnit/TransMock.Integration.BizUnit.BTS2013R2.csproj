@@ -8,8 +8,8 @@
     <ProjectGuid>{B32C1509-3952-4492-B097-6886CEC675FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wiretap.Integration.BizUnit</RootNamespace>
-    <AssemblyName>Wiretap.Integration.BizUnit</AssemblyName>
+    <RootNamespace>TransMock.Integration.BizUnit</RootNamespace>
+    <AssemblyName>TransMock.Integration.BizUnit</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

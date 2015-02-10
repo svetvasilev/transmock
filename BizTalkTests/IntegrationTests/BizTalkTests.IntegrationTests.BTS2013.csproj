@@ -45,9 +45,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TransMock.Integration.BizUnit">
-      <HintPath>..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Debug\TransMock.Integration.BizUnit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -73,6 +70,12 @@
     <Content Include="TestData\StartMessage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj">
+      <Project>{b32c1509-3952-4492-b097-6886cec675fb}</Project>
+      <Name>TransMock.Integration.BizUnit.BTS2013</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

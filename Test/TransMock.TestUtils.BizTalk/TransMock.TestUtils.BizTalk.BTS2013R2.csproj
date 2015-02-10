@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="MockHelper.cs" />
     <Compile Include="MockTransportConfig.cs" />
+    <Compile Include="TransportAdapterType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

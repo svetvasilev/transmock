@@ -9,8 +9,8 @@
     <ProjectGuid>{FCBD2200-2998-4A52-8D49-FC17F21A4750}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wiretap.Integration.BizUnit.Tests</RootNamespace>
-    <AssemblyName>Wiretap.Integration.BizUnit.Tests</AssemblyName>
+    <RootNamespace>TransMock.Integration.BizUnit.Tests</RootNamespace>
+    <AssemblyName>TransMock.Integration.BizUnit.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

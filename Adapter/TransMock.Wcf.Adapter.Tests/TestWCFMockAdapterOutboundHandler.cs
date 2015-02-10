@@ -98,13 +98,13 @@ namespace TransMock.Wcf.Adapter.Tests
         #endregion
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestSendOneWay_XML()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1, 
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
             {
-                //TODO: implement sending XML message to the inbound handler
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
@@ -117,21 +117,23 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, testHelper.bytesReadCount, Encoding.UTF8);
+                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(), 
+                    (int)testHelper.memStream.Length, Encoding.UTF8);
 
                 Assert.AreEqual(xml, receivedResponseXml, "Contents of received message is different");
             }
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestSendOneWay_XML_Unicode()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
             {
                 adapter.Encoding = "Unicode";
-                //TODO: implement sending XML message to the inbound handler
+                
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.Unicode);
@@ -144,18 +146,20 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, testHelper.bytesReadCount, Encoding.Unicode);
+                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(), 
+                    (int)testHelper.memStream.Length, Encoding.Unicode);
 
                 Assert.AreEqual(xml, receivedResponseXml, "Contents of received message is different");
             }
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestSendOneWay_FlatFile()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
             {                
                 string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
 
@@ -169,20 +173,20 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, testHelper.bytesReadCount, Encoding.UTF8);
-                //Need to decode it once more from base64 to normal string
-                //receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, testHelper.bytesReadCount, Encoding.UTF8);
+                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(), 
+                    (int)testHelper.memStream.Length, Encoding.UTF8);                
 
                 Assert.AreEqual(ffContent, receivedResponse, "Contents of received message is different");
             }
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestSendOneWay_FlatFile_ASCII()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
             {
                 adapter.Encoding = "ASCII";
                 string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
@@ -197,20 +201,19 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, testHelper.bytesReadCount, Encoding.UTF8);
-                //Need to decode it once more from base64 to normal string
-                //receivedResponse = Encoding.ASCII.GetString(Convert.FromBase64String(receivedResponse));
+                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(), (int)testHelper.memStream.Length, Encoding.UTF8);                
 
                 Assert.AreEqual(ffContent, receivedResponse, "Contents of received message is different");
             }
         }
 
         [TestMethod]
+        [TestCategory("One Way Tests")]
         public void TestSendOneWay_FlatFile_ISO88591()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
             {
                 adapter.Encoding = "ISO-8859-1";
                 string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
@@ -225,28 +228,26 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer, 
-                    testHelper.bytesReadCount, Encoding.GetEncoding("ISO-8859-1"));
-                //Need to decode it once more from base64 to normal string
-                //receivedResponse = Encoding.GetEncoding("ISO-8859-1").GetString(Convert.FromBase64String(receivedResponse));
-
+                string receivedResponse = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(), 
+                    (int)testHelper.memStream.Length, Encoding.GetEncoding("ISO-8859-1"));
+                
                 Assert.AreEqual(ffContent, receivedResponse, "Contents of received message is different");
             }
         }
 
         [TestMethod]
+        [TestCategory("Two Way Tests")]
         public void TestSendTwoWay_XML()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous))
-            {
-                //TODO: implement sending XML message to the inbound handler
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+            {   
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
-                //Setting up the BTS.CorrelationToken property
-                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken", "TestCorrelationToke");
+                //Setting up the BTS.IsSolicitResponse property
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
                 //We set the response message content
@@ -255,18 +256,86 @@ namespace TransMock.Wcf.Adapter.Tests
                 pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnectedSyncronous(cb), testHelper);
 
                 Message responseMsg = outboundHandler.Execute(msg, new TimeSpan(0, 0, 10));
-                //Here we wait for the event to be signalled
-                //testHelper.syncEvent.WaitOne(60000);
-                //The event was signalled, we get the message stirng from the outBuffer
-                string receivedXml = GeneralTestHelper.GetMessageFromArray(testHelper.outBuffer,
-                    testHelper.bytesReadCount, Encoding.UTF8);
+                
+                string receivedXml = GeneralTestHelper.GetMessageFromArray(testHelper.memStream.ToArray(),
+                    (int)testHelper.memStream.Length, Encoding.UTF8);
 
                 Assert.AreEqual(receivedXml, xml, "Contents of the request message is different");
                 Assert.AreEqual(testHelper.responseXml, 
                     GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8), "Contents of the response message is different");
             }
-        }        
-    }
+        }
 
-    
+        [TestMethod]
+        [TestCategory("Two Way Tests")]
+        [DeploymentItem(@"TestData\SmallMessage.xml")]
+        public void TestSendTwoWay_XML_SmallMessage()
+        {
+            using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(
+                    File.ReadAllBytes("SmallMessage.xml"));
+                //Setting up the BTS.IsSolicitResponse property
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
+                //We set the response message content
+                testHelper.responsePath = "SmallMessage.xml";
+
+                pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnectedSyncronous(cb), testHelper);
+
+                Message responseMsg = outboundHandler.Execute(msg, new TimeSpan(0, 0, 10));
+                //Calculating the hashes of the messages and the file
+                byte[] responseMessageBytes = GeneralTestHelper.GetBodyAsBytes(responseMsg);
+
+                string receivedMessageHash = GeneralTestHelper.CalculateBytesHash(testHelper.memStream.ToArray());
+                string responseMessageHash = GeneralTestHelper.CalculateBytesHash(responseMessageBytes);
+                string fileHash = GeneralTestHelper.CalculateFileHash("SmallMessage.xml");
+
+                Assert.AreEqual(fileHash, receivedMessageHash, "Contents of the request message is different");
+                
+                Assert.AreEqual(fileHash,
+                    responseMessageHash, 
+                    "Contents of the response message is different");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Two Way Tests")]
+        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        public void TestSendTwoWay_XML_MediumMessage()
+        {
+            using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(
+                    File.ReadAllBytes("MediumMessage.xml"));
+                //Setting up the BTS.IsSolicitResponse property
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
+                //We set the response message content
+                testHelper.responsePath = "MediumMessage.xml";
+
+                pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnectedSyncronous(cb), testHelper);
+
+                Message responseMsg = outboundHandler.Execute(msg, new TimeSpan(0, 0, 10));                              
+                //Calculating the hashes of the messages and the file
+                byte[] responseMessageBytes = GeneralTestHelper.GetBodyAsBytes(responseMsg);
+
+                string receivedMessageHash = GeneralTestHelper.CalculateBytesHash(testHelper.memStream.ToArray());
+                string responseMessageHash = GeneralTestHelper.CalculateBytesHash(responseMessageBytes);
+                string fileHash = GeneralTestHelper.CalculateFileHash("MediumMessage.xml");
+                //Validating the results
+                Assert.AreEqual(fileHash, receivedMessageHash, "Contents of the request message is different");
+
+                Assert.AreEqual(fileHash,
+                    responseMessageHash,
+                    "Contents of the response message is different");
+            }
+        }
+    }    
 }

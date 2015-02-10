@@ -37,9 +37,10 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="portName">The name of the send port as defined in the orchestration</param>
         /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
         /// <returns>An instance of the MockTransportConfig class if the orchestration is executed within the context of a TransMock test case. Otherwise a null is returned.</returns>
-        public static MockTransportConfig MockDynamicSendPort(string portName, XLANGMessage outboundMessage)
+        public static MockTransportConfig MockDynamicSendPort(string portName,
+            XLANGMessage outboundMessage)
         {
-            System.Diagnostics.Debug.WriteLine("MockDynamicSendPort(portName, XLANGMessage) called.");
+            System.Diagnostics.Debug.WriteLine("MockDynamicSendPort(portName, originalAdapter, XLANGMessage) called.");
 
             return MockDynamicSendPort(portName, null, outboundMessage);
         }
@@ -48,15 +49,16 @@ namespace TransMock.TestUtils.BizTalk
         /// Mocks a dynamic send port with the given name by setting the necessary transport properties with the specified custom behaviors
         /// on the outbound message only in the case a TransMock test case is being executed
         /// </summary>
-        /// <param name="portName">The name of the send port as defined in the orchestration</param>        
+        /// <param name="portName">The name of the send port as defined in the orchestration</param>                
         /// <param name="customBehaviorConfig">The custom behavior configuration to be applied</param>
         /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
         /// <returns></returns>
-        public static MockTransportConfig MockDynamicSendPort(string portName, string customBehaviorConfig, XLANGMessage outboundMessage)
+        public static MockTransportConfig MockDynamicSendPort(string portName,             
+            string customBehaviorConfig, XLANGMessage outboundMessage)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("MockDynamicSendPort(portName, customBehaviorConfig, XLANGMessage) called.");
+                System.Diagnostics.Debug.WriteLine("MockDynamicSendPort(portName, originalAdapter, customBehaviorConfig, XLANGMessage) called.");
 
                 bool applyMock = IsTransMockTestCaseExecuting();
 
@@ -64,6 +66,9 @@ namespace TransMock.TestUtils.BizTalk
                 {
                     System.Diagnostics.Debug.WriteLine("Applying mock transport settings");
 
+                    //Clear any previously set transport specific properties
+                    ClearOriginalWCFAdapterProperties(outboundMessage);
+                    //Then apply the mock transport config properties to the message
                     ApplyMockTransportConfig(outboundMessage, customBehaviorConfig);
 
                     var mockConfig = new MockTransportConfig(portName);
@@ -87,7 +92,6 @@ namespace TransMock.TestUtils.BizTalk
                 return null;
             }
         }
-         
         /// <summary>
         /// Checks whether a TransMock test case is currently under execution
         /// </summary>
@@ -157,5 +161,102 @@ namespace TransMock.TestUtils.BizTalk
             outboundMessage.SetPropertyValue(typeof(WCF.UseSSO), false);
             outboundMessage.SetPropertyValue(typeof(WCF.EnableTransaction), false);
         }
+
+        /// <summary>
+        /// Clears the properties set for the original WCF transport
+        /// </summary>
+        /// <param name="outboundMessage">The message which will have its context cleared for the original adapter properties</param>        
+        private static void ClearOriginalWCFAdapterProperties(XLANGMessage outboundMessage)
+        {
+            System.Diagnostics.Debug.WriteLine("ClearOriginalTransportProperties(outboundMessage) called.");
+
+            try
+            {
+                if (outboundMessage.GetPropertyValue(typeof(WCF.AffiliateApplicationName)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.AffiliateApplicationName), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ClientCertificate)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ClientCertificate), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.Identity)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.Identity), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.IsolationLevel)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.IsolationLevel), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.MessageClientCredentialType)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.MessageClientCredentialType), "None");
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ProxyAddress)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ProxyAddress), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ProxyUserName)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ProxyUserName), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ProxyPassword)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ProxyPassword), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ProxyToUse)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ProxyToUse), "None");
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ReplyToAddress)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ReplyToAddress), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.ReferencedBindings)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.ReferencedBindings), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.To)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.To), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.SecurityMode)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.SecurityMode), "None");
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.TransportProtectionLevel)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.TransportProtectionLevel), "None");
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.UserName)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.UserName), string.Empty);
+                }
+
+                if (outboundMessage.GetPropertyValue(typeof(WCF.Password)) != null)
+                {
+                    outboundMessage.SetPropertyValue(typeof(WCF.Password), string.Empty);
+                }                
+            }
+            catch (Exception ex)
+            {                
+                System.Diagnostics.Debug.WriteLine("ClearOriginalTransportProperties() failed with exception: "
+                    + ex.Message);
+            }
+        }        
     }
 }
