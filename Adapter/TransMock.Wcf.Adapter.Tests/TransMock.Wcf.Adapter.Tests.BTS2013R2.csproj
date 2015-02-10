@@ -66,20 +66,20 @@
     <Compile Include="TestWCFMockAdapterOutboundHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013.csproj">
-      <Project>{5891035F-5346-4A15-BB61-09018D5CC4AE}</Project>
-      <Name>TransMock.TestUtils.BTS2013</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj">
-      <Project>{1F8B806E-B479-4DB0-9896-1D29E288A2F2}</Project>
-      <Name>TransMock.Wcf.Adapter.BTS2013</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="MockAdapterTest.BindingInfo.BTS2013.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013R2.csproj">
+      <Project>{5891035f-5346-4a15-bb61-09018d5cc4ae}</Project>
+      <Name>TransMock.TestUtils.BTS2013R2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj">
+      <Project>{1f8b806e-b479-4db0-9896-1d29e288a2f2}</Project>
+      <Name>TransMock.Wcf.Adapter.BTS2013R2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

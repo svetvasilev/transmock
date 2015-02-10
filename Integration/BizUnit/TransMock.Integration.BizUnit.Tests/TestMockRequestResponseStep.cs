@@ -96,9 +96,13 @@ namespace TransMock.Integration.BizUnit.Tests
         }
         //
         // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
+        [TestCleanup()]
+        public void MyTestCleanup() 
+        {
+            //give some time for the pipe to clean
+            System.Threading.Thread.Sleep(100);
+        }
+        
         #endregion
 
         [TestMethod]
@@ -144,7 +148,7 @@ namespace TransMock.Integration.BizUnit.Tests
             string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
             Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
-            msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken", "TestCorrelationToken");
+            msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
 
             Message responseMsg = outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
             

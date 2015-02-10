@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBA39921-3716-4CBE-8742-086727D383B0}</ProjectGuid>
+    <ProjectGuid>{B08F87E7-B580-4E42-BAF0-7F8233153230}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransMock.BizTalk.TestUtils.Tests</RootNamespace>
-    <AssemblyName>TransMock.BizTalk.TestUtils.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>TransMock.Communication.NamedPipes.Tests</RootNamespace>
+    <AssemblyName>TransMock.Communication.NamedPipes.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,7 +16,6 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +25,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,29 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2013\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2013\Microsoft.XLANGs.BaseTypes.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2013\Microsoft.XLANGs.Engine.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\packages\Moq.4.2.1408.0717\lib\net40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -72,16 +50,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestStreamingNamedPipeServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestMockHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013R2.csproj">
-      <Project>{42f57394-8f3e-47e7-b1e6-acdea505af23}</Project>
-      <Name>TransMock.TestUtils.BizTalk.BTS2013R2</Name>
+    <ProjectReference Include="..\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj">
+      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
+      <Name>TransMock.Communication.NamedPipes.BTS2013R2</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

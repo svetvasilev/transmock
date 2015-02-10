@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.BTS2013R2", "Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj", "{1F8B806E-B479-4DB0-9896-1D29E288A2F2}"
 EndProject
@@ -57,6 +57,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.BTS2013R2", "Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013R2.csproj", "{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.Tests.BTS2013R2", "Test\TransMock.TestUtils.BizTalk.Tests\TransMock.TestUtils.BizTalk.Tests.BTS2013R2.csproj", "{CBA39921-3716-4CBE-8742-086727D383B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{2D9F1B46-84E3-44E6-B46A-AB5B9E079560}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.BTS2013R2", "Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj", "{6C9E0C6C-4E2B-40A1-8413-980538762DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.Tests.BTS2013R2", "Communication\TransMock.Communication.NamedPipes.Tests\TransMock.Communication.NamedPipes.Tests.BTS2013R2.csproj", "{B08F87E7-B580-4E42-BAF0-7F8233153230}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -218,6 +224,26 @@ Global
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -240,6 +266,8 @@ Global
 		{911D72D4-C2B8-48E6-900E-88D8EDC86E14} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
 		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
 		{CBA39921-3716-4CBE-8742-086727D383B0} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
+		{B08F87E7-B580-4E42-BAF0-7F8233153230} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TransMock.vsmdi

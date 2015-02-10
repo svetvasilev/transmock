@@ -59,9 +59,9 @@
     <Compile Include="TestTransMockInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TransMock.Deploy.CustomActions\TransMock.Deploy.CustomActions.BTS2013.csproj">
+    <ProjectReference Include="..\TransMock.Deploy.CustomActions\TransMock.Deploy.CustomActions.BTS2013R2.csproj">
       <Project>{F28847B9-75C3-4130-B7A4-650689D23FAF}</Project>
-      <Name>TransMock.Deploy.CustomActions.BTS2013</Name>
+      <Name>TransMock.Deploy.CustomActions.BTS2013R2</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Deploy.Utils\TransMock.Deploy.Utils.BTS2013R2.csproj">
       <Project>{911d72d4-c2b8-48e6-900e-88d8edc86e14}</Project>

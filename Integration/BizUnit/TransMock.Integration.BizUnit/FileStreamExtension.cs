@@ -32,8 +32,7 @@ namespace TransMock.Integration.BizUnit
             {
                 System.Diagnostics.Debug.WriteLine("BOM detected and will be skipped!");
 
-                buffer = buffer.Skip(3).ToArray();
-                byteCount = buffer.Length;
+                buffer = buffer.Skip(3).ToArray();                
             }
 
             return byteCount;

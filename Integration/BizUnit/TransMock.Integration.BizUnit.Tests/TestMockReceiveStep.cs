@@ -96,9 +96,13 @@ namespace TransMock.Integration.BizUnit.Tests
         }
         //
         // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
+        [TestCleanup()]
+        public void MyTestCleanup() 
+        {
+            //give some time for the pipe to clean
+            System.Threading.Thread.Sleep(100);
+        }
+        
         #endregion
 
         [TestMethod]
@@ -149,7 +153,8 @@ namespace TransMock.Integration.BizUnit.Tests
 
             loggerMock.Verify(l => l.LogData(
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
-                It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
+                It.Is<string>(s => !string.IsNullOrEmpty(s))), 
+                Times.AtLeastOnce(), "The LogData message was not called");
             
         }
 

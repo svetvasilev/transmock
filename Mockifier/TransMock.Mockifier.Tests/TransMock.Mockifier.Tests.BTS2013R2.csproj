@@ -59,18 +59,18 @@
     <Compile Include="TestMockifier.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.BTS2013.csproj">
-      <Project>{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}</Project>
-      <Name>TransMock.Mockifier.BTS2013</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="TestData\TestApplication.BindingInfo.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.BTS2013R2.csproj">
+      <Project>{c24d4710-abf8-48ac-ba22-e6be75e50ead}</Project>
+      <Name>TransMock.Mockifier.BTS2013R2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

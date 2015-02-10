@@ -104,6 +104,9 @@ namespace TransMock.Integration.BizUnit.Tests
         {
             if (inboundHandler != null)
                 inboundHandler.StopListener(TimeSpan.FromSeconds(10));
+
+            //give some time for the pipe to clean
+            System.Threading.Thread.Sleep(100);
         }
         //
         #endregion
@@ -205,7 +208,7 @@ namespace TransMock.Integration.BizUnit.Tests
 
         internal static string ReadRequestFileContent(string path)
         {
-            return System.IO.File.ReadAllText(path, Encoding.UTF8);
+            return Encoding.UTF8.GetString(File.ReadAllBytes(path));
         }
     }
 }
