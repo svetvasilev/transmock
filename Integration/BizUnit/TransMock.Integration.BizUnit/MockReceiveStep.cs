@@ -26,6 +26,8 @@ using System.Threading;
 using BizUnit;
 using BizUnit.Xaml;
 
+using TransMock.Communication.NamedPipes;
+
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
@@ -33,166 +35,101 @@ namespace TransMock.Integration.BizUnit
     /// which is utilizing the mock adapter.
     /// </summary>
     public class MockReceiveStep : MockStepBase
-    {
-        protected byte[] inBuffer;
+    {        
+        protected IAsyncStreamingServer pipeServer;
         protected MemoryStream inStream;
+
         protected object syncRoot = new object();
 
-        protected NamedPipeServerStream pipeServer;
-
-        protected IAsyncResult asyncReadResult;
-        protected IAsyncResult asyncConnectResult;
-
         protected string requestContent;
+        protected int connectionId = 0;
 
         public MockReceiveStep()
-        {            
-            SubSteps = new Collection<SubStepBase>();
-            Timeout = 30;
+        {   
+            Timeout = 30;            
         }
         
         public override void Execute(Context context)
         {
-            lock (syncRoot)
+            try
             {
-                if (!Monitor.Wait(syncRoot, 1000 * Timeout))
-                    throw new TimeoutException("The step execution exceeded the alotted time");                
-            }
+                WaitForRequest();
 
-            //If we are passed this point, then everything was processed fine
-            context.LogData("MockReceiveStep received a message with content", inStream, true);
-            System.Diagnostics.Debug.WriteLine(string.Format("MockReceiveStep received a message with content {0}", requestContent));
-            //Here we invoke the sub steps
-            foreach (var step in this.SubSteps)
-            {
-                step.Execute(inStream, context);
+                //If we are passed this point, then everything was processed fine
+                context.LogData("MockReceiveStep received a message with content", inStream, true);
+                
+                //Here we invoke the sub steps
+                foreach (var step in this.SubSteps)
+                {
+                    step.Execute(inStream, context);
+                }
+                //Finally we supply response
+                SendResponse(context);
             }
-            //The named pipe connection is closed
-            ClosePipeServer();
-            //Cleaning the inStream
-            inStream.Close();
-            
-        }
+            finally
+            {
+                //The named pipe server is closed
+                ClosePipeServer();
+                //Cleaning the inStream
+                inStream.Dispose();
+            }
+        }        
 
         public override void Validate(Context context)
         {
             base.Validate(context);
-
-            CreatePipeServer();
-        }
-
-        #region Pipe operation methdos
-        /// <summary>
-        /// Creates a pipe server instance
-        /// </summary>
-        protected void CreatePipeServer()
-        {
-            try
-            {
-                //Setting up pipe security
-                PipeSecurity ps = new PipeSecurity();
-
-                ps.AddAccessRule(new PipeAccessRule("Users",
-                    PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite,
-                    System.Security.AccessControl.AccessControlType.Allow));
-                //Creating the named pipe server
-                pipeServer = new NamedPipeServerStream(
-                    _endpointUri.AbsolutePath,
-                    PipeDirection.InOut, 1, 
-                    PipeTransmissionMode.Message,
-                    PipeOptions.Asynchronous, 
-                    4096, 4096, ps);
-
-                System.Diagnostics.Debug.WriteLine("Starting listening for client connections");
-
-                //Starting the waiting for client connetions.                
-                asyncConnectResult = pipeServer.BeginWaitForConnection(cb => PipeClientConnected(cb),
-                    pipeServer);
-
-            }
-            finally
-            {
-
-            }
-
-        }
-        /// <summary>
-        /// Invoked asyncroubously when a new client connects to the pipe server
-        /// </summary>
-        /// <param name="ar">The async result of the operation that triggered the method</param>
-        protected void PipeClientConnected(IAsyncResult ar)
-        {
-            System.Diagnostics.Debug.WriteLine("Pipe client connected");
-
-            var pipeConnection = (NamedPipeServerStream)ar.AsyncState;
             
-            try
-            {
-                //We first end the waiting for connection
-                pipeConnection.EndWaitForConnection(asyncConnectResult);
-            }
-            catch (System.ObjectDisposedException)
-            {
-                System.Diagnostics.Debug.WriteLine("Pipe has been disposed!Exiting without further processing", "TransMock.Integration.BizUnit.MockReceiveStep");
-                return;
-            }
-
-            inBuffer = new byte[pipeConnection.InBufferSize];
-            inStream = new MemoryStream(pipeConnection.InBufferSize);
-
-            System.Diagnostics.Debug.WriteLine("Starting async reading from the pipe server", "TransMock.Integration.BizUnit.MockReceiveStep");
-            //Starting async read by passing the named pipe conenction as a async state parameter again.
-            asyncReadResult = pipeConnection.BeginRead(inBuffer, 0, inBuffer.Length, 
-                cb => PipeReadAsync(cb), pipeConnection);
-
-            System.Diagnostics.Debug.WriteLine("Async reading started", "TransMock.Integration.BizUnit.MockReceiveStep");
+            CreateServer();
         }
-        /// <summary>
-        /// Asyncrounous callback for a read operation from the pipe
-        /// </summary>
-        /// <param name="ar">The async result instanced passed to the method</param>
-        protected void PipeReadAsync(IAsyncResult ar)
+
+        public override void Cleanup()
         {
-            System.Diagnostics.Debug.WriteLine("Beginning reading from the pipe", "TransMock.Integration.BizUnit.MockReceiveStep");
-            //Extracting the pipe connection from which the data is being read
-            var pipeConnection = (NamedPipeServerStream)ar.AsyncState;
+            pipeServer.Stop();
+        }
 
-            int bytesRead = pipeConnection.EndRead(asyncReadResult);
+        protected virtual void CreateServer()
+        {
+            //We create and start the server
+            pipeServer = new StreamingNamedPipeServer(
+                _endpointUri.AbsolutePath);
 
-            lock (inStream)
+            pipeServer.ReadCompleted += pipeServer_ReadCompleted;
+
+            pipeServer.Start();
+        }
+
+        protected virtual void WaitForRequest()
+        {
+            lock (syncRoot)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format("Read {0} bytes from the stream", bytesRead));
-                inStream.Write(inBuffer, 0, bytesRead);                
-            }            
-
-            if (!pipeConnection.IsMessageComplete)
-                pipeConnection.BeginRead(inBuffer, 0, inBuffer.Length, 
-                    cb => PipeReadAsync(cb), pipeConnection);
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Message was read from the pipe. Notifying the BizUnit thread", "TransMock.Integration.BizUnit.MockReceiveStep");
-                System.Diagnostics.Debug.WriteLine(string.Format("Length of inStream is {0} bytes", inStream.Length));
-                //Here we need to make the message available to the step
-                lock (syncRoot)
-                {
-                    //Rewiding the stream
-                    inStream.Seek(0, SeekOrigin.Begin);
-                    requestContent = _encoding.GetString(inStream.ToArray());
-
-                    Monitor.Pulse(syncRoot);
-                }
-
-                System.Diagnostics.Debug.WriteLine("Finished message reading", "TransMock.Integration.BizUnit.MockReceiveStep");
+                if (!Monitor.Wait(syncRoot, 1000 * Timeout))
+                    throw new TimeoutException("The step execution exceeded the alotted time");
+                //If we are passed this point, then a request was successfully received
+                System.Diagnostics.Debug.WriteLine(string.Format("MockReceiveStep received a message with content {0}", requestContent));
             }
-            
+        }
+
+        protected virtual void SendResponse(Context context)
+        {
+            //The base implementation is empty as this class covers only one way receive
         }
 
         protected virtual void ClosePipeServer()
         {
-            pipeServer.Disconnect();
-            pipeServer.Close();
+            pipeServer.Stop();
         }
 
-        #endregion
+        private void pipeServer_ReadCompleted(object sender, AsyncReadEventArgs e)
+        {
+            lock (syncRoot)
+            {
+                connectionId = e.ConnectionId;
+                inStream = e.MessageStream as MemoryStream;
+                                
+                requestContent = _encoding.GetString(inStream.ToArray());
+
+                Monitor.Pulse(syncRoot);
+            }
+        }
     }
 }

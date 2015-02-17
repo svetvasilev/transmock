@@ -116,7 +116,8 @@ namespace TransMock.Integration.BizUnit.Tests
             step.Encoding = "UTF-8";
             //Colling Validate in order to start the 
             step.Validate(context);
-            step = null;
+            //Cleaning up the step
+            step.Cleanup();
         }
 
         [TestMethod]

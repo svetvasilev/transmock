@@ -32,43 +32,29 @@ namespace TransMock.Integration.BizUnit
     /// </summary>
     public class MockSolicitResponseStep : MockSendStep
     {
+        private Stream responseDataStream;
+
         public override void Execute(Context context)
         {
-            base.Execute(context);
-
-            context.LogInfo("Waiting to read the response from the endpoint");
-
-            int bytesRead = 0;
-            byte[] inBuffer = new byte[4096];
-
-            pipeClient.ReadMode = PipeTransmissionMode.Message;
-
-            using (MemoryStream inStream = new MemoryStream(pipeClient.InBufferSize))
+            try
             {
-                System.Diagnostics.Trace.WriteLine("Reading the response from the endpoint", "TransMock.Integration.BizUnit.MockSolicitResponseStep");
-                context.LogInfo("Reading the response from the endpoint");
+                base.Execute(context);
 
-                bytesRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-
-                while (!pipeClient.IsMessageComplete)
-                {
-                    inStream.Write(inBuffer, 0, bytesRead);
-                }
-
-                System.Diagnostics.Debug.WriteLine("Response read!Closing the pipe client", "TransMock.Integration.BizUnit.MockSolicitResponseStep");
-                pipeClient.Close();
-                
-                System.Diagnostics.Debug.WriteLine("Pipe client closed", "TransMock.Integration.BizUnit.MockSolicitResponseStep");
-
-                context.LogData("The response received from the mocked endpoint is:", inStream, true);
-                
-                System.Diagnostics.Debug.WriteLine("Executing the substeps", "TransMock.Integration.BizUnit.MockSolicitResponseStep");
+                System.Diagnostics.Debug.WriteLine("Executing the substeps",
+                        "TransMock.Integration.BizUnit.MockSolicitResponseStep");
 
                 foreach (var subStep in SubSteps)
                 {
-                    subStep.Execute(inStream, context);
+                    subStep.Execute(responseDataStream,
+                        context);
                 }
-
+            }
+            finally
+            {
+                if (responseDataStream != null)
+                {
+                    responseDataStream.Dispose();
+                }
             }
             
         }
@@ -80,10 +66,22 @@ namespace TransMock.Integration.BizUnit
             
         }
 
-        protected override void ClosePipeClient()
+        protected override void ReceiveResponse(Context context)
         {
-            //Overriding with empty body to avoid closing the pipe client stream in the base.Execute() method
-            System.Diagnostics.Debug.WriteLine("ClosePipeClient() invoked", "TransMock.Integration.BizUnit.MockSolicitResponseStep");
+            context.LogInfo("Waiting to read the response from the endpoint");
+
+            System.Diagnostics.Trace.WriteLine("Reading the response from the endpoint",
+                "TransMock.Integration.BizUnit.MockSolicitResponseStep");
+
+            context.LogInfo("Reading the response from the endpoint");
+
+            responseDataStream = pipeClient.ReadStream();
+
+            System.Diagnostics.Debug.WriteLine("Response read!",
+                    "TransMock.Integration.BizUnit.MockSolicitResponseStep");
+
+            context.LogData("The response received from the mocked endpoint is:", responseDataStream, true);
         }
+        
     }
 }

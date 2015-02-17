@@ -70,5 +70,9 @@ namespace TransMock.Integration.BizUnit
                 SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
             }
         }
+
+        public virtual void Cleanup()
+        {
+        }
     }
 }

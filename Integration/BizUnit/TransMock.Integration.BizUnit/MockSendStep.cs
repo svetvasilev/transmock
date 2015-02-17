@@ -24,6 +24,8 @@ using System.IO.Pipes;
 using BizUnit;
 using BizUnit.Xaml;
 
+using TransMock.Communication.NamedPipes;
+
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
@@ -38,44 +40,22 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// The named pipe client stream used to communicate with the mocked endpoint
         /// </summary>
-        protected NamedPipeClientStream pipeClient;
+        protected StreamingNamedPipeClient pipeClient;
 
         public override void Execute(Context context)
         {
-            System.Diagnostics.Debug.WriteLine("Creating a pipe client instance", "TransMock.Integration.BizUnit.MockSendStep");
-            
-            pipeClient = new NamedPipeClientStream(
-                _endpointUri.Host, _endpointUri.AbsolutePath,
-                PipeDirection.InOut, PipeOptions.Asynchronous);
-
-            System.Diagnostics.Debug.WriteLine("Connecting to the pipe server", "TransMock.Integration.BizUnit.MockSendStep");
-
-            pipeClient.Connect(1000 * Timeout);
-
-            System.Diagnostics.Debug.WriteLine("Connected to the pipe server", "TransMock.Integration.BizUnit.MockSendStep");
-
-            using (FileStream fs = File.OpenRead(RequestPath))
+            try
             {
-                context.LogData(string.Format("Reading request content from path {0}", RequestPath),
-                    fs, true);
+                CreatePipeClient();
 
-                byte[] outBuffer = new byte[4096];  
-                int byteCount = 0;
+                SendRequest(context);
 
-                System.Diagnostics.Debug.WriteLine("Starting to read the request from path {0}", RequestPath);
-
-                while ((byteCount = fs.ReadWithoutBOM(outBuffer, 0, outBuffer.Length)) > 0)
-                {
-                    pipeClient.Write(outBuffer, 0, byteCount);
-                }
-                //
-                pipeClient.Flush();//Done with writing the response content, flushing the message
-                //Waiting for the client to read the message
-                pipeClient.WaitForPipeDrain();
-                System.Diagnostics.Debug.WriteLine("Request sent to the pipe server", "TransMock.Integration.BizUnit.MockSendStep");         
+                ReceiveResponse(context);
             }
-
-            ClosePipeClient(); 
+            finally
+            {
+                ClosePipeClient(); 
+            }
         }
 
         public override void Validate(Context context)
@@ -88,12 +68,58 @@ namespace TransMock.Integration.BizUnit
             }
         }
 
+        protected virtual void CreatePipeClient()
+        {
+            System.Diagnostics.Debug.WriteLine("Creating a pipe client instance", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            pipeClient = new StreamingNamedPipeClient(
+                _endpointUri.Host, 
+                _endpointUri.AbsolutePath);
+
+            System.Diagnostics.Debug.WriteLine("Connecting to the pipe server", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            pipeClient.Connect(1000 * Timeout);
+
+            System.Diagnostics.Debug.WriteLine("Connected to the pipe server", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+        }
+
+        protected virtual void  SendRequest(Context context)
+        {
+            System.Diagnostics.Debug.WriteLine("Sending request to the pipe server",
+                    "TransMock.Integration.BizUnit.MockSendStep");
+
+            using (FileStream fs = File.OpenRead(RequestPath))
+            {
+                context.LogData(string.Format("Reading request content from path {0}", RequestPath),
+                    fs, true);
+
+                pipeClient.WriteStream(fs);
+
+                System.Diagnostics.Debug.WriteLine("Request sent to the pipe server", 
+                    "TransMock.Integration.BizUnit.MockSendStep");
+            }
+        }
+
+        protected virtual void ReceiveResponse(Context context)
+        {
+
+        }
+
         protected virtual void ClosePipeClient()
         {
-            System.Diagnostics.Debug.WriteLine("Closing the pipe client", "TransMock.Integration.BizUnit.MockSendStep");    
-            //Closing the pipe server                            
-            pipeClient.Close();
-            System.Diagnostics.Trace.WriteLine("PipeClient closed", "TransMock.Integration.BizUnit.MockSendStep");    
+            System.Diagnostics.Debug.WriteLine("Closing the pipe client", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+            if (pipeClient != null)
+            {
+                //Closing the pipe server                            
+                pipeClient.Disconnect();
+            }
+
+            System.Diagnostics.Trace.WriteLine("PipeClient closed", 
+                "TransMock.Integration.BizUnit.MockSendStep");    
         }
 
         
