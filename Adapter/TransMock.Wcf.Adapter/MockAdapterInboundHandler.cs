@@ -43,7 +43,7 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// The streaming named pipe server used for communication
         /// </summary>
-        private StreamingNamedPipeServer pipeServer;
+        private IAsyncStreamingServer pipeServer;
 
         /// <summary>
         /// The internal queue where messages are put when received from an external system
@@ -161,7 +161,7 @@ namespace TransMock.Wcf.Adapter
                         if (msgHelper != null)
                         {
                             message = msgHelper.Message;//Assigning the message that was received
-                            reply = new WCFMockAdapterInboundReply(pipeServer,
+                            reply = new MockAdapterInboundReply(pipeServer,
                                 msgHelper.ConnectionId,
                                 Encoding.GetEncoding(Connection.ConnectionFactory.Adapter.Encoding));//Creating the proper reply instance                            
                                
@@ -211,13 +211,12 @@ namespace TransMock.Wcf.Adapter
                 
                 string msgContents = null;
                 //Adding the message contents to a predefined XML structure
-                //TODO: refactor to a more efficien implementation
-                using(BinaryReader br = new BinaryReader(e.MessageStream))
-	            {
+                //TODO: refactor to a more efficien implementation                
+                using (MemoryStream memStream = e.MessageStream as MemoryStream)
+                {
                     msgContents = string.Format("<MessageContent>{0}</MessageContent>",
-                        Convert.ToBase64String(br.ReadBytes((int)br.BaseStream.Length)));
-	            }
-                
+                       Convert.ToBase64String(memStream.ToArray()));
+                } 
 
                 XmlReader xr = XmlReader.Create(new StringReader(msgContents));
 
@@ -274,10 +273,10 @@ namespace TransMock.Wcf.Adapter
     /// <summary>
     /// This class implements the logic for sending a reply to the caller
     /// </summary>
-    internal class WCFMockAdapterInboundReply : InboundReply
+    internal class MockAdapterInboundReply : InboundReply
     {
         private int connectionId;
-        private StreamingNamedPipeServer pipeServer;
+        private IAsyncStreamingServer pipeServer;
         private Encoding encoding;
 
         /// <summary>
@@ -286,8 +285,8 @@ namespace TransMock.Wcf.Adapter
         /// <param name="pipeServer">The instance of the pipe server</param>
         /// <param name="connectionId">The Id of the connection on which the reply should be sent back</param>
         /// <param name="encoding">The encoding of the reply</param>
-        public WCFMockAdapterInboundReply(
-            StreamingNamedPipeServer pipeServer, 
+        public MockAdapterInboundReply(
+            IAsyncStreamingServer pipeServer, 
             int connectionId,
             Encoding encoding)
         {            
@@ -316,6 +315,15 @@ namespace TransMock.Wcf.Adapter
             try
             {
                 System.Diagnostics.Debug.WriteLine("Sending a response message");
+
+                if (message.IsEmpty)
+                {
+                    System.Diagnostics.Debug.WriteLine("Response message is empty. Exiting.",
+                        "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+
+                    return;
+                }
+
                 XmlDictionaryReader xdr = message.GetReaderAtBodyContents();
                 //Read the start element and extract its contents as a base64 encoded bytes                
                 if (xdr.NodeType == XmlNodeType.Element)
@@ -332,7 +340,8 @@ namespace TransMock.Wcf.Adapter
                 pipeServer.WriteAllBytes(connectionId, msgBuffer);                
 
                 System.Diagnostics.Debug.WriteLine("The response message was sent to the client",
-                    "TransMock.Wcf.Adapter.MockAdapterInboundHandler");                              
+                    "TransMock.Wcf.Adapter.MockAdapterInboundHandler");       
+                       
             }            
             catch (Exception ex)
             {

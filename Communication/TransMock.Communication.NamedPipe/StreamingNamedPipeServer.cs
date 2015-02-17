@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Pipes;
@@ -11,29 +12,47 @@ namespace TransMock.Communication.NamedPipes
     /// <summary>
     /// This class implements the logic of a streaming named pipe server
     /// </summary>
-    public class StreamingNamedPipeServer : IStreamingServer
+    public class StreamingNamedPipeServer : IAsyncStreamingServer
     {
-        protected Dictionary<int, NamedPipeServerStream> pipeServers;
-        protected byte[] inBuffer;
-        protected MemoryStream msgStream;
-        
-        protected object pipeSyncLock;
-        protected object pipeServersLock;
+        protected Dictionary<int, NamedPipeServerStream> pipeServerConnections;
+               
+        protected object pipeSyncLock;        
 
+        private ManualResetEventSlim serverStopEvent;
+        private int activePipeConnectionCount = 0;      
+
+        private ServerState serverState = ServerState.Undefined;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public StreamingNamedPipeServer()
         {
             pipeSyncLock = new object();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Url"></param>
         public StreamingNamedPipeServer(string Url) : this()
         {
             URL = Url;
         }
 
-        public string URL { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public string URL 
+        { 
+            get; set; 
+        }
 
         #region IStreamingServerImplementation
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool Start()
         {
             try
@@ -41,12 +60,17 @@ namespace TransMock.Communication.NamedPipes
                 System.Diagnostics.Trace.WriteLine("Start called", 
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
+                serverState = ServerState.Starting;
+
                 lock (pipeSyncLock)
                 {
-                    pipeServers = new Dictionary<int, NamedPipeServerStream>(3);
+                    pipeServerConnections = new Dictionary<int, NamedPipeServerStream>(3);
                 }
                 
                 CreatePipeServer();
+                
+                serverState = ServerState.Started;
+                
 
                 System.Diagnostics.Trace.WriteLine("Named pipe server started", 
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
@@ -58,16 +82,16 @@ namespace TransMock.Communication.NamedPipes
                 System.Diagnostics.Trace.WriteLine("Start failed with exception: " + ex.Message,
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
+                serverState = ServerState.Stopped;
+
                 return false;
             }
             
         }
 
-        public bool Start(int timeoutMilliseconds)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Stop()
         {
             try
@@ -75,21 +99,23 @@ namespace TransMock.Communication.NamedPipes
                 System.Diagnostics.Trace.WriteLine("Stop called",
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
+                serverState = ServerState.Stopping;
+
                 lock (pipeSyncLock)
                 {
-                    System.Diagnostics.Debug.WriteLine("Clearing the pending pipe servers. Currently the number of servers is: " + pipeServers.Count);
+                    System.Diagnostics.Debug.WriteLine("Clearing the pending pipe servers. Currently the number of servers is: " + pipeServerConnections.Count,
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
-                    foreach (var pipeServer in pipeServers.Values)
+                    foreach (var pipeServer in pipeServerConnections.Values)
                     {
-                        System.Diagnostics.Debug.WriteLine("Closing existing server");
+                        System.Diagnostics.Debug.WriteLine("Closing existing server",
+                            "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                         //Close any existing pipeServers
                         pipeServer.Dispose();
-                    }
+                    }                    
 
-                    pipeServers.Clear();
-                    pipeServers = null;
-
-                    System.Diagnostics.Debug.WriteLine("All pipe servers cleared");
+                    System.Diagnostics.Debug.WriteLine("All pipe servers closed",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                 }
 
                 System.Diagnostics.Trace.WriteLine("Stop succeeded",
@@ -102,19 +128,44 @@ namespace TransMock.Communication.NamedPipes
                 
                 throw;
             }
+            finally
+            {
+                WaitForPipeServersCleanup();
+
+                System.Diagnostics.Debug.WriteLine("Clearing the server collection",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                lock (pipeSyncLock)
+                {
+                    pipeServerConnections.Clear();
+                    pipeServerConnections = null;
+                }
+
+                serverState = ServerState.Stopped;
+
+                System.Diagnostics.Debug.WriteLine("Server collection cleared",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connectionId"></param>
         public void Disconnect(int connectionId) 
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine("Disconnect() called",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
                 NamedPipeServerStream pipeConnection;
 
                 lock (pipeSyncLock)
                 {
                     try
                     {
-                        pipeConnection = pipeServers[connectionId];
+                        pipeConnection = pipeServerConnections[connectionId];
 
                         if (pipeConnection.IsConnected)
                         {
@@ -125,75 +176,105 @@ namespace TransMock.Communication.NamedPipes
                     }
                     finally
                     {
-                        pipeServers.Remove(connectionId);
+                        pipeServerConnections.Remove(connectionId);
                     }                    
                 }
+
+                System.Diagnostics.Trace.WriteLine("Disconnect() succeeded",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Trace.WriteLine("Disconnect() threw an exception:" + ex.Message,
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                 
                 throw;
             }
-        }
+            
+        }        
 
-        public byte[] ReadAllBytes()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Stream ReadStream()
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <param name="data"></param>
         public void WriteAllBytes(int connectionId, byte[] data)
         {
-            NamedPipeServerStream pipeConnection;
+            System.Diagnostics.Trace.WriteLine("WriteAllBytes() called",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
-            lock (pipeSyncLock)
+            using (MemoryStream msgStream = new MemoryStream(data))
             {
-                pipeConnection = pipeServers[connectionId];
+                System.Diagnostics.Debug.WriteLine("Constructed MemoryStream of the message data.",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                WriteStream(connectionId, msgStream);
             }
 
-            if (data != null && data.Length > 0)
-            {
-                pipeConnection.Write(data, 0, data.Length);
-
-                //Write the EOF bite
-                pipeConnection.WriteByte(0x00);
-            }            
+            System.Diagnostics.Trace.WriteLine("WriteAllBytes() succeeded",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <param name="data"></param>
         public void WriteStream(int connectionId, Stream data)
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine("WriteStream() called",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
                 NamedPipeServerStream pipeConnection;
                 
                 lock (pipeSyncLock)
                 {
-                    pipeConnection = pipeServers[connectionId];                    
+                    pipeConnection = pipeServerConnections[connectionId];                    
                 }
 
-                int byteReadCount;
+                int byteReadCount; 
                 byte[] outBuffer = new byte[4096];
+
+                System.Diagnostics.Debug.WriteLine("Writing the message to the client.",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
                 while ((byteReadCount = data.Read(outBuffer, 0, outBuffer.Length)) > 0)
                 {
                     pipeConnection.Write(outBuffer, 0, byteReadCount);
                 }
+
+                System.Diagnostics.Debug.WriteLine("Writing the EOF byte.",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                 //Write the EOF bite
                 pipeConnection.WriteByte(0x00);
+
+                System.Diagnostics.Debug.WriteLine("Message sent to the client.",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                pipeConnection.WaitForPipeDrain();
+
+                System.Diagnostics.Trace.WriteLine("Message read by the client. WriteStream() succeeded",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                System.Diagnostics.Trace.WriteLine("WriteStream() trhew an exception: " + ex.Message,
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
                 throw;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<AsyncReadEventArgs> ReadCompleted;
         #endregion
 
@@ -227,27 +308,43 @@ namespace TransMock.Communication.NamedPipes
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine("CreatePipeServer() called",
+                       "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                //Setting up pipe security
+                PipeSecurity ps = new PipeSecurity();
+
+                ps.AddAccessRule(new PipeAccessRule("Users",
+                    PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite,
+                    System.Security.AccessControl.AccessControlType.Allow));
                 
                 //Creating the named pipe server
                 NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                     URL,
                     PipeDirection.InOut, 5, PipeTransmissionMode.Byte,
-                    PipeOptions.Asynchronous, int.MaxValue, int.MaxValue);
+                    PipeOptions.Asynchronous, 4096, 4096, ps);
 
                 lock (pipeSyncLock)
                 {
-                    pipeServers.Add(pipeServer.GetHashCode(), pipeServer);
+                    pipeServerConnections.Add(pipeServer.GetHashCode(), pipeServer);
+
+                    activePipeConnectionCount++;
                 }
                 //Starting the waiting for client connetions.
                 //Notice how the pipe server instance is passed as a async state object
                 pipeServer.BeginWaitForConnection(cb => PipeClientConnected(cb),
-                    pipeServer.GetHashCode());                
+                    pipeServer.GetHashCode());
+
+                System.Diagnostics.Trace.WriteLine("CreatePipeServer() succeeded",
+                       "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
             }
-            finally
+            catch(Exception ex)
             {
+                System.Diagnostics.Trace.WriteLine("CreatePipeServer() thre an exception: " + ex.Message,
+                       "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
+                throw;
             }
-
         }
 
         /// <summary>
@@ -256,43 +353,71 @@ namespace TransMock.Communication.NamedPipes
         /// <param name="ar">The async result of the operation that triggered the method</param>
         private void PipeClientConnected(IAsyncResult ar)
         {
-            System.Diagnostics.Debug.WriteLine("Pipe client connected");
-
-            int pipeConnectionId = (int)ar.AsyncState;
-
-            NamedPipeServerStream pipeConnection;
-            
-            //Extract the pipe server connection from the dictionary
-            lock (pipeSyncLock)
-            {
-                pipeConnection = pipeServers[pipeConnectionId];
-            }
-
             try
             {
-                //We first end the waiting for connection
-                pipeConnection.EndWaitForConnection(ar);
-            }
-            catch (System.ObjectDisposedException)
-            {
-                System.Diagnostics.Debug.WriteLine("Pipe has been disposed!Exiting without further processing");
-                return;
-            }
+                System.Diagnostics.Trace.WriteLine("Pipe client connected",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
-            byte[] inBuffer = new byte[4096];
+                int pipeConnectionId = (int)ar.AsyncState;
 
-            //Starting async read by passing the named pipe conenction as a async state parameter again.
-            pipeConnection.BeginRead(inBuffer, 0,
-                inBuffer.Length, cb => PipeReadAsync(cb),
-                new AsyncReadState
+                NamedPipeServerStream pipeConnection;
+
+                //Extract the pipe server connection from the dictionary
+                lock (pipeSyncLock)
                 {
-                    ConnectionId = pipeConnectionId,
-                    InStream = new MemoryStream(4096),
-                    RawData = inBuffer
-                });
+                    pipeConnection = pipeServerConnections[pipeConnectionId];
 
-            OnClientConnected(pipeConnectionId);
+                    activePipeConnectionCount--;
+                }
+
+                try
+                {
+                    //We first end the waiting for connection
+                    pipeConnection.EndWaitForConnection(ar);
+                }
+                catch (System.ObjectDisposedException)
+                {
+                    System.Diagnostics.Debug.WriteLine("Pipe has been disposed!Exiting without further processing",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+                    return;
+                }
+
+                byte[] inBuffer = new byte[4096];
+
+                //Starting async read by passing the named pipe conenction as a async state parameter again.
+                pipeConnection.BeginRead(inBuffer, 0,
+                    inBuffer.Length, cb => PipeReadAsync(cb),
+                    new AsyncReadState
+                    {
+                        ConnectionId = pipeConnectionId,
+                        InStream = new MemoryStream(4096),
+                        RawData = inBuffer
+                    });
+
+                OnClientConnected(pipeConnectionId);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("PipeClientConnected() threw an exception: " + ex.Message,
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+            }
+            finally
+            {
+                switch (serverState)
+                {   
+                    case ServerState.Started:
+                        CreatePipeServer();
+                        break;
+                    case ServerState.Stopping:
+                        SignalPipeClientDisconnect();
+                        break;                    
+                    default:
+                        break;
+                }                
+            }
+            
         }
+
         /// <summary>
         /// Asyncrounous callback for a read operation from the pipe
         /// </summary>
@@ -309,7 +434,7 @@ namespace TransMock.Communication.NamedPipes
                 
                 lock (pipeSyncLock)
                 {
-                    pipeConnection = pipeServers[state.ConnectionId];
+                    pipeConnection = pipeServerConnections[state.ConnectionId];
                 }
 
                 int bytesRead = pipeConnection.EndRead(ar);
@@ -360,20 +485,51 @@ namespace TransMock.Communication.NamedPipes
                     //EOF reached, constructing the message
                     System.Diagnostics.Debug.WriteLine("Message was read from the pipe",
                         "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
-                    
+                    //Rewind the stream
+                    state.InStream.Seek(0, SeekOrigin.Begin);
                     //Notify that the read was complete
                     OnReadCompleted(state.ConnectionId, state.InStream);
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("PipeReadAsync threw an exception: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("PipeReadAsync threw an exception: " + ex.Message,
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
             }            
-        }        
+        }
+
+        private void WaitForPipeServersCleanup() 
+        {           
+            System.Diagnostics.Debug.WriteLine("WaitForPipeServersCleanup called with pipeServerConnectCount: " + activePipeConnectionCount,
+                "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+            serverStopEvent = new ManualResetEventSlim(false);
+            serverStopEvent.Wait(TimeSpan.FromSeconds(10));
+
+            System.Diagnostics.Debug.WriteLine("All waiting connections stopped",
+                "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+            activePipeConnectionCount = 0;
+                        
+        }
+
+        private void SignalPipeClientDisconnect()
+        {
+            if (serverStopEvent == null)
+            {
+                return;
+            }
+
+            if (activePipeConnectionCount == 0)
+            {
+                //When we have no more active pipe connections we set the event
+                serverStopEvent.Set();
+            }
+        }
     }
 
     /// <summary>
-    /// 
+    /// Event arguments for the AsyncReadEvent
     /// </summary>
     public class AsyncReadEventArgs
     {
@@ -383,7 +539,7 @@ namespace TransMock.Communication.NamedPipes
     }
 
     /// <summary>
-    /// 
+    /// Event arguments for the ClientConnectedEvent
     /// </summary>
     public class ClientConnectedEventArgs
     {
@@ -402,5 +558,14 @@ namespace TransMock.Communication.NamedPipes
         public MemoryStream InStream { get; set; }
 
         public byte[] RawData { get; set; }
+    }
+
+    internal enum ServerState
+    {
+        Undefined,
+        Starting,
+        Started,
+        Stopping,
+        Stopped
     }
 }

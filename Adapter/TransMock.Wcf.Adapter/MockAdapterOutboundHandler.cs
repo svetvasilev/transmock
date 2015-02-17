@@ -86,27 +86,39 @@ namespace TransMock.Wcf.Adapter
                 System.Diagnostics.Debug.WriteLine("Outbound message sent!",
                     "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
+                //Check if the IsSolicitResponse context property is present and set to true
+                bool isTwoWay = false;
+                object isSolicitResponseValue;
+
+                if (message.Properties.TryGetValue(
+                    "http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse",
+                    out isSolicitResponseValue))
+                {
+                    isTwoWay = Convert.ToBoolean(isSolicitResponseValue);
+                }
+
                 //Check if the CorrelationToken prometed property is present
-                if (message.Properties.ContainsKey("http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken"))
+                if (isTwoWay)
                 {
                     //We are in a two-way communication scenario
                     System.Diagnostics.Debug.WriteLine("Two-way communication - reading the response message",
                         "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
                     string respContents = null;
-                    //We proceed with waiting for the response
-                    using(BinaryReader br = new BinaryReader(pipeClient.ReadStream()))
-	                {
-		                respContents = string.Format("<MessageContent>{0}</MessageContent>",
-                            Convert.ToBase64String(br.ReadBytes((int)br.BaseStream.Length)));
-	                }
+                    //We proceed with waiting for the response                    
+                    Message responseMsg = null;
+                    using (MemoryStream msgStream = pipeClient.ReadStream() as MemoryStream)
+                    {
+                        respContents = string.Format("<MessageContent>{0}</MessageContent>",
+                           Convert.ToBase64String(msgStream.ToArray()));
 
-                    XmlReader xrResponse = XmlReader.Create(new StringReader(respContents));
+                        XmlReader xrResponse = XmlReader.Create(new StringReader(respContents));
 
-                    System.Diagnostics.Debug.WriteLine("Constructing the response WCF Message",
-                        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
+                        System.Diagnostics.Debug.WriteLine("Constructing the response WCF Message",
+                            "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
-                    Message responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, xrResponse);
+                        responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, xrResponse);
+                    }
 
                     System.Diagnostics.Debug.WriteLine("Response WCF Message constructed. Returning it to BizTalk",
                         "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
@@ -114,13 +126,12 @@ namespace TransMock.Wcf.Adapter
                     return responseMsg;
                 }
                 else
+                {
                     //Return empty message in one-way scenario
                     return Message.CreateMessage(MessageVersion.Default, string.Empty);
-                
-            }
-            
+                }                
+            }           
         }
-
         #endregion IOutboundHandler Members
     }
 }

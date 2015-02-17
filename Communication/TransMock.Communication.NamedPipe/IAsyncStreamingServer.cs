@@ -10,19 +10,13 @@ namespace TransMock.Communication.NamedPipes
     /// <summary>
     /// Defines the operations of a streaming server
     /// </summary>
-    public interface IStreamingServer
+    public interface IAsyncStreamingServer
     {
         bool Start();
 
-        bool Start(int timeoutMilliseconds);
-
         void Stop();
 
-        void Disconnect(int connectionId);
-
-        byte[] ReadAllBytes();
-
-        Stream ReadStream();
+        void Disconnect(int connectionId);       
 
         void WriteAllBytes(int connectionId, byte[] data);
 

@@ -107,6 +107,14 @@ namespace TransMock.TestUtils
             try
             {
                 testHelper.pipeServer.EndWaitForConnection(cb);
+
+                if (!testHelper.pipeServer.IsConnected)
+                {
+                    //The method was invoked in the the case of closing the pipe. 
+                    //Exiting with no room for discussion
+                    return;
+                }
+
                 //We read from the pipe
                 int byteCountRead = 0;
                 bool eofReached = false;

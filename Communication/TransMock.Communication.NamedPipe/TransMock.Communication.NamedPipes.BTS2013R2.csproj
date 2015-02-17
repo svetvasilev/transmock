@@ -49,7 +49,7 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="IStreamingClient.cs" />
-    <Compile Include="IStreamingServer.cs" />
+    <Compile Include="IAsyncStreamingServer.cs" />
     <Compile Include="StreamingNamedPipeClient.cs" />
     <Compile Include="StreamingNamedPipeServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

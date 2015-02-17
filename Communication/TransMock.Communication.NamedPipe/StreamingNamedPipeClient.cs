@@ -46,10 +46,16 @@ namespace TransMock.Communication.NamedPipes
         {
             try
             {
+                System.Diagnostics.Trace.WriteLine("Connect() called",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
                 pipeClient = new NamedPipeClientStream(HostName,
                     PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
 
                 pipeClient.Connect(timeoutMilliseconds);
+
+                System.Diagnostics.Debug.WriteLine("Connected to the pipe server",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
 
                 return true;
             }
@@ -97,14 +103,25 @@ namespace TransMock.Communication.NamedPipes
 
         public byte[] ReadAllBytes()
         {
+            System.Diagnostics.Trace.WriteLine("ReadAllBytes() called",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
             MemoryStream msgStream = ReadStream() as MemoryStream;
 
             if (msgStream != null)
             {
+                System.Diagnostics.Trace.WriteLine("ReadAllBytes() succeeded and returning data",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
                 return msgStream.ToArray();
             }
             else
+            {
+                System.Diagnostics.Trace.WriteLine("ReadAllBytes() returning null",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
                 return null;
+            }   
         }
 
         public System.IO.Stream ReadStream()
@@ -117,8 +134,8 @@ namespace TransMock.Communication.NamedPipes
                 byte[] inBuffer = new byte[4096];
                 MemoryStream msgStream = new MemoryStream(4096);
 
-                int byteCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-                    bool eofReached = false;
+                int byteCountRead = 0;
+                bool eofReached = false;
 
                 while (!eofReached)
                 {
@@ -156,6 +173,8 @@ namespace TransMock.Communication.NamedPipes
 
                 System.Diagnostics.Trace.WriteLine("ReadStream() succeeded",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+                //Rewind the message stream to the beginning
+                msgStream.Seek(0, SeekOrigin.Begin);
 
                 return msgStream;
             }
@@ -171,7 +190,19 @@ namespace TransMock.Communication.NamedPipes
 
         public void WriteAllBytes(byte[] data)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Trace.WriteLine("WriteAllBytes() called",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeClient");
+
+            using (MemoryStream msgStream = new MemoryStream(data))
+            {
+                System.Diagnostics.Debug.WriteLine("Constructed MemoryStream of the message data.",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeClient");
+
+                WriteStream(msgStream);
+            }
+
+            System.Diagnostics.Trace.WriteLine("WriteAllBytes() succeeded",
+                    "TransMock.Communication.NamedPipe.StreamingNamedPipeClient");
         }
 
         public void WriteStream(System.IO.Stream data)
@@ -183,6 +214,9 @@ namespace TransMock.Communication.NamedPipes
 
                 byte[] outBuffer = new byte[4096];
 
+                System.Diagnostics.Debug.WriteLine("Writing message to the server",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
                 int byteCountRead = 0;
                 //while ((byteCount = fs.ReadWithoutBOM(outBuffer, 0, outBuffer.Length)) > 0)
                 while ((byteCountRead = data.Read(outBuffer, 0, outBuffer.Length)) > 0)
@@ -191,12 +225,18 @@ namespace TransMock.Communication.NamedPipes
                 }
                 //Done with writing the response content, flushing the message
                 pipeClient.Flush();
+
+                System.Diagnostics.Debug.WriteLine("Writing the EOF byte",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
                 //Writing the EOF byte
                 pipeClient.WriteByte(0x00);
+
+                System.Diagnostics.Debug.WriteLine("Message sent to the server",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
                 //Waiting for the client to read the message
                 pipeClient.WaitForPipeDrain();
 
-                System.Diagnostics.Trace.WriteLine("WriteStream() succeeded",
+                System.Diagnostics.Trace.WriteLine("WriteStream() succeeded. Message read by the server",
                     "TransMock.Communication.NamedPipes");
             }
             catch (Exception ex)
@@ -212,10 +252,16 @@ namespace TransMock.Communication.NamedPipes
         
         public void Dispose()
         {
+            System.Diagnostics.Trace.WriteLine("Dispose() called",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
             if (pipeClient != null)
             {
                 pipeClient.Dispose();
             }
+
+            System.Diagnostics.Trace.WriteLine("Dispose() succeeded",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
         }
     }
 }
