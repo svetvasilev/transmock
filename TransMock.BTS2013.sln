@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8CCED02-CA1A-4408-9A80-BA606A66CE24}"
 	ProjectSection(SolutionItems) = preProject
+		BuildTransMock_Debug.bat = BuildTransMock_Debug.bat
+		BuildTransMock_Release.bat = BuildTransMock_Release.bat
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 		TransMock.vsmdi = TransMock.vsmdi
