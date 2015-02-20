@@ -25,6 +25,7 @@ using System.Xml;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using TransMock.Communication.NamedPipes;
 using TransMock.TestUtils;
 
 namespace TransMock.Wcf.Adapter.Tests
@@ -42,13 +43,13 @@ namespace TransMock.Wcf.Adapter.Tests
         {
             PipeSecurity ps = new PipeSecurity();
             ps.AddAccessRule(new PipeAccessRule("USERS", PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite, 
-                System.Security.AccessControl.AccessControlType.Allow));
-            //We first spin a pipe server to make sure that the send port will be able to connect
+               System.Security.AccessControl.AccessControlType.Allow));
+            ////We first spin a pipe server to make sure that the send port will be able to connect
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 "OneWaySend", PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous, 
-                1024, 1024, ps))
-            {                
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous,
+                1024, 1024, ps))            
+            {   
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";                           
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
@@ -62,7 +63,11 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                    pipeClient.Flush();                    
+
+                    pipeClient.WriteByte(0x00);//writing the EOF byte
+                    pipeClient.Flush();
+
+                    pipeClient.WaitForPipeDrain();
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
@@ -73,6 +78,11 @@ namespace TransMock.Wcf.Adapter.Tests
             }            
         }
 
+        void pipeServer_ReadCompleted(object sender, AsyncReadEventArgs e)
+        {
+            
+        }
+
         [TestMethod]
         public void TestOneWay_FlatFile()
         {
@@ -81,7 +91,7 @@ namespace TransMock.Wcf.Adapter.Tests
             //We first spin a pipe server to make sure that the send port will be able to connect
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 "OneWaySend", PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous,
                 1024, 1024, ps))
             {
                 string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";                
@@ -98,6 +108,11 @@ namespace TransMock.Wcf.Adapter.Tests
                     pipeClient.Connect(10000);
                     pipeClient.Write(flatBytes, 0, flatBytes.Count());
                     pipeClient.Flush();
+
+                    pipeClient.WriteByte(0x00);//writing the EOF byte
+                    pipeClient.Flush();
+
+                    pipeClient.WaitForPipeDrain();
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
@@ -116,7 +131,7 @@ namespace TransMock.Wcf.Adapter.Tests
             //We first spin a pipe server to make sure that the send port will be able to connect
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 "OneWaySend", PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous,
                 1024, 1024, ps))
             {
                 string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
@@ -133,6 +148,11 @@ namespace TransMock.Wcf.Adapter.Tests
                     pipeClient.Connect(10000);
                     pipeClient.Write(flatBytes, 0, flatBytes.Count());
                     pipeClient.Flush();
+
+                    pipeClient.WriteByte(0x00);//writing the EOF byte
+                    pipeClient.Flush();
+
+                    pipeClient.WaitForPipeDrain();
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
@@ -168,6 +188,11 @@ namespace TransMock.Wcf.Adapter.Tests
                     pipeClient.Connect(10000);
                     pipeClient.Write(flatBytes, 0, flatBytes.Count());
                     pipeClient.Flush();
+
+                    pipeClient.WriteByte(0x00);//writing the EOF byte
+                    pipeClient.Flush();
+
+                    pipeClient.WaitForPipeDrain();
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
@@ -187,7 +212,7 @@ namespace TransMock.Wcf.Adapter.Tests
             //We first spin a pipe server to make sure that the send port will be able to connect
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 "TwoWaySend", PipeDirection.InOut, 1,
-                PipeTransmissionMode.Message, PipeOptions.Asynchronous,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous,
                 1024, 1024, ps))
             {
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
@@ -205,6 +230,11 @@ namespace TransMock.Wcf.Adapter.Tests
                     pipeClient.Connect(10000);
                     pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
                     pipeClient.Flush();
+
+                    pipeClient.WriteByte(0x00);//writing the EOF byte
+                    pipeClient.Flush();
+
+                    pipeClient.WaitForPipeDrain();
 
                     //Here we wait for the event to be signalled
                     testHelper.syncEvent.WaitOne(10000);

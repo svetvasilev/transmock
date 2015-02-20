@@ -71,9 +71,17 @@ namespace TransMock.TestUtils
                 //We read from the pipe
                 int byteCountRead = 0;
                 bool eofReached = false;
-                while ((byteCountRead = testHelper.pipeServer.Read(outBuffer, 0, outBuffer.Length)) > 0)
+                while (!eofReached)
                 {
-                    if (byteCountRead > 1)
+                    byteCountRead = testHelper.pipeServer.Read(outBuffer, 0, outBuffer.Length);
+
+                    if (byteCountRead > 2)
+                    {
+                        eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
+                            outBuffer[byteCountRead - 2] != 0x0 &&
+                            outBuffer[byteCountRead - 3] != 0x0);
+                    }
+                    else if (byteCountRead > 1)
                     {
                         eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
                             outBuffer[byteCountRead - 2] == 0x0);
@@ -125,7 +133,13 @@ namespace TransMock.TestUtils
 
                     if (byteCountRead > 0)
                     {
-                        if (byteCountRead > 1)
+                        if (byteCountRead > 2)
+                        {
+                            eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
+                                outBuffer[byteCountRead - 2] != 0x0 &&
+                                outBuffer[byteCountRead - 3] != 0x0);
+                        }
+                        else if (byteCountRead > 1)
                         {
                             eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
                                 outBuffer[byteCountRead - 2] == 0x0);

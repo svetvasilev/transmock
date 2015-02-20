@@ -78,6 +78,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj">
+      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
+      <Name>TransMock.Communication.NamedPipes.BTS2013R2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013R2.csproj">
       <Project>{5891035f-5346-4a15-bb61-09018d5cc4ae}</Project>
       <Name>TransMock.TestUtils.BTS2013R2</Name>
