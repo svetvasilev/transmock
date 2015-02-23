@@ -78,11 +78,6 @@ namespace TransMock.Wcf.Adapter.Tests
             }            
         }
 
-        void pipeServer_ReadCompleted(object sender, AsyncReadEventArgs e)
-        {
-            
-        }
-
         [TestMethod]
         public void TestOneWay_FlatFile()
         {

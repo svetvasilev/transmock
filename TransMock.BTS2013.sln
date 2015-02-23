@@ -58,6 +58,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.Tests.BTS2013", "Test\TransMock.TestUtils.BizTalk.Tests\TransMock.TestUtils.BizTalk.Tests.BTS2013.csproj", "{CBA39921-3716-4CBE-8742-086727D383B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{2F7BCBD9-D532-40A7-9428-6F1F2B8DFFCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.BTS2013", "Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013.csproj", "{6C9E0C6C-4E2B-40A1-8413-980538762DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.Tests.BTS2013", "Communication\TransMock.Communication.NamedPipes.Tests\TransMock.Communication.NamedPipes.Tests.BTS2013.csproj", "{B08F87E7-B580-4E42-BAF0-7F8233153230}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TransMock.vsmdi
@@ -221,6 +227,26 @@ Global
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CBA39921-3716-4CBE-8742-086727D383B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,5 +269,7 @@ Global
 		{5891035F-5346-4A15-BB61-09018D5CC4AE} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
 		{42F57394-8F3E-47E7-B1E6-ACDEA505AF23} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
 		{CBA39921-3716-4CBE-8742-086727D383B0} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
+		{6C9E0C6C-4E2B-40A1-8413-980538762DDE} = {2F7BCBD9-D532-40A7-9428-6F1F2B8DFFCE}
+		{B08F87E7-B580-4E42-BAF0-7F8233153230} = {2F7BCBD9-D532-40A7-9428-6F1F2B8DFFCE}
 	EndGlobalSection
 EndGlobal
