@@ -135,3 +135,4 @@ namespace TransMock.Wcf.Adapter
         #endregion IOutboundHandler Members
     }
 }
+

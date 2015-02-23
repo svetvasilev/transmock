@@ -124,4 +124,10 @@
       <Link>TransMock.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2010.csproj">
+      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
+      <Name>TransMock.Communication.NamedPipes.BTS2010</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

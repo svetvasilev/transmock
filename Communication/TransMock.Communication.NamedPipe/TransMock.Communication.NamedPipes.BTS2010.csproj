@@ -1,21 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B32C1509-3952-4492-B097-6886CEC675FB}</ProjectGuid>
+    <ProjectGuid>{6C9E0C6C-4E2B-40A1-8413-980538762DDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransMock.Integration.BizUnit</RootNamespace>
-    <AssemblyName>TransMock.Integration.BizUnit</AssemblyName>
+    <RootNamespace>TransMock.Communication.NamedPipes</RootNamespace>
+    <AssemblyName>TransMock.Communication.NamedPipes</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,10 +30,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Key\TransMock.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizUnit">
-      <HintPath>..\..\..\..\..\..\..\Program Files\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,23 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\VersionInfo.cs">
+    <Compile Include="..\..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="FileStreamExtension.cs" />
-    <Compile Include="MockStepBase.cs" />
-    <Compile Include="MockSolicitResponseStep.cs" />
-    <Compile Include="MockRequestResponseStep.cs" />
-    <Compile Include="MockSendStep.cs" />
-    <Compile Include="MockReceiveStep.cs" />
+    <Compile Include="EventArgs.NET4.cs" />
+    <Compile Include="IStreamingClient.cs" />
+    <Compile Include="IAsyncStreamingServer.cs" />
+    <Compile Include="StreamingNamedPipeClient.cs" />
+    <Compile Include="StreamingNamedPipeServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransMockExecutionBeacon.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2010.csproj">
-      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
-      <Name>TransMock.Communication.NamedPipes.BTS2010</Name>
-    </ProjectReference>
+    <None Include="..\..\Key\TransMock.snk">
+      <Link>TransMock.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
