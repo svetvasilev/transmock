@@ -22,36 +22,42 @@
 #region Using Directives
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.ServiceModel;
-using System.ServiceModel.Configuration;
-using System.ServiceModel.Channels;
 using System.Configuration;
 using System.Globalization;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Configuration;
+using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
 namespace TransMock.Wcf.Adapter
 {
+    /// <summary>
+    /// The mock adapter binding element class
+    /// </summary>
     public class MockAdapterBindingElement : StandardBindingElement
     {
+        /// <summary>
+        /// The collection of configuration properties for the binding element
+        /// </summary>
         private ConfigurationPropertyCollection properties;
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapterBindingElement class
+        /// Initializes a new instance of the <see cref="MockAdapterBindingElement"/> class
         /// </summary>
         public MockAdapterBindingElement()
             : base(null)
         {
         }
 
-
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapterBindingElement class with a configuration name
+        /// Initializes a new instance of the <see cref="MockAdapterBindingElement"/> class with a configuration name
         /// </summary>
+        /// <param name="configurationName">The configuration name to be used to configure the adapter binding instance with</param>
         public MockAdapterBindingElement(string configurationName)
             : base(configurationName)
         {
@@ -61,28 +67,34 @@ namespace TransMock.Wcf.Adapter
 
         #region Custom Generated Properties
 
+        /// <summary>
+        /// Gets or sets the encoding used for message serialization
+        /// </summary>
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding
         {
             get
             {
-                return ((string)(base["Encoding"]));
+                return (string)base["Encoding"];
             }
+
             set
             {
                 base["Encoding"] = value;
             }
         }
 
-
-
+        /// <summary>
+        /// Gets or sets the list of promoted properties for the original adapter
+        /// </summary>
         [System.Configuration.ConfigurationProperty("PromotedProperties")]
         public string PromotedProperties
         {
             get
             {
-                return ((string)(base["PromotedProperties"]));
+                return (string)base["PromotedProperties"];
             }
+
             set
             {
                 base["PromotedProperties"] = value;
@@ -107,10 +119,33 @@ namespace TransMock.Wcf.Adapter
         #endregion Protected Properties
 
         #region StandardBindingElement Members
+        /// <summary>
+        /// Gets a collection of the configuration properties
+        /// </summary>        
+        protected override ConfigurationPropertyCollection Properties
+        {
+            get
+            {
+                if (this.properties == null)
+                {
+                    ConfigurationPropertyCollection configProperties = base.Properties;
+
+                    configProperties.Add(new ConfigurationProperty(
+                        "Encoding", typeof(string), null, null, null, ConfigurationPropertyOptions.None));
+                    configProperties.Add(new ConfigurationProperty(
+                        "PromotedProperties", typeof(string), null, null, null, ConfigurationPropertyOptions.None));
+                    
+                    this.properties = configProperties;
+                }
+
+                return this.properties;
+            }
+        }
 
         /// <summary>
         /// Initializes the binding with the configuration properties
         /// </summary>
+        /// <param name="binding">The binding instance</param>
         protected override void InitializeFrom(Binding binding)
         {
             base.InitializeFrom(binding);
@@ -123,36 +158,19 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Applies the configuration
         /// </summary>
+        /// <param name="binding">The binding instance</param>
         protected override void OnApplyConfiguration(Binding binding)
         {
             if (binding == null)
+            {
                 throw new ArgumentNullException("binding");
+            }
 
             MockAdapterBinding adapterBinding = (MockAdapterBinding)binding;
             
-            adapterBinding.Encoding = (System.String)this["Encoding"];
-            adapterBinding.PromotedProperties = (System.String)this["PromotedProperties"];
+            adapterBinding.Encoding = (string)this["Encoding"];
+            adapterBinding.PromotedProperties = (string)this["PromotedProperties"];
         }
-
-        /// <summary>
-        /// Returns a collection of the configuration properties
-        /// </summary>
-        protected override ConfigurationPropertyCollection Properties
-        {
-            get
-            {
-                if (this.properties == null)
-                {
-                    ConfigurationPropertyCollection configProperties = base.Properties;
-                    
-                    configProperties.Add(new ConfigurationProperty("Encoding", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
-                    configProperties.Add(new ConfigurationProperty("PromotedProperties", typeof(System.String), null, null, null, ConfigurationPropertyOptions.None));
-                    this.properties = configProperties;
-                }
-                return this.properties;
-            }
-        }
-
 
         #endregion StandardBindingElement Members
     }

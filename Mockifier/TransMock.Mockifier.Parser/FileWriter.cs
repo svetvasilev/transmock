@@ -29,15 +29,14 @@ namespace TransMock.Mockifier.Parser
     {
         public void WriteTextFile(string path, string content)
         {
-            using (FileStream classFileStream = File.Open(path,
-                     FileMode.OpenOrCreate, FileAccess.Write))
+            FileStream classFileStream = File.Open(path,
+                     FileMode.OpenOrCreate, FileAccess.Write);
+           
+            using (StreamWriter sw = new StreamWriter(classFileStream, Encoding.UTF8))
             {
-                using (StreamWriter sw = new StreamWriter(classFileStream, Encoding.UTF8))
-                {
-                    sw.Write(content);
-                    sw.Flush();
-                }
-            }
+                sw.Write(content);
+                sw.Flush();
+            }           
         }
     }
     /// <summary>

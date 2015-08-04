@@ -32,7 +32,7 @@ namespace TransMock.Communication.NamedPipes
     /// <summary>
     /// Defines the operations of a streaming server
     /// </summary>
-    public interface IAsyncStreamingServer
+    public interface IAsyncStreamingServer : IDisposable
     {
         bool Start();
 
@@ -44,8 +44,10 @@ namespace TransMock.Communication.NamedPipes
 
         void WriteStream(int connectionId, Stream data);
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
         event EventHandler<ClientConnectedEventArgs> ClientConnected;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
         event EventHandler<AsyncReadEventArgs> ReadCompleted;
     }    
 }

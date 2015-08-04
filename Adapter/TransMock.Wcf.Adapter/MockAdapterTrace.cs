@@ -29,13 +29,15 @@ using Microsoft.ServiceModel.Channels.Common;
 
 namespace TransMock.Wcf.Adapter
 {
-    // Use WCFMockAdapterUtilities.Trace in the code to trace the adapter
-    public class MockAdapterUtilities
-    {
-        //
-        // Initializes a new instane of  Microsoft.ServiceModel.Channels.Common.AdapterTrace using the specified name for the source
-        //
-        static AdapterTrace trace = new AdapterTrace("MockAdapter");
+    /// <summary>
+    /// Use MockAdapterUtilities.Trace in the code to trace the adapter
+    /// </summary> 
+    public static class MockAdapterUtilities
+    {        
+        /// <summary>
+        /// Initializes a new instance of Microsoft.ServiceModel.Channels.Common.AdapterTrace  using the specified name for the source 
+        /// </summary>
+        private static AdapterTrace trace = new AdapterTrace("MockAdapter");
 
         /// <summary>
         /// Gets the AdapterTrace
@@ -47,9 +49,5 @@ namespace TransMock.Wcf.Adapter
                 return trace;
             }
         }
-
     }
-
-
 }
-

@@ -22,34 +22,51 @@
 #region Using Directives
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IdentityModel.Selectors;
 using System.ServiceModel.Description;
+using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
 namespace TransMock.Wcf.Adapter
 {
+    /// <summary>
+    /// The mock adapter connection factory class
+    /// </summary>
     public class MockAdapterConnectionFactory : IConnectionFactory
     {
         #region Private Fields
 
-        // Stores the client credentials
+        /// <summary>
+        /// Stores the client credentials
+        /// </summary> 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields",
+            Justification = "Needed as per design")]
         private ClientCredentials clientCredentials;
-        // Stores the adapter class
+
+        /// <summary>
+        /// Stores the adapter class
+        /// </summary> 
         private MockAdapter adapter;
-        //The connection URI
+        
+        /// <summary>
+        /// The connection URI
+        /// </summary>
         private MockAdapterConnectionUri connectionUri;
 
         #endregion Private Fields
 
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapterConnectionFactory class
+        /// Initializes a new instance of the <see cref="MockAdapterConnectionFactory"/> class
         /// </summary>
-        public MockAdapterConnectionFactory(ConnectionUri connectionUri
-            , ClientCredentials clientCredentials
-            , MockAdapter adapter)
+        /// <param name="connectionUri">The connection Uri</param>        
+        /// <param name="clientCredentials">THe client credentials for the adapter connection</param>
+        /// <param name="adapter">The adapter instance</param>
+        public MockAdapterConnectionFactory(
+            ConnectionUri connectionUri,
+            ClientCredentials clientCredentials,
+            MockAdapter adapter)
         {
             this.clientCredentials = clientCredentials;
             this.adapter = adapter;
@@ -69,7 +86,11 @@ namespace TransMock.Wcf.Adapter
             }
         }
 
-        public MockAdapterConnectionUri ConnectionUri {
+        /// <summary>
+        /// Gets the adapter connection Uri
+        /// </summary>
+        public MockAdapterConnectionUri ConnectionUri 
+        {
             get
             {
                 return this.connectionUri;
@@ -83,6 +104,7 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Creates the connection to the target system
         /// </summary>
+        /// <returns>An instance of the adapter connection</returns>
         public IConnection CreateConnection()
         {
             return new MockAdapterConnection(this);

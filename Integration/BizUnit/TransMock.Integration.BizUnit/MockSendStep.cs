@@ -31,7 +31,7 @@ namespace TransMock.Integration.BizUnit
     /// <summary>
     /// Implements the logic for sending a message to a one way endpoing utilizing the mock adapter
     /// </summary>
-    public class MockSendStep : MockStepBase
+    public class MockSendStep : MockStepBase, IDisposable
     {
         /// <summary>
         /// The path to the file containing the request to be sent
@@ -122,6 +122,19 @@ namespace TransMock.Integration.BizUnit
                 "TransMock.Integration.BizUnit.MockSendStep");    
         }
 
-        
+        #region IDisposable methdos
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
+
+        protected virtual void Dispose(bool disposeAll)
+        {
+            if (pipeClient != null)
+            {
+                pipeClient.Dispose();
+            }
+        }
     }
 }

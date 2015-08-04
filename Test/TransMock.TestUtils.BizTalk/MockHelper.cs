@@ -111,9 +111,8 @@ namespace TransMock.TestUtils.BizTalk
                     beaconClient.Connect(10);
                     //Closing the stream immediately after connecting
 
-                    System.Diagnostics.Debug.WriteLine("Disonnecting from the beacon");
+                    System.Diagnostics.Debug.WriteLine("Disonnecting from the beacon");                   
                     
-                    beaconClient.Close();
                 }
 
                 return true;

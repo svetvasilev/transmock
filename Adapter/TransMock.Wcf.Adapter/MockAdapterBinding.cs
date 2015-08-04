@@ -22,74 +22,77 @@
 #region Using Directives
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
+using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
 namespace TransMock.Wcf.Adapter
 {
+    /// <summary>
+    /// The mock adapter binding class
+    /// </summary>
     public class MockAdapterBinding : AdapterBinding
-    {
-        // Scheme in Binding does not have to be the same as Adapter Scheme. 
-        // Over write this value as appropriate.
-        private const string BindingScheme = "mock";
-
+    {        
         /// <summary>
-        /// Initializes a new instance of the AdapterBinding class
+        /// The binding scheme
         /// </summary>
-        public MockAdapterBinding() { }
-
-        /// <summary>
-        /// Initializes a new instance of the AdapterBinding class with a configuration name
-        /// </summary>
-        public MockAdapterBinding(string configName)
-        {
-            ApplyConfiguration(configName);
-        }
-
-        /// <summary>
-        /// Applies the current configuration to the WCFMockAdapterBindingCollectionElement
-        /// </summary>
-        private void ApplyConfiguration(string configurationName)
-        {   
-            BindingsSection bindingsSection = (BindingsSection)System.Configuration.ConfigurationManager.GetSection("system.serviceModel/bindings");
-            MockAdapterBindingCollectionElement bindingCollectionElement = (MockAdapterBindingCollectionElement)bindingsSection["mockBinding"];
-            MockAdapterBindingElement element = bindingCollectionElement.Bindings[configurationName];
-            if (element != null)
-            {
-                MockAdapterUtilities.Trace.Trace(System.Diagnostics.TraceEventType.Information,
-                    "1007", "Applying binding configuration");
-
-                element.ApplyConfiguration(this);
-            }
-            
-         }
-
-
+        private const string BindingScheme = "mock";        
 
         #region Private Fields
-
+        /// <summary>
+        /// The mock adapter binding
+        /// </summary>
         private MockAdapter binding;
 
         #endregion Private Fields
 
         #region Custom Generated Fields        
-
+        /// <summary>
+        /// The host name
+        /// </summary>
         private string host;
 
+        /// <summary>
+        /// The system endpoint name
+        /// </summary>
         private string systemEndpoint;
 
+        /// <summary>
+        /// The operation name
+        /// </summary>
         private string operation;
 
+        /// <summary>
+        /// The encoding name used for message serialization
+        /// </summary>
         private string encoding;
 
+        /// <summary>
+        /// The list of adapter properties for promotion
+        /// </summary>
         private string promotedProperties;
 
         #endregion Custom Generated Fields
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockAdapterBinding"/> class
+        /// </summary>
+        public MockAdapterBinding()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockAdapterBinding"/> class with a configuration name
+        /// </summary>
+        /// <param name="configName">The configuration name to be used to configure the adapter binding instance with</param>
+        public MockAdapterBinding(string configName)
+        {
+            this.ApplyConfiguration(configName);
+        }        
 
         #region Public Properties
 
@@ -151,7 +154,9 @@ namespace TransMock.Wcf.Adapter
         #endregion Public Properties
 
         #region Custom Generated Properties
-
+        /// <summary>
+        /// Gets or sets the host name for the connection
+        /// </summary>
         [System.Configuration.ConfigurationProperty("Host", DefaultValue = "localhost")]
         public string Host
         {
@@ -159,12 +164,16 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.host;
             }
+
             set
             {
                 this.host = value;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the system endpoint
+        /// </summary>
         [System.Configuration.ConfigurationProperty("SystemEndpoint", DefaultValue = "")]
         public string SystemEndpoint
         {
@@ -172,12 +181,16 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.systemEndpoint;
             }
+
             set
             {
                 this.systemEndpoint = value;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the operation name for a given system endpoint
+        /// </summary>
         [System.Configuration.ConfigurationProperty("Operation", DefaultValue = "")]
         public string Operation
         {
@@ -185,13 +198,16 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.operation;
             }
+
             set
             {
                 this.operation = value;
             }
         }
 
-
+        /// <summary>
+        /// Gets or sets the encoding to be used for message serialization
+        /// </summary>
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding
         {
@@ -199,14 +215,16 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.encoding;
             }
+
             set
             {
                 this.encoding = value;
             }
         }
 
-
-
+        /// <summary>
+        /// Gets or sets the list of promoted properties for the original adapter
+        /// </summary>
         [System.Configuration.ConfigurationProperty("PromotedProperties")]
         public string PromotedProperties
         {
@@ -214,6 +232,7 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.promotedProperties;
             }
+
             set
             {
                 this.promotedProperties = value;
@@ -223,17 +242,22 @@ namespace TransMock.Wcf.Adapter
         #endregion Custom Generated Properties
 
         #region Private Properties
-
+        /// <summary>
+        /// Gets the binding element instance
+        /// </summary>
         private MockAdapter BindingElement
         {
             get
             {
-                if (binding == null)
-                    binding = new MockAdapter();
+                if (this.binding == null)
+                {
+                    this.binding = new MockAdapter();
+                }
                 
-                binding.Encoding = this.Encoding;
-                binding.PromotedProperties = this.PromotedProperties;
-                return binding;
+                this.binding.Encoding = this.Encoding;
+                this.binding.PromotedProperties = this.PromotedProperties;
+
+                return this.binding;
             }
         }
 
@@ -244,16 +268,43 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Creates a clone of the existing BindingElement and returns it
         /// </summary>
+        /// <returns>An instance of the binding element collection</returns>
         public override BindingElementCollection CreateBindingElements()
         {
             BindingElementCollection bindingElements = new BindingElementCollection();
-            //Only create once
+
+            // Only create once
             bindingElements.Add(this.BindingElement);
-            //Return the clone
+            
+            // Return the clone
             return bindingElements.Clone();
         }
 
         #endregion Public Methods
 
+        #region Private methods
+
+        /// <summary>
+        /// Applies the current configuration to the WCFMockAdapterBindingCollectionElement
+        /// </summary>
+        /// <param name="configurationName">The configuration name to be used to configure the adapter binding instance with</param>
+        private void ApplyConfiguration(string configurationName)
+        {
+            BindingsSection bindingsSection = (BindingsSection)System.Configuration.ConfigurationManager.GetSection("system.serviceModel/bindings");
+            MockAdapterBindingCollectionElement bindingCollectionElement = (MockAdapterBindingCollectionElement)bindingsSection["mockBinding"];
+            MockAdapterBindingElement element = bindingCollectionElement.Bindings[configurationName];
+
+            if (element != null)
+            {
+                MockAdapterUtilities.Trace.Trace(
+                    System.Diagnostics.TraceEventType.Information,
+                    "1007", 
+                    "Applying binding configuration");
+
+                element.ApplyConfiguration(this);
+            }
+        }
+
+        #endregion        
     }
 }

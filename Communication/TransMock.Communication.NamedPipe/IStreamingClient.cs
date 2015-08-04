@@ -31,7 +31,7 @@ namespace TransMock.Communication.NamedPipes
     /// <summary>
     /// Defines the operations of a streaming client
     /// </summary>
-    public interface IStreamingClient
+    public interface IStreamingClient : IDisposable
     {
         bool Connect();
 

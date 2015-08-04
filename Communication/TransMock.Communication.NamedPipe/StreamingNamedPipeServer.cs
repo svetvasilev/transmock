@@ -546,6 +546,26 @@ namespace TransMock.Communication.NamedPipes
                 serverStopEvent.Set();
             }
         }
+
+        #region IDisposable implementation
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
+
+        protected virtual void Dispose(bool disposeAll)
+        {
+            System.Diagnostics.Trace.WriteLine("Dispose() called",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeServer");
+
+            serverStopEvent.Dispose();
+            pipeSyncLock = null;
+            pipeServerConnections = null;
+
+            System.Diagnostics.Trace.WriteLine("Dispose() succeeded",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeServer");
+        }
     }
 
    

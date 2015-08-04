@@ -34,7 +34,7 @@ namespace TransMock.Integration.BizUnit
     /// Implements the logic for receiving a message from a one way enpoint
     /// which is utilizing the mock adapter.
     /// </summary>
-    public class MockReceiveStep : MockStepBase
+    public class MockReceiveStep : MockStepBase, IDisposable
     {        
         protected IAsyncStreamingServer pipeServer;
         protected MemoryStream inStream;
@@ -131,5 +131,26 @@ namespace TransMock.Integration.BizUnit
                 Monitor.Pulse(syncRoot);
             }
         }
+
+        #region IDisposable methdos
+        public void Dispose()
+        {
+            Dispose(true);
+        }        
+        #endregion
+
+        protected virtual void Dispose(bool disposeAll)
+        {
+            if (pipeServer != null)
+            {
+                pipeServer.Dispose();
+            }
+
+            if (inStream != null)
+            {
+                inStream.Dispose();
+            }
+        }
+
     }
 }

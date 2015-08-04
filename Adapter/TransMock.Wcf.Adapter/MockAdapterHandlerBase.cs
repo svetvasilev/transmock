@@ -29,24 +29,40 @@ using Microsoft.ServiceModel.Channels.Common;
 
 namespace TransMock.Wcf.Adapter
 {
-    public abstract class MockAdapterHandlerBase
+    /// <summary>
+    /// The base class for the mock adapter handlers
+    /// </summary>
+    public abstract class MockAdapterHandlerBase : IDisposable
     {
         #region Private Fields
-
+        /// <summary>
+        /// The connection for the mock adapter
+        /// </summary>
         private MockAdapterConnection connection;
+
+        /// <summary>
+        /// The metadata lookup object
+        /// </summary>
         private MetadataLookup metadataLookup;
 
         #endregion Private Fields
-
-        protected MockAdapterHandlerBase(MockAdapterConnection connection
-            , MetadataLookup metadataLookup)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockAdapterHandlerBase"/> class
+        /// </summary>
+        /// <param name="connection">The mock adapter connection instance</param>
+        /// <param name="metadataLookup">The instance of the metadata lookup object</param>
+        protected MockAdapterHandlerBase(
+            MockAdapterConnection connection,
+            MetadataLookup metadataLookup)
         {
             this.connection = connection;
             this.metadataLookup = metadataLookup;
         }
 
         #region Public Properties
-
+        /// <summary>
+        /// Gets the adapter connection
+        /// </summary>
         public MockAdapterConnection Connection
         {
             get
@@ -55,6 +71,9 @@ namespace TransMock.Wcf.Adapter
             }
         }
 
+        /// <summary>
+        /// Gets the metadata lookup object
+        /// </summary>
         public MetadataLookup MetadataLookup
         {
             get
@@ -66,22 +85,22 @@ namespace TransMock.Wcf.Adapter
         #endregion Public Properties
 
         #region IDisposable
-
+        /// <summary>
+        /// Disposes the object instance
+        /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         #endregion IDisposable
-
+        /// <summary>
+        /// Disposes the object
+        /// </summary>
+        /// <param name="disposing">Governs how the object shall be disposed</param>
         protected virtual void Dispose(bool disposing)
-        {
-            //
-            //TODO: Implement Dispose. Override this method in respective Handler classes
-            //
-            
+        {   
         }
     }
 }
-

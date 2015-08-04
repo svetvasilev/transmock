@@ -75,7 +75,9 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AdapterProperty.cs" />
     <Compile Include="AdapterPropertyParser.cs" />
+    <Compile Include="MessageConnectionPair.cs" />
     <Compile Include="MockAdapter.cs" />
     <Compile Include="MockAdapterBinding.cs" />
     <Compile Include="MockAdapterBindingElement.cs" />
@@ -84,11 +86,13 @@
     <Compile Include="MockAdapterConnection.cs" />
     <Compile Include="MockAdapterHandlerBase.cs" />
     <Compile Include="MockAdapterInboundHandler.cs" />
+    <Compile Include="MockAdapterInboundReply.cs" />
     <Compile Include="MockAdapterOutboundHandler.cs" />
     <Compile Include="MockAdapterBindingCollectionElement.cs" />
     <Compile Include="MockAdapterTrace.cs" />
     <Compile Include="MockAdapterConnectionUri.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TimeoutHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />

@@ -11,7 +11,7 @@ namespace TransMock.Integration.BizUnit
     /// Implements beacon like functionality for enabling any process to be able to identify 
     /// whether a TransMock test case is currently being executed
     /// </summary>
-    public class TransMockExecutionBeacon
+    public class TransMockExecutionBeacon : IDisposable
     {
         private NamedPipeServerStream beaconServer;
         
@@ -113,8 +113,7 @@ namespace TransMock.Integration.BizUnit
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.StopBeacon() called.");
 
                 if (beaconServer != null)
-                {
-                    //beaconServer.EndWaitForConnection(connectResult);
+                {                    
                     beaconServer.Close();
 
                     beaconServer = null;
@@ -187,6 +186,21 @@ namespace TransMock.Integration.BizUnit
 
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.ClientConnected() threw an exception: " +
                     ex.Message);
+            }
+        }
+
+        #region IDisposable methdos
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
+
+        protected virtual void Dispose(bool disposeAll)
+        {
+            if (beaconServer != null)
+            {
+                beaconServer.Dispose();
             }
         }
     }

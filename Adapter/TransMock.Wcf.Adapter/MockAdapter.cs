@@ -22,34 +22,48 @@
 #region Using Directives
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.ServiceModel.Description;
+using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
 namespace TransMock.Wcf.Adapter
 {
+    /// <summary>
+    /// The mock adapter class
+    /// </summary>
     public class MockAdapter : Microsoft.ServiceModel.Channels.Common.Adapter
     {
-        // Scheme associated with the adapter
+        /// <summary>
+        /// Scheme associated with the adapter
+        /// </summary> 
         internal const string SCHEME = "mock";
-        // Namespace for the proxy that will be generated from the adapter schema
+
+        /// <summary>
+        /// Namespace for the proxy that will be generated from the adapter schema
+        /// </summary> 
         internal const string SERVICENAMESPACE = "http://www.transmock.com/Wcf/Adapter";
-        // Initializes the AdapterEnvironmentSettings class
+
+        /// <summary>
+        /// Initializes the AdapterEnvironmentSettings class
+        /// </summary> 
         private static AdapterEnvironmentSettings environmentSettings = new AdapterEnvironmentSettings();
 
         #region Custom Generated Fields
-
+        /// <summary>
+        /// The encoding used by the adapter
+        /// </summary>
         private string encoding;
 
-
+        /// <summary>
+        /// A list of separated by a delimiter adapter properties for promotion
+        /// </summary>
         private string promotedProperties;
 
         #endregion Custom Generated Fields
 
         #region  Constructor
-
         /// <summary>
         /// Initializes a new instance of the MockAdapter class
         /// </summary>
@@ -62,9 +76,15 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Initializes a new instance of the MockAdapter class with a binding
         /// </summary>
+        /// <param name="binding">The binding instance from which the adapter will be initialized</param>
         public MockAdapter(MockAdapter binding)
             : base(binding)
-        {   
+        {
+            if (binding == null)
+            {
+                throw new ArgumentNullException("binding");                
+            }
+
             this.Encoding = binding.Encoding;
             this.PromotedProperties = binding.PromotedProperties;
         }
@@ -73,21 +93,26 @@ namespace TransMock.Wcf.Adapter
 
         #region Custom Generated Properties
 
+        /// <summary>
+        /// Gets or sets the encoding to be used for the messages
+        /// </summary>
         [System.Configuration.ConfigurationProperty("Encoding")]
         public string Encoding
-        {
+        {            
             get
             {
                 return this.encoding;
             }
+
             set
             {
                 this.encoding = value;
             }
         }
 
-
-
+        /// <summary>
+        /// Gets or sets the list of promoted properties of the actual adapter
+        /// </summary>
         [System.Configuration.ConfigurationProperty("PromotedProperties")]
         public string PromotedProperties
         {
@@ -95,6 +120,7 @@ namespace TransMock.Wcf.Adapter
             {
                 return this.promotedProperties;
             }
+
             set
             {
                 this.promotedProperties = value;
@@ -119,46 +145,6 @@ namespace TransMock.Wcf.Adapter
         #endregion Public Properties
 
         #region Protected Methods
-
-        /// <summary>
-        /// Creates a ConnectionUri instance from the provided Uri
-        /// </summary>
-        protected override ConnectionUri BuildConnectionUri(Uri uri)
-        {
-            return new MockAdapterConnectionUri(uri);
-        }
-
-        /// <summary>
-        /// Builds a connection factory from the ConnectionUri and ClientCredentials
-        /// </summary>
-        protected override IConnectionFactory BuildConnectionFactory(
-            ConnectionUri connectionUri
-            , ClientCredentials clientCredentials
-            , System.ServiceModel.Channels.BindingContext context)
-        {
-            return new MockAdapterConnectionFactory(connectionUri, clientCredentials, this);
-        }
-
-        /// <summary>
-        /// Returns a clone of the adapter object
-        /// </summary>
-        protected override Microsoft.ServiceModel.Channels.Common.Adapter CloneAdapter()
-        {
-            return new MockAdapter(this);
-        }
-
-        /// <summary>
-        /// Indicates whether the provided TConnectionHandler is supported by the adapter or not
-        /// </summary>
-        protected override bool IsHandlerSupported<TConnectionHandler>()
-        {
-            return (
-                  //typeof(IAsyncOutboundHandler) == typeof(TConnectionHandler)
-                typeof(IOutboundHandler) == typeof(TConnectionHandler)
-                //|| typeof(IAsyncInboundHandler) == typeof(TConnectionHandler)
-                || typeof(IInboundHandler) == typeof(TConnectionHandler));
-        }
-
         /// <summary>
         /// Gets the namespace that is used when generating schema and WSDL
         /// </summary>
@@ -169,6 +155,52 @@ namespace TransMock.Wcf.Adapter
                 return SERVICENAMESPACE;
             }
         }
+
+        /// <summary>
+        /// Creates a ConnectionUri instance from the provided Uri
+        /// </summary>
+        /// <param name="uri">The connection Uri</param>
+        /// <returns>An instance of the connection Uri</returns>
+        protected override ConnectionUri BuildConnectionUri(Uri uri)
+        {
+            return new MockAdapterConnectionUri(uri);
+        }
+
+        /// <summary>
+        /// Builds a connection factory from the ConnectionUri and ClientCredentials
+        /// </summary>
+        /// <param name="connectionUri">The connection Uri</param>
+        /// <param name="clientCredentials">The client credentials for the connection</param>
+        /// <param name="context">The binding context</param>
+        /// <returns>An instance of the connection factory</returns>
+        protected override IConnectionFactory BuildConnectionFactory(
+            ConnectionUri connectionUri,
+            ClientCredentials clientCredentials,
+            System.ServiceModel.Channels.BindingContext context)
+        {
+            return new MockAdapterConnectionFactory(connectionUri, clientCredentials, this);
+        }
+
+        /// <summary>
+        /// Returns a clone of the adapter object
+        /// </summary>
+        /// <returns>An instance of the mock adapter</returns>
+        protected override Microsoft.ServiceModel.Channels.Common.Adapter CloneAdapter()
+        {
+            return new MockAdapter(this);
+        }
+
+        /// <summary>
+        /// Indicates whether the provided TConnectionHandler is supported by the adapter or not
+        /// </summary>
+        /// <typeparam name="TConnectionHandler">The connection handler type</typeparam>
+        /// <returns>A boolean value indicating whether the handler type provided as a template parameter is supported</returns>
+        protected override bool IsHandlerSupported<TConnectionHandler>()
+        {
+            return                  
+                typeof(IOutboundHandler) == typeof(TConnectionHandler)                
+                || typeof(IInboundHandler) == typeof(TConnectionHandler);
+        }        
 
         #endregion Protected Methods
     }

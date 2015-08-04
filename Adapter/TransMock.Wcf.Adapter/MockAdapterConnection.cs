@@ -21,8 +21,8 @@
 
 #region Using Directives
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
@@ -30,18 +30,28 @@ using Microsoft.ServiceModel.Channels.Common;
 
 namespace TransMock.Wcf.Adapter
 {
+    /// <summary>
+    /// The mock adapter connection class
+    /// </summary>
     public class MockAdapterConnection : IConnection
     {
         #region Private Fields
-
+        /// <summary>
+        /// The connection factory for the mock adapter
+        /// </summary>
         private MockAdapterConnectionFactory connectionFactory;
+
+        /// <summary>
+        /// The connection Id
+        /// </summary>
         private string connectionId;
 
         #endregion Private Fields
 
         /// <summary>
-        /// Initializes a new instance of the WCFMockAdapterConnection class with the WCFMockAdapterConnectionFactory
+        /// Initializes a new instance of the <see cref="MockAdapterConnection"/> class with the WCFMockAdapterConnectionFactory
         /// </summary>
+        /// <param name="connectionFactory">The connection factory instance</param>
         public MockAdapterConnection(MockAdapterConnectionFactory connectionFactory)
         {
             this.connectionFactory = connectionFactory;
@@ -63,43 +73,54 @@ namespace TransMock.Wcf.Adapter
 
         #endregion Public Properties
 
-        #region IConnection Members
+        #region IConnection Members        
 
         /// <summary>
-        /// Closes the connection to the target system
+        /// Gets the Id of the Connection
         /// </summary>
-        public void Close(TimeSpan timeout)
+        public string ConnectionId
         {
-            //
-            //TODO: Implement physical closing of the connection
-            //
-            MockAdapterUtilities.Trace.Trace(System.Diagnostics.TraceEventType.Information,
-                "1001", "Mock Connection closed");
-        }
-
-        /// <summary>
-        /// Returns a value indicating whether the connection is still valid
-        /// </summary>
-        public bool IsValid(TimeSpan timeout)
-        {
-            //
-            //TODO: Implement physical checking for the validity of the opened connection
-            //
-            return true;
-
+            get
+            {
+                return this.connectionId;
+            }
         }
 
         /// <summary>
         /// Opens the connection to the target system.
         /// </summary>
+        /// <param name="timeout">THe timeout for opening the connection</param>
         public void Open(TimeSpan timeout)
         {
-            //
-            //TODO: Implement physical opening of the connection
-            //
-            MockAdapterUtilities.Trace.Trace(System.Diagnostics.TraceEventType.Information,
-                "1001", "Mock Connection opened");
+            // Not opening the connection here, only creating trace output
+            MockAdapterUtilities.Trace.Trace(
+                System.Diagnostics.TraceEventType.Information,
+                "1001", 
+                "Mock Connection opened");
+        }
 
+        /// <summary>
+        /// Closes the connection to the target system
+        /// </summary>
+        /// <param name="timeout">The timeout for closing the connection</param>
+        public void Close(TimeSpan timeout)
+        {
+            // Not closing the connection here, only creating tracing output
+            MockAdapterUtilities.Trace.Trace(
+                System.Diagnostics.TraceEventType.Information,
+                "1001", 
+                "Mock Connection closed");
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the connection is still valid
+        /// </summary>
+        /// <param name="timeout">The time period for which the connection should be valid</param>
+        /// <returns>A boolean indicating whether the connection is still valid</returns>
+        public bool IsValid(TimeSpan timeout)
+        {
+            // Always return true
+            return true;
         }
 
         /// <summary>
@@ -107,32 +128,29 @@ namespace TransMock.Wcf.Adapter
         /// </summary>
         public void ClearContext()
         {
-            //
-            //TODO: Implement clear context to set the connection back to the pool.
-            //
-            MockAdapterUtilities.Trace.Trace(System.Diagnostics.TraceEventType.Information,
-                "1001", "Mock connection ClearContex invoked");
+            // Only creating trace output
+            MockAdapterUtilities.Trace.Trace(
+                System.Diagnostics.TraceEventType.Information,
+                "1001", 
+                "Mock connection ClearContex invoked");
         }
 
         /// <summary>
         /// Builds a new instance of the specified IConnectionHandler type
         /// </summary>
+        /// <param name="metadataLookup">The meta data lookup object</param>
+        /// <typeparam name="TConnectionHandler">The type of the connection handler</typeparam>
+        /// <returns>An instance of an adapter handler</returns>        
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+            Justification = "Need to return the object instances the method creates to be used elsewhere in the code")]
         public TConnectionHandler BuildHandler<TConnectionHandler>(MetadataLookup metadataLookup)
              where TConnectionHandler : class, IConnectionHandler
-        {
-
-            //if (typeof(IAsyncOutboundHandler).IsAssignableFrom(typeof(TConnectionHandler)))
-            //{
-            //    return new WCFMockAdapterAsyncOutboundHandler(this, metadataLookup) as TConnectionHandler;
-            //}
+        {           
             if (typeof(IOutboundHandler).IsAssignableFrom(typeof(TConnectionHandler)))
             {
                 return new MockAdapterOutboundHandler(this, metadataLookup) as TConnectionHandler;
             }
-            //if (typeof(IAsyncInboundHandler).IsAssignableFrom(typeof(TConnectionHandler)))
-            //{
-            //    return new WCFMockAdapterAsyncInboundHandler(this, metadataLookup) as TConnectionHandler;
-            //}
+            
             if (typeof(IInboundHandler).IsAssignableFrom(typeof(TConnectionHandler)))
             {
                 return new MockAdapterInboundHandler(this, metadataLookup) as TConnectionHandler;
@@ -146,24 +164,11 @@ namespace TransMock.Wcf.Adapter
         /// </summary>
         public void Abort()
         {
-            //
-            //TODO: Implement abort logic. DO NOT throw an exception from this method
-            //
-            MockAdapterUtilities.Trace.Trace(System.Diagnostics.TraceEventType.Information,
-                "1001", "Mock Abort invoked");
-            
-        }
-
-
-        /// <summary>
-        /// Gets the Id of the Connection
-        /// </summary>
-        public String ConnectionId
-        {
-            get
-            {
-                return connectionId;
-            }
+            // Not aborting the connection here, only creating trace output
+            MockAdapterUtilities.Trace.Trace(
+                System.Diagnostics.TraceEventType.Information,
+                "1001", 
+                "Mock Abort invoked");            
         }
 
         #endregion IConnection Members

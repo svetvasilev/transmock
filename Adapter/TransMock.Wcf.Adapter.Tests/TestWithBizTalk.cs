@@ -35,16 +35,21 @@ namespace TransMock.Wcf.Adapter.Tests
     /// on a local BizTalk server instance. Please import the bindings included in the project to create the application
     /// and make sure it is started prior to executing the tests.
     /// </summary>
-    [TestClass]
+    [TestClass]    
     public class TestWithBizTalk
     {
         [TestMethod]
+        [TestCategory("BizTalk Tests")]
         public void TestOneWay_XML()
         {
             PipeSecurity ps = new PipeSecurity();
-            ps.AddAccessRule(new PipeAccessRule("USERS", PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite, 
-               System.Security.AccessControl.AccessControlType.Allow));
-            ////We first spin a pipe server to make sure that the send port will be able to connect
+            ps.AddAccessRule(
+                new PipeAccessRule(
+                    "USERS", 
+                    PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite, 
+                    System.Security.AccessControl.AccessControlType.Allow));
+            
+            // We first spin a pipe server to make sure that the send port will be able to connect
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                 "OneWaySend", PipeDirection.InOut, 1,
                 PipeTransmissionMode.Byte, PipeOptions.Asynchronous,
@@ -79,6 +84,7 @@ namespace TransMock.Wcf.Adapter.Tests
         }
 
         [TestMethod]
+        [TestCategory("BizTalk Tests")]
         public void TestOneWay_FlatFile()
         {
             PipeSecurity ps = new PipeSecurity();
@@ -119,6 +125,7 @@ namespace TransMock.Wcf.Adapter.Tests
         }
 
         [TestMethod]
+        [TestCategory("BizTalk Tests")]
         public void TestOneWay_FlatFile_ASCII()
         {
             PipeSecurity ps = new PipeSecurity();
@@ -159,6 +166,7 @@ namespace TransMock.Wcf.Adapter.Tests
         }
 
         [TestMethod]
+        [TestCategory("BizTalk Tests")]
         public void TestOneWay_FlatFile_ISO88591()
         {
             PipeSecurity ps = new PipeSecurity();
@@ -199,6 +207,7 @@ namespace TransMock.Wcf.Adapter.Tests
         }
 
         [TestMethod]
+        [TestCategory("BizTalk Tests")]
         public void TestTwoWay_XML()
         {
             PipeSecurity ps = new PipeSecurity();

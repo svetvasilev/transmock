@@ -32,7 +32,7 @@ namespace TransMock.Communication.NamedPipes
     /// <summary>
     /// This class implements the logic of a client streaming data over named pipe
     /// </summary>
-    public class StreamingNamedPipeClient : IStreamingClient, IDisposable
+    public class StreamingNamedPipeClient : IStreamingClient
     {
         protected NamedPipeClientStream pipeClient;        
 
@@ -272,6 +272,11 @@ namespace TransMock.Communication.NamedPipes
         #endregion
         
         public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposeAll)
         {
             System.Diagnostics.Trace.WriteLine("Dispose() called",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
