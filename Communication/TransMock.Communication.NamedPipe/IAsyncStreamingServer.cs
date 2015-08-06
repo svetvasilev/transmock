@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-
-/***************************************
+﻿/***************************************
 //   Copyright 2014 - Svetoslav Vasilev
 
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +19,12 @@ using System.IO;
 /// Description :  This interface defines the operations of an asyncronous streaming server.
 /// -----------------------------------------------------------------------------------------------------------
 /// 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
@@ -34,20 +33,52 @@ namespace TransMock.Communication.NamedPipes
     /// </summary>
     public interface IAsyncStreamingServer : IDisposable
     {
-        bool Start();
-
-        void Stop();
-
-        void Disconnect(int connectionId);       
-
-        void WriteAllBytes(int connectionId, byte[] data);
-
-        void WriteStream(int connectionId, Stream data);
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
+        /// <summary>
+        /// Event indicating when a client connection has been established
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly",
+            Justification = "Incompatibility with generic event handlers")]
         event EventHandler<ClientConnectedEventArgs> ClientConnected;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
+        /// <summary>
+        /// Event indicating when all the data from a client has been read
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly",
+            Justification = "Incompatibility with generic event handlers")]
         event EventHandler<AsyncReadEventArgs> ReadCompleted;
+
+        /// <summary>
+        /// Starts the server
+        /// </summary>
+        /// <returns>A boolean indicating of whether the server started successfully or not</returns>
+        bool Start();
+
+        /// <summary>
+        /// Stops the server
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// Disconnects a specific client form the server
+        /// </summary>
+        /// <param name="connectionId">The id of the client connection to be disconnected</param>
+        void Disconnect(int connectionId);       
+
+        /// <summary>
+        /// Writes all bytes to the specified client connection
+        /// </summary>
+        /// <param name="connectionId">The id of the client connection to write the data to</param>
+        /// <param name="data">The data to be written to the client as an array of bytes</param>
+        void WriteAllBytes(int connectionId, byte[] data);
+
+        /// <summary>
+        /// Writes the provided stream's contents to the specified client connection
+        /// </summary>
+        /// <param name="connectionId">The id of the client connection to write the data to</param>
+        /// <param name="data">The data to be written to the client as a stream</param>
+        void WriteStream(int connectionId, Stream data);
     }    
 }

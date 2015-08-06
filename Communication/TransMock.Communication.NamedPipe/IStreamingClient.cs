@@ -21,10 +21,10 @@
 /// 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace TransMock.Communication.NamedPipes
 {
@@ -33,18 +33,46 @@ namespace TransMock.Communication.NamedPipes
     /// </summary>
     public interface IStreamingClient : IDisposable
     {
+        /// <summary>
+        /// Connects the client to a server endpoint
+        /// </summary>
+        /// <returns>True if the connection was successfully established. Otherwise false</returns>
         bool Connect();
 
+        /// <summary>
+        /// Connects the client to a server endpoint within a defined time period
+        /// </summary>
+        /// <param name="timeoutMilliseconds">The time period in milliseconds allotted to open the connection</param>
+        /// <returns>True if the connection was successfully established. Otherwise false</returns>
         bool Connect(int timeoutMilliseconds);
 
+        /// <summary>
+        /// Disconnects the client from a server endpoint
+        /// </summary>
         void Disconnect();
 
+        /// <summary>
+        /// Reads all the bytes sent from the server named pipe end point
+        /// </summary>
+        /// <returns>An array of bytes that were read from the server</returns>
         byte[] ReadAllBytes();
 
+        /// <summary>
+        /// Reads the data sent from the server named pipe endpoint as a stream
+        /// </summary>
+        /// <returns>The stream object containing the data read from the server</returns>
         Stream ReadStream();
 
+        /// <summary>
+        /// Writes all the bytes provided to the stream and sends them to the server named pipe endpoint
+        /// </summary>
+        /// <param name="data">Array of bytes containing all the data that is to be sent to the server</param>
         void WriteAllBytes(byte[] data);
 
+        /// <summary>
+        /// Writes the data from the provided stream to the server named pipe endpoint
+        /// </summary>
+        /// <param name="data">The stream containing all the data to be sent to the server</param>
         void WriteStream(Stream data);
     }
 }
