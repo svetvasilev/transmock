@@ -16,10 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Text;
 
 using BizUnit;
 using BizUnit.Xaml;
@@ -27,61 +27,80 @@ using BizUnit.Xaml;
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
-    /// Implements the logic for sending a request and receiving a syncrounous response
+    /// Implements the logic for sending a request and receiving a synchronous response
     /// from a 2-way endpoint utilizing the mock adapter
     /// </summary>
     public class MockSolicitResponseStep : MockSendStep
     {
+        /// <summary>
+        /// The stream containing the response data
+        /// </summary>
         private Stream responseDataStream;
 
+        /// <summary>
+        /// Executes the step
+        /// </summary>
+        /// <param name="context">The BizUnit execution context</param>
         public override void Execute(Context context)
         {
             try
             {
                 base.Execute(context);
 
-                System.Diagnostics.Debug.WriteLine("Executing the substeps",
-                        "TransMock.Integration.BizUnit.MockSolicitResponseStep");
+                System.Diagnostics.Debug.WriteLine(
+                    "Executing the substeps",
+                    "TransMock.Integration.BizUnit.MockSolicitResponseStep");
 
-                foreach (var subStep in SubSteps)
+                foreach (var subStep in this.SubSteps)
                 {
-                    subStep.Execute(responseDataStream,
+                    subStep.Execute(
+                        this.responseDataStream,
                         context);
                 }
             }
             finally
             {
-                if (responseDataStream != null)
+                if (this.responseDataStream != null)
                 {
-                    responseDataStream.Dispose();
+                    this.responseDataStream.Dispose();
                 }
-            }
-            
+            }            
         }
 
+        /// <summary>
+        /// Validates the step before execution
+        /// </summary>
+        /// <param name="context">The BizUnit execution context</param>
         public override void Validate(Context context)
         {
-            //Call the base class implementation in order to validate the required properties
-            base.Validate(context);
-            
+            // Call the base class implementation in order to validate the required properties
+            base.Validate(context);            
         }
 
+        /// <summary>
+        /// Receives a response message from the server
+        /// </summary>
+        /// <param name="context">The BizUnit execution context</param>
         protected override void ReceiveResponse(Context context)
         {
             context.LogInfo("Waiting to read the response from the endpoint");
 
-            System.Diagnostics.Trace.WriteLine("Reading the response from the endpoint",
+            System.Diagnostics.Trace.WriteLine(
+                "Reading the response from the endpoint",
                 "TransMock.Integration.BizUnit.MockSolicitResponseStep");
 
             context.LogInfo("Reading the response from the endpoint");
 
-            responseDataStream = pipeClient.ReadStream();
+            this.responseDataStream = this.pipeClient.ReadStream();
 
-            System.Diagnostics.Debug.WriteLine("Response read!",
+            System.Diagnostics.Debug.WriteLine(
+                "Response read!",
                     "TransMock.Integration.BizUnit.MockSolicitResponseStep");
 
-            context.LogData("The response received from the mocked endpoint is:", responseDataStream, true);
-        }
-        
+            context.LogData(
+                "The response received from the mocked endpoint is:", 
+                this.responseDataStream, 
+                true);
+        }        
     }
 }

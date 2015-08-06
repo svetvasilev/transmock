@@ -16,9 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 using BizUnit;
 using BizUnit.Xaml;
@@ -26,41 +27,61 @@ using BizUnit.Xaml;
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
-    /// Implements the logic for receiving a request and sending a syncrounous response
+    /// Implements the logic for receiving a request and sending a synchronous response
     /// to a 2-way endpoint utilizing the mock adapter
     /// </summary>
     public class MockRequestResponseStep : MockReceiveStep
     {
+        /// <summary>
+        /// Gets or sets the path to the file containing the response message
+        /// </summary>
         public string ResponsePath { get; set; }
 
+        /// <summary>
+        /// Executes the step
+        /// </summary>
+        /// <param name="context">The execution context</param>
         public override void Execute(Context context)
         {
-            base.Execute(context);
-            
+            base.Execute(context);            
         }
 
+        /// <summary>
+        /// Validates the step before execution
+        /// </summary>
+        /// <param name="context">The BizUnit execution context</param>
         public override void Validate(Context context)
         {
             base.Validate(context);
 
-            if (string.IsNullOrEmpty(ResponsePath))
+            if (string.IsNullOrEmpty(this.ResponsePath))
             {
                 throw new ArgumentException("The ResponsePath is not defined!");
             }
         }
 
+        /// <summary>
+        /// Sends a response message to the client
+        /// </summary>
+        /// <param name="context">The BizUnit execution context</param>
         protected override void SendResponse(Context context)
         {
-            //Here we supply the response
-            using (FileStream fs = File.OpenRead(ResponsePath))
+            // Here we supply the response
+            using (FileStream fs = File.OpenRead(this.ResponsePath))
             {
-                context.LogData(string.Format("Reading response content from path {0}", ResponsePath),
-                    fs, true);
-                //
-                System.Diagnostics.Debug.WriteLine("Sending response to the mocked endpoint",
+                context.LogData(
+                    string.Format(
+                        CultureInfo.CurrentUICulture,
+                            "Reading response content from path {0}", 
+                            this.ResponsePath),
+                    fs, 
+                    true);
+
+                System.Diagnostics.Debug.WriteLine(
+                    "Sending response to the mocked endpoint",
                     "TransMock.Integration.BizUnit.MockRequestResponseStep");
 
-                pipeServer.WriteStream(connectionId, fs);
+                this.pipeServer.WriteStream(this.connectionId, fs);
             }
 
             context.LogInfo("Done sending the response");

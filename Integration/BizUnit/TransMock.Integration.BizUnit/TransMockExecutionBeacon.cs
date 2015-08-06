@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO.Pipes;
 
 namespace TransMock.Integration.BizUnit
 {
@@ -13,20 +13,32 @@ namespace TransMock.Integration.BizUnit
     /// </summary>
     public class TransMockExecutionBeacon : IDisposable
     {
-        private NamedPipeServerStream beaconServer;
-        
-        private IAsyncResult connectResult;
-        
+        /// <summary>
+        /// A flag indicating whether the beacon is started
+        /// </summary>
         private static bool isStarted = false;
 
+        /// <summary>
+        /// The singleton instance of the beacon
+        /// </summary>
         private static TransMockExecutionBeacon beaconInstance;
 
         /// <summary>
+        /// Named pipe server stream instance used as a beacon
+        /// </summary>
+        private NamedPipeServerStream beaconServer;
+        
+        /// <summary>
+        /// The result of the async connect operation
+        /// </summary>
+        private IAsyncResult connectResult;        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransMockExecutionBeacon"/> class.
         /// Protected constructor in order to prevent others from being able to instantiate this class.
         /// </summary>
         protected TransMockExecutionBeacon()
         {
-
         }
 
         /// <summary>
@@ -82,6 +94,28 @@ namespace TransMock.Integration.BizUnit
             }
         }
 
+        #region IDisposable methdos
+        /// <summary>
+        /// Disposes the object
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+        #endregion
+
+        /// <summary>
+        /// Implements object specific disposal logic
+        /// </summary>
+        /// <param name="disposeAll">Indicates whether all or only managed objects will be disposed</param>
+        protected virtual void Dispose(bool disposeAll)
+        {
+            if (this.beaconServer != null)
+            {
+                this.beaconServer.Dispose();
+            }
+        }
+
         /// <summary>
         /// Starts a new beacon instance
         /// </summary>
@@ -91,7 +125,7 @@ namespace TransMock.Integration.BizUnit
             {
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.StartBeacon() called.");
                                 
-                CreatePipeServer();
+                this.CreatePipeServer();
                                 
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.StartBeacon() succeeded.");
             }
@@ -112,11 +146,11 @@ namespace TransMock.Integration.BizUnit
             {
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.StopBeacon() called.");
 
-                if (beaconServer != null)
+                if (this.beaconServer != null)
                 {                    
-                    beaconServer.Close();
+                    this.beaconServer.Close();
 
-                    beaconServer = null;
+                    this.beaconServer = null;
 
                     isStarted = false;
                 }
@@ -128,8 +162,7 @@ namespace TransMock.Integration.BizUnit
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.StopBeacon() threw exception:" + ex.Message);
 
                 throw;
-            }
-            
+            }            
         }
 
         /// <summary>
@@ -141,25 +174,31 @@ namespace TransMock.Integration.BizUnit
             
             PipeSecurity ps = new PipeSecurity();
             
-            ps.AddAccessRule(new PipeAccessRule("Users",
-                PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite, 
-                System.Security.AccessControl.AccessControlType.Allow));
+            ps.AddAccessRule(
+                new PipeAccessRule(
+                    "Users",
+                    PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite, 
+                    System.Security.AccessControl.AccessControlType.Allow));
 
-            beaconServer = new NamedPipeServerStream("TransMockBeacon",
+            this.beaconServer = new NamedPipeServerStream(
+                "TransMockBeacon",
                 PipeDirection.InOut,
                 10,
                 PipeTransmissionMode.Message,
                 PipeOptions.Asynchronous,
-                8,8, ps);
+                8,
+                8, 
+                ps);
 
             System.Diagnostics.Debug.WriteLine("Starting waiting for connection.");
 
-            connectResult = beaconServer.BeginWaitForConnection(cb => ClientConnected(cb), 
-                beaconServer);
+            this.connectResult = this.beaconServer.BeginWaitForConnection(
+                cb => this.ClientConnected(cb), 
+                this.beaconServer);
         }
 
         /// <summary>
-        /// Handler for che asynchronous connected client operation
+        /// Handler for the asynchronous connected client operation
         /// </summary>
         /// <param name="cb">The AsyncResult instance passed as a result of the operation outcome</param>
         private void ClientConnected(IAsyncResult cb)
@@ -178,29 +217,13 @@ namespace TransMock.Integration.BizUnit
 
                     System.Diagnostics.Debug.WriteLine("Disconnecting beacon client.");
 
-                    CreatePipeServer();
+                    this.CreatePipeServer();
                 }
             }
             catch (Exception ex)
             {
-
                 System.Diagnostics.Debug.WriteLine("TransMockExecutionBeacon.ClientConnected() threw an exception: " +
                     ex.Message);
-            }
-        }
-
-        #region IDisposable methdos
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
-
-        protected virtual void Dispose(bool disposeAll)
-        {
-            if (beaconServer != null)
-            {
-                beaconServer.Dispose();
             }
         }
     }

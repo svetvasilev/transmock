@@ -16,10 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Text;
 
 using BizUnit;
 using BizUnit.Xaml;
@@ -29,112 +30,154 @@ using TransMock.Communication.NamedPipes;
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
-    /// Implements the logic for sending a message to a one way endpoing utilizing the mock adapter
+    /// Implements the logic for sending a message to a one way endpoint utilizing the mock adapter
     /// </summary>
     public class MockSendStep : MockStepBase, IDisposable
     {
-        /// <summary>
-        /// The path to the file containing the request to be sent
-        /// </summary>
-        public string RequestPath { get; set; }
         /// <summary>
         /// The named pipe client stream used to communicate with the mocked endpoint
         /// </summary>
         protected StreamingNamedPipeClient pipeClient;
 
+        /// <summary>
+        /// Gets or sets the path to the file containing the request to be sent
+        /// </summary>
+        public string RequestPath { get; set; }
+        
+        /// <summary>
+        /// Executes the step's logic
+        /// </summary>
+        /// <param name="context">The execution context</param>
         public override void Execute(Context context)
         {
             try
             {
-                CreatePipeClient();
+                this.CreatePipeClient();
 
-                SendRequest(context);
+                this.SendRequest(context);
 
-                ReceiveResponse(context);
+                this.ReceiveResponse(context);
             }
             finally
             {
-                ClosePipeClient(); 
+                this.ClosePipeClient(); 
             }
         }
 
+        /// <summary>
+        /// Validates the step before execution
+        /// </summary>
+        /// <param name="context">The execution context</param>
         public override void Validate(Context context)
         {
             base.Validate(context);
 
-            if (string.IsNullOrEmpty(RequestPath))
+            if (string.IsNullOrEmpty(this.RequestPath))
             {
                 throw new ArgumentException("The RequestPath is not specified!");
             }
         }
 
-        protected virtual void CreatePipeClient()
-        {
-            System.Diagnostics.Debug.WriteLine("Creating a pipe client instance", 
-                "TransMock.Integration.BizUnit.MockSendStep");
-
-            pipeClient = new StreamingNamedPipeClient(
-                _endpointUri.Host, 
-                _endpointUri.AbsolutePath);
-
-            System.Diagnostics.Debug.WriteLine("Connecting to the pipe server", 
-                "TransMock.Integration.BizUnit.MockSendStep");
-
-            pipeClient.Connect(1000 * Timeout);
-
-            System.Diagnostics.Debug.WriteLine("Connected to the pipe server", 
-                "TransMock.Integration.BizUnit.MockSendStep");
-        }
-
-        protected virtual void  SendRequest(Context context)
-        {
-            System.Diagnostics.Debug.WriteLine("Sending request to the pipe server",
-                    "TransMock.Integration.BizUnit.MockSendStep");
-
-            using (FileStream fs = File.OpenRead(RequestPath))
-            {
-                context.LogData(string.Format("Reading request content from path {0}", RequestPath),
-                    fs, true);
-
-                pipeClient.WriteStream(fs);
-
-                System.Diagnostics.Debug.WriteLine("Request sent to the pipe server", 
-                    "TransMock.Integration.BizUnit.MockSendStep");
-            }
-        }
-
-        protected virtual void ReceiveResponse(Context context)
-        {
-
-        }
-
-        protected virtual void ClosePipeClient()
-        {
-            System.Diagnostics.Debug.WriteLine("Closing the pipe client", 
-                "TransMock.Integration.BizUnit.MockSendStep");
-            if (pipeClient != null)
-            {
-                //Closing the pipe server                            
-                pipeClient.Disconnect();
-            }
-
-            System.Diagnostics.Trace.WriteLine("PipeClient closed", 
-                "TransMock.Integration.BizUnit.MockSendStep");    
-        }
-
         #region IDisposable methdos
+        /// <summary>
+        /// Disposes the object
+        /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
         #endregion
 
+        /// <summary>
+        /// Implements the objects disposal logic
+        /// </summary>
+        /// <param name="disposeAll">Indicates whether all or only managed objects will be disposed</param>
         protected virtual void Dispose(bool disposeAll)
         {
-            if (pipeClient != null)
+            if (this.pipeClient != null)
             {
-                pipeClient.Dispose();
+                this.pipeClient.Dispose();
             }
         }
+
+        /// <summary>
+        /// Creates an instance of the named pipe client
+        /// </summary>
+        protected virtual void CreatePipeClient()
+        {
+            System.Diagnostics.Debug.WriteLine(
+                "Creating a pipe client instance", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            this.pipeClient = new StreamingNamedPipeClient(
+                endpointUri.Host, 
+                endpointUri.AbsolutePath);
+
+            System.Diagnostics.Debug.WriteLine(
+                "Connecting to the pipe server", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            this.pipeClient.Connect(1000 * this.Timeout);
+
+            System.Diagnostics.Debug.WriteLine(
+                "Connected to the pipe server", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+        }
+
+        /// <summary>
+        /// Sends a request to the server endpoint
+        /// </summary>
+        /// <param name="context">The execution context for the step</param>
+        protected virtual void SendRequest(Context context)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                "Sending request to the pipe server",
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            using (FileStream fs = File.OpenRead(this.RequestPath))
+            {
+                context.LogData(
+                    string.Format(
+                        CultureInfo.CurrentUICulture,
+                            "Reading request content from path {0}", 
+                            this.RequestPath),
+                    fs, 
+                    true);
+
+                this.pipeClient.WriteStream(fs);
+
+                System.Diagnostics.Debug.WriteLine(
+                    "Request sent to the pipe server", 
+                    "TransMock.Integration.BizUnit.MockSendStep");
+            }
+        }
+
+        /// <summary>
+        /// Receives a response from the server endpoint
+        /// </summary>
+        /// <param name="context">The execution context</param>
+        protected virtual void ReceiveResponse(Context context)
+        {
+        }
+
+        /// <summary>
+        /// Closes the pipe client
+        /// </summary>
+        protected virtual void ClosePipeClient()
+        {
+            System.Diagnostics.Debug.WriteLine(
+                "Closing the pipe client", 
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            if (this.pipeClient != null)
+            {
+                // Closing the pipe server                            
+                this.pipeClient.Disconnect();
+            }
+
+            System.Diagnostics.Trace.WriteLine(
+                "PipeClient closed", 
+                "TransMock.Integration.BizUnit.MockSendStep");    
+        }        
     }
 }

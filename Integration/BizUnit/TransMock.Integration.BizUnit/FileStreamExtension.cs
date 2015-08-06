@@ -16,14 +16,25 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace TransMock.Integration.BizUnit
 {
+    /// <summary>
+    /// Extension helper class
+    /// </summary>
     public static class FileStreamExtension
     {
+        /// <summary>
+        /// Extension method for the FileStream class implementing logic for reading a file without the BOM bytes for Unicode encoded files.
+        /// </summary>
+        /// <param name="fs">The file stream object</param>
+        /// <param name="buffer">The buffer of bytes to be read from the file stream</param>
+        /// <param name="offset">The offset from where the read will start</param>
+        /// <param name="length">The number of bytes to read</param>
+        /// <returns>An integer indicating the number of bytes read</returns>
         public static int ReadWithoutBOM(this FileStream fs, byte[] buffer, int offset, int length)
         {
             int byteCount = fs.Read(buffer, offset, length);

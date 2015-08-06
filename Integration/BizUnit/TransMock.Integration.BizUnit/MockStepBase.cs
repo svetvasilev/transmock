@@ -25,31 +25,48 @@ using BizUnit.Xaml;
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
-    /// Implements the logic for receiving a message from a one way enpoint
+    /// Implements the logic for receiving a message from a one way endpoint
     /// which is utilizing the mock adapter.
     /// </summary>
     public class MockStepBase : TestStepBase
     {
         /// <summary>
-        /// The URL of the corresponding enpoint the step will communicate with
+        /// The encoding used for the message content
+        /// </summary>
+        protected System.Text.Encoding encoding = null;
+
+        /// <summary>
+        /// The endpoint URI
+        /// </summary>
+        protected Uri endpointUri = null;
+
+        /// <summary>
+        /// Gets or sets the URL of the corresponding endpoint the step will communicate with
         /// </summary>
         public string Url { get; set; }
+
         /// <summary>
-        /// The encoding to be used for exchanging the data with the endpoint
+        /// Gets or sets the encoding to be used for exchanging the data with the endpoint
         /// </summary>
         public string Encoding { get; set; }
 
-        public int Timeout { get; set; }
+        /// <summary>
+        /// Gets or sets the timeout in seconds for the receiving a message
+        /// </summary>
+        public int Timeout { get; set; }        
 
-        protected System.Text.Encoding _encoding = null;
-
-        protected Uri _endpointUri = null;
-
+        /// <summary>
+        /// Executes the step
+        /// </summary>
+        /// <param name="context">The execution conte</param>
         public override void Execute(Context context)
-        {
-            
+        {            
         }
 
+        /// <summary>
+        /// Validates the step before execution
+        /// </summary>
+        /// <param name="context">The execution context</param>
         public override void Validate(Context context)
         {
             if (string.IsNullOrEmpty(this.Url))
@@ -62,15 +79,18 @@ namespace TransMock.Integration.BizUnit
                 throw new ArgumentException("Encoding propery not defined");
             }
 
-            _encoding = System.Text.Encoding.GetEncoding(this.Encoding);
-            _endpointUri = new Uri(Url);
+            this.encoding = System.Text.Encoding.GetEncoding(this.Encoding);
+            this.endpointUri = new Uri(this.Url);
 
-            if (SubSteps == null)
+            if (this.SubSteps == null)
             {
-                SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
+                this.SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
             }
         }
 
+        /// <summary>
+        /// Implements cleanup logic.
+        /// </summary>
         public virtual void Cleanup()
         {
         }
