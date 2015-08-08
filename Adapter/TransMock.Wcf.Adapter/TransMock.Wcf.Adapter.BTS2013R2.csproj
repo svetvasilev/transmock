@@ -130,6 +130,7 @@
     <None Include="..\..\Key\TransMock.snk">
       <Link>TransMock.snk</Link>
     </None>
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj">

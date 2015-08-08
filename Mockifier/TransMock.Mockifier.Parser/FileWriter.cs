@@ -16,21 +16,41 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace TransMock.Mockifier.Parser
 {
+    /// <summary>
+    /// Defines the operation of a file writer
+    /// </summary>
+    public interface IFileWriter
+    {
+        /// <summary>
+        /// Writes the supplied text to a file with the supplied path
+        /// </summary>
+        /// <param name="path">The path to the file to write to</param>
+        /// <param name="contents">The string contents to write to the file</param>
+        void WriteTextFile(string path, string contents);
+    }
+
     /// <summary>
     /// Helper class for writing a file to the disk
     /// </summary>
     public class FileWriter : IFileWriter
     {
+        /// <summary>
+        /// Writes text content to a new file
+        /// </summary>
+        /// <param name="path">The path to the file to write to</param>
+        /// <param name="content">The contents to be written to the file</param>
         public void WriteTextFile(string path, string content)
         {
-            FileStream classFileStream = File.Open(path,
-                     FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream classFileStream = File.Open(
+                path,
+                FileMode.OpenOrCreate, 
+                FileAccess.Write);
            
             using (StreamWriter sw = new StreamWriter(classFileStream, Encoding.UTF8))
             {
@@ -38,12 +58,5 @@ namespace TransMock.Mockifier.Parser
                 sw.Flush();
             }           
         }
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IFileWriter
-    {
-        void WriteTextFile(string path, string contents);
-    }
+    }    
 }

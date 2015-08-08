@@ -15,13 +15,14 @@
 *****************************************/
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-using System.Xml;
 using System.Resources;
+using System.Text;
+using System.Xml;
 
 namespace TransMock.Mockifier.Parser
 {
@@ -30,8 +31,17 @@ namespace TransMock.Mockifier.Parser
     /// </summary>
     public interface IResourceReader
     {
+        /// <summary>
+        /// Gets the stream to the Mock schema
+        /// </summary>
        Stream MockSchema { get; }
 
+        /// <summary>
+        /// Gets the mock transport configuration
+        /// </summary>
+        /// <param name="btsVersion">The version of the BizTalk server for the configuration</param>
+        /// <param name="configKey">The key of the configuration setting to be returned</param>
+        /// <returns>A string containing the mock adapter transport configuration for the specified key</returns>
        string GetMockTransportConfig(string btsVersion, string configKey);
     }
 
@@ -40,11 +50,11 @@ namespace TransMock.Mockifier.Parser
     /// </summary>
     public class ResourceReader : IResourceReader
     {
-        private ResourceManager rm;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceReader"/> class
+        /// </summary>
         public ResourceReader()
-        {
-            
+        {            
         }
 
         /// <summary>
@@ -54,7 +64,9 @@ namespace TransMock.Mockifier.Parser
         {
             get 
             {
-                return Assembly.GetExecutingAssembly().GetManifestResourceStream("TransMock.Mockifier.Parser.Mock.xsd");               
+                return Assembly
+                    .GetExecutingAssembly()
+                    .GetManifestResourceStream("TransMock.Mockifier.Parser.Mock.xsd");               
             }
         }
 
@@ -63,14 +75,18 @@ namespace TransMock.Mockifier.Parser
         /// </summary>
         /// <param name="btsVersion">The version of the BizTalk server</param>
         /// <param name="configKey">The key for the specific configuration</param>
-        /// <returns></returns>
+        /// <returns>A string containing the mock adapter transport configuration</returns>
         public string GetMockTransportConfig(string btsVersion, string configKey)
         {
             try
             {
                 return Resources.ResourceManager
-                    .GetString(string.Format("BTS{0}_{1}",
-                        btsVersion, configKey));           
+                    .GetString(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "BTS{0}_{1}",
+                            btsVersion, 
+                            configKey));           
             }
             catch (Exception ex)
             {

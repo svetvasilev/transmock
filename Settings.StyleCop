@@ -1,4 +1,13 @@
 <StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>mockifier</Value>
+      <Value>Mockifier</Value>
+      <Value>unescape</Value>
+      <Value>Clsid</Value>
+      <Value>xsd</Value>
+    </CollectionProperty>
+  </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.OrderingRules">
       <Rules>

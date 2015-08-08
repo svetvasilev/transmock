@@ -26,20 +26,38 @@ namespace TransMock.Mockifier.Parser
     /// </summary>
     internal class MockSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockSettings"/> class
+        /// </summary>
         public MockSettings()
         {
-            PromotedProperties = new Dictionary<string, string>();
-            Encoding = "UTF-8";
+            this.PromotedProperties = new Dictionary<string, string>();
+            this.Encoding = "UTF-8";
         }
 
+        /// <summary>
+        /// Gets or sets the host
+        /// </summary>
         public string Host { get; set; }
         
+        /// <summary>
+        /// Gets or sets the encoding
+        /// </summary>
         public string Encoding { get; set; }        
 
+        /// <summary>
+        /// Gets or sets the endpoint name
+        /// </summary>
         public string EndpointName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the operation name
+        /// </summary>
         public string Operation { get; set; }
 
+        /// <summary>
+        /// Gets or sets a dictionary with the properties that are to be promoted
+        /// </summary>
         public Dictionary<string, string> PromotedProperties { get; set; }
     }
 }

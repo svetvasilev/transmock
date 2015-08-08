@@ -1,9 +1,2 @@
 <StyleCopSettings Version="105">
-  <GlobalSettings>
-    <CollectionProperty Name="RecognizedWords">
-      <Value>mockifier</Value>
-      <Value>Mockifier</Value>
-      <Value>unescape</Value>
-    </CollectionProperty>
-  </GlobalSettings>
 </StyleCopSettings>
