@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -27,43 +28,63 @@ namespace TransMock.TestUtils.BizTalk
     [Serializable]
     public class MockTransportConfig
     {
-        private const string transportType = "WCF-Custom";
+        /// <summary>
+        /// A constant representing the mock transport type name
+        /// </summary>
+        private const string TransportTypeName = "WCF-Custom";
 
+        /// <summary>
+        /// The address of the endpoint
+        /// </summary>
         private string address;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockTransportConfig"/> class
+        /// </summary>
         public MockTransportConfig()
-        {
-        
+        {        
         }
 
         /// <summary>
-        /// Constructs a new instance with the given endpoint name
+        /// Initializes a new instance of the <see cref="MockTransportConfig"/> class with the given endpoint name
         /// </summary>
-        /// <param name="endPointName"></param>
+        /// <param name="endPointName">The endpoint name for the mock transport config</param>
         public MockTransportConfig(string endPointName)
         {
-            address = string.Format("mock://localhost/Dynamic{0}", endPointName);
+            this.address = string.Format(
+                CultureInfo.InvariantCulture,
+                "mock://localhost/Dynamic{0}", 
+                endPointName);
         }
 
         /// <summary>
-        /// Constructs a new instance with the given host and endpoint names
+        /// Initializes a new instance of the <see cref="MockTransportConfig"/> class with the given host and endpoint names
         /// </summary>
-        /// <param name="hostName"></param>
-        /// <param name="endPointName"></param>
+        /// <param name="hostName">The host name of the endpoint</param>
+        /// <param name="endPointName">The name of the endpoint</param>
         public MockTransportConfig(string hostName, string endPointName)
         {
-            address = string.Format("mock://{0}/Dynamic{1}", hostName, endPointName);
+            this.address = string.Format(
+                CultureInfo.InvariantCulture,
+                "mock://{0}/Dynamic{1}", 
+                hostName, 
+                endPointName);
         }
 
         /// <summary>
-        /// Constructs a new instance with the given host, endpoint and operation names names
+        /// Initializes a new instance of the <see cref="MockTransportConfig"/> class with the given host, endpoint and operation names names
         /// </summary>
-        /// <param name="hostName"></param>
-        /// <param name="endPointName"></param>
-        /// <param name="operationName"></param>
+        /// <param name="hostName">The host name of the endpoint</param>
+        /// <param name="endPointName">The name of the endpoint</param>
+        /// <param name="operationName">The name of the operation</param>
         public MockTransportConfig(string hostName, string endPointName, string operationName)
         {
-            address = string.Format("mock://{0}/Dynamic{1}/{2}", hostName, endPointName, operationName);
+            this.address = string.Format(
+                CultureInfo.InvariantCulture,
+                "mock://{0}/Dynamic{1}/{2}", 
+                hostName, 
+                endPointName, 
+                operationName);
         }
 
         /// <summary>
@@ -73,7 +94,7 @@ namespace TransMock.TestUtils.BizTalk
         {
             get
             {
-                return transportType;
+                return TransportTypeName;
             }
         }
 
@@ -84,7 +105,7 @@ namespace TransMock.TestUtils.BizTalk
         {
             get
             {
-                return address;
+                return this.address;
             }
         }
     }

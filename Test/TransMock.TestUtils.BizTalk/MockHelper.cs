@@ -16,10 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO.Pipes;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 
 using Microsoft.XLANGs.BaseTypes;
 
@@ -37,7 +37,8 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="portName">The name of the send port as defined in the orchestration</param>
         /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
         /// <returns>An instance of the MockTransportConfig class if the orchestration is executed within the context of a TransMock test case. Otherwise a null is returned.</returns>
-        public static MockTransportConfig MockDynamicSendPort(string portName,
+        public static MockTransportConfig MockDynamicSendPort(
+            string portName,
             XLANGMessage outboundMessage)
         {
             System.Diagnostics.Debug.WriteLine("MockDynamicSendPort(portName, originalAdapter, XLANGMessage) called.");
@@ -52,9 +53,11 @@ namespace TransMock.TestUtils.BizTalk
         /// <param name="portName">The name of the send port as defined in the orchestration</param>                
         /// <param name="customBehaviorConfig">The custom behavior configuration to be applied</param>
         /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
-        /// <returns></returns>
-        public static MockTransportConfig MockDynamicSendPort(string portName,             
-            string customBehaviorConfig, XLANGMessage outboundMessage)
+        /// <returns>An instance of the <see cref="MockTransportConfig"/> class which contains the configuration for the mock adapter transport for the dynamic send port</returns>
+        public static MockTransportConfig MockDynamicSendPort(
+            string portName,             
+            string customBehaviorConfig, 
+            XLANGMessage outboundMessage)
         {
             try
             {
@@ -66,9 +69,10 @@ namespace TransMock.TestUtils.BizTalk
                 {
                     System.Diagnostics.Debug.WriteLine("Applying mock transport settings");
 
-                    //Clear any previously set transport specific properties
+                    // Clear any previously set transport specific properties
                     ClearOriginalWCFAdapterProperties(outboundMessage);
-                    //Then apply the mock transport config properties to the message
+
+                    // Then apply the mock transport config properties to the message
                     ApplyMockTransportConfig(outboundMessage, customBehaviorConfig);
 
                     var mockConfig = new MockTransportConfig(portName);
@@ -81,17 +85,17 @@ namespace TransMock.TestUtils.BizTalk
 
                     return null;
                 }
-
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(
                     "MockDynamicSendPort(portName, customBehaviorConfig, XLANGMessage) threw an exception: "
-                        + ex.Message);
+                    + ex.Message);
 
                 return null;
             }
         }
+
         /// <summary>
         /// Checks whether a TransMock test case is currently under execution
         /// </summary>
@@ -103,16 +107,18 @@ namespace TransMock.TestUtils.BizTalk
                 System.Diagnostics.Debug.WriteLine("IsTransMockTestCaseExecuting() called");
 
                 using (NamedPipeClientStream beaconClient = 
-                    new NamedPipeClientStream("localhost", "TransMockBeacon",
-                        PipeDirection.InOut, PipeOptions.Asynchronous))
+                    new NamedPipeClientStream(
+                        "localhost", 
+                        "TransMockBeacon",
+                        PipeDirection.InOut, 
+                        PipeOptions.Asynchronous))
                 {
                     System.Diagnostics.Debug.WriteLine("Connecting to the beacon");
 
                     beaconClient.Connect(10);
-                    //Closing the stream immediately after connecting
-
-                    System.Diagnostics.Debug.WriteLine("Disonnecting from the beacon");                   
                     
+                    // Closing the stream immediately after connecting
+                    System.Diagnostics.Debug.WriteLine("Disonnecting from the beacon");                    
                 }
 
                 return true;
@@ -129,27 +135,32 @@ namespace TransMock.TestUtils.BizTalk
         /// Applies the TransMock transport configuration to the context of the provided message 
         /// </summary>
         /// <param name="outboundMessage">The outbound message instance that is to be sent over the dynamic send port</param>
+        /// <param name="customBehaviorConfig">A string representing the custom behavior configuration</param>
         private static void ApplyMockTransportConfig(XLANGMessage outboundMessage, string customBehaviorConfig)
         {
-            //Adding the mock binding properties to tme message context                    
+            // Adding the mock binding properties to tme message context                    
             outboundMessage.SetPropertyValue(typeof(WCF.BindingType), "mockBinding");
-            outboundMessage.SetPropertyValue(typeof(WCF.BindingConfiguration),
+            outboundMessage.SetPropertyValue(
+                typeof(WCF.BindingConfiguration),
                 @"<binding name=""mockBinding"" Encoding=""UTF-8"" />");
             outboundMessage.SetPropertyValue(typeof(WCF.Action), "*");
 
             if (string.IsNullOrEmpty(customBehaviorConfig))
             {
-                outboundMessage.SetPropertyValue(typeof(WCF.EndpointBehaviorConfiguration),
+                outboundMessage.SetPropertyValue(
+                    typeof(WCF.EndpointBehaviorConfiguration),
                     @"<behavior name=""EndpointBehavior"" />");
             }
             else
             {
-                outboundMessage.SetPropertyValue(typeof(WCF.EndpointBehaviorConfiguration),
+                outboundMessage.SetPropertyValue(
+                    typeof(WCF.EndpointBehaviorConfiguration),
                     customBehaviorConfig);
             }
 
             outboundMessage.SetPropertyValue(typeof(WCF.OutboundBodyLocation), "UseTemplate");
-            outboundMessage.SetPropertyValue(typeof(WCF.OutboundXmlTemplate),
+            outboundMessage.SetPropertyValue(
+                typeof(WCF.OutboundXmlTemplate),
                 @"<bts-msg-body xmlns=""http://www.microsoft.com/schemas/bts2007"" encoding=""base64""/>");
 
             outboundMessage.SetPropertyValue(typeof(WCF.InboundBodyLocation), @"UseBodyPath");
@@ -253,7 +264,8 @@ namespace TransMock.TestUtils.BizTalk
             }
             catch (Exception ex)
             {                
-                System.Diagnostics.Debug.WriteLine("ClearOriginalTransportProperties() failed with exception: "
+                System.Diagnostics.Debug.WriteLine(
+                    "ClearOriginalTransportProperties() failed with exception: "
                     + ex.Message);
             }
         }        
