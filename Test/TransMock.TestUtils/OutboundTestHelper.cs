@@ -81,7 +81,7 @@ namespace TransMock.TestUtils
                             outBuffer[byteCountRead - 2] != 0x0 &&
                             outBuffer[byteCountRead - 3] != 0x0);
                     }
-                    else if (byteCountRead > 1)
+                    else if (byteCountRead > 1 && !eofReached)
                     {
                         eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
                             outBuffer[byteCountRead - 2] == 0x0);
@@ -139,7 +139,7 @@ namespace TransMock.TestUtils
                                 outBuffer[byteCountRead - 2] != 0x0 &&
                                 outBuffer[byteCountRead - 3] != 0x0);
                         }
-                        else if (byteCountRead > 1)
+                        else if (byteCountRead > 1 && !eofReached)
                         {
                             eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
                                 outBuffer[byteCountRead - 2] == 0x0);

@@ -85,6 +85,16 @@ namespace TransMock.Wcf.Adapter
 
                 byte[] msgBuffer = xdr.ReadContentAsBase64();
 
+                if (msgBuffer.Length == 0)
+                {
+                    // Message is with empty body, simply return
+                    System.Diagnostics.Debug.WriteLine(
+                        "Response message has empty body. Exiting.",
+                        "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+
+                    return;
+                }
+
                 System.Diagnostics.Debug.WriteLine(
                     "Writing the response message to the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");

@@ -74,7 +74,10 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
+                pipeClient.WriteByte(0x0);
+                
                 pipeClient.WaitForPipeDrain();
+                
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler
@@ -109,7 +112,10 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
+                pipeClient.WriteByte(0x0);
+                
                 pipeClient.WaitForPipeDrain();
+                
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler
@@ -143,7 +149,10 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+                
                 pipeClient.WaitForPipeDrain();
+                
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler
@@ -177,7 +186,10 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+
                 pipeClient.WaitForPipeDrain();
+                
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler
@@ -211,7 +223,10 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.Connect(10000);
                 pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+
                 pipeClient.WaitForPipeDrain();
+                
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler

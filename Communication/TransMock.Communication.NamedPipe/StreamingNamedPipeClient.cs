@@ -213,37 +213,13 @@ namespace TransMock.Communication.NamedPipes
                 while (!eofReached)
                 {
                     byteCountRead = this.pipeClient.Read(inBuffer, 0, inBuffer.Length);
+                    
+                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(inBuffer, byteCountRead);
 
-                    if (byteCountRead > 0)
-                    {
-                        if (byteCountRead > 2)
-                        {
-                            // For longer strings only the last one is EOF byte
-                            eofReached = inBuffer[byteCountRead - 1] == 0x0 &&
-                                            inBuffer[byteCountRead - 2] != 0x0 &&
-                                            inBuffer[byteCountRead - 3] != 0x0;
-                        }
-                        else if (byteCountRead > 1)
-                        {
-                            // In case of Unicode the last 2 bytes are EOF
-                            eofReached = inBuffer[byteCountRead - 1] == 0x0 &&
-                                inBuffer[byteCountRead - 2] == 0x0;
-                        }
-                        else if (byteCountRead == 1)
-                        {
-                            // In case the EOF was read alone
-                            eofReached = inBuffer[byteCountRead - 1] == 0x0;
-                        }
-
-                        msgStream.Write(
-                            inBuffer, 
-                            0,
-                            eofReached ? byteCountRead - 1 : byteCountRead);
-                    }
-                    else
-                    {
-                        eofReached = true;
-                    }
+                    msgStream.Write(
+                        inBuffer, 
+                        0,
+                        eofReached ? byteCountRead - 1 : byteCountRead);                    
                 }
 
                 System.Diagnostics.Trace.WriteLine(

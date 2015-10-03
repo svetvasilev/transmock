@@ -108,7 +108,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(flatBytes, 0, flatBytes.Count());
-                    pipeClient.Flush();
+                    //pipeClient.Flush();
 
                     pipeClient.WriteByte(0x00);//writing the EOF byte
                     pipeClient.Flush();
@@ -225,6 +225,8 @@ namespace TransMock.Wcf.Adapter.Tests
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer, responseXml);
 
                 pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnectedSyncronous(cb), testHelper);
+
+                System.Threading.Thread.Sleep(100);
                 //Here we spin the pipe client that will send the message to BizTalk
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "TwoWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
@@ -241,19 +243,52 @@ namespace TransMock.Wcf.Adapter.Tests
                     pipeClient.WaitForPipeDrain();
 
                     //Here we wait for the event to be signalled
-                    testHelper.syncEvent.WaitOne(10000);
+                    bool waitExpired = testHelper.syncEvent.WaitOne(10000);
+
+                    Assert.IsTrue(waitExpired, "The waiting time for the response has expired prior to receiving the response");
+
                     //The event was signalled, we get the message stirng from the outBuffer
                     string receivedXml = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
 
                     Assert.AreEqual(xml, receivedXml, "Contents of received message is different");
                     //Here we read from the pipeClient the response message
                     byte[] responseBytes = new byte[256];
-                    int responseByteCount = pipeClient.Read(responseBytes, 0, responseBytes.Length);
 
-                    string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(responseBytes,
-                        responseByteCount, Encoding.UTF8);
+                    using (MemoryStream memStream = new MemoryStream(256))
+                    {
+                        int byteCountRead = 0;
+                        bool eofReached = false;
+                        while (!eofReached)
+                        {
+                            byteCountRead = pipeClient.Read(responseBytes, 0, responseBytes.Length);
 
-                    Assert.AreEqual(responseXml, receivedResponseXml, "Contents of the response message is different");
+                            if (byteCountRead > 2)
+                            {
+                                eofReached = (responseBytes[byteCountRead - 1] == 0x0 &&
+                                    responseBytes[byteCountRead - 2] != 0x0 &&
+                                    responseBytes[byteCountRead - 3] != 0x0);
+                            }
+                            else if (byteCountRead > 1 && !eofReached)
+                            {
+                                eofReached = (responseBytes[byteCountRead - 1] == 0x0 &&
+                                    responseBytes[byteCountRead - 2] == 0x0);
+                            }
+                            else if (byteCountRead == 1)
+                            {
+                                eofReached = responseBytes[byteCountRead - 1] == 0x0;
+                            }
+
+                            memStream.Write(responseBytes, 0,
+                                eofReached ? byteCountRead - 1 : byteCountRead);
+                        }                        
+
+                        string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(
+                            memStream.ToArray(),
+                            (int)memStream.Length, 
+                            Encoding.UTF8);
+
+                        Assert.AreEqual(responseXml, receivedResponseXml, "Contents of the response message is different");
+                    }
                 }
             }
         }
