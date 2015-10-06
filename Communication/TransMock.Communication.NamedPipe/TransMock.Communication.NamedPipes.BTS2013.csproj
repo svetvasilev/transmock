@@ -51,6 +51,7 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="IStreamingClient.cs" />
     <Compile Include="IAsyncStreamingServer.cs" />
+    <Compile Include="NamedPipeMessageUtils.cs" />
     <Compile Include="StreamingNamedPipeClient.cs" />
     <Compile Include="StreamingNamedPipeServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
