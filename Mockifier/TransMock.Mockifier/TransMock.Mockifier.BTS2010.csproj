@@ -57,10 +57,13 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Mockifier.cs" />
+    <Compile Include="MockifierArguments.cs" />
+    <Compile Include="ParameterCombination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2010.csproj">
