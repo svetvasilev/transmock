@@ -105,6 +105,10 @@ namespace TransMock.Communication.NamedPipes
                     PipeDirection.InOut, 
                     PipeOptions.Asynchronous);
 
+                System.Diagnostics.Trace.WriteLine(
+                    string.Format("Connecting to named pipe server at: {0}/{1}", this.HostName, this.PipeName),
+                       "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
                 this.pipeClient.Connect(timeoutMilliseconds);
 
                 System.Diagnostics.Debug.WriteLine(
@@ -219,7 +223,7 @@ namespace TransMock.Communication.NamedPipes
                     msgStream.Write(
                         inBuffer, 
                         0,
-                        eofReached ? byteCountRead - 1 : byteCountRead);                    
+                        eofReached && byteCountRead > 0 ? byteCountRead - 1 : byteCountRead);                    
                 }
 
                 System.Diagnostics.Trace.WriteLine(

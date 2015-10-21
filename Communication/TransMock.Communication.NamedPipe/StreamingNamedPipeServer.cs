@@ -427,6 +427,10 @@ namespace TransMock.Communication.NamedPipes
                         "Users",
                         PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite,
                         System.Security.AccessControl.AccessControlType.Allow));
+
+                System.Diagnostics.Trace.WriteLine(
+                    string.Format("Creating named pipe server with URL: {0}", this.URL),
+                       "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                 
                 // Creating the named pipe server
                 NamedPipeServerStream pipeServer = new NamedPipeServerStream(
@@ -586,7 +590,7 @@ namespace TransMock.Communication.NamedPipes
                 state.InStream.Write(
                     state.RawData, 
                     0,
-                    eofReached ? bytesRead - 1 : bytesRead);
+                    eofReached && bytesRead > 0 ? bytesRead - 1 : bytesRead);
 
                     System.Diagnostics.Debug.WriteLine(
                         string.Format(
