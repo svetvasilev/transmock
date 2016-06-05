@@ -53,7 +53,18 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// Gets or sets the timeout in seconds for the receiving a message
         /// </summary>
-        public int Timeout { get; set; }        
+        public int Timeout { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockStepBase.cs"/> class
+        /// </summary>
+        public MockStepBase() 
+        {
+            if (this.SubSteps == null)
+            {
+                this.SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
+            }
+        }
 
         /// <summary>
         /// Executes the step
@@ -81,11 +92,6 @@ namespace TransMock.Integration.BizUnit
 
             this.encoding = System.Text.Encoding.GetEncoding(this.Encoding);
             this.endpointUri = new Uri(this.Url);
-
-            if (this.SubSteps == null)
-            {
-                this.SubSteps = new System.Collections.ObjectModel.Collection<SubStepBase>();
-            }
         }
 
         /// <summary>
