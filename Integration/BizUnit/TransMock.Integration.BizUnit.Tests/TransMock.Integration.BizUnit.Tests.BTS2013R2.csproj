@@ -66,6 +66,7 @@
     <Compile Include="TestMockRequestResponseStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMockReceiveStep.cs" />
+    <Compile Include="TestWithBizTalk.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj">

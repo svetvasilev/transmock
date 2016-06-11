@@ -115,8 +115,11 @@ namespace TransMock.Integration.BizUnit.Tests
             step.Url = connectionUri.Uri.OriginalString;
             step.Encoding = "UTF-8";
             step.ResponsePath = "TestResponse.xml";
-            //Colling Validate in order to start the 
+            //Calling Validate in order to start the 
             step.Validate(context);
+            // Cleaning up the step
+            step.Cleanup();
+
             step = null;
         }
 
@@ -134,7 +137,7 @@ namespace TransMock.Integration.BizUnit.Tests
             step.Encoding = "UTF-8";
             step.ResponsePath = "TestResponse.xml";
             step.Timeout = 30;
-            //Colling Validate in order to start the 
+            //Calling Validate in order to start the server
             step.Validate(context);
             //Setting up a manual reset event
             System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
@@ -154,7 +157,7 @@ namespace TransMock.Integration.BizUnit.Tests
             
             //Waiting for the manual event to be set
             manualEvent.WaitOne(1000);
-            
+
             //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             
@@ -163,7 +166,275 @@ namespace TransMock.Integration.BizUnit.Tests
 
             loggerMock.Verify(l => l.LogData(
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
-                It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
+                It.Is<string>(s => !string.IsNullOrEmpty(s))), 
+                Times.Exactly(2), 
+                "The LogData method was not called");
+            
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestResponse.xml")]
+        public void TestReceiveSmallMessages_Debatch3_XML()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = TestMockReceiveStep.CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockRequestResponseStep step = new MockRequestResponseStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.ResponsePath = "TestResponse.xml";
+            step.Timeout = 30;
+            step.DebatchedMessageCount = 3;
+            //Calling Validate in order to start the 
+            step.Validate(context);
+            //Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            var responseMessageList = new List<Message>(3);
+
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            for (int i = 0; i < 3; i++)
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                var responseMsg = outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+                responseMessageList.Add(responseMsg);
+            }            
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+            
+            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+
+            //Assert.AreEqual(expected, actual, 
+            //    "Response message is not matching the expected content");
+            Assert.AreEqual(3, responseMessageList.Count, "The number of response messages is incorrect.");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))), 
+                Times.Exactly(6), 
+                "The LogData method was not called");
+
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestResponse.xml")]
+        public void TestReceiveSmallMessages_Debatch50_XML()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = TestMockReceiveStep.CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockRequestResponseStep step = new MockRequestResponseStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.ResponsePath = "TestResponse.xml";
+            step.Timeout = 30;
+            step.DebatchedMessageCount = 50;
+            //Calling Validate in order to start the 
+            step.Validate(context);
+            //Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            var responseMessageList = new List<Message>(3);
+
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            for (int i = 0; i < 50; i++)
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                var responseMsg = outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+                responseMessageList.Add(responseMsg);
+            }
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(3000);
+
+            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+
+            //Assert.AreEqual(expected, actual, 
+            //    "Response message is not matching the expected content");
+            Assert.AreEqual(50, responseMessageList.Count, "The number of response messages is incorrect.");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.Exactly(100),
+                "The LogData method was not called");
+
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestResponse.xml")]
+        public void TestReceiveSmallMessages_Debatch3_SerialValidationSingleStep_XML()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = TestMockReceiveStep.CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockRequestResponseStep step = new MockRequestResponseStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.ResponsePath = "TestResponse.xml";
+            step.Timeout = 30;
+            step.DebatchedMessageCount = 3;
+            
+            // Setting up a validation step mock
+            var validationStepMock = TestMockReceiveStep.CreateSubStepMock();
+            step.SubSteps.Add(validationStepMock.Object);
+
+            //Calling Validate in order to start the 
+            step.Validate(context);
+            //Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            var responseMessageList = new List<Message>(3);
+
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            for (int i = 0; i < 3; i++)
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                var responseMsg = outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+                responseMessageList.Add(responseMsg);
+            }
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+
+            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+
+            //Assert.AreEqual(expected, actual, 
+            //    "Response message is not matching the expected content");
+            Assert.AreEqual(3, responseMessageList.Count, "The number of response messages is incorrect.");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.Exactly(6),
+                "The LogData method was not called");
+
+            validationStepMock.Verify(vs => vs.Execute(
+                It.Is<Stream>(s => s != null),
+                It.Is<Context>(c => c != null)),
+                Times.Exactly(3),
+                "The SubStep mock was not called the expected number of times");
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestResponse.xml")]
+        public void TestReceiveSmallMessages_Debatch3_CascadingValidationSingleStep_XML()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = TestMockReceiveStep.CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockRequestResponseStep step = new MockRequestResponseStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.ResponsePath = "TestResponse.xml";
+            step.Timeout = 30;
+            step.DebatchedMessageCount = 3;
+            step.ValidationMode = MultiMessageValidationMode.Cascading;
+
+            // Setting up a validation step mock list
+            var validationStepMockList = new List<Mock<global::BizUnit.Xaml.SubStepBase>>(3);
+            for (int i = 0; i < 3; i++)
+            {
+                var validationStepMock = TestMockReceiveStep.CreateSubStepMock();
+                var subStepCollection = new System.Collections.ObjectModel.Collection<global::BizUnit.Xaml.SubStepBase>();
+                subStepCollection.Add(validationStepMock.Object);
+                
+                step.CascadingSubSteps.Add(i, subStepCollection);
+
+                validationStepMockList.Add(validationStepMock);
+            }
+            
+
+            //Calling Validate in order to start the 
+            step.Validate(context);
+            //Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            var responseMessageList = new List<Message>(3);
+
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            for (int i = 0; i < 3; i++)
+            {
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                var responseMsg = outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+                responseMessageList.Add(responseMsg);
+            }
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+
+            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+
+            //Assert.AreEqual(expected, actual, 
+            //    "Response message is not matching the expected content");
+            Assert.AreEqual(3, responseMessageList.Count, "The number of response messages is incorrect.");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.Exactly(6),
+                "The LogData method was not called");
+
+            for (int i = 0; i < validationStepMockList.Count; i++)
+            {
+                var validationStepMock = validationStepMockList[i];
+
+                // For cascading validation mode each sub step should be called only once
+                validationStepMock.Verify(vs => vs.Execute(
+                    It.Is<Stream>(s => s != null),
+                    It.Is<Context>(c => c != null)),
+                    Times.Exactly(1),
+                    "The SubStep mock was not called the expected number of times");
+            }
             
         }
 

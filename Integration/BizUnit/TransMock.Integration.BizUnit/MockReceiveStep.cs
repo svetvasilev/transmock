@@ -62,12 +62,45 @@ namespace TransMock.Integration.BizUnit
         /// </summary>
         protected int connectionId = 0;
 
+        protected Queue<AsyncReadEventArgs> receivedMessagesQueue;
+
+        /// <summary>
+        /// Gets or sets the number of messages expected as a resulf of de-batching scenario
+        /// </summary>
+        public int DebatchedMessageCount
+        { 
+            get; set; 
+        }
+
+        /// <summary>
+        /// Gets or sets the validation mode in case multiple messages are received by the same 
+        /// test step instance
+        /// </summary>
+        public MultiMessageValidationMode ValidationMode 
+        { 
+            get; set; 
+        }
+
+        public Dictionary<int, Collection<SubStepBase>> CascadingSubSteps 
+        { 
+            get; set; 
+        }
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MockReceiveStep"/> class with default timeout of 30 seconds
         /// </summary>
         public MockReceiveStep()
         {   
-            this.Timeout = 30;            
+            this.Timeout = 30;
+            // Setting the Debatched message count to 1 as default.             
+            this.DebatchedMessageCount = 1;
+
+            this.ValidationMode = MultiMessageValidationMode.Serial;
+
+            this.CascadingSubSteps = new Dictionary<int, Collection<SubStepBase>>();
+
+            this.receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
         }
         
         /// <summary>
@@ -75,25 +108,52 @@ namespace TransMock.Integration.BizUnit
         /// </summary>
         /// <param name="context">The BizUnit execution context</param>
         public override void Execute(Context context)
-        {
-            try
-            {
-                this.WaitForRequest();
-
-                // If we are passed this point, then everything was processed fine
-                context.LogData(
-                    "MockReceiveStep received a message with content", 
-                    this.inStream, 
-                    true);
-                
-                // Here we invoke the sub steps
-                foreach (var step in this.SubSteps)
+        {   
+            try{
+                // The processing happens in a synchronization block in order to avoid
+                // incorrect thread syncronization with the threads from the pipe server
+                lock (this.syncRoot)
                 {
-                    step.Execute(this.inStream, context);
-                }
+                    // In case of de-batch scenario we will wait for as many request messages as 
+                    // the number of messages specified in DebatchedMessageCount
+                    for (int i = 0; i < this.DebatchedMessageCount; i++)
+                    {
+                        this.WaitForRequest();
 
-                // Finally we supply response
-                this.SendResponse(context);
+                        var receivedMessage = this.receivedMessagesQueue.Dequeue();
+
+                        // If we are passed this point, then everything was processed fine
+                        context.LogData(
+                            "MockReceiveStep received a message with content",
+                            receivedMessage.MessageStream,
+                            true);
+
+                        // Here we invoke the sub steps
+                        switch (this.ValidationMode)
+                        {
+                            case MultiMessageValidationMode.Cascading:
+                                // Performing cascading validation
+                                this.CascadingValidation(
+                                    receivedMessage.MessageStream, 
+                                    context, 
+                                    i);
+                                break;
+                            case MultiMessageValidationMode.Serial:
+                            default:     
+                                // Performing serial validation
+                                this.SerialValidation(
+                                    receivedMessage.MessageStream, 
+                                    context);
+                                break;
+                        }
+
+                        //Set the connection Id for the response to be sent over the correct pipe
+                        this.connectionId = receivedMessage.ConnectionId;
+
+                        // Finally we supply response
+                        this.SendResponse(context);  
+                    }
+                }
             }
             finally
             {
@@ -101,9 +161,12 @@ namespace TransMock.Integration.BizUnit
                 this.ClosePipeServer();
 
                 // Cleaning the inStream
-                this.inStream.Dispose();
+                if (this.inStream != null)
+                {
+                    this.inStream.Dispose();
+                }                
             }
-        }        
+        }       
 
         /// <summary>
         /// Validates the step
@@ -121,7 +184,22 @@ namespace TransMock.Integration.BizUnit
         /// </summary>
         public override void Cleanup()
         {
-            this.pipeServer.Stop();
+            if (pipeServer != null)
+            {
+                this.pipeServer.Stop();
+            }
+
+            if (this.CascadingSubSteps != null)
+            {
+                this.CascadingSubSteps.Clear();
+                this.CascadingSubSteps = null;
+            }
+
+            if (this.receivedMessagesQueue != null)
+            {
+                this.receivedMessagesQueue.Clear();
+                this.receivedMessagesQueue = null;
+            }
         }
 
         #region IDisposable methdos
@@ -169,21 +247,18 @@ namespace TransMock.Integration.BizUnit
         /// Waits for a request to be sent by a client
         /// </summary>
         protected virtual void WaitForRequest()
-        {
-            lock (this.syncRoot)
+        {  
+            if (!Monitor.Wait(this.syncRoot, 1000 * this.Timeout))
             {
-                if (!Monitor.Wait(this.syncRoot, 1000 * this.Timeout))
-                {
-                    throw new TimeoutException("The step execution exceeded the alotted time");
-                }
-
-                // If we are passed this point, then a request was successfully received
-                System.Diagnostics.Debug.WriteLine(
-                    string.Format(
-                        CultureInfo.CurrentUICulture,
-                            "MockReceiveStep received a message with content {0}", 
-                            this.requestContent));
+                throw new TimeoutException("The step execution exceeded the alotted time");
             }
+
+            // If we are passed this point, then a request was successfully received
+            System.Diagnostics.Debug.WriteLine(
+                string.Format(
+                    CultureInfo.CurrentUICulture,
+                        "WaitForRequest exited the wait queue as a result of message reception."));
+            
         }
 
         /// <summary>
@@ -204,6 +279,41 @@ namespace TransMock.Integration.BizUnit
         }
 
         /// <summary>
+        /// Performs serial validation of a message that has been received by the step
+        /// </summary>
+        /// <param name="msgStream">The sream object that contains the message</param>
+        /// <param name="context">The BizUnit context isntance</param>
+        private void SerialValidation(Stream msgStream, Context context)
+        {
+            foreach (var step in this.SubSteps)
+            {
+                step.Execute(msgStream, context);
+            }
+        }
+
+        /// <summary>
+        /// Performs cascading validation of a message that has been received by the step
+        /// </summary>
+        /// <param name="msgStream">The sream object that contains the message</param>
+        /// <param name="context">The BizUnit context isntance</param>
+        /// <param name="index">The index at which to extract the collection of validation sub steps</param>
+        private void CascadingValidation(Stream msgStream, Context context, int index)
+        {
+            if (this.CascadingSubSteps.Count > 0)
+            {
+                var validationSubSteps = this.CascadingSubSteps[index];
+
+                if (validationSubSteps != null)
+                {
+                    foreach (var step in validationSubSteps)
+                    {
+                        step.Execute(msgStream, context);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Handler method for the ReadCompleted event
         /// </summary>
         /// <param name="sender">The instance of the object firing the event</param>
@@ -212,10 +322,9 @@ namespace TransMock.Integration.BizUnit
         {
             lock (this.syncRoot)
             {
-                this.connectionId = e.ConnectionId;
-                this.inStream = e.MessageStream as MemoryStream;
+                this.receivedMessagesQueue.Enqueue(e);
                                 
-                this.requestContent = this.encoding.GetString(this.inStream.ToArray());
+                // this.requestContent = this.encoding.GetString(this.inStream.ToArray());
 
                 Monitor.Pulse(this.syncRoot);
             }

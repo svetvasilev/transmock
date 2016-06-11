@@ -150,11 +150,11 @@ namespace TransMock.Communication.NamedPipes
                 System.Diagnostics.Trace.WriteLine(
                     "Stop called",
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
-
-                this.serverState = ServerState.Stopping;
-
+                
                 lock (this.pipeSyncLock)
                 {
+                    this.serverState = ServerState.Stopping;
+
                     System.Diagnostics.Debug.WriteLine(
                         "Clearing the pending pipe servers. Currently the number of servers is: " + this.pipeServerConnections.Count,
                         "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
@@ -196,8 +196,11 @@ namespace TransMock.Communication.NamedPipes
 
                 lock (this.pipeSyncLock)
                 {
-                    this.pipeServerConnections.Clear();
-                    this.pipeServerConnections = null;
+                    if (this.pipeServerConnections != null)
+                    {
+                        this.pipeServerConnections.Clear();
+                        this.pipeServerConnections = null;
+                    }                    
                 }
 
                 this.serverState = ServerState.Stopped;
@@ -436,7 +439,7 @@ namespace TransMock.Communication.NamedPipes
                 NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                     this.URL,
                     PipeDirection.InOut, 
-                    5, 
+                    NamedPipeServerStream.MaxAllowedServerInstances, 
                     PipeTransmissionMode.Byte,
                     PipeOptions.Asynchronous, 
                     4096, 
@@ -502,8 +505,20 @@ namespace TransMock.Communication.NamedPipes
                 catch (System.ObjectDisposedException)
                 {
                     System.Diagnostics.Debug.WriteLine(
-                        "Pipe has been disposed!Exiting without further processing",
+                        "Pipe has been disposed!Removing the pipe connection from the dictionary.",
                         "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+                   
+                    // Since the pipe connection was disposed, we will try to remove 
+                    // it from the dictionary if it is still there. 
+                    // This might be the case in case the client closed the connection intentionally or not
+                    lock (this.pipeSyncLock)
+                    {
+                        if (this.pipeServerConnections != null 
+                            && this.pipeServerConnections.ContainsKey(pipeConnectionId))
+                        {
+                            this.pipeServerConnections.Remove(pipeConnectionId);
+                        }                        
+                    }
 
                     return;
                 }
@@ -534,16 +549,18 @@ namespace TransMock.Communication.NamedPipes
             finally
             {
                 switch (this.serverState)
-                {   
+                {
                     case ServerState.Started:
-                        this.CreatePipeServer();
+                        // If the server is Started a new pipe server instance is created
+                        this.CreatePipeServer();                            
                         break;
                     case ServerState.Stopping:
+                        // If the server is Stoppin all the connected clients will be disconnected
                         this.SignalPipeClientDisconnect();
-                        break;                    
+                        break;
                     default:
                         break;
-                }                
+                }                                                
             }            
         }
 
@@ -592,21 +609,22 @@ namespace TransMock.Communication.NamedPipes
                     0,
                     eofReached && bytesRead > 0 ? bytesRead - 1 : bytesRead);
 
-                    System.Diagnostics.Debug.WriteLine(
-                        string.Format(
-                            CultureInfo.InvariantCulture, 
-                            "Written {0} bytes to the internal stream",
-                            eofReached ? bytesRead - 1 : bytesRead));                
-
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        CultureInfo.InvariantCulture, 
+                        "Written {0} bytes to the internal stream",
+                        eofReached ? bytesRead - 1 : bytesRead),
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+               
                 if (!eofReached)
                 {
                     // Not EOF, continue reading
-                   pipeConnection.BeginRead(
-                       state.RawData, 
-                       0,
-                       state.RawData.Length, 
-                       cb => this.PipeReadAsync(cb), 
-                       state);
+                    pipeConnection.BeginRead(
+                        state.RawData, 
+                        0,
+                        state.RawData.Length, 
+                        cb => this.PipeReadAsync(cb), 
+                        state);
                 }
                 else
                 {
@@ -618,8 +636,11 @@ namespace TransMock.Communication.NamedPipes
                     // Rewind the stream
                     state.InStream.Seek(0, SeekOrigin.Begin);
 
-                    // Notify that the read was complete
-                    this.OnReadCompleted(state.ConnectionId, state.InStream);
+                    lock (this.pipeSyncLock)
+                    {
+                        // Notify that the read was complete
+                        this.OnReadCompleted(state.ConnectionId, state.InStream);   
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -639,8 +660,16 @@ namespace TransMock.Communication.NamedPipes
                 "WaitForPipeServersCleanup called with pipeServerConnectCount: " + this.activePipeConnectionCount,
                 "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
-            this.serverStopEvent = new ManualResetEventSlim(false);
-            this.serverStopEvent.Wait(TimeSpan.FromSeconds(10));
+            // Setting up thre signalling mechanism in case there are still active connections
+            if (this.activePipeConnectionCount > 0)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    "Setting up stop event",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                this.serverStopEvent = new ManualResetEventSlim(false);
+                this.serverStopEvent.Wait(TimeSpan.FromSeconds(10));                
+            }
 
             System.Diagnostics.Debug.WriteLine(
                 "All waiting connections stopped",
