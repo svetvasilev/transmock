@@ -81,6 +81,10 @@ namespace TransMock.Integration.BizUnit
             get; set; 
         }
 
+        /// <summary>
+        /// Gets or sets the dictionary with the sub steps colleciton specific to each received message.
+        /// It is used only in case the ValidationMode is set to MultiMessageValidationMode.Cascading
+        /// </summary>
         public Dictionary<int, Collection<SubStepBase>> CascadingSubSteps 
         { 
             get; set; 
