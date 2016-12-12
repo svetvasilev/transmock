@@ -41,7 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BizUnit">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="BizUnit.TestSteps">
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.TestSteps.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />

@@ -36,7 +36,7 @@ namespace TransMock.Mockifier.Parser.Tests
     [TestClass]
     public class TestBindingsParser
     {
-        private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\t" +
+        private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test\r\n{\r\n\tpublic static class TestApplicationMockAddresses\r\n\t{\r\n\t\t" +
             "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
             "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
             "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
@@ -44,7 +44,7 @@ namespace TransMock.Mockifier.Parser.Tests
             "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
             "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
 
-        private const string GeneratedClassContentsCustomURL = "\r\nnamespace TestApplication.Test {\r\n\tpublic static class TestApplicationMockAddresses {\r\n\t\t" +
+        private const string GeneratedClassContentsCustomURL = "\r\nnamespace TestApplication.Test\r\n{\r\n\tpublic static class TestApplicationMockAddresses\r\n\t{\r\n\t\t" +
             "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
             "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
             "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayOutEndpoint\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +

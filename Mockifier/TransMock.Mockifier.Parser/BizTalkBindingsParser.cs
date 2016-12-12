@@ -231,8 +231,10 @@ namespace TransMock.Mockifier.Parser
             }
 
             // Getting the BizTalk application name
-            string applicationName = root.Descendants().Where(d => d.Name == "ModuleRef" && 
-                d.Attributes("Name").First().Value.StartsWith("[Application:")).First().Attribute("Name").Value;
+            string applicationName = root.Descendants()
+                .Where(d => d.Name == "ModuleRef" && d.Attributes("Name")
+                    .First().Value.StartsWith("[Application:"))
+                .First().Attribute("Name").Value;
 
             applicationName = applicationName
                 .Replace("[Application:", string.Empty)
@@ -243,13 +245,18 @@ namespace TransMock.Mockifier.Parser
 
             helperClassBuilder.AppendLine()
                 .AppendFormat(
-                    "namespace {0}.Test {{",
+                    "namespace {0}.Test",
                     applicationName) // Namespace definition start
                 // Generating the class definition
                 .AppendLine()
+                .AppendLine("{")
                     .Append("\t").AppendFormat(
-                        "public static class {0}MockAddresses {{", 
-                        applicationName.Replace(".", string.Empty)); // URL helper class definition start
+                        "public static class {0}MockAddresses", 
+                        applicationName
+                            .Replace(".", string.Empty)
+                            .Replace("-", "_"))
+                        .AppendLine()
+                        .Append("\t{"); // URL helper class definition start
 
             foreach (var mockEndpoint in this.endpointMockUrls)
             {

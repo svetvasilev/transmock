@@ -38,8 +38,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizUnit">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
+    <Reference Include="BizUnit, Version=4.1.3.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="BizUnit.TestSteps, Version=4.1.3.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.TestSteps.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,12 +67,17 @@
     <Compile Include="MultiMessageValidationMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransMockExecutionBeacon.cs" />
+    <Compile Include="Validation\LambdaValidationStep.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj">
       <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2013R2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="net45.packages.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
