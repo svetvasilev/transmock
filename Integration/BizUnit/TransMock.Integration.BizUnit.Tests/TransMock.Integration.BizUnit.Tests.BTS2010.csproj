@@ -37,8 +37,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizUnit">
-      <HintPath>..\..\..\..\..\..\..\Program Files\BizUnit\BizUnit 4.0\Bins\BizUnit.dll</HintPath>
+    <Reference Include="BizUnit, Version=4.1.3.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net40\BizUnit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BizUnit.TestSteps, Version=4.1.3.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net40\BizUnit.TestSteps.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
