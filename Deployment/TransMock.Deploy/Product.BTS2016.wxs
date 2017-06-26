@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="8C3A26E6-24AA-4953-BFA7-E9B8478AB121" Name="TransMock 1.3 For BizTalk Server 2016" Language="1033" Version="1.3" Manufacturer="TransMock Community" UpgradeCode="B8DF0B75-EBC8-4EEF-901D-90F067D282AA">
+    <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" Platform="x86"  />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+   
+    <Feature Id="ProductBinaries" Title="Binaries" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProductExtensions" />      
+    </Feature>
+
+    <Feature Id="ProductDocs" Title="Documentation" Level="1">
+      
+    </Feature>
+    
+    <UIRef Id="WixUI_InstallDir" />
+    
+    <WixVariable Id="WixUILicenseRtf" Value="eula.rtf" />
+    
+    <Binary Id="CustomActionsAssembly" SourceFile="..\TransMock.Deploy.CustomActions\bin\$(var.Configuration)\TransMock.Deploy.CustomActions.CA.dll"></Binary>    
+    
+    <CustomAction Id="AfterInstallAction" BinaryKey="CustomActionsAssembly" 
+                  Execute="immediate" Return="check" 
+                  DllEntry="AfterInstall">      
+    </CustomAction>
+
+    <CustomAction Id="BeforeUninstallAction" BinaryKey="CustomActionsAssembly"
+                  Execute="immediate" Return="check"
+                  DllEntry="BeforeUninstall">
+    </CustomAction>
+
+    <InstallExecuteSequence>
+      
+      <Custom Action="AfterInstallAction" After="InstallFinalize">
+        NOT Installed
+      </Custom>
+      <Custom Action="BeforeUninstallAction" Before="InstallFinalize">
+        Installed AND NOT UPGRADINGPRODUCTCODE
+      </Custom>
+    </InstallExecuteSequence>
+    
+  </Product>
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="TRANSMOCKROOT" Name="TransMock" >
+          <Directory Id="TRANSMOCKFOLDER" Name="BTS2016">
+            <Directory Id="TRANSMOCKBIN" Name="Bin" />
+            <Directory Id="TRANSMOCKEXT" Name="Ext" />
+            <Directory Id="TRANSMOCKDOC" Name="Doc" />
+          </Directory>
+        </Directory>
+      </Directory>      
+    </Directory>
+    <Property Id="WIXUI_INSTALLDIR" Value="TRANSMOCKFOLDER" />
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="TRANSMOCKBIN">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+       <Component Id="Adapter" Guid="861C120A-4E45-4CE8-9288-324C34222BC8" Permanent="no" Transitive="no"> 
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+         <File Source="$(var.TransMock.Wcf.Adapter.BTS2013R2.TargetPath)" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>         
+       </Component>
+      <Component Id="CommunicationLib" Guid="C59A977A-58CC-4FA4-B954-3F2E82BD540A" Permanent="no" Transitive="no"> 
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+         <File Source="$(var.TransMock.Communication.NamedPipes.BTS2013R2.TargetPath)" Name="TransMock.Communication.NamedPipes.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>         
+       </Component>
+      <Component Id="Mockifier" Guid="12236B58-F3EE-4BF0-A66D-4F6D8176E576" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.Mockifier.BTS2013R2.TargetPath)" Name="TransMock.Mockifier.exe" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
+      </Component>
+      <Component Id="MockifierParser" Guid="B55D51E6-E022-40BA-8DFF-647555C6A0E9" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->        
+        <File Source="$(var.TransMock.Mockifier.Parser.BTS2013R2.TargetPath)" Name="TransMock.Mockifier.Parser.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+      <Component Id="CommandLineLib" Guid="329F7F8E-540D-4E26-B028-5822A3911022" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="..\..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll" Name="CommandLine.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="ProductExtensions" Directory="TRANSMOCKEXT">      
+      <Component Id="BizUnitIntegration" Guid="B511A2C0-6B31-4737-8233-81F1A3F0AE0F" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.Integration.BizUnit.BTS2013R2.TargetPath)" Name="TransMock.Integration.BizUnit.dll" KeyPath="yes" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>        
+      </Component>
+      <Component Id="BTDFIntegration" Guid="D165B1A7-FF17-4510-B9CC-EA5A426C6EFF" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->        
+        <File Source="..\..\Integration\BTDF\TransMock.Targets" Name="TransMock.Targets" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
+      </Component>
+      <Component Id="BizTalkTestUtils" Guid="FFF5CE2E-5CEA-45D0-A6B9-6CE7C305325E" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.TestUtils.BizTalk.BTS2013R2.TargetPath)" Name="TransMock.TestUtils.BizTalk.dll" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes" KeyPath="yes"></File>
+      </Component>
+      <Component Id="GACAdapter" Guid="2A48904D-B3F0-483D-BB3C-04C185C14945" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.Wcf.Adapter.BTS2013R2.TargetPath)" Id="TransMock.Wcf.Adapter.dll.GAC" Name="TransMock.Wcf.Adapter.dll" KeyPath="yes" Assembly=".net" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+      <Component Id="GACCommunicationLib" Guid="A2636FC4-61D8-4D80-A0FD-27DB5ED26AC8" Permanent="no" Transitive="no">
+        <!-- TODO: Insert files, registry keys, and other resources here. -->
+        <File Source="$(var.TransMock.Communication.NamedPipes.BTS2013R2.TargetPath)" Id="TransMock.Communication.NamedPipes.dll.GAC" Name="TransMock.Communication.NamedPipes.dll" KeyPath="yes" Assembly=".net" Vital="yes" DiskId="1" Hidden="no" ReadOnly="no" TrueType="no" System="no" PatchWholeFile="yes"></File>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
