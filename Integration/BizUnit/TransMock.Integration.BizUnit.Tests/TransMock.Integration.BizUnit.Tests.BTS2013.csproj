@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FCBD2200-2998-4A52-8D49-FC17F21A4750}</ProjectGuid>
+    <ProjectGuid>{4C40089D-2E96-4A2B-9EB2-02D2B5D2441F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Integration.BizUnit.Tests</RootNamespace>
@@ -24,7 +24,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\net45\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,7 +33,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\net45\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -71,20 +71,6 @@
     <Compile Include="TestMockReceiveStep.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj">
-      <Project>{1F8B806E-B479-4DB0-9896-1D29E288A2F2}</Project>
-      <Name>TransMock.Wcf.Adapter.BTS2013</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013.csproj">
-      <Project>{5891035F-5346-4A15-BB61-09018D5CC4AE}</Project>
-      <Name>TransMock.TestUtils.BTS2013</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj">
-      <Project>{B32C1509-3952-4492-B097-6886CEC675FB}</Project>
-      <Name>TransMock.Integration.BizUnit.BTS2013</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +83,20 @@
     <Content Include="TestData\TestResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj">
+      <Project>{c47460d1-131e-4467-b8cc-02056d3d2652}</Project>
+      <Name>TransMock.Wcf.Adapter.BTS2013</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013.csproj">
+      <Project>{e7c8d3f9-bb10-4d00-b368-3ec826c5a80d}</Project>
+      <Name>TransMock.TestUtils.BTS2013</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj">
+      <Project>{a0bbae30-ddf5-4852-ad81-03f8f30ba97a}</Project>
+      <Name>TransMock.Integration.BizUnit.BTS2013</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

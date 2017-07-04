@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1AE03E84-CD2E-4F67-B953-6D3CEE410315}</ProjectGuid>
+    <ProjectGuid>{D171B6E9-44C6-4C43-A5BA-A47C7D5CB2F3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Mockifier.Parser.Tests</RootNamespace>
@@ -24,7 +24,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\net451\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,7 +33,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\net451\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -76,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2013R2.csproj">
-      <Project>{b3edc765-d278-420d-8e10-e408acf1067a}</Project>
+      <Project>{0c81dc0d-abe3-4188-83d3-c0961e7427cd}</Project>
       <Name>TransMock.Mockifier.Parser.BTS2013R2</Name>
     </ProjectReference>
   </ItemGroup>

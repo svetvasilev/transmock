@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F4E6707A-1B29-4F36-A5B8-92C8BAE0FF3F}</ProjectGuid>
+    <ProjectGuid>{5D5CA52C-800C-4F36-9283-0F95D87126ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mockifier.Tests</RootNamespace>
@@ -23,7 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\net40\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,7 +31,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\net40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,15 +53,15 @@
     <Compile Include="TestMockifier.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.BTS2010.csproj">
-      <Project>{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}</Project>
-      <Name>TransMock.Mockifier.BTS2010</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="TestData\TestApplication.BindingInfo.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.BTS2010.csproj">
+      <Project>{c2e611cf-808c-4f25-9619-3247e02bb2f9}</Project>
+      <Name>TransMock.Mockifier.BTS2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

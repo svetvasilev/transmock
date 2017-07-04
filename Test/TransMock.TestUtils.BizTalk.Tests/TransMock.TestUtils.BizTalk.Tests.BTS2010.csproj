@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBA39921-3716-4CBE-8742-086727D383B0}</ProjectGuid>
+    <ProjectGuid>{B06CE9EC-C799-47B1-AFCD-F10681F53B61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.BizTalk.TestUtils.Tests</RootNamespace>
@@ -76,13 +76,13 @@
     <Compile Include="TestMockHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj">
-      <Project>{42f57394-8f3e-47e7-b1e6-acdea505af23}</Project>
-      <Name>TransMock.TestUtils.BizTalk.BTS2010</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj">
+      <Project>{2c5e174a-8087-41b1-805c-7d7830ec478a}</Project>
+      <Name>TransMock.TestUtils.BizTalk.BTS2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

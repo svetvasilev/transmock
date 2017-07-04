@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>fcb0bfe8-7df3-4ce6-9110-1b40975b4e8d</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>TransMock.Adapter.BTS2016</Id>
+    <Version>1.3.0</Version>
+    <Title>TransMock Adapter</Title>
+    <Authors>Svetoslav Vasilev</Authors>
+    <Owners>Svetoslav Vasilev</Owners>
+    <Summary>TransMock Adapter package for BizTalk 2016</Summary>
+    <Description>Contain the TransMock Adapter assemblies for BizTalk 2016</Description>
+    <ReleaseNotes>
+    </ReleaseNotes>
+    <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
+    <LicenseUrl>
+    </LicenseUrl>
+    <Copyright>Copyright © 2017, Svetoslav Vasilev</Copyright>
+    <Tags>TransMock, Adapter, BizTalk 2016</Tags>
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+    <Content Include="tools\Uninstall.ps1" />
+    <Content Include="tools\Install.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2016.csproj" />
+    <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2016.csproj" />
+  </ItemGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>

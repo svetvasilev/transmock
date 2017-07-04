@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{43289D5B-19BD-4FD1-A8A7-05996A688BEE}</ProjectGuid>
+    <ProjectGuid>{1DD6AC74-FACD-46CA-A8FB-0E39653A2B2E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Wcf.Adapter.Tests</RootNamespace>
@@ -23,7 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\net40\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,7 +31,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\net40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,15 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2010.csproj">
-      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
+      <Project>{cf45da9f-f4b9-46b7-ad11-fa36af2bf399}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2010.csproj">
-      <Project>{5891035F-5346-4A15-BB61-09018D5CC4AE}</Project>
+      <Project>{dfad184e-2c98-4e34-ae8d-7bd0ec677f12}</Project>
       <Name>TransMock.TestUtils.BTS2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2010.csproj">
-      <Project>{1F8B806E-B479-4DB0-9896-1D29E288A2F2}</Project>
+      <Project>{10b17c1a-69ec-4a58-904f-16037427dc03}</Project>
       <Name>TransMock.Wcf.Adapter.BTS2010</Name>
     </ProjectReference>
   </ItemGroup>

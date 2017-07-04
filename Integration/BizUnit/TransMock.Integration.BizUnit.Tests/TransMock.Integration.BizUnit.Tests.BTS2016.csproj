@@ -74,17 +74,17 @@
     <Compile Include="TestWithBizTalk.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj">
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2016.csproj">
       <Project>{1f8b806e-b479-4db0-9896-1d29e288a2f2}</Project>
-      <Name>TransMock.Wcf.Adapter.BTS2013R2</Name>
+      <Name>TransMock.Wcf.Adapter.BTS2016</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013R2.csproj">
+    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2016.csproj">
       <Project>{5891035f-5346-4a15-bb61-09018d5cc4ae}</Project>
-      <Name>TransMock.TestUtils.BTS2013R2</Name>
+      <Name>TransMock.TestUtils.BTS2016</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013R2.csproj">
+    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2016.csproj">
       <Project>{b32c1509-3952-4492-b097-6886cec675fb}</Project>
-      <Name>TransMock.Integration.BizUnit.BTS2013R2</Name>
+      <Name>TransMock.Integration.BizUnit.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

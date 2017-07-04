@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>f8b1849d-8252-45fe-ba8a-6c6828da1d6e</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>TransMock.Deploy.Framework</Id>
+    <Version>1.0.0</Version>
+    <Title>TransMock.Deploy.Framework</Title>
+    <Authors>Administrator</Authors>
+    <Owners>Administrator</Owners>
+    <Summary>TransMock.Deploy.Framework</Summary>
+    <Description>TransMock.Deploy.Framework</Description>
+    <ReleaseNotes>
+    </ReleaseNotes>
+    <ProjectUrl>
+    </ProjectUrl>
+    <LicenseUrl>
+    </LicenseUrl>
+    <Copyright>Copyright © Administrator</Copyright>
+    <Tags>TransMock.Deploy.Framework</Tags>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="content\BTDF\TransMock.targets">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2016.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2016.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier\TransMock.Mockifier.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier\TransMock.Mockifier.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier\TransMock.Mockifier.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Mockifier\TransMock.Mockifier\TransMock.Mockifier.BTS2016.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2016.csproj" />
+  </ItemGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>
