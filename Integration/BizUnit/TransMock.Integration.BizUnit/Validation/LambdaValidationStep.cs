@@ -22,7 +22,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using BizUnit;
-using BizUnit.Xaml;
+using BizUnit.TestSteps;
+using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit.Validation
 {

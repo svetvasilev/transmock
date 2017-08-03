@@ -23,20 +23,25 @@
     <Title>TransMock Adapter</Title>
     <Authors>Svetoslav Vasilev</Authors>
     <Owners>$(Authors)</Owners>
-    <Summary>Package for the TransMock Adapter for BizTalk Server</Summary>
-    <Description>Contains the TransMock adapter assemblies for BizTalk Server versions 2010 to 2016 incl.</Description>
+    <Summary>TransMock Adapter for BizTalk Server 2010/2013/2013 R2/2016</Summary>
+    <Description>Easily mock the communication endpoints of BizTalk integrations for testing purposes.</Description>
     <ReleaseNotes>
     </ReleaseNotes>
     <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
-    <LicenseUrl>
-    </LicenseUrl>
-    <Copyright>Copyright © Administrator</Copyright>
-    <Tags>TransMock.Deploy.Adapter</Tags>
+    <LicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</LicenseUrl>
+    <Copyright>Copyright 2014 © Svetoslav Vasilev</Copyright>
+    <Tags>TransMock Adapter BizTalk testing mocking</Tags>
+    <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
     <Content Include="tools\Install.ps1" />
     <Content Include="tools\Uninstall.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ServiceModel.Channels.dll">
+      <ExcludeFromNuPkg>true</ExcludeFromNuPkg>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2010.csproj" />

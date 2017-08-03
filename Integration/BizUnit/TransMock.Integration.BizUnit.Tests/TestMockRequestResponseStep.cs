@@ -30,7 +30,9 @@ using TransMock.Wcf.Adapter;
 using TransMock.Integration.BizUnit;
 
 using BizUnit;
+using BizUnit.Core;
 using Moq;
+using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit.Tests
 {
@@ -371,11 +373,11 @@ namespace TransMock.Integration.BizUnit.Tests
             step.ValidationMode = MultiMessageValidationMode.Cascading;
 
             // Setting up a validation step mock list
-            var validationStepMockList = new List<Mock<global::BizUnit.Xaml.SubStepBase>>(3);
+            var validationStepMockList = new List<Mock<SubStepBase>>(3);
             for (int i = 0; i < 3; i++)
             {
                 var validationStepMock = TestMockReceiveStep.CreateSubStepMock();
-                var subStepCollection = new System.Collections.ObjectModel.Collection<global::BizUnit.Xaml.SubStepBase>();
+                var subStepCollection = new System.Collections.ObjectModel.Collection<SubStepBase>();
                 subStepCollection.Add(validationStepMock.Object);
                 
                 step.CascadingSubSteps.Add(i, subStepCollection);

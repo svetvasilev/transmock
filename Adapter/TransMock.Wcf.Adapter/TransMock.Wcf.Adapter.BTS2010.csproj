@@ -92,7 +92,9 @@
     <Compile Include="TimeoutHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.ServiceModel" />
@@ -133,6 +135,7 @@
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2010.csproj">
       <Project>{cf45da9f-f4b9-46b7-ad11-fa36af2bf399}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2010</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
 </Project>

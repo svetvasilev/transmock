@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>8ff018cc-6ead-486a-8a11-bfe352e064ce</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>TransMock.TestUtils</Id>
+    <Version>1.3.0</Version>
+    <Title>TransMock TestUtils</Title>
+    <Authors>Svetoslav Vasilev</Authors>
+    <Owners>$(Authors)</Owners>
+    <Summary>TransMock test utils for dynamic send ports</Summary>
+    <Description>Enables testing of BizTalk integrations with dynamic send ports</Description>
+    <ReleaseNotes>
+    </ReleaseNotes>
+    <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
+    <LicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</LicenseUrl>
+    <Copyright>Copyright 2014 © Svetoslav Vasilev</Copyright>
+    <Tags>TransMock BizTalk mocking dynamic send ports</Tags>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+    <Content Include="tools\Install.ps1" />
+    <Content Include="tools\Uninstall.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.BTS2016.csproj" />
+  </ItemGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>

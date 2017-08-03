@@ -1,6 +1,8 @@
 ﻿
-namespace BizTalkTests.Test {
-	public static class BizTalkTestsMockAddresses {
+namespace BizTalkTests.Test
+{
+	public static class BizTalkTestsMockAddresses
+	{
 		public static string DynamicPortOut
 		{
 			get

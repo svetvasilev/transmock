@@ -71,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.BTS2016.csproj">
-      <Project>{B3EDC765-D278-420D-8E10-E408ACF1067A}</Project>
+      <Project>{b3edc765-d278-420d-8e10-e408acf1067a}</Project>
       <Name>TransMock.Mockifier.Parser.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>

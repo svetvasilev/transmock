@@ -40,11 +40,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BizUnit">
-      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.dll</HintPath>
+    <Reference Include="BizUnit.Core, Version=5.0.5.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\BizUnit.Core.5.0.5\lib\net45\BizUnit.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="BizUnit.TestSteps">
-      <HintPath>..\..\..\packages\BizUnit4.4.1.4\lib\net45\BizUnit.TestSteps.dll</HintPath>
+    <Reference Include="BizUnit.TestSteps, Version=5.0.5.0, Culture=neutral, PublicKeyToken=8ab3cc29608bfce0, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\BizUnit.TestSteps.5.0.5\lib\net45\BizUnit.TestSteps.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />

@@ -23,9 +23,10 @@ using System.Linq;
 using System.Text;
 
 using BizUnit;
-using BizUnit.Xaml;
+using BizUnit.TestSteps;
 
 using TransMock.Communication.NamedPipes;
+using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit
 {

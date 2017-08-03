@@ -20,7 +20,8 @@ using System.Linq;
 using System.Text;
 
 using BizUnit;
-using BizUnit.Xaml;
+using BizUnit.Core;
+using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit
 {

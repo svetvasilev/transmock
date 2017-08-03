@@ -26,7 +26,7 @@ namespace BizTalkTest.IntegrationTests
         [DeploymentItem(@"TestData\StartMessage.xml")]
         public void TestHappyPath_OneWay()
         {
-            var testCase = new BizUnit.Xaml.TestCase();
+            var testCase = new BizUnit.Core.TestBuilder.TestCase();
 
             var inMsgStep = new MockSendStep()
             {
@@ -46,16 +46,16 @@ namespace BizTalkTest.IntegrationTests
 
             testCase.ExecutionSteps.Add(outMsgStep);
 
-            BizUnit.BizUnit testRunner = new BizUnit.BizUnit(testCase);
+            BizUnit.Core.TestRunner testRunner = new BizUnit.Core.TestRunner(testCase);
 
-            testRunner.RunTest();
+            testRunner.Run();
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\StartMessage.xml")]
         public void TestHappyPath_OneWay_HelperClass()
         {
-            var testCase = new BizUnit.Xaml.TestCase();
+            var testCase = new BizUnit.Core.TestBuilder.TestCase();
 
             var inMsgStep = new MockSendStep()
             {
@@ -75,9 +75,9 @@ namespace BizTalkTest.IntegrationTests
 
             testCase.ExecutionSteps.Add(outMsgStep);
 
-            BizUnit.BizUnit testRunner = new BizUnit.BizUnit(testCase);
+            BizUnit.Core.TestRunner testRunner = new BizUnit.Core.TestRunner(testCase);
 
-            testRunner.RunTest();
+            testRunner.Run();
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace BizTalkTest.IntegrationTests
         [DeploymentItem(@"TestData\ResponseMessage.xml")]
         public void TestHappyPath_TwoWay_HelperClass()
         {
-            var testCase = new BizUnit.Xaml.TestCase();
+            var testCase = new BizUnit.Core.TestBuilder.TestCase();
 
             var inMsgStep = new MockSendStep()
             {
@@ -106,9 +106,9 @@ namespace BizTalkTest.IntegrationTests
 
             testCase.ExecutionSteps.Add(outMsgStep);
 
-            BizUnit.BizUnit testRunner = new BizUnit.BizUnit(testCase);
+            BizUnit.Core.TestRunner testRunner = new BizUnit.Core.TestRunner(testCase);
 
-            testRunner.RunTest();
+            testRunner.Run();
         }
     }
 }

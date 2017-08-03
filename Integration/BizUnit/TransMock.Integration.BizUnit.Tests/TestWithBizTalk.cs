@@ -31,6 +31,8 @@ using TransMock.Integration.BizUnit;
 
 using BizUnit;
 using Moq;
+using BizUnit.Core.Utilites;
+using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit.Tests
 {
