@@ -19,7 +19,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TransMock.Framework</Id>
-    <Version>1.3.1</Version>
+    <Version>1.3.2</Version>
     <Title>TransMock Framework</Title>
     <Authors>Svetoslav Vasilev</Authors>
     <Owners>$(Authors)</Owners>
@@ -29,7 +29,7 @@
     </ReleaseNotes>
     <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
     <LicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</LicenseUrl>
-    <Copyright>Copyright 2014 © Svetoslav Vasilev</Copyright>
+    <Copyright>Copyright 2014-2017 © Svetoslav Vasilev</Copyright>
     <Tags>TransMock BizTalk testing mocking</Tags>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
   </PropertyGroup>
@@ -38,18 +38,52 @@
       <Link>BTDF\TransMock.targets</Link>
     </Content>
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\CommandLine.dll">
-      <Link>tools\CommandLine.dll</Link>
+      <Link>tools\BTS2016\CommandLine.dll</Link>
     </Content>
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe">
-      <Link>tools\TransMock.Mockifier.exe</Link>
+      <Link>tools\BTS2016\TransMock.Mockifier.exe</Link>
     </Content>
-    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe.config">
-      <Link>tools\TransMock.Mockifier.exe.config</Link>
-    </Content>
+<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe.config">
+      <Link>tools\BTS2016\TransMock.Mockifier.exe.config</Link>
+    </Content> -->
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.Parser.dll">
-      <Link>tools\TransMock.Mockifier.Parser.dll</Link>
+      <Link>tools\BTS2016\TransMock.Mockifier.Parser.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net40\CommandLine.dll">
+      <Link>tools\BTS2010\CommandLine.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net40\TransMock.Mockifier.exe">
+      <Link>tools\BTS2010\TransMock.Mockifier.exe</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net40\Transmock.Mockifier.Parser.dll">
+      <Link>tools\BTS2010\Transmock.Mockifier.Parser.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\CommandLine.dll">
+      <Link>tools\BTS2013R2\CommandLine.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.exe">
+      <Link>tools\BTS2013R2\TransMock.Mockifier.exe</Link>
+    </Content>
+<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.exe.config">
+      <Link>tools\BTS2013R2\TransMock.Mockifier.exe.config</Link>
+    </Content> -->
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.Parser.dll">
+      <Link>tools\BTS2013R2\TransMock.Mockifier.Parser.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\CommandLine.dll">
+      <Link>tools\BTS2013\CommandLine.dll</Link>
+    </Content>
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.exe">
+      <Link>tools\BTS2013\TransMock.Mockifier.exe</Link>
+    </Content>
+<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.exe.config">
+      <Link>tools\BTS2013\TransMock.Mockifier.exe.config</Link>
+    </Content> -->
+    <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.Parser.dll">
+      <Link>tools\BTS2013\TransMock.Mockifier.Parser.dll</Link>
     </Content>
     <Content Include="Readme.txt" />
+    <Content Include="tools\Install.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas.dll">
@@ -101,6 +135,12 @@
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013R2.csproj" />
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2016.csproj" />
     <ProjectReference Include="..\TransMock.Deploy.Adapter\TransMock.Deploy.Adapter.nuproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tools\BTS2010\" />
+    <Folder Include="tools\BTS2013\" />
+    <Folder Include="tools\BTS2013R2\" />
+    <Folder Include="tools\BTS2016\" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
