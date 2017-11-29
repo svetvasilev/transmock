@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 //   Copyright 2014 - Svetoslav Vasilev
 
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,18 +19,36 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Installer">
 	<PropertyGroup>
 		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>
-    <BTSVersion Condition="'$(BTSVersion)' == ''">2013</BTSVersion>
-    <TargetBTSEnvironment Condition="'$(BTDF_Env)' != ''">$(BTDF_Env)</TargetBTSEnvironment>
+    <BTSVersion Condition="'$(BTSVersion)' == ''">2013</BTSVersion>    
     <TransMockAddressClassDir Condition="'$(TransMockAddressClassDir)' == ''"></TransMockAddressClassDir>
     <TransMockDebug Condition="'$(TransMockDebug)' == ''">false</TransMockDebug>
+    <BTDF_Env></BTDF_Env>
 	</PropertyGroup>
-	<!-- Extension point for BTDF. Executed in case deploying to local or shared development environment only!!! -->
-	<Target Name="CustomDeployTarget" Condition="$(TargetBTSEnvironment.ToLower().Contains('dev'))" >
+  
+  <!-- Extension point for BTDF. -->
+  <Target Name="CustomDeployTarget">
+    <PropertyGroup>      
+      <TargetBTSEnvironment Condition="'$(BTDF_Env)' != ''">$(BTDF_Env)</TargetBTSEnvironment>
+      <TargetBTSEnvironment Condition="'$(BTDF_Env)' == '' And ($(SettingsFilePath.Contains('local_settings')) 
+                            Or $(SettingsFilePath.Contains('Exported_LocalSettings')) 
+                            Or $(SettingsFilePath.Contains('Exported_DevSettings')))">Development</TargetBTSEnvironment>
+    </PropertyGroup>
+
+    <Message Text="BTDF_Env value: $(BTDF_Env)" Condition="'$(TransMockDebug)' == 'true'" />
+    <Message Text="SettingsFilePath value: $(SettingsFilePath)" Condition="'$(TransMockDebug)' == 'true'" />
+    <Message Text="TargetBTSEnvironment value: $(TargetBTSEnvironment)" Condition="'$(TransMockDebug)' == 'true'" />
+
+    <CallTarget Targets="TransMockTarget" Condition="$(TargetBTSEnvironment.ToLower().Contains('dev'))"/>
+  </Target>
+	
+  <!-- TransMock target executed in case deploying to local or shared development environment only!!! -->
+	<Target Name="TransMockTarget">
 		<!-- Redefining the TransMockHomeDir property in case it was not assigned a value -->
 		<!-- In case TransMock was not installed in the default folder the property should be assigned 
 			the actual path in the PropertyGroup section in the BTDFPROJ file -->
-		<PropertyGroup>			
-			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.0\tools</TransMockHomeDir>			
+		<PropertyGroup>
+      <!-- The macros PkgVersion and BizTalk version are updated during deploy time to point to the correct location depending on those 2 values -->
+			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.2\tools\BTS2016</TransMockHomeDir>			
 		</PropertyGroup>
     
     <CreateProperty Value="$(TransMockAddressClassDir)" Condition="'$(TransMockAddressClassDir)' != ''">
