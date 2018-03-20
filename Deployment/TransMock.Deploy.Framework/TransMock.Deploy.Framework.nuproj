@@ -19,7 +19,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TransMock.Framework</Id>
-    <Version>1.3.2</Version>
+    <Version>1.3.3</Version>
     <Title>TransMock Framework</Title>
     <Authors>Svetoslav Vasilev</Authors>
     <Owners>$(Authors)</Owners>
@@ -29,7 +29,7 @@
     </ReleaseNotes>
     <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
     <LicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</LicenseUrl>
-    <Copyright>Copyright 2014-2017 © Svetoslav Vasilev</Copyright>
+    <Copyright>Copyright 2014-2018 © Svetoslav Vasilev</Copyright>
     <Tags>TransMock BizTalk testing mocking</Tags>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
   </PropertyGroup>
@@ -43,7 +43,7 @@
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe">
       <Link>tools\BTS2016\TransMock.Mockifier.exe</Link>
     </Content>
-<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe.config">
+    <!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.exe.config">
       <Link>tools\BTS2016\TransMock.Mockifier.exe.config</Link>
     </Content> -->
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\$(Configuration)\net45\TransMock.Mockifier.Parser.dll">
@@ -64,7 +64,7 @@
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.exe">
       <Link>tools\BTS2013R2\TransMock.Mockifier.exe</Link>
     </Content>
-<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.exe.config">
+    <!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.exe.config">
       <Link>tools\BTS2013R2\TransMock.Mockifier.exe.config</Link>
     </Content> -->
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net451\TransMock.Mockifier.Parser.dll">
@@ -76,7 +76,7 @@
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.exe">
       <Link>tools\BTS2013\TransMock.Mockifier.exe</Link>
     </Content>
-<!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.exe.config">
+    <!--     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.exe.config">
       <Link>tools\BTS2013\TransMock.Mockifier.exe.config</Link>
     </Content> -->
     <Content Include="..\..\Mockifier\TransMock.Mockifier\bin\Release\net45\TransMock.Mockifier.Parser.dll">

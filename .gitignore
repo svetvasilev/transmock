@@ -193,3 +193,4 @@ FakesAssemblies/
 
 # BTDF Exported settings
 Exported*.xml
+/Framework
