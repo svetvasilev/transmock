@@ -6,6 +6,9 @@ The following BizTalk Server versions are supported:
 - 2010/2013/2013 R2/2016
 
 **** Release notes ****
+Version 1.3.4:
+- Fixed an issue with the BTSVersion setting when explicitly set to 2016
+
 Version 1.3.3:
 - Fixed an issue with the BTDF integration where wrong name of an internal BTDF variable was used
 
