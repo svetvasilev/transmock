@@ -99,8 +99,22 @@ namespace TransMock.Wcf.Adapter
                     "Writing the response message to the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
+                // Ccreate MockMessage isntance
+                var mockMessage = new MockMessage();
+
+                // Assign the message body
+                mockMessage.Body = Convert.ToBase64String(msgBuffer);
+
+                // Add the message properties to the mock message
+                foreach (var property in message.Properties)
+                {
+                    mockMessage.Properties.Add(
+                        property.Key,
+                        property.Value.ToString());
+                }
                 // Write it to the pipe server
-                this.pipeServer.WriteAllBytes(this.connectionId, msgBuffer);
+                //this.pipeServer.WriteAllBytes(this.connectionId, msgBuffer);
+                this.pipeServer.WriteMessage(connectionId, mockMessage);
 
                 System.Diagnostics.Debug.WriteLine(
                     "The response message was sent to the client",

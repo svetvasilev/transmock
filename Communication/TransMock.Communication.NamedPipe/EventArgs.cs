@@ -35,6 +35,11 @@ namespace TransMock.Communication.NamedPipes
         /// Gets or sets the connection Id
         /// </summary>
         public int ConnectionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message instance
+        /// </summary>
+        public MockMessage Message { get; set; }
     }
 
     /// <summary>

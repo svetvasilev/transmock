@@ -80,5 +80,12 @@ namespace TransMock.Communication.NamedPipes
         /// <param name="connectionId">The id of the client connection to write the data to</param>
         /// <param name="data">The data to be written to the client as a stream</param>
         void WriteStream(int connectionId, Stream data);
+
+        /// <summary>
+        /// Writes a mock message to the specified client connection
+        /// </summary>
+        /// <param name="connectionId">The connection Id to write the message to</param>
+        /// <param name="message">The message instance that will be written to the connection</param>
+        void WriteMessage(int connectionId, MockMessage message);
     }    
 }

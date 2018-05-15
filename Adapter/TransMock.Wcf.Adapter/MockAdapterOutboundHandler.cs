@@ -88,6 +88,20 @@ namespace TransMock.Wcf.Adapter
             }
 
             byte[] msgBuffer = xdr.ReadContentAsBase64();
+
+            // Ccreate MockMessage isntance
+            var mockMessage = new MockMessage();
+
+            // Assign the message body
+            mockMessage.Body = Convert.ToBase64String(msgBuffer);
+
+            // Add the message properties to the mock message
+            foreach (var property in message.Properties)
+            {
+                mockMessage.Properties.Add(
+                    property.Key,
+                    property.Value.ToString());
+            }
             
             using (StreamingNamedPipeClient pipeClient = new StreamingNamedPipeClient(
                 Connection.ConnectionFactory.ConnectionUri.Uri))
@@ -98,7 +112,8 @@ namespace TransMock.Wcf.Adapter
                     "The pipe client was connected!Sending the outbound message over the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
-                pipeClient.WriteAllBytes(msgBuffer);                
+                // pipeClient.WriteAllBytes(msgBuffer);
+                pipeClient.WriteMessage(mockMessage);
 
                 System.Diagnostics.Debug.WriteLine(
                     "Outbound message sent!",
@@ -129,21 +144,50 @@ namespace TransMock.Wcf.Adapter
 
                     // We proceed with waiting for the response                    
                     Message responseMsg = null;
-                    using (MemoryStream msgStream = pipeClient.ReadStream() as MemoryStream)
+                    var responseMockMessage = pipeClient.ReadMessage();
+
+                    respContents = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "<MessageContent>{0}</MessageContent>",
+                       responseMockMessage.Body);
+
+                    XmlReader respReader = XmlReader.Create(new StringReader(respContents));
+
+                    System.Diagnostics.Debug.WriteLine(
+                        "Constructing the response WCF Message",
+                        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
+
+                    responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, respReader);
+
+                    // Check if there are returned some properties that needs to be written/promoted to the message context
+                    foreach (var property in responseMockMessage.Properties)
                     {
-                        respContents = string.Format(
-                            CultureInfo.InvariantCulture,
-                            "<MessageContent>{0}</MessageContent>",
-                           Convert.ToBase64String(msgStream.ToArray()));
-
-                        XmlReader respReader = XmlReader.Create(new StringReader(respContents));
-
-                        System.Diagnostics.Debug.WriteLine(
-                            "Constructing the response WCF Message",
-                            "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
-
-                        responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, respReader);
+                        if (responseMsg.Properties.ContainsKey(property.Key))
+                        {
+                            responseMsg.Properties[property.Key] = property.Value;
+                        }
+                        else
+                        {
+                            responseMsg.Properties.Add(
+                                property.Key, property.Value);
+                        }
                     }
+
+                    //using (MemoryStream msgStream = pipeClient.ReadStream() as MemoryStream)
+                    //{
+                    //    respContents = string.Format(
+                    //        CultureInfo.InvariantCulture,
+                    //        "<MessageContent>{0}</MessageContent>",
+                    //       Convert.ToBase64String(msgStream.ToArray()));
+
+                    //    XmlReader respReader = XmlReader.Create(new StringReader(respContents));
+
+                    //    System.Diagnostics.Debug.WriteLine(
+                    //        "Constructing the response WCF Message",
+                    //        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
+
+                    //    responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, respReader);
+                    //}
 
                     System.Diagnostics.Debug.WriteLine(
                         "Response WCF Message constructed. Returning it to BizTalk",

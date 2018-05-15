@@ -21,6 +21,8 @@ using System.IO.Pipes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -227,6 +229,191 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                 pipeClient.WaitForPipeDrain();
                 
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedContent, "Message was not received by the server");
+            Assert.AreEqual(ffContent, receivedContent, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_XML()
+        {
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+            string receivedXml = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) => {
+
+                receivedXml = readArgs.Message.Body;
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
+
+                var formatter = new BinaryFormatter();
+                pipeClient.Connect(10000);
+
+                formatter.Serialize(pipeClient, mockMessage);
+                // pipeClient.Flush();
+
+                pipeClient.WaitForPipeDrain();
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedXml, "Message was not received by the server");
+            Assert.AreEqual(xml, receivedXml, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_XML_Unicode()
+        {
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+            string receivedXml = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) =>
+            {
+                using (StreamReader sr = new StreamReader(readArgs.MessageStream, Encoding.Unicode))
+                {
+                    receivedXml = sr.ReadToEnd();
+                }
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                byte[] xmlBytes = Encoding.Unicode.GetBytes(xml);
+
+                pipeClient.Connect(10000);
+                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
+                pipeClient.WriteByte(0x0);
+
+                pipeClient.WaitForPipeDrain();
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedXml, "Message was not received by the server");
+            Assert.AreEqual(xml, receivedXml, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_FlatFile()
+        {
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
+            string receivedContent = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) =>
+            {
+                using (StreamReader sr = new StreamReader(readArgs.MessageStream, Encoding.UTF8))
+                {
+                    receivedContent = sr.ReadToEnd();
+                }
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                byte[] msgBytes = Encoding.UTF8.GetBytes(ffContent);
+
+                pipeClient.Connect(10000);
+                pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+
+                pipeClient.WaitForPipeDrain();
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedContent, "Message was not received by the server");
+            Assert.AreEqual(ffContent, receivedContent, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_FlatFile_ASCII()
+        {
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
+            string receivedContent = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) =>
+            {
+                using (StreamReader sr = new StreamReader(readArgs.MessageStream, Encoding.ASCII))
+                {
+                    receivedContent = sr.ReadToEnd();
+                }
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                byte[] msgBytes = Encoding.ASCII.GetBytes(ffContent);
+
+                pipeClient.Connect(10000);
+                pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+
+                pipeClient.WaitForPipeDrain();
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedContent, "Message was not received by the server");
+            Assert.AreEqual(ffContent, receivedContent, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_FlatFile_Unicode()
+        {
+            string ffContent = "303330123333777;ABCD;00001;00002;2014-01-15;21:21:33.444;EFGH;";
+            string receivedContent = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) =>
+            {
+                using (StreamReader sr = new StreamReader(readArgs.MessageStream, Encoding.Unicode))
+                {
+                    receivedContent = sr.ReadToEnd();
+                }
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                byte[] msgBytes = Encoding.Unicode.GetBytes(ffContent);
+
+                pipeClient.Connect(10000);
+                pipeClient.Write(msgBytes, 0, msgBytes.Count());
+                pipeClient.WriteByte(0x0);
+
+                pipeClient.WaitForPipeDrain();
+
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler

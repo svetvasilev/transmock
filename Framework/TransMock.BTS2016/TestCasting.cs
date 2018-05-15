@@ -17,6 +17,7 @@ namespace TransMock
     /// This behavior is driven by the TestMold class where the corresponding expectations are set.
     /// This is why the Setup methods match the direction of the message flow, e.g. SetupReceive is setting up a receive
     /// endpoint and vice versa.
+    /// IDEA: To use the casting for performing the mocking on the fly?
     /// </summary>
     public class TestCasting<TAddresses> where TAddresses : class
     {
@@ -172,9 +173,5 @@ namespace TransMock
                 System.Threading.Monitor.Pulse(this.syncRoot);
             }
         }
-    }
-
-    public class SingleMessageExpectation
-    {
     }
 }

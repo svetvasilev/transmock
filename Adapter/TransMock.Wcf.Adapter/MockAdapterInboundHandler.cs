@@ -265,15 +265,20 @@ namespace TransMock.Wcf.Adapter
                 
                 string msgContents = null;
 
-                // Adding the message contents to a predefined XML structure
-                // TODO: refactor to a more efficien implementation                
-                using (MemoryStream memStream = e.MessageStream as MemoryStream)
-                {
-                    msgContents = string.Format(
+                msgContents = string.Format(
                         CultureInfo.InvariantCulture,
                         "<MessageContent>{0}</MessageContent>",
-                        Convert.ToBase64String(memStream.ToArray()));
-                } 
+                        e.Message.Body);
+
+                // Adding the message contents to a predefined XML structure
+                // TODO: refactor to a more efficien implementation                
+                //using (MemoryStream memStream = e.MessageStream as MemoryStream)
+                //{
+                //    msgContents = string.Format(
+                //        CultureInfo.InvariantCulture,
+                //        "<MessageContent>{0}</MessageContent>",
+                //        Convert.ToBase64String(memStream.ToArray()));
+                //} 
 
                 XmlReader xr = XmlReader.Create(new StringReader(msgContents));
 
@@ -283,9 +288,23 @@ namespace TransMock.Wcf.Adapter
                     "Message constructed. Promoting any properties to it",
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
-                // Add any configured properties in the message context
-                this.propertyParser.PromoteProperties(inMsg);                    
-                    
+                // Add any statically configured properties in the message context
+                this.propertyParser.PromoteProperties(inMsg);
+
+                // Add/Update any dynamically configured message properties
+                foreach (var property in e.Message.Properties)
+                {
+                    if (inMsg.Properties.ContainsKey(property.Key))
+                    {
+                        inMsg.Properties[property.Key] = property.Value;
+                    }
+                    else
+                    {
+                        inMsg.Properties.Add(
+                            property.Key, property.Value);
+                    }
+                }
+
                 if (inMsg != null)
                 {
                     System.Diagnostics.Debug.WriteLine(

@@ -74,5 +74,11 @@ namespace TransMock.Communication.NamedPipes
         /// </summary>
         /// <param name="data">The stream containing all the data to be sent to the server</param>
         void WriteStream(Stream data);
+
+        /// <summary>
+        /// Writes a mock message to the specified server named pipe endpoint
+        /// </summary>
+        /// <param name="message">The message instance that will be written to the connection</param>
+        void WriteMessage(MockMessage message);
     }
 }

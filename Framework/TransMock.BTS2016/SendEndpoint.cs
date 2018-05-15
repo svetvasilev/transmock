@@ -12,13 +12,17 @@
         public int ExpectedMessageCount { get; set; }
     }
 
-    public class MockEndpoint
+    public abstract class MockEndpoint
     {
         
         public string URL { get; set; }
 
         public int TimeoutInSeconds { get; set; }
 
+        /// <summary>
+        /// Represents the default expected encoding of the messages for 
+        /// a given endpoint instance
+        /// </summary>
         public System.Text.Encoding MessageEncoding { get; set; }
 
 

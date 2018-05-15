@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -245,6 +247,38 @@ namespace TransMock.Communication.NamedPipes
             }
         }
 
+        public MockMessage ReadMessage()
+        {
+            try
+            {
+                System.Diagnostics.Trace.WriteLine(
+                    "ReadMessage() called",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
+                var formatter = new BinaryFormatter();
+
+                System.Diagnostics.Trace.WriteLine(
+                    "Deserializing message from the pipe.",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
+                var message = (MockMessage) formatter.Deserialize(this.pipeClient);
+
+                System.Diagnostics.Trace.WriteLine(
+                    "ReadStream() succeeded",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
+                return message;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine(
+                    "ReadMessage() threw exception: " + ex.Message,
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Writes all the bytes provided to the stream and sends them to the server named pipe endpoint
         /// </summary>
@@ -325,6 +359,37 @@ namespace TransMock.Communication.NamedPipes
             }            
         }
         #endregion
+
+        public void WriteMessage(MockMessage message)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    "WriteMessage() invoked",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+                var formatter = new BinaryFormatter();
+
+                formatter.Serialize(this.pipeClient, message);
+
+                this.pipeClient.Flush();
+
+                System.Diagnostics.Debug.WriteLine(
+                    "Message sent to the server",
+                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
+
+                // Waiting for the client to read the message
+                this.pipeClient.WaitForPipeDrain();
+
+                System.Diagnostics.Trace.WriteLine(
+                    "WriteMessage() succeeded. Message read by the server",
+                    "TransMock.Communication.NamedPipes");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         
         /// <summary>
         /// Disposing the client
