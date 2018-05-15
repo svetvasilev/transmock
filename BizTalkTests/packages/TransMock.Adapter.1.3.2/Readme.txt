@@ -7,6 +7,8 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Version 1.3.2:
+- Fixed issue with incorrect version of the reference to Microsoft.ServiceModel.Channels assembly for BizTalk 2016
 
 Version 1.3:
 - Introduced support for BizTalk Server 2016
