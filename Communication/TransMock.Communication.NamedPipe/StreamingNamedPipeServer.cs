@@ -24,6 +24,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -424,10 +425,13 @@ namespace TransMock.Communication.NamedPipes
 
                 // Setting up pipe security
                 PipeSecurity ps = new PipeSecurity();
+                SecurityIdentifier si = new SecurityIdentifier(
+                    WellKnownSidType.BuiltinUsersSid,
+                    null);
 
                 ps.AddAccessRule(
                     new PipeAccessRule(
-                        "Users",
+                        si,
                         PipeAccessRights.CreateNewInstance | PipeAccessRights.ReadWrite,
                         System.Security.AccessControl.AccessControlType.Allow));
 

@@ -141,4 +141,7 @@
       <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>
+  </PropertyGroup>
 </Project>

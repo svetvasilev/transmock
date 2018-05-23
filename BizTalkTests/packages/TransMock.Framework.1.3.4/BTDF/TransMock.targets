@@ -46,7 +46,7 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 		<PropertyGroup>
       <!-- The macros PkgVersion and BizTalkVersion are updated during deploy time to point to the 
            correct location of the mockifier depending on those 2 values -->
-			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.4\tools\BTS2016</TransMockHomeDir>			
+			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.5\tools\BTS2016</TransMockHomeDir>			
 		</PropertyGroup>
     
     <CreateProperty Value="$(TransMockAddressClassDir)" Condition="'$(TransMockAddressClassDir)' != ''">

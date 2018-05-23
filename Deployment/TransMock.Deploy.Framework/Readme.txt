@@ -5,10 +5,14 @@ communicate with an integration through the TransMock adapter.
 The following BizTalk Server versions are supported:
 - 2010/2013/2013 R2/2016
 
-**** Release notes ****
-Version 1.3.4:
-- Fixed an issue with the BTSVersion setting when explicitly set to 2016
+NB: Please note that for each version update the btdfproj file has to be updated in the part where the reference to the TransMock.targets file is defined!
+    Example: v1.3.3 reference is:      <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.3\BTDF\TransMock.targets" />
+	         v1.3.5 reference will be: <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.3.5\BTDF\TransMock.targets" />
 
+**** Release notes ****
+Version 1.3.5:
+- Fixed issue with wrong target .NET framework for the BizTalk 2016 version of BizUnit integration project
+ 
 Version 1.3.3:
 - Fixed an issue with the BTDF integration where wrong name of an internal BTDF variable was used
 
