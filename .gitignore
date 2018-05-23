@@ -194,3 +194,5 @@ FakesAssemblies/
 # BTDF Exported settings
 Exported*.xml
 /Framework
+/Adapter.BTS2016.txt
+/Adapter.IDE.BTS2016

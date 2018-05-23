@@ -41,7 +41,7 @@
     <Reference Include="BizUnit.Core">
       <HintPath>..\..\..\packages\BizUnit.Core.5.0.5\lib\net45\BizUnit.Core.dll</HintPath>
     </Reference>
-    <Reference Include="BizUnit.TestSteps">      
+    <Reference Include="BizUnit.TestSteps">
       <HintPath>..\..\..\packages\BizUnit.TestSteps.5.0.5\lib\net45\BizUnit.TestSteps.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -77,6 +77,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

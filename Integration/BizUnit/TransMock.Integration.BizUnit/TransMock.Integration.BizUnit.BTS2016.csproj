@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Integration.BizUnit</RootNamespace>
     <AssemblyName>TransMock.Integration.BizUnit</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -41,7 +41,7 @@
     <Reference Include="BizUnit.Core">
       <HintPath>..\..\..\packages\BizUnit.Core.5.0.5\lib\net46\BizUnit.Core.dll</HintPath>
     </Reference>
-    <Reference Include="BizUnit.TestSteps">      
+    <Reference Include="BizUnit.TestSteps">
       <HintPath>..\..\..\packages\BizUnit.TestSteps.5.0.5\lib\net46\BizUnit.TestSteps.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -77,6 +77,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
