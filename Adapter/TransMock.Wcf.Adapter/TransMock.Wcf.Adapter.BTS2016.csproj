@@ -72,7 +72,7 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs">
+    <Compile Include="..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="AdapterProperty.cs" />
@@ -95,8 +95,9 @@
     <Compile Include="TimeoutHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>False</Private>
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\WCF LOB SDK\2016\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -140,4 +141,7 @@
       <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>
+  </PropertyGroup>
 </Project>
