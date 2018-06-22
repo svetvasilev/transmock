@@ -64,22 +64,28 @@ namespace TransMock.Wcf.Adapter.Tests
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "OneWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
                 {
-                    byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                    var mockMessage = new MockMessage();
+                    mockMessage.Body = xml;
 
-                    pipeClient.Connect(10000);
-                    pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
+                    using (var memStream = new MemoryStream())
+                    {
+                        var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    pipeClient.WriteByte(0x00);//writing the EOF byte
-                    pipeClient.Flush();
+                        formatter.Serialize(memStream, mockMessage);
 
-                    pipeClient.WaitForPipeDrain();
+                        pipeClient.Connect(10000);
+                        pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                        pipeClient.WriteByte(0x00);
+                        pipeClient.WaitForPipeDrain();
+                    }
+                    
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedXml = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
+                var receivedMsg = TestUtils.ConvertToMockMessage(testHelper.memStream);
 
-                Assert.AreEqual(xml, receivedXml, "Contents of the received message is different");
+                Assert.AreEqual(xml, receivedMsg.Body, "Contents of the received message is different");
             }            
         }
 
@@ -104,23 +110,27 @@ namespace TransMock.Wcf.Adapter.Tests
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "OneWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
                 {
-                    byte[] flatBytes = Encoding.UTF8.GetBytes(ffContent);
+                    var mockMessage = new MockMessage();
+                    mockMessage.Body = ffContent;
 
-                    pipeClient.Connect(10000);
-                    pipeClient.Write(flatBytes, 0, flatBytes.Count());
-                    //pipeClient.Flush();
+                    using (var memStream = new MemoryStream())
+                    {
+                        var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    pipeClient.WriteByte(0x00);//writing the EOF byte
-                    pipeClient.Flush();
+                        formatter.Serialize(memStream, mockMessage);
 
-                    pipeClient.WaitForPipeDrain();
+                        pipeClient.Connect(10000);
+                        pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                        pipeClient.WriteByte(0x00);
+                        pipeClient.WaitForPipeDrain();
+                    }
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedMsg = Encoding.UTF8.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
+                var receivedMsg = TestUtils.ConvertToMockMessage(testHelper.memStream);
 
-                Assert.AreEqual(ffContent, receivedMsg, "Contents of the received message is different");
+                Assert.AreEqual(ffContent, receivedMsg.Body, "Contents of the received message is different");
             }
         }
 
@@ -145,23 +155,27 @@ namespace TransMock.Wcf.Adapter.Tests
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "OneWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
                 {
-                    byte[] flatBytes = Encoding.ASCII.GetBytes(ffContent);
+                    var mockMessage = new MockMessage(Encoding.ASCII);
+                    mockMessage.Body = ffContent;
 
-                    pipeClient.Connect(10000);
-                    pipeClient.Write(flatBytes, 0, flatBytes.Count());
-                    pipeClient.Flush();
+                    using (var memStream = new MemoryStream())
+                    {
+                        var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    pipeClient.WriteByte(0x00);//writing the EOF byte
-                    pipeClient.Flush();
+                        formatter.Serialize(memStream, mockMessage);
 
-                    pipeClient.WaitForPipeDrain();
+                        pipeClient.Connect(10000);
+                        pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                        pipeClient.WriteByte(0x00);
+                        pipeClient.WaitForPipeDrain();
+                    }
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
                 //The event was signalled, we get the message stirng from the outBuffer
-                string receivedMsg = Encoding.ASCII.GetString(testHelper.memStream.ToArray(), 0, (int)testHelper.memStream.Length);
+                var receivedMsg = TestUtils.ConvertToMockMessage(testHelper.memStream, Encoding.ASCII);
 
-                Assert.AreEqual(ffContent, receivedMsg, "Contents of the received message is different");
+                Assert.AreEqual(ffContent, receivedMsg.Body, "Contents of the received message is different");
             }
         }
 
@@ -185,17 +199,21 @@ namespace TransMock.Wcf.Adapter.Tests
                 //Here we spin the pipe client that will send the message to BizTalk
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "OneWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
-                {   
-                    byte[] flatBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(ffContent);
+                {
+                    var mockMessage = new MockMessage(Encoding.GetEncoding("ISO-8859-1"));
+                    mockMessage.Body = ffContent;
 
-                    pipeClient.Connect(10000);
-                    pipeClient.Write(flatBytes, 0, flatBytes.Count());
-                    pipeClient.Flush();
+                    using (var memStream = new MemoryStream())
+                    {
+                        var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    pipeClient.WriteByte(0x00);//writing the EOF byte
-                    pipeClient.Flush();
+                        formatter.Serialize(memStream, mockMessage);
 
-                    pipeClient.WaitForPipeDrain();
+                        pipeClient.Connect(10000);
+                        pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                        pipeClient.WriteByte(0x00);
+                        pipeClient.WaitForPipeDrain();
+                    }
                 }
                 //Here we wait for the event to be signalled
                 testHelper.syncEvent.WaitOne(60000);
@@ -224,23 +242,28 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer, responseXml);
 
-                pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnectedSyncronous(cb), testHelper);
+                pipeServer.BeginWaitForConnection(cb => testHelper
+                    .ClientConnectedSyncronous(cb, ctx => TestMockAdapterOutboundHandler.SendResponse(ctx)), testHelper);
 
                 System.Threading.Thread.Sleep(100);
                 //Here we spin the pipe client that will send the message to BizTalk
                 using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                     "TwoWayReceive", PipeDirection.InOut, PipeOptions.Asynchronous))
                 {
-                    byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                    var mockMessage = new MockMessage();
+                    mockMessage.Body = xml;
 
-                    pipeClient.Connect(10000);
-                    pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                    pipeClient.Flush();
+                    using (var memStream = new MemoryStream())
+                    {
+                        var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    pipeClient.WriteByte(0x00);//writing the EOF byte
-                    pipeClient.Flush();
+                        formatter.Serialize(memStream, mockMessage);
 
-                    pipeClient.WaitForPipeDrain();
+                        pipeClient.Connect(10000);
+                        pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                        pipeClient.WriteByte(0x00);
+                        pipeClient.WaitForPipeDrain();
+                    }
 
                     //Here we wait for the event to be signalled
                     bool waitExpired = testHelper.syncEvent.WaitOne(10000);

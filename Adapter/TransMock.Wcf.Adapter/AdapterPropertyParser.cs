@@ -32,12 +32,12 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Namespace used for promoting header properties to the BizTalk message context
         /// </summary>
-        private const string PropertiesToPromoteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote";
+        public const string PropertiesToPromoteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote";
 
         /// <summary>
         /// Namespace used for writing header properties to the BizTalk message context
         /// </summary>
-        private const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
+        public const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
         
         #endregion
 

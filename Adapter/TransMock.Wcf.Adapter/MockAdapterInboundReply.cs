@@ -23,6 +23,11 @@ namespace TransMock.Wcf.Adapter
         private int connectionId;
 
         /// <summary>
+        /// The encoding for the response message
+        /// </summary>
+        private Encoding encoding;
+
+        /// <summary>
         /// The instance of the pipe server
         /// </summary>
         private IAsyncStreamingServer pipeServer;
@@ -34,10 +39,20 @@ namespace TransMock.Wcf.Adapter
         /// <param name="connectionId">The Id of the connection on which the reply should be sent back</param>        
         public MockAdapterInboundReply(
             IAsyncStreamingServer pipeServer,
-            int connectionId)
+            int connectionId,
+            Encoding encoding)
         {
             this.pipeServer = pipeServer;
             this.connectionId = connectionId;
+
+            if (encoding != null)
+            {
+                this.encoding = encoding;
+            }
+            else
+            {
+                this.encoding = Encoding.UTF8;
+            }
         }
 
         #region InboundReply Members
@@ -100,11 +115,10 @@ namespace TransMock.Wcf.Adapter
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
                 // Ccreate MockMessage isntance
-                var mockMessage = new MockMessage();
-
-                // Assign the message body
-                mockMessage.Body = Convert.ToBase64String(msgBuffer);
-
+                var mockMessage = new MockMessage(
+                    msgBuffer, 
+                    this.encoding);
+                
                 // Add the message properties to the mock message
                 foreach (var property in message.Properties)
                 {

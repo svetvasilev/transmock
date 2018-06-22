@@ -188,7 +188,9 @@ namespace TransMock.Wcf.Adapter
                             // Creating the proper reply instance
                             reply = new MockAdapterInboundReply(
                                 this.pipeServer,
-                                msgHelper.ConnectionId);                            
+                                msgHelper.ConnectionId,
+                                Encoding.GetEncoding(   
+                                    this.Connection.ConnectionFactory.Adapter.Encoding));                            
                                
                             System.Diagnostics.Debug.WriteLine("Message dequeued from the inbound queue");
 
@@ -268,7 +270,7 @@ namespace TransMock.Wcf.Adapter
                 msgContents = string.Format(
                         CultureInfo.InvariantCulture,
                         "<MessageContent>{0}</MessageContent>",
-                        e.Message.Body);
+                        e.Message.BodyBase64);
 
                 // Adding the message contents to a predefined XML structure
                 // TODO: refactor to a more efficien implementation                

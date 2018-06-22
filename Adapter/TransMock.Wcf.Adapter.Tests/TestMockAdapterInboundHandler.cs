@@ -25,6 +25,7 @@ using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.ServiceModel.Channels.Common;
 
+using TransMock.Communication.NamedPipes;
 using TransMock.Wcf.Adapter;
 using TransMock.TestUtils;
 
@@ -111,13 +112,24 @@ namespace TransMock.Wcf.Adapter.Tests
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {   
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+            {
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();                   
+                }
+
                 pipeClient.Close();
+
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -142,12 +154,22 @@ namespace TransMock.Wcf.Adapter.Tests
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {            
-                byte[] xmlBytes = Encoding.Unicode.GetBytes(xml);
+            {
+                var mockMessage = new MockMessage(Encoding.Unicode);
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
                 pipeClient.Close();
             }
             //Now we read the message in the inbound handler
@@ -161,7 +183,6 @@ namespace TransMock.Wcf.Adapter.Tests
             Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.Unicode), "Message contents of received message is different");        
         }
 
-        [Ignore]
         [TestMethod]
         public void TestOneWayReceive_XML_ISO88591()
         {
@@ -174,11 +195,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(xml);
+                var mockMessage = new MockMessage(Encoding.GetEncoding("ISO-8859-1"));
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -188,7 +220,10 @@ namespace TransMock.Wcf.Adapter.Tests
             reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
 
             Assert.IsNotNull(msg, "Message instance was not returned");
-            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), "Message contents of received message is different");
+            Assert.AreEqual(
+                xml, 
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.GetEncoding("ISO-8859-1")), 
+                "Message contents of received message is different");
             
         }
 
@@ -200,7 +235,7 @@ namespace TransMock.Wcf.Adapter.Tests
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
             byte[] xmlBytes = new byte[256];
-            int fileLength = 0;
+            int fileLength = (int)File.OpenRead("SmallMessage.xml").Length;
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
@@ -209,17 +244,25 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 int byteCountRead = 0;
 
-                using (FileStream fs = File.OpenRead("SmallMessage.xml"))
-                {
-                    fileLength = (int)fs.Length;
+                var mockMessage = new MockMessage(
+                    "SmallMessage.xml",
+                    Encoding.UTF8);
 
-                    while ((byteCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    formatter.Serialize(memStream, mockMessage);
+                    memStream.Seek(0, SeekOrigin.Begin);
+                    
+                    
+                    while ((byteCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
                     {
                         pipeClient.Write(xmlBytes, 0, byteCountRead);
                     }
-                }
 
-                pipeClient.WaitForPipeDrain();
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }                
             }
 
             //Now we read the message in the inbound handler
@@ -251,7 +294,7 @@ namespace TransMock.Wcf.Adapter.Tests
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
             byte[] xmlBytes = new byte[256];
-            int fileLength = 0;
+            int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
@@ -260,17 +303,25 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 int byteCountRead = 0;
 
-                using (FileStream fs = File.OpenRead("MediumMessage.xml"))
-                {
-                    fileLength = (int)fs.Length;
+                var mockMessage = new MockMessage(
+                    "MediumMessage.xml",
+                    Encoding.UTF8);
 
-                    while ((byteCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    formatter.Serialize(memStream, mockMessage);
+                    // rewinding the message stream
+                    memStream.Seek(0, SeekOrigin.Begin);
+
+                    while ((byteCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
                     {
                         pipeClient.Write(xmlBytes, 0, byteCountRead);
                     }
-                }
 
-                pipeClient.WaitForPipeDrain();
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
             }
 
             //Now we read the message in the inbound handler
@@ -301,16 +352,29 @@ namespace TransMock.Wcf.Adapter.Tests
             //TODO: implement sending XML message to the inbound handler
             string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
-            byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+            //byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();                
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
+
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
 
             //Now we read the message in the inbound handler
@@ -326,9 +390,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();                
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
+
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             
@@ -351,11 +428,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] ffBytes = Encoding.UTF8.GetBytes(ffContent);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = ffContent;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -366,7 +454,8 @@ namespace TransMock.Wcf.Adapter.Tests
 
             Assert.IsNotNull(msg, "Message instance was not returned");
             Assert.AreEqual(ffContent,
-                GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), 
+                "Message contents of received message is different");
             //Assert.AreEqual(string.Format("<FFContent>{0}</FFContent>", Convert.ToBase64String(ffBytes)),
             //    GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");        
         }
@@ -381,12 +470,23 @@ namespace TransMock.Wcf.Adapter.Tests
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {   
-                byte[] ffBytes = Encoding.Unicode.GetBytes(ffContent);
+            {
+                var mockMessage = new MockMessage(Encoding.Unicode);
+                mockMessage.Body = ffContent;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -411,12 +511,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-         
-                byte[] ffBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(ffContent);
+                var mockMessage = new MockMessage(Encoding.GetEncoding("ISO-8859-1"));
+                mockMessage.Body = ffContent;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(ffBytes, 0, ffBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -448,11 +558,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -495,11 +616,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -551,11 +683,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -622,11 +765,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -686,11 +840,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -741,11 +906,22 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
             }
             //Now we read the message in the inbound handler
             Message msg = null;
@@ -776,14 +952,20 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                byte[] xmlBytes = Encoding.UTF8.GetBytes(xml);
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                //pipeClient.WaitForPipeDrain();
-                //Send the EOF byte
-                pipeClient.WriteByte(0x00);                
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
 
                 //Now we read the message in the inbound handler
                 Message msg = null;
@@ -796,18 +978,12 @@ namespace TransMock.Wcf.Adapter.Tests
                 string responseXml = "<Response><Description>The request was successfully processed</Description></Response>";
                 Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(responseXml, Encoding.UTF8);
 
-                byte[] inBuffer = new byte[256];
-                int bytesCountRead = 0, eofCountRead = 0;
+                MockMessage receivedResponse = null;
                 System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
                 //We queue up the reply so that it executes from the context of another thread.
                 System.Threading.ThreadPool.QueueUserWorkItem(cb =>
                     {
-                        //we try to read from the pipe
-                        bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-                        //read the EOF bytes
-                        byte[] eofBytes = new byte[2];
-                        eofCountRead = pipeClient.Read(eofBytes, 0, 1);
-
+                        receivedResponse = TestUtils.ReceiveResponse(pipeClient);
                         manualEvent.Set();
                     }
                 );
@@ -815,10 +991,9 @@ namespace TransMock.Wcf.Adapter.Tests
                 reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
                 //We wait for the event to be signalled
                 manualEvent.WaitOne(10000);
-                
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead - (1 - eofCountRead), Encoding.UTF8);
-                     
-                Assert.AreEqual(responseXml, receivedResponseXml, "The received response is not correct");                
+
+                Assert.IsNotNull(receivedResponse, "The response message is null!");   
+                Assert.AreEqual(responseXml, receivedResponse.Body, "The received response is not correct");                
             }
         }             
 
@@ -835,14 +1010,20 @@ namespace TransMock.Wcf.Adapter.Tests
                 //TODO: implement sending XML message to the inbound handler
                 string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
 
-                byte[] xmlBytes = Encoding.Unicode.GetBytes(xml);
+                var mockMessage = new MockMessage(Encoding.Unicode);
+                mockMessage.Body = xml;
 
-                pipeClient.Connect(10000);
-                pipeClient.Write(xmlBytes, 0, xmlBytes.Count());
-                //Send the EOF bytes
-                //pipeClient.Write(new byte[] { 0x00, 0x00 }, 0, 2);  
-                pipeClient.WriteByte(0x00);
-                pipeClient.WaitForPipeDrain();
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
                 //Now we read the message in the inbound handler
                 Message msg = null;
                 IInboundReply reply;
@@ -853,19 +1034,13 @@ namespace TransMock.Wcf.Adapter.Tests
                 //we send the response message
                 string responseXml = "<Response><Description>The request was successfully processed</Description></Response>";
                 Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(responseXml, Encoding.Unicode);
-                
-                byte[] inBuffer = new byte[256];
-                int bytesCountRead = 0, eofCountRead = 0;
+
+                MockMessage receivedResponse = null;
                 System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
                 //We queue up the reply so that it executes from the context of another thread.
                 System.Threading.ThreadPool.QueueUserWorkItem(cb =>
                     {
-                        //we try to read from the pipe
-                        bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-                        //read the EOF bytes.
-                        byte[] eofBytes = new byte[2];
-                        eofCountRead = pipeClient.Read(eofBytes, 0, 1);                        
-
+                        receivedResponse = TestUtils.ReceiveResponse(pipeClient, Encoding.Unicode);
                         manualEvent.Set();
                     }
                 );
@@ -874,9 +1049,8 @@ namespace TransMock.Wcf.Adapter.Tests
                 //We wait for the event to be signalled
                 manualEvent.WaitOne(10000);
 
-                string receivedResponseXml = GeneralTestHelper.GetMessageFromArray(inBuffer, bytesCountRead - (1 - eofCountRead), Encoding.Unicode);
-
-                Assert.AreEqual(responseXml, receivedResponseXml, "The received response is not correct");
+                Assert.IsNotNull(receivedResponse, "The response message is null!");
+                Assert.AreEqual(responseXml, receivedResponse.Body, "The received response is not correct");
             }
         }
 
@@ -890,25 +1064,31 @@ namespace TransMock.Wcf.Adapter.Tests
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
-                int bytesCountRead = 0;
-                int fileLength = 0;
+                int bytesCountRead = 0;                
                 byte[] xmlBytes = new byte[256];
+
+                int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
 
                 pipeClient.Connect(10000);
 
-                using (FileStream fs = File.OpenRead("MediumMessage.xml"))
-                {
-                    fileLength = (int)fs.Length;
+                var mockMessage = new MockMessage(
+                    "MediumMessage.xml",
+                    Encoding.UTF8);
 
-                    while ((bytesCountRead = fs.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    formatter.Serialize(memStream, mockMessage);
+                    memStream.Seek(0, SeekOrigin.Begin);
+
+                    while ((bytesCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
                     {
                         pipeClient.Write(xmlBytes, 0, bytesCountRead);
-                    }                    
+                    }
+
+                    pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
                 }
-                
-                //Send the EOF bytes
-                pipeClient.WriteByte(0x00);
-                pipeClient.WaitForPipeDrain();
 
                 //Now we read the message in the inbound handler
                 Message msg = null;
@@ -928,50 +1108,33 @@ namespace TransMock.Wcf.Adapter.Tests
                     requestMessageHash, "Message contents of received message is different");
                 //we send the response message
                 
-                Message responseMessage = GeneralTestHelper.CreateMessageWithBase64EncodedBody(File.ReadAllBytes("MediumMessage.xml"));
+                Message responseMessage = GeneralTestHelper
+                    .CreateMessageWithBase64EncodedBody(
+                        File.ReadAllBytes("MediumMessage.xml"));
 
-                byte[] inBuffer = new byte[512];
-                
-                using (MemoryStream memStream = new MemoryStream(512))
-                {
-                    System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
-                    //We queue up the reply so that it executes from the context of another thread.
-                    System.Threading.ThreadPool.QueueUserWorkItem(cb =>
+                MockMessage receivedResponse = null;
+
+                System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+
+                System.Threading.ThreadPool.QueueUserWorkItem(cb =>
                     {
-                        bool eof = false;
-                        //we try to read from the pipe
-                        while (!eof)
-                        {
-                            bytesCountRead = pipeClient.Read(inBuffer, 0, inBuffer.Length);
-
-                            if (bytesCountRead > 0)
-                            {
-                                //if (inBuffer[bytesCountRead - 1] == 0x00 &&
-                                //    inBuffer[bytesCountRead - 2] == 0x00)
-                                if (inBuffer[bytesCountRead - 1] == 0x00)
-                                {
-                                    eof = true;
-                                }
-
-                                memStream.Write(inBuffer, 0, !eof ? bytesCountRead : bytesCountRead - 1);
-                            }
-                            else
-                                eof = true;
-                        }
+                        receivedResponse = TestUtils.ReceiveResponse(pipeClient);
 
                         manualEvent.Set();
                     }
-                    );
+                );
 
-                    reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
-                    //We wait for the event to be signalled
-                    manualEvent.WaitOne(10000);
+                reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
+                //We wait for the event to be signalled
+                manualEvent.WaitOne(10000);
 
-                    string responseHash = GeneralTestHelper.CalculateBytesHash(memStream.ToArray());
+                Assert.IsNotNull(receivedResponse, "Received response is null!");
+                string responseHash = GeneralTestHelper.CalculateBytesHash(
+                    Convert.FromBase64String(
+                        receivedResponse.BodyBase64));
 
-                    Assert.AreEqual(fileHash, responseHash,
-                        "The received response is not correct");
-                }
+                Assert.AreEqual(fileHash, responseHash,
+                    "The received response is not correct");                
             }
         }
         #endregion
@@ -991,7 +1154,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 connectionUri, null, adapter);
             MockAdapterConnection connection = new MockAdapterConnection(connectionFactory);
             inboundHandler = new MockAdapterInboundHandler(connection, null);
-        }
+        }        
 
         private static void VerifyPromotedProperty(
             KeyValuePair<XmlQualifiedName, object> promotedProperty, 

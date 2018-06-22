@@ -41,7 +41,7 @@ namespace TransMock.Wcf.Adapter
     /// the mock adapter outbound handler class. This class is used for sending data to the target system
     /// </summary>
     public class MockAdapterOutboundHandler : MockAdapterHandlerBase, IOutboundHandler
-    {   
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="MockAdapterOutboundHandler"/> class
         /// </summary>
@@ -52,9 +52,58 @@ namespace TransMock.Wcf.Adapter
             MetadataLookup metadataLookup)
             : base(connection, metadataLookup)
         {
+            
         }
 
-        #region IOutboundHandler Members
+        #region Private methods
+        /// <summary>
+        /// Copies the promoted properties from the BizTalk message to the mock message
+        /// </summary>
+        /// <param name="message">The message from where the properties will be copied</param>
+        /// <param name="mockMessage">The mock message to where the properties will be copied</param>
+        private static void CopyPromotedProperties(Message message, MockMessage mockMessage)
+        {
+#if DEBUG
+            foreach (var property in message.Properties)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    "Property name:{0}, value:{1}",
+                        property.Key, 
+                        property.Value ?? property.Value.ToString());
+            }
+#endif
+
+            if (message.Properties.ContainsKey(AdapterPropertyParser.PropertiesToPromoteKey))
+            {
+                var propertiesList = message.Properties[AdapterPropertyParser.PropertiesToPromoteKey]
+                    as List<KeyValuePair<XmlQualifiedName, object>>;
+
+                // Add the message properties to the mock message
+                foreach (var property in propertiesList)
+                {
+                    mockMessage.Properties.Add(
+                        property.Key.Name,
+                        property.Value.ToString());
+                }
+            }
+
+            if (message.Properties.ContainsKey(AdapterPropertyParser.PropertiesToWriteKey))
+            {
+                var propertiesList = message.Properties[AdapterPropertyParser.PropertiesToWriteKey]
+                    as List<KeyValuePair<XmlQualifiedName, object>>;
+
+                // Add the message properties to the mock message
+                foreach (var property in propertiesList)
+                {
+                    mockMessage.Properties.Add(
+                        property.Key.Name,
+                        property.Value.ToString());
+                }
+            }
+        } 
+#endregion
+
+#region IOutboundHandler Members
 
         /// <summary>
         /// Executes the request message on the target system and returns a response message.
@@ -70,14 +119,14 @@ namespace TransMock.Wcf.Adapter
             System.Diagnostics.Debug.WriteLine(
                 "Sending an outbound message",
                 "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
-            
+
             if (message == null)
             {
                 throw new ArgumentNullException("message");
             }
 
             XmlDictionaryReader xdr = message.GetReaderAtBodyContents();
-            
+
             System.Diagnostics.Debug.WriteLine("Reading the message body in base64 encoding");
 
             // Reading the message contents as a base64 encoded string
@@ -89,25 +138,20 @@ namespace TransMock.Wcf.Adapter
 
             byte[] msgBuffer = xdr.ReadContentAsBase64();
 
-            // Ccreate MockMessage isntance
-            var mockMessage = new MockMessage();
+            var encoding = Encoding.GetEncoding(
+                this.Connection.ConnectionFactory.Adapter.Encoding);
+            // Create MockMessage isntance
+            var mockMessage = new MockMessage(
+                msgBuffer,
+                encoding);
 
-            // Assign the message body
-            mockMessage.Body = Convert.ToBase64String(msgBuffer);
+            CopyPromotedProperties(message, mockMessage);
 
-            // Add the message properties to the mock message
-            foreach (var property in message.Properties)
-            {
-                mockMessage.Properties.Add(
-                    property.Key,
-                    property.Value.ToString());
-            }
-            
             using (StreamingNamedPipeClient pipeClient = new StreamingNamedPipeClient(
                 Connection.ConnectionFactory.ConnectionUri.Uri))
-            {   
-                pipeClient.Connect((int)timeout.TotalMilliseconds);                
-                
+            {
+                pipeClient.Connect((int)timeout.TotalMilliseconds);
+
                 System.Diagnostics.Debug.WriteLine(
                     "The pipe client was connected!Sending the outbound message over the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
@@ -128,7 +172,7 @@ namespace TransMock.Wcf.Adapter
                     out isSolicitResponseValue))
                 {
                     isTwoWay = Convert.ToBoolean(
-                        isSolicitResponseValue, 
+                        isSolicitResponseValue,
                         CultureInfo.InvariantCulture);
                 }
 
@@ -149,7 +193,7 @@ namespace TransMock.Wcf.Adapter
                     respContents = string.Format(
                         CultureInfo.InvariantCulture,
                         "<MessageContent>{0}</MessageContent>",
-                       responseMockMessage.Body);
+                       responseMockMessage.BodyBase64);
 
                     XmlReader respReader = XmlReader.Create(new StringReader(respContents));
 
@@ -173,22 +217,6 @@ namespace TransMock.Wcf.Adapter
                         }
                     }
 
-                    //using (MemoryStream msgStream = pipeClient.ReadStream() as MemoryStream)
-                    //{
-                    //    respContents = string.Format(
-                    //        CultureInfo.InvariantCulture,
-                    //        "<MessageContent>{0}</MessageContent>",
-                    //       Convert.ToBase64String(msgStream.ToArray()));
-
-                    //    XmlReader respReader = XmlReader.Create(new StringReader(respContents));
-
-                    //    System.Diagnostics.Debug.WriteLine(
-                    //        "Constructing the response WCF Message",
-                    //        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
-
-                    //    responseMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, respReader);
-                    //}
-
                     System.Diagnostics.Debug.WriteLine(
                         "Response WCF Message constructed. Returning it to BizTalk",
                         "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
@@ -199,10 +227,10 @@ namespace TransMock.Wcf.Adapter
                 {
                     // Return empty message in one-way scenario
                     return Message.CreateMessage(MessageVersion.Default, string.Empty);
-                }                
-            }           
-        }
-        #endregion IOutboundHandler Members
+                }
+            }
+        }       
+#endregion IOutboundHandler Members
         /// <summary>
         /// Overrides the default dispose behavior
         /// </summary>

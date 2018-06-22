@@ -38,6 +38,7 @@ namespace TransMock.TestUtils
         public string requestXml;
         public string responseXml;
         public string responsePath;
+        public Encoding responseEncoding = Encoding.UTF8;
 
         public OutboundTestHelper(NamedPipeServerStream pipeServer)
         {
@@ -108,7 +109,7 @@ namespace TransMock.TestUtils
         /// The callback method for when clien is connected to the pipe in two-way communication scenarios
         /// </summary>
         /// <param name="cb">The asynchronous result of the connect operation</param>
-        public void ClientConnectedSyncronous(IAsyncResult cb)
+        public void ClientConnectedSyncronous(IAsyncResult cb, Action<OutboundTestHelper> responseHandler)
         {
             OutboundTestHelper testHelper = (OutboundTestHelper)cb.AsyncState;           
             
@@ -158,34 +159,8 @@ namespace TransMock.TestUtils
                     }                    
                 }
 
-                //Sending a response
-                if (!string.IsNullOrEmpty(testHelper.responseXml))
-                {
-                    //TODO: Set the proper encoding
-                    byte[] xmlBytes = Encoding.UTF8.GetBytes(testHelper.responseXml);
-                    //We write the response content back and flush it down the drain.
-                    testHelper.pipeServer.Write(xmlBytes, 0, xmlBytes.Length);
-                }
-                else if (!string.IsNullOrEmpty(testHelper.responsePath))
-                {
-                    byteCountRead = 0;
-                    using (System.IO.FileStream fs = System.IO.File.OpenRead(testHelper.responsePath))
-                    {
-                        //Streaming respoonse from file
-                        while ((byteCountRead = fs.Read(outBuffer, 0, outBuffer.Length)) > 0)
-                        {
-                            testHelper.pipeServer.Write(outBuffer, 0, byteCountRead);
-                        }
-                    }
-                }
-                else
-                    throw new InvalidOperationException("There was no response content defined");                
-                
-                //Write the EOF bytes
-                testHelper.pipeServer.WriteByte(0x00);
-                testHelper.pipeServer.Flush();
-
-                testHelper.pipeServer.WaitForPipeDrain();
+                // Invoking the response handler
+                responseHandler(testHelper);
             }
             finally
             {
