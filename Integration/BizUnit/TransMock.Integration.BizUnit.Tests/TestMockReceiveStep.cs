@@ -614,21 +614,20 @@ namespace TransMock.Integration.BizUnit.Tests
 
             // Setting up a manual reset event
             System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            StreamReader sr = null;
 
             // Creating the validation step
             var validationStep = new LambdaValidationStep()
             {
                 ValidationCallback = (s) =>
-                {   
-                    using (StreamReader sr = new System.IO.StreamReader(s))
-                    {
-                        string actual = sr.ReadToEnd();
-
-                        Assert.AreEqual(xml, actual,
-                            "Validation of received message failed");
-                    }
+                {
+                    sr = new System.IO.StreamReader(s);
                     
+                    string actual = sr.ReadToEnd();
 
+                    Assert.AreEqual(xml, actual,
+                        "Validation of received message failed");
+                    
                     return true;
                 }
             };
@@ -647,6 +646,10 @@ namespace TransMock.Integration.BizUnit.Tests
 
             //Waiting for the manual event to be set
             manualEvent.WaitOne(1000);
+            if (sr != null)
+            {
+                sr.Close();
+            }
 
             loggerMock.Verify(l => l.LogData(
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),

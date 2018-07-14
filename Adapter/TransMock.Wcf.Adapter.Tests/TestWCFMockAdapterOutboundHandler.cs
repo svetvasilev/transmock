@@ -271,7 +271,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
         [TestMethod]
         [TestCategory("Two Way Tests")]
-        [DeploymentItem(@"TestData\SmallMessage.xml")]
+        [DeploymentItem(@"..\TestData\SmallMessage.xml")]
         public void TestSendTwoWay_XML_SmallMessage()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
@@ -313,7 +313,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
         [TestMethod]
         [TestCategory("Two Way Tests")]
-        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        [DeploymentItem(@"..\TestData\MediumMessage.xml")]
         public void TestSendTwoWay_XML_MediumMessage()
         {
             using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(

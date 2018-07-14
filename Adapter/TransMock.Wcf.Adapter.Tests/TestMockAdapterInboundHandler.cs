@@ -232,7 +232,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
         [TestMethod]
         [TestCategory("One Way Tests")]
-        [DeploymentItem(@"TestData\SmallMessage.xml")]
+        [DeploymentItem(@"..\TestData\SmallMessage.xml")]
         public void TestOneWayReceive_XML_SmallMessage()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
@@ -291,7 +291,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
         [TestMethod]
         [TestCategory("One Way Tests")]
-        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        [DeploymentItem(@"..\TestData\MediumMessage.xml")]
         public void TestOneWayReceive_XML_MediumMessage()
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));

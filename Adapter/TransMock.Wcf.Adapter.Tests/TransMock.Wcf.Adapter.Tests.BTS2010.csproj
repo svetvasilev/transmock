@@ -68,6 +68,10 @@
       <Project>{cf45da9f-f4b9-46b7-ad11-fa36af2bf399}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2010</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2010.csproj">
+      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
+      <Name>TransMock.Utils.BTS2010</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2010.csproj">
       <Project>{dfad184e-2c98-4e34-ae8d-7bd0ec677f12}</Project>
       <Name>TransMock.TestUtils.BTS2010</Name>

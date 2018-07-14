@@ -82,7 +82,7 @@ namespace TransMock.Wcf.Adapter
                         var utilsType = typeof(Utils.BizTalkProperties.Namespaces);
 
                         string prefix = (string)utilsType.GetProperties().Where(
-                            p => p.PropertyType == typeof(string) && p.GetValue(null).ToString() == propertyParts[0])
+                            p => p.PropertyType == typeof(string) && p.GetValue(null, null).ToString() == propertyParts[0])
                             .SingleOrDefault()
                             .Name;
 
