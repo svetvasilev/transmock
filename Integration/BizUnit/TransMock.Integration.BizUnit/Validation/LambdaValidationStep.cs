@@ -67,6 +67,8 @@ namespace TransMock.Integration.BizUnit.Validation
         /// <returns>The stream containing the message that was validated</returns>
         public override Stream Execute(Stream data, Context context)
         {
+            Validate(context);
+
             bool result = ValidationCallback(data);
 
             if (!result)

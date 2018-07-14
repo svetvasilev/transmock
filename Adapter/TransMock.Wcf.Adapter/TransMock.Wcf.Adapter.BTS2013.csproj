@@ -140,6 +140,10 @@
       <Project>{cb560249-9a5b-42a0-9db6-8e9165194c6c}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2013</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013.csproj">
+      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
+      <Name>TransMock.Utils.BTS2013</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>

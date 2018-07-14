@@ -688,11 +688,23 @@ namespace TransMock.Integration.BizUnit.Tests
             // Calling Validate in order to start the pipe server
             step.Validate(context);
 
+            bool exceptionThrown = false;
             // here we queue up the step.Execute method in a separate thread as the execution model would actually be
             System.Threading.ThreadPool.QueueUserWorkItem((state) =>
             {
-                step.Execute(context);
-                manualEvent.Set();
+                try
+                {
+                    step.Execute(context);
+                }
+                catch (ArgumentNullException)
+                {
+                    exceptionThrown = true;
+                }
+                finally
+                {
+                    manualEvent.Set();
+                }
+               
             });
 
             Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
@@ -706,6 +718,8 @@ namespace TransMock.Integration.BizUnit.Tests
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 It.Is<string>(s => !string.IsNullOrEmpty(s))),
                 Times.AtLeastOnce(), "The LogData message was not called");
+
+            Assert.IsTrue(exceptionThrown, "The expected exception was not thrown!");
 
         }
 

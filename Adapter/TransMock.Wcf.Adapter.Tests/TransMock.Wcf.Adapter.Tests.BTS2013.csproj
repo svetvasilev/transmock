@@ -80,6 +80,10 @@
       <Project>{cb560249-9a5b-42a0-9db6-8e9165194c6c}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2013</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013.csproj">
+      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
+      <Name>TransMock.Utils.BTS2013</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013.csproj">
       <Project>{e7c8d3f9-bb10-4d00-b368-3ec826c5a80d}</Project>
       <Name>TransMock.TestUtils.BTS2013</Name>
@@ -88,6 +92,9 @@
       <Project>{c47460d1-131e-4467-b8cc-02056d3d2652}</Project>
       <Name>TransMock.Wcf.Adapter.BTS2013</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
