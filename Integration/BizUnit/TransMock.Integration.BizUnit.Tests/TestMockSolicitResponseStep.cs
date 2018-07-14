@@ -43,6 +43,7 @@ namespace TransMock.Integration.BizUnit.Tests
     [TestClass]
     public class TestMockSolicitResponseStep
     {
+        int endpointId = 0;
         public TestMockSolicitResponseStep()
         {
             //
@@ -89,7 +90,10 @@ namespace TransMock.Integration.BizUnit.Tests
         public void MyTestInitialize()
         {
             //Setting up the inbound handler with all the references
-            connectionUri = new MockAdapterConnectionUri(new Uri("mock://localhost/TestEndpoint"));
+            connectionUri = new MockAdapterConnectionUri(
+                new Uri(
+                    string.Format("mock://localhost/2WayTestEndpoint{0}", endpointId++))
+                    );
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
             MockAdapterConnectionFactory connectionFactory = new MockAdapterConnectionFactory(

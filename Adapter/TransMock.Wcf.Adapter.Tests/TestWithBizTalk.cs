@@ -86,6 +86,11 @@ namespace TransMock.Wcf.Adapter.Tests
                 var receivedMsg = TestUtils.ConvertToMockMessage(testHelper.memStream);
 
                 Assert.AreEqual(xml, receivedMsg.Body, "Contents of the received message is different");
+                Assert.IsTrue(receivedMsg.Properties.Count > 1, "Received message does not contain properties");
+                Assert.IsTrue(receivedMsg.Properties.ContainsKey(
+                    "http://schemas.microsoft.com/BizTalk/2003/system-properties#BizTalkMessageID"),
+                    "Received message does not contain MessageID property");
+                
             }            
         }
 

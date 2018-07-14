@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" ?>
+<xs:schema xmlns:b="http://schemas.microsoft.com/BizTalk/2003" xmlns="http://schemas.microsoft.com/BizTalk/2003/pop3-properties" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/BizTalk/2003/pop3-properties" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:annotation>
+    <xs:appinfo>
+      <b:schemaInfo schema_type="property" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" />
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="Subject" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="395b88c0-2b41-4b67-a47a-c086a33572ef" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="From" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="bc036783-eca5-4946-880c-6786e321c563" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="To" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="feb71d90-37fe-40e3-8370-4b84baee0711" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ReplyTo" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="f0fe5840-43de-4ef2-93ea-85b2d6ee17d2" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="CC" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="356c4fdf-0d10-4392-a15e-d0a547ae8157" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Date" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="7009bd14-d138-417e-9035-373d345c2cb4" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="DispositionNotificationTo" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="3eb32c59-51c5-447b-b225-46dda7142552" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Headers" type="xs:string">
+    <xs:annotation>
+      <xs:appinfo>
+        <b:fieldInfo propSchFieldBase="MessageContextPropertyBase" xmlns:b="http://schemas.microsoft.com/BizTalk/2003" propertyGuid="63665e66-db1b-4d40-9d1f-1fdf3525845e" />
+      </xs:appinfo>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>

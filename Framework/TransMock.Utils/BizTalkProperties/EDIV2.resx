@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OverrideEDIHeader">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#OverrideEDIHeader</value>
+  </data>
+  <data name="ISA01">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA01</value>
+  </data>
+  <data name="ISA02">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA02</value>
+  </data>
+  <data name="ISA03">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA03</value>
+  </data>
+  <data name="ISA04">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA04</value>
+  </data>
+  <data name="ISA05">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA05</value>
+  </data>
+  <data name="ISA06">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA06</value>
+  </data>
+  <data name="ISA07">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA07</value>
+  </data>
+  <data name="ISA08">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA08</value>
+  </data>
+  <data name="ISA09">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA09</value>
+  </data>
+  <data name="ISA10">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA10</value>
+  </data>
+  <data name="ISA11">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA11</value>
+  </data>
+  <data name="ISA12">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA12</value>
+  </data>
+  <data name="ISA13">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA13</value>
+  </data>
+  <data name="ISA14">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA14</value>
+  </data>
+  <data name="ISA15">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA15</value>
+  </data>
+  <data name="ISA16">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ISA16</value>
+  </data>
+  <data name="GS01">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS01</value>
+  </data>
+  <data name="GS02">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS02</value>
+  </data>
+  <data name="GS03">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS03</value>
+  </data>
+  <data name="GS04">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS04</value>
+  </data>
+  <data name="GS05">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS05</value>
+  </data>
+  <data name="GS06">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS06</value>
+  </data>
+  <data name="GS07">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS07</value>
+  </data>
+  <data name="GS08">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GS08</value>
+  </data>
+  <data name="ST02">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#ST02</value>
+  </data>
+  <data name="GenerateUNA">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GenerateUNA</value>
+  </data>
+  <data name="UNA1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA1</value>
+  </data>
+  <data name="UNA2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA2</value>
+  </data>
+  <data name="UNA3">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA3</value>
+  </data>
+  <data name="UNA4">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA4</value>
+  </data>
+  <data name="UNA5">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA5</value>
+  </data>
+  <data name="UNA6">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA6</value>
+  </data>
+  <data name="UNA6Suffix">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNA6Suffix</value>
+  </data>
+  <data name="UNB1_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB1_1</value>
+  </data>
+  <data name="UNB1_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB1_2</value>
+  </data>
+  <data name="UNB1_3">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB1_3</value>
+  </data>
+  <data name="UNB1_4">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB1_4</value>
+  </data>
+  <data name="UNB2_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB2_1</value>
+  </data>
+  <data name="UNB2_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB2_2</value>
+  </data>
+  <data name="UNB2_3">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB2_3</value>
+  </data>
+  <data name="UNB2_4">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB2_4</value>
+  </data>
+  <data name="UNB3_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB3_1</value>
+  </data>
+  <data name="UNB3_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB3_2</value>
+  </data>
+  <data name="UNB3_3">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB3_3</value>
+  </data>
+  <data name="UNB3_4">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB3_4</value>
+  </data>
+  <data name="UNB4_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB4_1</value>
+  </data>
+  <data name="UNB4_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB4_2</value>
+  </data>
+  <data name="UNB5">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB5</value>
+  </data>
+  <data name="UNB6_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB6_1</value>
+  </data>
+  <data name="UNB6_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB6_2</value>
+  </data>
+  <data name="UNB7">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB7</value>
+  </data>
+  <data name="UNB8">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB8</value>
+  </data>
+  <data name="UNB9">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB9</value>
+  </data>
+  <data name="UNB10">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB10</value>
+  </data>
+  <data name="UNB11">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNB11</value>
+  </data>
+  <data name="GenerateUNG">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#GenerateUNG</value>
+  </data>
+  <data name="UNG1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG1</value>
+  </data>
+  <data name="UNG2_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG2_1</value>
+  </data>
+  <data name="UNG2_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG2_2</value>
+  </data>
+  <data name="UNG3_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG3_1</value>
+  </data>
+  <data name="UNG3_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG3_2</value>
+  </data>
+  <data name="UNG4_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG4_1</value>
+  </data>
+  <data name="UNG4_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG4_2</value>
+  </data>
+  <data name="UNG5">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG5</value>
+  </data>
+  <data name="UNG6">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG6</value>
+  </data>
+  <data name="UNG7_1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG7_1</value>
+  </data>
+  <data name="UNG7_2">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG7_2</value>
+  </data>
+  <data name="UNG7_3">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG7_3</value>
+  </data>
+  <data name="UNG8">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNG8</value>
+  </data>
+  <data name="UNH1">
+    <value>http://schemas.microsoft.com/BizTalk/2006/edi-properties#UNH1</value>
+  </data>  
+</root>

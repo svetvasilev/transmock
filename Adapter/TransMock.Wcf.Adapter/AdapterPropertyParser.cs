@@ -32,12 +32,12 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// Namespace used for promoting header properties to the BizTalk message context
         /// </summary>
-        public const string PropertiesToPromoteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote";
+        private const string PropertiesToPromoteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote";
 
         /// <summary>
         /// Namespace used for writing header properties to the BizTalk message context
         /// </summary>
-        public const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
+        private const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
         
         #endregion
 
@@ -123,15 +123,12 @@ namespace TransMock.Wcf.Adapter
             {
                 try
                 {
-                    var property = wellKnownProperties
-                        .Where(k => k.Key == propertyName)
-                        .SingleOrDefault();
-
-                    XmlQualifiedName fulyQualifiedPropertyName = 
-                        new XmlQualifiedName(property.Value.Name, property.Value.Namespace);
-                
-                    promoteProps.Add(new KeyValuePair<XmlQualifiedName, object>(
-                        fulyQualifiedPropertyName, this.propertiesToPromote[propertyName]));
+                    var fullyQualifiedPropertyName = LookupProperty(propertyName);
+                    
+                    promoteProps.Add(
+                        new KeyValuePair<XmlQualifiedName, object>(
+                            fullyQualifiedPropertyName, 
+                            this.propertiesToPromote[propertyName]));
                 }
                 catch (Exception ex)
                 {
@@ -158,6 +155,51 @@ namespace TransMock.Wcf.Adapter
                 this.propertiesToPromote = null;
             }
         }
+
+        private XmlQualifiedName LookupProperty(string name)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        "LookupProperty called for property: {0}",
+                        name),
+                    "TransMock.Wcf.Adapter.AdapterPropertyParser");
+
+                string[] nameParts = name.Split('.');
+
+                // Activator.CreateInstance("TransMock.Utils", );
+                var utilsAssembly = System.Reflection
+                    .Assembly.Load(
+                        "TransMock.Utils");
+
+                var propertyType = utilsAssembly.GetTypes()
+                    .Where(t => t.Name == nameParts[0])
+                    .SingleOrDefault();
+
+                string value = propertyType
+                        .GetProperty(nameParts[1])
+                        .GetValue(null).ToString();
+
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        "LookupProperty value found: {0}",
+                        value),
+                    "TransMock.Wcf.Adapter.AdapterPropertyParser");
+
+                string[] propertyParts = value.Split('#');
+
+                return new XmlQualifiedName(
+                    propertyParts[1], // Property name
+                    propertyParts[0]); // Propery namespace
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+       }
 
         /// <summary>
         /// Initializes well known adapter properties

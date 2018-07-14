@@ -25,6 +25,8 @@ using BizUnit;
 using BizUnit.TestSteps;
 using BizUnit.Core.TestBuilder;
 
+using TransMock.Communication.NamedPipes;
+
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
@@ -73,17 +75,20 @@ namespace TransMock.Integration.BizUnit
                 context.LogData(
                     string.Format(
                         CultureInfo.CurrentUICulture,
-                            "Reading response content from path {0}", 
+                            "Reading response content from path {0}",
                             this.ResponsePath),
-                    fs, 
+                    fs,
                     true);
 
-                System.Diagnostics.Debug.WriteLine(
-                    "Sending response to the mocked endpoint",
-                    "TransMock.Integration.BizUnit.MockRequestResponseStep");
-
-                this.pipeServer.WriteStream(this.connectionId, fs);
             }
+
+            var mockMessage = new MockMessage(this.ResponsePath, this.encoding);
+
+            System.Diagnostics.Debug.WriteLine(
+                "Sending response to the mocked endpoint",
+                "TransMock.Integration.BizUnit.MockRequestResponseStep");
+
+            this.pipeServer.WriteMessage(this.connectionId, mockMessage);            
 
             context.LogInfo("Done sending the response");
         }

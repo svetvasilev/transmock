@@ -42,6 +42,7 @@ namespace TransMock.Integration.BizUnit.Tests
     [TestClass]
     public class TestMockRequestResponseStep
     {
+        int endpointId = 0;
         public TestMockRequestResponseStep()
         {
             //
@@ -88,7 +89,13 @@ namespace TransMock.Integration.BizUnit.Tests
         public void MyTestInitialize()
         {
             //Setting up the inbound handler with all the references
-            connectionUri = new MockAdapterConnectionUri(new Uri("mock://localhost/2WayTestEndpoint"));
+            // Setting differnet URL for each test in order to avoid collisions
+            // over the same pipe due to lagging clean up as it is usually
+            // executed in the context of a different thread
+            connectionUri = new MockAdapterConnectionUri(
+                new Uri(
+                    string.Format("mock://localhost/2WayTestEndpoint{0}", endpointId++))
+                    );
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
             MockAdapterConnectionFactory connectionFactory = new MockAdapterConnectionFactory(
@@ -101,6 +108,7 @@ namespace TransMock.Integration.BizUnit.Tests
         [TestCleanup()]
         public void MyTestCleanup() 
         {
+            outboundHandler.Dispose();
             //give some time for the pipe to clean
             System.Threading.Thread.Sleep(100);
         }
@@ -160,12 +168,6 @@ namespace TransMock.Integration.BizUnit.Tests
             //Waiting for the manual event to be set
             manualEvent.WaitOne(1000);
 
-            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            
-            //Assert.AreEqual(expected, actual, 
-            //    "Response message is not matching the expected content");
-
             loggerMock.Verify(l => l.LogData(
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 It.Is<string>(s => !string.IsNullOrEmpty(s))), 
@@ -216,11 +218,6 @@ namespace TransMock.Integration.BizUnit.Tests
             //Waiting for the manual event to be set
             manualEvent.WaitOne(1000);
             
-            //string expected = ReadResponseFileContent("TestResponse.xml").Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            //string actual = GeneralTestHelper.GetBodyAsString(responseMsg, Encoding.UTF8).Trim().Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-
-            //Assert.AreEqual(expected, actual, 
-            //    "Response message is not matching the expected content");
             Assert.AreEqual(3, responseMessageList.Count, "The number of response messages is incorrect.");
 
             loggerMock.Verify(l => l.LogData(

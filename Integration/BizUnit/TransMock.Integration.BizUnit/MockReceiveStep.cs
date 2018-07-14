@@ -28,6 +28,7 @@ using BizUnit;
 using BizUnit.TestSteps;
 
 using TransMock.Communication.NamedPipes;
+using TransMock.Integration.BizUnit.Validation;
 using BizUnit.Core.TestBuilder;
 
 namespace TransMock.Integration.BizUnit
@@ -130,8 +131,7 @@ namespace TransMock.Integration.BizUnit
                         // If we are passed this point, then everything was processed fine
                         context.LogData(
                             "MockReceiveStep received a message with content",
-                            receivedMessage.MessageStream,
-                            true);
+                            receivedMessage.Message.Body);
 
                         // Here we invoke the sub steps
                         switch (this.ValidationMode)
@@ -139,7 +139,7 @@ namespace TransMock.Integration.BizUnit
                             case MultiMessageValidationMode.Cascading:
                                 // Performing cascading validation
                                 this.CascadingValidation(
-                                    receivedMessage.MessageStream, 
+                                    receivedMessage.Message, 
                                     context, 
                                     i);
                                 break;
@@ -147,7 +147,7 @@ namespace TransMock.Integration.BizUnit
                             default:     
                                 // Performing serial validation
                                 this.SerialValidation(
-                                    receivedMessage.MessageStream, 
+                                    receivedMessage.Message, 
                                     context);
                                 break;
                         }
@@ -286,23 +286,30 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// Performs serial validation of a message that has been received by the step
         /// </summary>
-        /// <param name="msgStream">The sream object that contains the message</param>
+        /// <param name="message">The message object that will be validated</param>
         /// <param name="context">The BizUnit context isntance</param>
-        private void SerialValidation(Stream msgStream, Context context)
+        private void SerialValidation(MockMessage message, Context context)
         {
             foreach (var step in this.SubSteps)
             {
-                step.Execute(msgStream, context);
+                if (step is LambdaValidationStep)
+                {
+                    ((LambdaValidationStep)step).Execute(message, context);
+                }
+                else
+                {
+                    step.Execute(message.BodyStream, context);
+                }                
             }
         }
 
         /// <summary>
         /// Performs cascading validation of a message that has been received by the step
         /// </summary>
-        /// <param name="msgStream">The sream object that contains the message</param>
+        /// <param name="message">The message object that will be validated</param>
         /// <param name="context">The BizUnit context isntance</param>
         /// <param name="index">The index at which to extract the collection of validation sub steps</param>
-        private void CascadingValidation(Stream msgStream, Context context, int index)
+        private void CascadingValidation(MockMessage message, Context context, int index)
         {
             if (this.CascadingSubSteps.Count > 0)
             {
@@ -312,7 +319,14 @@ namespace TransMock.Integration.BizUnit
                 {
                     foreach (var step in validationSubSteps)
                     {
-                        step.Execute(msgStream, context);
+                        if (step is LambdaValidationStep)
+                        {
+                            ((LambdaValidationStep)step).Execute(message, context);
+                        }
+                        else
+                        {
+                            step.Execute(message.BodyStream, context);
+                        }
                     }
                 }
             }

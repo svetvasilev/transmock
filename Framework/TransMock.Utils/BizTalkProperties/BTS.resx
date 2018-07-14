@@ -1,0 +1,477 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BackupEndpointInfo">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#BackupEndpointInfo</value>
+  </data>
+  <data name="BatchRequired">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#BatchRequired</value>
+  </data>
+  <data name="CorrelationToken">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#CorrelationToken</value>
+  </data>
+  <data name="DecryptionCert">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#DecryptionCert</value>
+  </data>
+  <data name="DestinationParty">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#DestinationParty</value>
+  </data>
+  <data name="DestinationPartyID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#DestinationPartyID</value>
+  </data>
+  <data name="DestinationPartyQualifier">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#DestinationPartyQualifier</value>
+  </data>
+  <data name="EncryptionCert">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#EncryptionCert</value>
+  </data>
+  <data name="EndpointGroup">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#EndpointGroup</value>
+  </data>
+  <data name="ExpirationTime">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ExpirationTime</value>
+  </data>
+  <data name="FaultName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#FaultName</value>
+  </data>
+  <data name="FaultQueue">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#FaultQueue</value>
+  </data>
+  <data name="InboundTransportType">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#InboundTransportType</value>
+  </data>
+  <data name="InboundTransportLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#InboundTransportLocation</value>
+  </data>
+  <data name="InterchangeID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#InterchangeID</value>
+  </data>
+  <data name="IsFragmented">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#IsFragmented</value>
+  </data>
+  <data name="MessageID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#MessageID</value>
+  </data>
+  <data name="WorkID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#WorkID</value>
+  </data>
+  <data name="IsRequestResponse">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#IsRequestResponse</value>
+  </data>
+  <data name="MessageType">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#MessageType</value>
+  </data>
+  <data name="OutboundTransportType">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#OutboundTransportType</value>
+  </data>
+  <data name="OutboundTransportLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#OutboundTransportLocation</value>
+  </data>
+  <data name="PassThrough">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#PassThrough</value>
+  </data>
+  <data name="PipelinesExecuted">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#PipelinesExecuted</value>
+  </data>
+  <data name="ReceivePipelineID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePipelineID</value>
+  </data>
+  <data name="ReceivePortID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePortID</value>
+  </data>
+  <data name="RetryCount">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#RetryCount</value>
+  </data>
+  <data name="RetryInterval">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#RetryInterval</value>
+  </data>
+  <data name="SchemaStrongName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SchemaStrongName</value>
+  </data>
+  <data name="SigningCert">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SigningCert</value>
+  </data>
+  <data name="SOAPAction">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SOAPAction</value>
+  </data>
+  <data name="SourcePartyEvidenceQualifier">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SourcePartyEvidenceQualifier</value>
+  </data>
+  <data name="SourcePartyEvidence">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SourcePartyEvidence</value>
+  </data>
+  <data name="SourcePartyQualifier">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SourcePartyQualifier</value>
+  </data>
+  <data name="SourceParty">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SourceParty</value>
+  </data>
+  <data name="WindowsUser">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#WindowsUser</value>
+  </data>
+  <data name="SignatureCertificate">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SignatureCertificate</value>
+  </data>
+  <data name="SourcePartyID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SourcePartyID</value>
+  </data>
+  <data name="TransmitPipelineID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#TransmitPipelineID</value>
+  </data>
+  <data name="ActivationServiceID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ActivationServiceID</value>
+  </data>
+  <data name="EpmRRCorrelationToken">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#EpmRRCorrelationToken</value>
+  </data>
+  <data name="PartnerService">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#PartnerService</value>
+  </data>
+  <data name="PartnerPort">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#PartnerPort</value>
+  </data>
+  <data name="JobID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#JobID</value>
+  </data>
+  <data name="BizTalkControl">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#BizTalkControl</value>
+  </data>
+  <data name="ReqRespTransmitPipelineID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReqRespTransmitPipelineID</value>
+  </data>
+  <data name="IsSolicitResponse">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse</value>
+  </data>
+  <data name="TransmitWorkID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#TransmitWorkID</value>
+  </data>
+  <data name="RouteDirectToTP">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#RouteDirectToTP</value>
+  </data>
+  <data name="LoopBack">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#LoopBack</value>
+  </data>
+  <data name="Operation">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#Operation</value>
+  </data>
+  <data name="LRPMsgBodyTracking">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#LRPMsgBodyTracking</value>
+  </data>
+  <data name="LTPMsgBodyTracking">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#LTPMsgBodyTracking</value>
+  </data>
+  <data name="SSOTicket">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SSOTicket</value>
+  </data>
+  <data name="ReceivePortName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePortName</value>
+  </data>
+  <data name="OutboundTransportCLSID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#OutboundTransportCLSID</value>
+  </data>
+  <data name="SPTransportID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SPTransportID</value>
+  </data>
+  <data name="SPGroupID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SPGroupID</value>
+  </data>
+  <data name="SPTransportBackupID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SPTransportBackupID</value>
+  </data>
+  <data name="SPID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SPID</value>
+  </data>
+  <data name="SendPortTransformHint">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SendPortTransformHint</value>
+  </data>
+  <data name="PropertiesToUpdate">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#PropertiesToUpdate</value>
+  </data>
+  <data name="AckType">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckType</value>
+  </data>
+  <data name="AckID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckID</value>
+  </data>
+  <data name="AckReceivePortID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckReceivePortID</value>
+  </data>
+  <data name="AckReceivePortName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckReceivePortName</value>
+  </data>
+  <data name="AckInboundTransportLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckInboundTransportLocation</value>
+  </data>
+  <data name="AckSendPortID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckSendPortID</value>
+  </data>
+  <data name="AckSendPortName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckSendPortName</value>
+  </data>
+  <data name="AckOutboundTransportLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckOutboundTransportLocation</value>
+  </data>
+  <data name="AckFailureCode">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckFailureCode</value>
+  </data>
+  <data name="AckFailureCategory">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckFailureCategory</value>
+  </data>
+  <data name="AckDescription">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckDescription</value>
+  </data>
+  <data name="AckOwnerID">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckOwnerID</value>
+  </data>
+  <data name="AckRequired">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#AckRequired</value>
+  </data>
+  <data name="SPName">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SPName</value>
+  </data>
+  <data name="ReceivePipelineConfig">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePipelineConfig</value>
+  </data>
+  <data name="ReceivePipelineResponseConfig">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePipelineResponseConfig</value>
+  </data>
+  <data name="SendPipelineConfig">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SendPipelineConfig</value>
+  </data>
+  <data name="SendPipelineResponseConfig">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SendPipelineResponseConfig</value>
+  </data>
+  <data name="ProcessingParts">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ProcessingParts</value>
+  </data>
+  <data name="ReceivePortTransformHint">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ReceivePortTransformHint</value>
+  </data>
+  <data name="MessageExchangePattern">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#MessageExchangePattern</value>
+  </data>
+  <data name="MessageDestination">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#MessageDestination</value>
+  </data>
+  <data name="SuspendMessageOnRoutingFailure">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SuspendMessageOnRoutingFailure</value>
+  </data>
+  <data name="SuspendMessageOnMappingFailure">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SuspendMessageOnMappingFailure</value>
+  </data>
+  <data name="ActionOnFailure">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#ActionOnFailure</value>
+  </data>
+  <data name="InterchangeSequenceNumber">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#InterchangeSequenceNumber</value>
+  </data>
+  <data name="SuspendAsNonResumable">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SuspendAsNonResumable</value>
+  </data>
+  <data name="SuppressRoutingFailureDiagnosticInfo">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#SuppressRoutingFailureDiagnosticInfo</value>
+  </data>
+  <data name="LastInterchangeMessage">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#LastInterchangeMessage</value>
+  </data>
+  <data name="IsDynamicSend">
+    <value>http://schemas.microsoft.com/BizTalk/2003/system-properties#IsDynamicSend</value>
+  </data>
+  <data name="BTF2_IsReliable">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#IsReliable</value>
+  </data>
+  <data name="BTF2_PassAckThrough">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#PassAckThrough</value>
+  </data>
+  <data name="BTF2_eps_to_address">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#eps_to_address</value>
+  </data>
+  <data name="BTF2_eps_to_address_type">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#eps_to_address_type</value>
+  </data>
+  <data name="BTF2_eps_from_address">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#eps_from_address</value>
+  </data>
+  <data name="BTF2_eps_from_address_type">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#eps_from_address_type</value>
+  </data>
+  <data name="BTF2_prop_identity">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#prop_identity</value>
+  </data>
+  <data name="BTF2_prop_sentAt">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#prop_sentAt</value>
+  </data>
+  <data name="BTF2_prop_topic">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#prop_topic</value>
+  </data>
+  <data name="BTF2_svc_deliveryRctRqt_sendTo_address">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_deliveryRctRqt_sendTo_address</value>
+  </data>
+  <data name="BTF2_svc_deliveryRctRqt_sendTo_address_type">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_deliveryRctRqt_sendTo_address_type</value>
+  </data>
+  <data name="BTF2_svc_deliveryRctRqt_sendBy">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_deliveryRctRqt_sendBy</value>
+  </data>
+  <data name="BTF2_svc_commitmentRctRqt_sendTo_address">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_commitmentRctRqt_sendTo_address</value>
+  </data>
+  <data name="BTF2_svc_commitmentRctRqt_sendTo_address_type">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_commitmentRctRqt_sendTo_address_type</value>
+  </data>
+  <data name="BTF2_svc_commitmentRctRqt_sendBy">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#svc_commitmentRctRqt_sendBy</value>
+  </data>
+  <data name="BTF2_prc_type">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#prc_type</value>
+  </data>
+  <data name="BTF2_prc_instance">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#prc_instance</value>
+  </data>
+  <data name="BTF2_deliveryRct_receivedAt">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#deliveryRct_receivedAt</value>
+  </data>
+  <data name="BTF2_deliveryRct_identity">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#deliveryRct_identity</value>
+  </data>
+  <data name="BTF2_commitmentRct_identity">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#commitmentRct_identity</value>
+  </data>
+  <data name="BTF2_commitmentRct_decidedAt">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#commitmentRct_decidedAt</value>
+  </data>
+  <data name="BTF2_commitmentRct_decision">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#commitmentRct_decision</value>
+  </data>
+  <data name="BTF2_commitmentRct_commitmentCode">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#commitmentRct_commitmentCode</value>
+  </data>
+  <data name="BTF2_fault_faultcode">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#fault_faultcode</value>
+  </data>
+  <data name="BTF2_fault_faultstring">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#fault_faultstring</value>
+  </data>
+  <data name="BTF2_fault_faultactor">
+    <value>http://schemas.microsoft.com/BizTalk/2003/btf2-properties#fault_faultactor</value>
+  </data>
+  <data name="ENDPOINT_TwoWayReceivePort">
+    <value>http://schemas.microsoft.com/BizTalk/2003/endpoint-properties#TwoWayReceivePort</value>
+  </data>
+</root>

@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ISA05">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA05</value>
+  </data>
+  <data name="ISA06">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA06</value>
+  </data>
+  <data name="ISA07">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA07</value>
+  </data>
+  <data name="ISA08">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA08</value>
+  </data>
+  <data name="ISA15">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA15</value>
+  </data>
+  <data name="GS01">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS01</value>
+  </data>
+  <data name="GS02">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS02</value>
+  </data>
+  <data name="GS03">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS03</value>
+  </data>
+  <data name="GS08">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS08</value>
+  </data>
+  <data name="GE01">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GE01</value>
+  </data>
+  <data name="ST01">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ST01</value>
+  </data>
+  <data name="ST03">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ST03</value>
+  </data>
+  <data name="ReuseEnvelope">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ReuseEnvelope</value>
+  </data>
+  <data name="UNB2_1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB2_1</value>
+  </data>
+  <data name="UNB2_2">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB2_2</value>
+  </data>
+  <data name="UNB2_3">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB2_3</value>
+  </data>
+  <data name="UNB2_4">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB2_4</value>
+  </data>
+  <data name="UNB3_1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB3_1</value>
+  </data>
+  <data name="UNB3_2">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB3_2</value>
+  </data>
+  <data name="UNB3_3">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB3_3</value>
+  </data>
+  <data name="UNB3_4">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB3_4</value>
+  </data>
+  <data name="UNB11">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB11</value>
+  </data>
+  <data name="UNG1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNG1</value>
+  </data>
+  <data name="UNG2_1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNG2_1</value>
+  </data>
+  <data name="UNG3_1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNG3_1</value>
+  </data>
+  <data name="UNH2_1">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNH2_1</value>
+  </data>
+  <data name="UNH2_2">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNH2_2</value>
+  </data>
+  <data name="UNH2_3">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNH2_3</value>
+  </data>
+  <data name="UNB_Segment">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNB_Segment</value>
+  </data>
+  <data name="UNG_Segment">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNG_Segment</value>
+  </data>
+  <data name="CodePage">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#CodePage</value>
+  </data>
+  <data name="ISA_Segment">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ISA_Segment</value>
+  </data>
+  <data name="GS_Segment">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS_Segment</value>
+  </data>
+  <data name="UNA_Segment">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#UNA_Segment</value>
+  </data>
+  <data name="DestinationPartyId">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartyId</value>
+  </data>
+  <data name="BatchElementValidationFailure">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchElementValidationFailure</value>
+  </data>
+  <data name="BatchingError">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchingError</value>
+  </data>
+  <data name="StatusReportContinuationId">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#StatusReportContinuationId</value>
+  </data>
+  <data name="ControlActionType">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ControlActionType</value>
+  </data>
+  <data name="ToBeBatched">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ToBeBatched</value>
+  </data>
+  <data name="ToBeRouted">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ToBeRouted</value>
+  </data>
+  <data name="DestinationParties">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationParties</value>
+  </data>
+  <data name="PopulateInterchangeValues">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#PopulateInterchangeValues</value>
+  </data>
+  <data name="TsSequenceNumberInGroup">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#TsSequenceNumberInGroup</value>
+  </data>
+  <data name="DestinationPartyName">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartyName</value>
+  </data>
+  <data name="EncodingType">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#EncodingType</value>
+  </data>
+  <data name="GS07">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#GS07</value>
+  </data>
+  <data name="IsSystemGeneratedAck">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#IsSystemGeneratedAck</value>
+  </data>
+  <data name="TA1_TA104">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#TA1_TA104</value>
+  </data>
+  <data name="AK901">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AK901</value>
+  </data>
+  <data name="CONTRL_UCI4">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#CONTRL_UCI4</value>
+  </data>
+  <data name="BatchEncodingType">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchEncodingType</value>
+  </data>
+  <data name="DestinationEncodingTypes">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationEncodingTypes</value>
+  </data>
+  <data name="IgnoreEncodingType">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#IgnoreEncodingType</value>
+  </data>
+  <data name="ErrorDescription">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ErrorDescription</value>
+  </data>
+  <data name="DestinationPartySenderQualifier">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartySenderQualifier</value>
+  </data>
+  <data name="DestinationPartySenderIdentifier">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartySenderIdentifier</value>
+  </data>
+  <data name="DestinationPartyReceiverQualifier">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartyReceiverQualifier</value>
+  </data>
+  <data name="DestinationPartyReceiverIdentifier">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#DestinationPartyReceiverIdentifier</value>
+  </data>
+  <data name="BatchId">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchId</value>
+  </data>
+  <data name="BatchName">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchName</value>
+  </data>
+  <data name="BatchIds">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#BatchIds</value>
+  </data>
+  <data name="IsResendControlMessage">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#IsResendControlMessage</value>
+  </data>
+  <data name="AttachmentId">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AttachmentId</value>
+  </data>
+  <data name="SenderPartyName">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#SenderPartyName</value>
+  </data>
+  <data name="ReceiverPartyName">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ReceiverPartyName</value>
+  </data>
+  <data name="AgreementName">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AgreementName</value>
+  </data>
+  <data name="SenderPartyNameForSend">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#SenderPartyNameForSend</value>
+  </data>
+  <data name="ReceiverPartyNameForSend">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#ReceiverPartyNameForSend</value>
+  </data>
+  <data name="AgreementNameForSend">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AgreementNameForSend</value>
+  </data>
+  <data name="AgreementID">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AgreementID</value>
+  </data>
+  <data name="AgreementPartIDOnReceive">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AgreementPartIDOnReceive</value>
+  </data>
+  <data name="AgreementPartIDForSend">
+    <value>http://schemas.microsoft.com/Edi/PropertySchema#AgreementPartIDForSend</value>
+  </data>
+</root>

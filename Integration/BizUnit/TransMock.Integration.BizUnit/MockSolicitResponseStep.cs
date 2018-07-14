@@ -25,6 +25,8 @@ using BizUnit;
 using BizUnit.TestSteps;
 using BizUnit.Core.TestBuilder;
 
+using TransMock.Communication.NamedPipes;
+
 namespace TransMock.Integration.BizUnit
 {
     /// <summary>
@@ -36,7 +38,7 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// The stream containing the response data
         /// </summary>
-        private Stream responseDataStream;
+        private MockMessage responseMessage;
 
         /// <summary>
         /// Executes the step
@@ -44,6 +46,7 @@ namespace TransMock.Integration.BizUnit
         /// <param name="context">The BizUnit execution context</param>
         public override void Execute(Context context)
         {
+            Stream responseStream = null;
             try
             {
                 base.Execute(context);
@@ -52,18 +55,24 @@ namespace TransMock.Integration.BizUnit
                     "Executing the substeps",
                     "TransMock.Integration.BizUnit.MockSolicitResponseStep");
 
-                foreach (var subStep in this.SubSteps)
+                if (this.responseMessage != null)
                 {
-                    subStep.Execute(
-                        this.responseDataStream,
-                        context);
+                    responseStream = this.responseMessage.BodyStream;
+
+                    foreach (var subStep in this.SubSteps)
+                    {
+                        subStep.Execute(
+                            responseStream,
+                            context);
+                    }
                 }
+                
             }
             finally
             {
-                if (this.responseDataStream != null)
+                if (responseStream != null)
                 {
-                    this.responseDataStream.Dispose();
+                    responseStream.Dispose();
                 }
             }            
         }
@@ -92,7 +101,7 @@ namespace TransMock.Integration.BizUnit
 
             context.LogInfo("Reading the response from the endpoint");
 
-            this.responseDataStream = this.pipeClient.ReadStream();
+            this.responseMessage = this.pipeClient.ReadMessage();
 
             System.Diagnostics.Debug.WriteLine(
                 "Response read!",
@@ -100,7 +109,7 @@ namespace TransMock.Integration.BizUnit
 
             context.LogData(
                 "The response received from the mocked endpoint is:", 
-                this.responseDataStream, 
+                this.responseMessage.BodyStream, 
                 true);
         }        
     }

@@ -54,6 +54,7 @@
     <Compile Include="EventArgs.NET4.cs" />
     <Compile Include="IStreamingClient.cs" />
     <Compile Include="IAsyncStreamingServer.cs" />
+    <Compile Include="MockMessage.cs" />
     <Compile Include="NamedPipeMessageUtils.cs" />
     <Compile Include="StreamingNamedPipeClient.cs" />
     <Compile Include="StreamingNamedPipeServer.cs" />

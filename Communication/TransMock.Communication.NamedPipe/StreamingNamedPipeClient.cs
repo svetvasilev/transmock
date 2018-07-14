@@ -211,7 +211,7 @@ namespace TransMock.Communication.NamedPipes
                     "ReadStream() called",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
 
-                byte[] inBuffer = new byte[4096];
+                byte[] inBuffer = new byte[256];
                 MemoryStream msgStream = new MemoryStream(4096);
 
                 int byteCountRead = 0;
@@ -221,12 +221,14 @@ namespace TransMock.Communication.NamedPipes
                 {
                     byteCountRead = this.pipeClient.Read(inBuffer, 0, inBuffer.Length);
 
-                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(inBuffer, byteCountRead);
+                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(
+                        inBuffer.Length, 
+                        byteCountRead);
 
                     msgStream.Write(
                         inBuffer,
                         0,
-                        eofReached && byteCountRead > 0 ? byteCountRead - 1 : byteCountRead);
+                        byteCountRead);
                 }
 
                 System.Diagnostics.Trace.WriteLine(
@@ -337,7 +339,7 @@ namespace TransMock.Communication.NamedPipes
                     "WriteMessage() invoked",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
 
-                using (MemoryStream msgStream = new MemoryStream())
+                using (MemoryStream msgStream = new MemoryStream(4096))
                 {
                     System.Diagnostics.Debug.WriteLine(
                         "Constructed MemoryStream where the message will be serialized.",
@@ -377,7 +379,7 @@ namespace TransMock.Communication.NamedPipes
                     "WriteStream() called",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
 
-                byte[] outBuffer = new byte[4096];
+                byte[] outBuffer = new byte[256];
 
                 System.Diagnostics.Debug.WriteLine(
                     "Writing message to the server",
@@ -392,14 +394,7 @@ namespace TransMock.Communication.NamedPipes
 
                 // Done with writing the response content, flushing the message
                 this.pipeClient.Flush();
-
-                System.Diagnostics.Debug.WriteLine(
-                    "Writing the EOF byte",
-                    "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
-
-                // Writing the EOF byte
-                this.pipeClient.WriteByte(0x00);
-
+                
                 System.Diagnostics.Debug.WriteLine(
                     "Message sent to the server",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");

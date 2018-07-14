@@ -28,6 +28,7 @@ using System.ServiceModel.Channels;
 using TransMock.TestUtils;
 using TransMock.Wcf.Adapter;
 using TransMock.Integration.BizUnit;
+using TransMock.Integration.BizUnit.Validation;
 
 using BizUnit;
 using Moq;
@@ -40,9 +41,11 @@ namespace TransMock.Integration.BizUnit.Tests
     /// <summary>
     /// Tests the MockReceiveStep class
     /// </summary>
-    [TestClass]
+    [TestClass]    
     public class TestMockReceiveStep
     {
+        int endpointId = 0;
+
         public TestMockReceiveStep()
         {
             //
@@ -88,8 +91,14 @@ namespace TransMock.Integration.BizUnit.Tests
         [TestInitialize()]
         public void MyTestInitialize()
         {
-            //Setting up the inbound handler with all the references
-            connectionUri = new MockAdapterConnectionUri(new Uri("mock://localhost/TestEndpoint"));
+            // Setting up the inbound handler with all the references
+            // Setting differnet URL for each test in order to avoid collisions
+            // over the same pipe due to lagging clean up as it is usually
+            // executed in the context of a different thread
+            connectionUri = new MockAdapterConnectionUri(
+                new Uri(
+                    string.Format("mock://localhost/TestEndpoint{0}", endpointId++))
+                    );
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
             MockAdapterConnectionFactory connectionFactory = new MockAdapterConnectionFactory(
@@ -102,6 +111,7 @@ namespace TransMock.Integration.BizUnit.Tests
         [TestCleanup()]
         public void MyTestCleanup() 
         {
+            outboundHandler.Dispose();
             //give some time for the pipe to clean
             System.Threading.Thread.Sleep(100);
         }
@@ -135,11 +145,14 @@ namespace TransMock.Integration.BizUnit.Tests
             step.Url = connectionUri.Uri.OriginalString;
             step.Encoding = "UTF-8";
             step.Timeout = 30;
-            //Colling Validate in order to start the 
+            
+            // Calling Validate in order to start the pipe server
             step.Validate(context);
-            //Setting up a manual reset event
+            
+            // Setting up a manual reset event
             System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
-            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            
+            // here we queue up the step.Execute method in a separate thread as the execution model would actually be
             System.Threading.ThreadPool.QueueUserWorkItem((state) =>
             {
                 step.Execute(context);
@@ -262,7 +275,7 @@ namespace TransMock.Integration.BizUnit.Tests
             MockReceiveStep step = new MockReceiveStep();
             step.Url = connectionUri.Uri.OriginalString;
             step.Encoding = "UTF-8";
-            step.Timeout = 30;
+            step.Timeout = 10;
             step.DebatchedMessageCount = 50;
             //Calling Validate in order to start the 
             step.Validate(context);
@@ -298,7 +311,7 @@ namespace TransMock.Integration.BizUnit.Tests
 
         }
 
-        [TestMethod]
+        [TestMethod]        
         [ExpectedException(typeof(System.InvalidOperationException))]
         public void TestReceiveSmallMessages_Debatch3_Expect2_XML()
         {
@@ -388,7 +401,7 @@ namespace TransMock.Integration.BizUnit.Tests
             // Waiting for the manual event to be set
             // The wait time is slightly longer than the step's timeout in order to 
             // to be able to capture the TimeoutException correctly
-            manualEvent.WaitOne(1200);
+            manualEvent.WaitOne(2000);
 
             Assert.IsTrue(timeoutExceptionThrown, "The expected exception was not thrown");
             
@@ -460,8 +473,7 @@ namespace TransMock.Integration.BizUnit.Tests
             var loggerMock = CreateLoggerMock();
 
             Context context = new Context(loggerMock.Object);
-            BizUnit.
-            MockReceiveStep step = new MockReceiveStep();
+            BizUnit.MockReceiveStep step = new MockReceiveStep();
             step.Url = connectionUri.Uri.OriginalString;
             step.Encoding = "UTF-8";
             step.Timeout = 30;
@@ -480,8 +492,6 @@ namespace TransMock.Integration.BizUnit.Tests
 
                 step.CascadingSubSteps.Add(i, validationStepsCollection);
             }
-
-
 
             // Calling Validate in order to start the 
             step.Validate(context);
@@ -504,7 +514,7 @@ namespace TransMock.Integration.BizUnit.Tests
             }
 
             //Waiting for the manual event to be set
-            manualEvent.WaitOne(1000);
+            manualEvent.WaitOne(2000);
 
             loggerMock.Verify(l => l.LogData(
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
@@ -519,7 +529,180 @@ namespace TransMock.Integration.BizUnit.Tests
                     Times.Exactly(3),
                     "The SubStep mock was not called the expected number of times");                
             }
-            
+        }
+
+        [TestMethod]
+        public void TestReceiveSmallMessage_XML_LambdaValidation()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockReceiveStep step = new MockReceiveStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.Timeout = 10;
+
+            string xml = @"<SomeTestMessage>
+                <Element1 attribute1=""attributeValue"">
+                </Element1>
+                <Element2>Some element content</Element2>
+            </SomeTestMessage>";
+
+            // Calling Validate in order to start the pipe server
+            step.Validate(context);
+
+            // Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+
+            // Creating the validation step
+            var validationStep = new LambdaValidationStep()
+            {
+                MessageValidationCallback = (m) =>
+                {
+                    Assert.AreEqual(xml, m.Body,
+                        "Validation of received message failed");
+
+                    return true;
+                }
+            };
+
+            step.SubSteps.Add(validationStep);
+            // here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+
+            outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.AtLeastOnce(), "The LogData message was not called");
+
+        }
+
+        [TestMethod]
+        public void TestReceiveSmallMessage_XML_LambdaValidationClassic()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockReceiveStep step = new MockReceiveStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.Timeout = 10;
+
+            string xml = @"<SomeTestMessage>
+                <Element1 attribute1=""attributeValue"">
+                </Element1>
+                <Element2>Some element content</Element2>
+            </SomeTestMessage>";
+
+            // Calling Validate in order to start the pipe server
+            step.Validate(context);
+
+            // Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+
+            // Creating the validation step
+            var validationStep = new LambdaValidationStep()
+            {
+                ValidationCallback = (s) =>
+                {   
+                    using (StreamReader sr = new System.IO.StreamReader(s))
+                    {
+                        string actual = sr.ReadToEnd();
+
+                        Assert.AreEqual(xml, actual,
+                            "Validation of received message failed");
+                    }
+                    
+
+                    return true;
+                }
+            };
+
+            step.SubSteps.Add(validationStep);
+            // here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+
+            outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.AtLeastOnce(), "The LogData message was not called");
+
+        }
+
+        [TestMethod]
+        public void TestReceiveSmallMessage_XML_LambdaValidationNotSet()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockReceiveStep step = new MockReceiveStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.Encoding = "UTF-8";
+            step.Timeout = 10;
+
+            string xml = @"<SomeTestMessage>
+                <Element1 attribute1=""attributeValue"">
+                </Element1>
+                <Element2>Some element content</Element2>
+            </SomeTestMessage>";
+
+            // Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+
+            // Creating the validation step
+            var validationStep = new LambdaValidationStep();
+
+            step.SubSteps.Add(validationStep);
+
+            // Calling Validate in order to start the pipe server
+            step.Validate(context);
+
+            // here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                step.Execute(context);
+                manualEvent.Set();
+            });
+
+            Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+
+            outboundHandler.Execute(msg, TimeSpan.FromSeconds(10));
+
+            //Waiting for the manual event to be set
+            manualEvent.WaitOne(1000);
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))),
+                Times.AtLeastOnce(), "The LogData message was not called");
 
         }
 

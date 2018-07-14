@@ -39,6 +39,7 @@ namespace TransMock.Wcf.Adapter.Tests
         MockAdapterConnectionUri connectionUri;
         MockAdapter adapter;
         MockAdapterOutboundHandler outboundHandler;
+        int endpointId = 0;
 
         public TestMockAdapterOutboundHandler()
         {
@@ -81,7 +82,11 @@ namespace TransMock.Wcf.Adapter.Tests
         public void MyTestInitialize()
         {
             //Setting up the inbound handler with all the references
-            connectionUri = new MockAdapterConnectionUri(new Uri("mock://localhost/TestEndpoint"));
+            connectionUri = new MockAdapterConnectionUri(
+                new Uri(
+                    string.Format("mock://localhost/TestEndpoint{0}", endpointId++)
+                    )
+                );
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
             MockAdapterConnectionFactory connectionFactory = new MockAdapterConnectionFactory(
@@ -361,7 +366,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
 
                 // Adding test properties
-                AddPromotedProperty(msg, "HTTP.Content-Type", "text/json");                
+                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/http-properties#ContentType", "text/json");                
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
 
@@ -375,24 +380,52 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 Assert.AreEqual(xml, mockMessage.Body, "Contents of received message is different");
                 Assert.IsTrue(mockMessage.Properties.Count == 1, "Number of properties received from outbound adapter is wrong");
-                Assert.AreEqual("text/json", mockMessage.Properties["HTTP.Content-Type"], "The promoted property is not as expected");
+                Assert.AreEqual("text/json", 
+                    mockMessage.Properties["HTTP.ContentType"], 
+                    "The promoted property is not as expected");
                 
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
+        public void TestSendOneWay_XML_WithProperties_InvalidProperty()
+        {
+            using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+            {
+                string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+                Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
+
+                // Adding test properties
+                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/zip-properties#Imaginary", "");
+
+                OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
+
+                pipeServer.BeginWaitForConnection(cb => testHelper.ClientConnected(cb), testHelper);
+
+                outboundHandler.Execute(msg, new TimeSpan(0, 0, 10));
+                //Here we wait for the event to be signalled
+                testHelper.syncEvent.WaitOne(60000);
+                //The event was signalled, we get the message stirng from the outBuffer
+                var mockMessage = ConvertToMockMessage(testHelper.memStream);
+
+                Assert.AreEqual(xml, mockMessage.Body, "Contents of received message is different");
+                Assert.IsTrue(mockMessage.Properties.Count == 0, "Number of properties received from outbound adapter is wrong");
+                //Assert.AreEqual("text/json",
+                //    mockMessage.Properties["HTTP.ContentType"],
+                //    "The promoted property is not as expected");
+
             }
         }
 
         private void AddPromotedProperty(Message msg, string name, string value)
         {
-            var propertiesList = new List<KeyValuePair<XmlQualifiedName, object>>(3);
-
-            propertiesList.Add(
-                new KeyValuePair<XmlQualifiedName, object>(
-                    new XmlQualifiedName(name, "http://transmock.tests"),
-                        value)
-                );
-
             msg.Properties.Add(
-                "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote",
-                propertiesList);
+                name,
+                value);
         }
 
         public static void SendResponse(OutboundTestHelper testHelper)
@@ -405,7 +438,7 @@ namespace TransMock.Wcf.Adapter.Tests
                     Body = testHelper.responseXml
                 };
 
-                using (var msgStream = new MemoryStream(256))
+                using (var msgStream = new MemoryStream(4096))
                 {
                     var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     formatter.Serialize(msgStream, responseMessage);
@@ -419,14 +452,14 @@ namespace TransMock.Wcf.Adapter.Tests
             else if (!string.IsNullOrEmpty(testHelper.responsePath))
             {
                 var responseMessage = new MockMessage(testHelper.responsePath, testHelper.responseEncoding);
-                using (var msgStream = new MemoryStream(256))
+                using (var msgStream = new MemoryStream(4096))
                 {
                     var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     formatter.Serialize(msgStream, responseMessage);
                     msgStream.Seek(0, SeekOrigin.Begin);
 
                     int byteCountRead = 0;
-                    byte[] outBuffer = new byte[512];
+                    byte[] outBuffer = new byte[4096];
                     
                     //Streaming respoonse from file
                     while ((byteCountRead = msgStream.Read(outBuffer, 0, outBuffer.Length)) > 0)

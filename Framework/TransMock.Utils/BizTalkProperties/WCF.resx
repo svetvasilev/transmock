@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="To">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#To</value>
+  </data>
+  <data name="FromAddress">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#FromAddress</value>
+  </data>
+  <data name="ReplyToAddress">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ReplyToAddress</value>
+  </data>
+  <data name="Action">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#Action</value>
+  </data>
+  <data name="IsFault">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#IsFault</value>
+  </data>
+  <data name="InboundHeaders">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundHeaders</value>
+  </data>
+  <data name="OutboundCustomHeaders">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OutboundCustomHeaders</value>
+  </data>
+  <data name="Identity">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#Identity</value>
+  </data>
+  <data name="Headers">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#Headers</value>
+  </data>
+  <data name="BindingType">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#BindingType</value>
+  </data>
+  <data name="BindingConfiguration">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#BindingConfiguration</value>
+  </data>
+  <data name="ReferencedBindings">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ReferencedBindings</value>
+  </data>
+  <data name="ServiceBehaviorConfiguration">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ServiceBehaviorConfiguration</value>
+  </data>
+  <data name="EndpointBehaviorConfiguration">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#EndpointBehaviorConfiguration</value>
+  </data>
+  <data name="OpenTimeout">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OpenTimeout</value>
+  </data>
+  <data name="SendTimeout">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SendTimeout</value>
+  </data>
+  <data name="CloseTimeout">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#CloseTimeout</value>
+  </data>
+  <data name="SessionIdleTimeout">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SessionIdleTimeout</value>
+  </data>
+  <data name="MaxConnections">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MaxConnections</value>
+  </data>
+  <data name="MaxReceivedMessageSize">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MaxReceivedMessageSize</value>
+  </data>
+  <data name="MaxConcurrentCalls">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MaxConcurrentCalls</value>
+  </data>
+  <data name="EnableTransaction">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#EnableTransaction</value>
+  </data>
+  <data name="TransactionProtocol">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#TransactionProtocol</value>
+  </data>
+  <data name="OrderedProcessing">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OrderedProcessing</value>
+  </data>
+  <data name="MessageEncoding">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MessageEncoding</value>
+  </data>
+  <data name="TextEncoding">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#TextEncoding</value>
+  </data>
+  <data name="TimeToLive">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#TimeToLive</value>
+  </data>
+  <data name="UseSourceJournal">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#UseSourceJournal</value>
+  </data>
+  <data name="DeadLetterQueue">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#DeadLetterQueue</value>
+  </data>
+  <data name="LeaseTimeout">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#LeaseTimeout</value>
+  </data>
+  <data name="CustomDeadLetterQueue">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#CustomDeadLetterQueue</value>
+  </data>
+  <data name="SecurityMode">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SecurityMode</value>
+  </data>
+  <data name="TransportClientCredentialType">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#TransportClientCredentialType</value>
+  </data>
+  <data name="TransportProtectionLevel">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#TransportProtectionLevel</value>
+  </data>
+  <data name="MsmqAuthenticationMode">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MsmqAuthenticationMode</value>
+  </data>
+  <data name="MsmqProtectionLevel">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MsmqProtectionLevel</value>
+  </data>
+  <data name="MsmqSecureHashAlgorithm">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MsmqSecureHashAlgorithm</value>
+  </data>
+  <data name="MsmqEncryptionAlgorithm">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MsmqEncryptionAlgorithm</value>
+  </data>
+  <data name="MessageClientCredentialType">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#MessageClientCredentialType</value>
+  </data>
+  <data name="AlgorithmSuite">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#AlgorithmSuite</value>
+  </data>
+  <data name="NegotiateServiceCredential">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#NegotiateServiceCredential</value>
+  </data>
+  <data name="EstablishSecurityContext">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#EstablishSecurityContext</value>
+  </data>
+  <data name="ServiceCertificate">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ServiceCertificate</value>
+  </data>
+  <data name="ClientCertificate">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ClientCertificate</value>
+  </data>
+  <data name="UseSSO">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#UseSSO</value>
+  </data>
+  <data name="UserName">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#UserName</value>
+  </data>
+  <data name="Password">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#Password</value>
+  </data>
+  <data name="AffiliateApplicationName">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#AffiliateApplicationName</value>
+  </data>
+  <data name="ProxyToUse">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ProxyToUse</value>
+  </data>
+  <data name="ProxyAddress">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ProxyAddress</value>
+  </data>
+  <data name="ProxyUserName">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ProxyUserName</value>
+  </data>
+  <data name="ProxyPassword">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#ProxyPassword</value>
+  </data>
+  <data name="InboundBodyLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundBodyLocation</value>
+  </data>
+  <data name="InboundBodyPathExpression">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundBodyPathExpression</value>
+  </data>
+  <data name="InboundNodeEncoding">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundNodeEncoding</value>
+  </data>
+  <data name="OutboundBodyLocation">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OutboundBodyLocation</value>
+  </data>
+  <data name="OutboundXmlTemplate">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OutboundXmlTemplate</value>
+  </data>
+  <data name="DisableLocationOnFailure">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#DisableLocationOnFailure</value>
+  </data>
+  <data name="SuspendMessageOnFailure">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SuspendMessageOnFailure</value>
+  </data>
+  <data name="PropagateFaultMessage">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#PropagateFaultMessage</value>
+  </data>
+  <data name="IsolationLevel">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#IsolationLevel</value>
+  </data>
+  <data name="InboundHttpHeaders">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundHttpHeaders</value>
+  </data>
+  <data name="InboundHttpStatusCode">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundHttpStatusCode</value>
+  </data>
+  <data name="InboundHttpStatusDescription">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundHttpStatusDescription</value>
+  </data>
+  <data name="InboundHttpMethod">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#InboundHttpMethod</value>
+  </data>
+  <data name="OutboundHttpStatusCode">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OutboundHttpStatusCode</value>
+  </data>
+  <data name="OutboundHttpStatusDescription">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#OutboundHttpStatusDescription</value>
+  </data>
+  <data name="UseAcsAuthentication">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#UseAcsAuthentication</value>
+  </data>
+  <data name="StsUri">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#StsUri</value>
+  </data>
+  <data name="IssuerName">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#IssuerName</value>
+  </data>
+  <data name="IssuerSecret">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#IssuerSecret</value>
+  </data>
+  <data name="UseSasAuthentication">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#UseSasAuthentication</value>
+  </data>
+  <data name="SharedAccessKeyName">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SharedAccessKeyName</value>
+  </data>
+  <data name="SharedAccessKey">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SharedAccessKey</value>
+  </data>
+  <data name="SuppressMessageBodyForHttpVerbs">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#SuppressMessageBodyForHttpVerbs</value>
+  </data>
+  <data name="HttpHeaders">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#HttpHeaders</value>
+  </data>
+  <data name="HttpMethodAndUrl">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#HttpMethodAndUrl</value>
+  </data>
+  <data name="VariablePropertyMapping">
+    <value>http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties#VariablePropertyMapping</value>
+  </data>
+</root>

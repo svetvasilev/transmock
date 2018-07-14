@@ -13,6 +13,8 @@ namespace TransMock.Communication.NamedPipes
     {
         public Stream MessageStream { get; set; }
 
+        public MockMessage Message { get; set; }
+
         public int ConnectionId { get; set; }
     }
 

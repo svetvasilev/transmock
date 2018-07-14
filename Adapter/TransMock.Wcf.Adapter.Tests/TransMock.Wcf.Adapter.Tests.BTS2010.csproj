@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtils.cs" />
     <Compile Include="TestWithBizTalk.cs" />
     <Compile Include="TestMockAdapterConnectionUri.cs" />
     <Compile Include="TestMockAdapterInboundHandler.cs" />

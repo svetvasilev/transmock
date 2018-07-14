@@ -44,6 +44,7 @@ namespace TransMock.Integration.BizUnit.Tests
     [TestClass]
     public class TestMockSendStep
     {
+        int endpointId = 0;
         public TestMockSendStep()
         {
             //
@@ -89,8 +90,11 @@ namespace TransMock.Integration.BizUnit.Tests
         [TestInitialize()]
         public void MyTestInitialize()
         {
-            //Setting up the inbound handler with all the references
-            connectionUri = new MockAdapterConnectionUri(new Uri("mock://localhost/TestEndpoint"));
+            //Setting up the inbound handler with all the references            
+            connectionUri = new MockAdapterConnectionUri(
+                new Uri(
+                    string.Format("mock://localhost/TestEndpoint{0}", endpointId++))
+                    );
             adapter = new MockAdapter();
             adapter.Encoding = "UTF-8";
             MockAdapterConnectionFactory connectionFactory = new MockAdapterConnectionFactory(

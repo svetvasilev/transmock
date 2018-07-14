@@ -362,12 +362,12 @@ namespace TransMock.Communication.NamedPipes
                     pipeConnection.Write(outBuffer, 0, byteReadCount);
                 }
 
-                System.Diagnostics.Debug.WriteLine(
-                    "Writing the EOF byte.",
-                    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+                //System.Diagnostics.Debug.WriteLine(
+                //    "Writing the EOF byte.",
+                //    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                 
-                // Write the EOF bite
-                pipeConnection.WriteByte(0x00);
+                //// Write the EOF bite
+                //pipeConnection.WriteByte(0x00);
 
                 System.Diagnostics.Debug.WriteLine(
                     "Message sent to the client.",
@@ -577,7 +577,7 @@ namespace TransMock.Communication.NamedPipes
                     return;
                 }
 
-                byte[] inBuffer = new byte[4096];
+                byte[] inBuffer = new byte[256];
 
                 // Starting async read by passing the named pipe connection as an async state parameter again.
                 pipeConnection.BeginRead(
@@ -651,7 +651,9 @@ namespace TransMock.Communication.NamedPipes
 
                 if (bytesRead > 0)
                 {
-                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(state.RawData, bytesRead);
+                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(
+                        state.RawData.Length, 
+                        bytesRead);
                 }
                 else
                 {
@@ -661,13 +663,13 @@ namespace TransMock.Communication.NamedPipes
                 state.InStream.Write(
                     state.RawData, 
                     0,
-                    eofReached && bytesRead > 0 ? bytesRead - 1 : bytesRead);
+                    bytesRead);
 
                 System.Diagnostics.Debug.WriteLine(
                     string.Format(
                         CultureInfo.InvariantCulture, 
                         "Written {0} bytes to the internal stream",
-                        eofReached ? bytesRead - 1 : bytesRead),
+                         bytesRead),
                         "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
                
                 if (!eofReached)

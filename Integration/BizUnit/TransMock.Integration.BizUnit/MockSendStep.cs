@@ -44,7 +44,16 @@ namespace TransMock.Integration.BizUnit
         /// Gets or sets the path to the file containing the request to be sent
         /// </summary>
         public string RequestPath { get; set; }
-        
+
+        public Dictionary<string, string> MessageProperties { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of MockSendStep
+        /// </summary>
+        public MockSendStep()
+        {
+            this.MessageProperties = new Dictionary<string, string>(3);
+        }
         /// <summary>
         /// Executes the step's logic
         /// </summary>
@@ -131,26 +140,30 @@ namespace TransMock.Integration.BizUnit
         /// <param name="context">The execution context for the step</param>
         protected virtual void SendRequest(Context context)
         {
-            System.Diagnostics.Debug.WriteLine(
-                "Sending request to the pipe server",
-                "TransMock.Integration.BizUnit.MockSendStep");
-
             using (FileStream fs = File.OpenRead(this.RequestPath))
             {
                 context.LogData(
                     string.Format(
                         CultureInfo.CurrentUICulture,
-                            "Reading request content from path {0}", 
+                            "Reading request content from path {0}",
                             this.RequestPath),
-                    fs, 
+                    fs,
                     true);
-
-                this.pipeClient.WriteStream(fs);
-
-                System.Diagnostics.Debug.WriteLine(
-                    "Request sent to the pipe server", 
-                    "TransMock.Integration.BizUnit.MockSendStep");
             }
+
+            System.Diagnostics.Debug.WriteLine(
+                "Sending request to the pipe server",
+                "TransMock.Integration.BizUnit.MockSendStep");
+
+            var mockMessage = new MockMessage(this.RequestPath, this.encoding);
+
+            mockMessage.Properties = this.MessageProperties;
+
+            this.pipeClient.WriteMessage(mockMessage);
+
+            System.Diagnostics.Debug.WriteLine(
+                "Request sent to the pipe server", 
+                "TransMock.Integration.BizUnit.MockSendStep");            
         }
 
         /// <summary>
@@ -159,6 +172,7 @@ namespace TransMock.Integration.BizUnit
         /// <param name="context">The execution context</param>
         protected virtual void ReceiveResponse(Context context)
         {
+            // Empty implementation for the one way send step
         }
 
         /// <summary>

@@ -37,6 +37,7 @@ namespace TransMock.Wcf.Adapter.Tests
     [TestClass]
     public class TestMockAdapterInboundHandler
     {
+        int endpointId = 0;
         public TestMockAdapterInboundHandler()
         {
             //
@@ -83,7 +84,9 @@ namespace TransMock.Wcf.Adapter.Tests
         public void MyTestInitialize() 
         {
             //Setting up the inbound handler with all the references
-            InitInboundHandler("mock://localhost/TestEndpoint", null);
+            InitInboundHandler(
+                string.Format("mock://localhost/TestEndpoint{0}", endpointId++), 
+                null);
         }        
        
         // Use TestCleanup to run code after each test has run
@@ -124,7 +127,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();                   
                 }
 
@@ -166,7 +169,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -206,7 +209,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -234,7 +237,7 @@ namespace TransMock.Wcf.Adapter.Tests
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
-            byte[] xmlBytes = new byte[256];
+            byte[] xmlBytes = new byte[512];
             int fileLength = (int)File.OpenRead("SmallMessage.xml").Length;
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
@@ -260,7 +263,7 @@ namespace TransMock.Wcf.Adapter.Tests
                         pipeClient.Write(xmlBytes, 0, byteCountRead);
                     }
 
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }                
             }
@@ -293,7 +296,7 @@ namespace TransMock.Wcf.Adapter.Tests
         {
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
-            byte[] xmlBytes = new byte[256];
+            byte[] xmlBytes = new byte[512];
             int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
@@ -319,7 +322,7 @@ namespace TransMock.Wcf.Adapter.Tests
                         pipeClient.Write(xmlBytes, 0, byteCountRead);
                     }
 
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
             }
@@ -370,7 +373,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -401,7 +404,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -439,7 +442,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -482,7 +485,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -522,7 +525,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -548,7 +551,11 @@ namespace TransMock.Wcf.Adapter.Tests
         public void TestOneWayReceive_XML_PromoteFileAdapterProperties()
         {
             //Initializing the inbound handler again and passing the desired property
-            InitInboundHandler("mock://localhost/TestEndpoint", @"FILE.ReceivedFileName=C:\Test\In\File1.xml");
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
+                @"FILE.ReceivedFileName=C:\Test\In\File1.xml");            
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
@@ -569,7 +576,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -607,7 +614,7 @@ namespace TransMock.Wcf.Adapter.Tests
         {
             //Initializing the inbound handler again and passing the desired property
             InitInboundHandler("mock://localhost/TestEndpoint", @"FTP.ReceivedFileName=File1.xml");
-
+            
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
             //TODO: implement sending XML message to the inbound handler
@@ -627,7 +634,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -669,12 +676,17 @@ namespace TransMock.Wcf.Adapter.Tests
                 "POP3.From=someone@test.com",
                 "POP3.Subject=Test mail",
                 "POP3.To=receiver@test.com",
-                "POP3.Cc=interested@test.com",
+                "POP3.CC=interested@test.com",
                 "POP3.ReplyTo=receiver2@test.com"
             };
+
             //Initializing the inbound handler again and passing the desired property
-            InitInboundHandler("mock://localhost/TestEndpoint", 
-                string.Join(";", propertyArray));
+            string propertiesToPromote = string.Join(";", propertyArray);
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
+                propertiesToPromote);
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
@@ -694,7 +706,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -718,7 +730,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
             var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
 
-            Assert.AreEqual(propertiesList.Count, 5, "The element count in the promoted properties list differ");
+            Assert.AreEqual(5, propertiesList.Count, "The element count in the promoted properties list differ");
 
             for (int i = 0; i < propertiesList.Count; i++)
             {
@@ -735,27 +747,30 @@ namespace TransMock.Wcf.Adapter.Tests
         [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteMQAdapterProperties()
         {
-            const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties";
+            const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2003/mqs-properties";
 
             string[] propertyArray = new string[]{
-                "MQMD.ApplIdentityData=SomeIdentityData",
-                "MQMD.ApplOriginData=SAP123",
-                "MQMD.CorrelId=TestCorrelationToken",
-                "MQMD.Encoding=Binary",
-                "MQMD.Expiry=2017-09-05T12:00:00",
-                "MQMD.Format=Text",
-                "MQMD.GroupID=",
-                "MQMD.MsgId=TestMessageId",
-                "MQMD.MsgSeqNumber=123",
-                "MQMD.MsgType=Normal",
-                "MQMD.Offset=0",
-                "MQMD.OriginalLength=123456"
+                "MQSeries.MQMD_ApplIdentityData=SomeIdentityData",
+                "MQSeries.MQMD_ApplOriginData=SAP123",
+                "MQSeries.MQMD_CorrelId=TestCorrelationToken",
+                "MQSeries.MQMD_Encoding=Binary",
+                "MQSeries.MQMD_Expiry=2017-09-05T12:00:00",
+                "MQSeries.MQMD_Format=Text",
+                "MQSeries.MQMD_GroupId=",
+                "MQSeries.MQMD_MsgId=TestMessageId",
+                "MQSeries.MQMD_MsgSeqNumber=123",
+                "MQSeries.MQMD_MsgType=Normal",
+                "MQSeries.MQMD_Offset=0",
+                "MQSeries.MQMD_OriginalLength=123456"
             };
 
             string properties = string.Join(";", propertyArray);
-            //Initializing the inbound handler again and passing the desired property
-            InitInboundHandler("mock://localhost/TestEndpoint",
-               properties);
+            //Initializing the inbound handler again and passing the desired property            
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
+                properties);
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
 
@@ -776,7 +791,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -809,7 +824,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                 VerifyPromotedProperty(propertiesList[i],
                     adapterNamespace,
-                    propertyDetails[0].Replace('.','_'),
+                    propertyDetails[0].Replace("MQSeries.", string.Empty),
                     propertyDetails[1]);                    
             }                      
         }
@@ -830,8 +845,11 @@ namespace TransMock.Wcf.Adapter.Tests
 
             string properties = string.Join(";", propertyArray);
             //Initializing the inbound handler again and passing the desired property
-            InitInboundHandler("mock://localhost/TestEndpoint",
-               properties);
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
+                properties);
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
             
@@ -851,7 +869,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -894,8 +912,11 @@ namespace TransMock.Wcf.Adapter.Tests
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestOneWayReceive_XML_PromoteImaginaryAdapterProperties()
         {
-            //Initializing the inbound handler again and passing the desired property
-            InitInboundHandler("mock://localhost/TestEndpoint", 
+            //Initializing the inbound handler again and passing the desired property            
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
                 @"PING.RetryCount=10");
 
             inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
@@ -917,7 +938,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -963,7 +984,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1021,7 +1042,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
                     pipeClient.Connect(10000);
                     pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
                 //Now we read the message in the inbound handler
@@ -1065,7 +1086,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
             {
                 int bytesCountRead = 0;                
-                byte[] xmlBytes = new byte[256];
+                byte[] xmlBytes = new byte[4096];
 
                 int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
 
@@ -1086,7 +1107,7 @@ namespace TransMock.Wcf.Adapter.Tests
                         pipeClient.Write(xmlBytes, 0, bytesCountRead);
                     }
 
-                    pipeClient.WriteByte(0x00);
+                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 

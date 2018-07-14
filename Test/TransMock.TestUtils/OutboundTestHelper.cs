@@ -44,7 +44,7 @@ namespace TransMock.TestUtils
         {
             this.pipeServer = pipeServer;
             syncEvent = new System.Threading.ManualResetEvent(false);
-            outBuffer = new byte[512];
+            outBuffer = new byte[256];
             memStream = new System.IO.MemoryStream(512);
         }
 
@@ -70,33 +70,25 @@ namespace TransMock.TestUtils
 
                 System.Diagnostics.Trace.WriteLine("Starting to read from the pipe.", "OutboundTestHelper");
                 //We read from the pipe
-                int byteCountRead = 0;
+                int byteCountRead = 0, totalBytesCount = 0;
                 bool eofReached = false;
+
                 while (!eofReached)
                 {
                     byteCountRead = testHelper.pipeServer.Read(outBuffer, 0, outBuffer.Length);
+                    totalBytesCount += byteCountRead;
 
-                    if (byteCountRead > 2)
-                    {
-                        eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
-                            outBuffer[byteCountRead - 2] != 0x0 &&
-                            outBuffer[byteCountRead - 3] != 0x0);
-                    }
-                    else if (byteCountRead > 1 && !eofReached)
-                    {
-                        eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
-                            outBuffer[byteCountRead - 2] == 0x0);
-                    }
-                    else if (byteCountRead == 1)
-                    {
-                        eofReached = outBuffer[byteCountRead - 1] == 0x0;
-                    }
+                    eofReached =  byteCountRead < outBuffer.Length ||
+                        byteCountRead == 0 ;
 
-                    memStream.Write(outBuffer, 0,
-                        eofReached ? byteCountRead - 1 : byteCountRead);
+                    memStream.Write(outBuffer, 0, byteCountRead);
                 }               
 
-                System.Diagnostics.Trace.WriteLine("Finished reading from the pipe.", "OutboundTestHelper");
+                System.Diagnostics.Trace.WriteLine(
+                    string.Format(
+                        "Finished reading from the pipe. Total bytes read: {0}", 
+                        totalBytesCount), 
+                    "OutboundTestHelper");
             }
             finally
             {
@@ -125,38 +117,20 @@ namespace TransMock.TestUtils
                 }
 
                 //We read from the pipe
-                int byteCountRead = 0;
+                int byteCountRead = 0, totalBytesCount = 0;
                 bool eofReached = false;
                 
                 while (!eofReached)
                 {
                     byteCountRead = testHelper.pipeServer.Read(outBuffer, 0, outBuffer.Length);
 
-                    if (byteCountRead > 0)
-                    {
-                        if (byteCountRead > 2)
-                        {
-                            eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
-                                outBuffer[byteCountRead - 2] != 0x0 &&
-                                outBuffer[byteCountRead - 3] != 0x0);
-                        }
-                        else if (byteCountRead > 1 && !eofReached)
-                        {
-                            eofReached = (outBuffer[byteCountRead - 1] == 0x0 &&
-                                outBuffer[byteCountRead - 2] == 0x0);
-                        }
-                        else if (byteCountRead == 1)
-                        {
-                            eofReached = outBuffer[byteCountRead - 1] == 0x0;
-                        }
+                    totalBytesCount += byteCountRead;
 
-                        memStream.Write(outBuffer, 0,
-                            eofReached ? byteCountRead - 1 : byteCountRead);                        
-                    }
-                    else
-                    {
-                        eofReached = true;
-                    }                    
+                    eofReached = byteCountRead < outBuffer.Length ||
+                        byteCountRead == 0;                   
+
+                    memStream.Write(outBuffer, 0, byteCountRead);                        
+                                    
                 }
 
                 // Invoking the response handler

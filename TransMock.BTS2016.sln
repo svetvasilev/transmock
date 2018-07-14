@@ -67,6 +67,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.Nam
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "TransMock.Deploy.Adapter.NuGet.BTS2016", "Deployment\TransMock.Deployment.NuGet\TransMock.Deploy.Adapter.NuGet.BTS2016.nuproj", "{FCB0BFE8-7DF3-4CE6-9110-1B40975B4E8D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{3054364E-61A0-44A8-ABFD-2A7263A6876E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Utils.BTS2016", "Framework\TransMock.Utils\TransMock.Utils.BTS2016.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,6 +263,18 @@ Global
 		{FCB0BFE8-7DF3-4CE6-9110-1B40975B4E8D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FCB0BFE8-7DF3-4CE6-9110-1B40975B4E8D}.Release|x86.ActiveCfg = Release|Any CPU
 		{FCB0BFE8-7DF3-4CE6-9110-1B40975B4E8D}.Release|x86.Build.0 = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -284,6 +300,7 @@ Global
 		{6C9E0C6C-4E2B-40A1-8413-980538762DDE} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
 		{B08F87E7-B580-4E42-BAF0-7F8233153230} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
 		{FCB0BFE8-7DF3-4CE6-9110-1B40975B4E8D} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
+		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC} = {3054364E-61A0-44A8-ABFD-2A7263A6876E}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TransMock.vsmdi

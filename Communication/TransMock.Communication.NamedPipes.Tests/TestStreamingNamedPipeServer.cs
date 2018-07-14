@@ -81,7 +81,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -122,7 +122,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -164,7 +164,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -293,7 +293,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
                     
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -338,7 +338,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -383,7 +383,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -428,7 +428,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -473,7 +473,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -522,7 +522,7 @@ namespace TransMock.Communication.NamedPipes.Tests
                     formatter.Serialize(msgStream, mockMessage);
 
                     pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    pipeClient.WriteByte(0x0); // Write the EOF byte
+                    // pipeClient.WriteByte(0x00);// Write the EOF byte
 
                     pipeClient.WaitForPipeDrain();
                 }

@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Xml;
@@ -63,48 +64,50 @@ namespace TransMock.Wcf.Adapter
         /// <param name="mockMessage">The mock message to where the properties will be copied</param>
         private static void CopyPromotedProperties(Message message, MockMessage mockMessage)
         {
-#if DEBUG
+
             foreach (var property in message.Properties)
             {
                 System.Diagnostics.Debug.WriteLine(
                     "Property name:{0}, value:{1}",
                         property.Key, 
                         property.Value ?? property.Value.ToString());
-            }
-#endif
 
-            if (message.Properties.ContainsKey(AdapterPropertyParser.PropertiesToPromoteKey))
-            {
-                var propertiesList = message.Properties[AdapterPropertyParser.PropertiesToPromoteKey]
-                    as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                // Add the message properties to the mock message
-                foreach (var property in propertiesList)
+                try
                 {
-                    mockMessage.Properties.Add(
-                        property.Key.Name,
-                        property.Value.ToString());
+                    // Lookup the namespace prefix
+                    string[] propertyParts = property.Key.Split('#');
+
+                    if (propertyParts.Length == 2)
+                    {
+                        var utilsType = typeof(Utils.BizTalkProperties.Namespaces);
+
+                        string prefix = (string)utilsType.GetProperties().Where(
+                            p => p.PropertyType == typeof(string) && p.GetValue(null).ToString() == propertyParts[0])
+                            .SingleOrDefault()
+                            .Name;
+
+                        // Adding the message properties to the mock message instance
+                        mockMessage.Properties.Add(
+                        string.Format("{0}.{1}",
+                            prefix, propertyParts[1]),
+                        property.Value == null ?
+                            string.Empty :
+                            property.Value.ToString());
+                    }
                 }
-            }
-
-            if (message.Properties.ContainsKey(AdapterPropertyParser.PropertiesToWriteKey))
-            {
-                var propertiesList = message.Properties[AdapterPropertyParser.PropertiesToWriteKey]
-                    as List<KeyValuePair<XmlQualifiedName, object>>;
-
-                // Add the message properties to the mock message
-                foreach (var property in propertiesList)
+                catch (Exception ex)
                 {
-                    mockMessage.Properties.Add(
-                        property.Key.Name,
-                        property.Value.ToString());
-                }
-            }
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format(
+                            "Property {0} not copied to mock message. Exception: {1}",
+                            property.Key, ex.Message),
+                        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
+                }                            
+            }            
         } 
 #endregion
 
 #region IOutboundHandler Members
-
         /// <summary>
         /// Executes the request message on the target system and returns a response message.
         /// If there isn’t a response, this method should return null
@@ -225,12 +228,16 @@ namespace TransMock.Wcf.Adapter
                 }
                 else
                 {
+                    System.Diagnostics.Debug.WriteLine(
+                        "One way communication - returning empty response WCF Message to BizTalk",
+                        "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
                     // Return empty message in one-way scenario
                     return Message.CreateMessage(MessageVersion.Default, string.Empty);
                 }
             }
         }       
 #endregion IOutboundHandler Members
+        
         /// <summary>
         /// Overrides the default dispose behavior
         /// </summary>
