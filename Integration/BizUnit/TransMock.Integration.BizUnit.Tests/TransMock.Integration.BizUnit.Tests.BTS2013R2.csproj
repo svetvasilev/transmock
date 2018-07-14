@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{98F23F99-F1FA-49CB-B32B-7F17FB955817}</ProjectGuid>
+    <ProjectGuid>{FCBD2200-2998-4A52-8D49-FC17F21A4750}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Integration.BizUnit.Tests</RootNamespace>
@@ -92,6 +92,10 @@
     <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj">
       <Project>{85c320d4-7f57-4702-8324-73b71b209ff9}</Project>
       <Name>TransMock.Wcf.Adapter.BTS2013R2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj">
+      <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
+      <Name>TransMock.Communication.NamedPipes.BTS2013R2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2013R2.csproj">
       <Project>{3d54d0df-7c08-4a06-9dcd-8d1cfdd8248f}</Project>
