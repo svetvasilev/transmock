@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B32C1509-3952-4492-B097-6886CEC675FB}</ProjectGuid>
+    <ProjectGuid>{E4EBDD49-191A-4697-8BC2-F85C0EE0A8BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Integration.BizUnit</RootNamespace>

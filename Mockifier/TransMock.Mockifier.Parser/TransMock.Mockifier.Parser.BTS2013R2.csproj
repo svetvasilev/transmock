@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B3EDC765-D278-420D-8E10-E408ACF1067A}</ProjectGuid>
+    <ProjectGuid>{0C81DC0D-ABE3-4188-83D3-C0961E7427CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Mockifier.Parser</RootNamespace>
