@@ -58,11 +58,15 @@
       <HintPath>..\packages\TransMock.Adapter.1.4.0\lib\net46\TransMock.Communication.NamedPipes.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TransMock.Integration.BizUnit, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Framework.1.3.5\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
+    <Reference Include="TransMock.Integration.BizUnit, Version=1.4.0.6217, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Framework.1.4.0\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TransMock.Wcf.Adapter, Version=1.3.3.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
+    <Reference Include="TransMock.Utils, Version=1.4.0.6217, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Adapter.1.4.0\lib\net46\TransMock.Utils.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TransMock.Wcf.Adapter, Version=1.4.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
       <HintPath>..\packages\TransMock.Adapter.1.4.0\lib\net46\TransMock.Wcf.Adapter.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -75,7 +79,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -83,6 +89,7 @@
     <Compile Include="BizTalkTestsMockAddresses.cs" />
     <Compile Include="TestDynamicSendPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestStaticPorts.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\ResponseMessage.xml">

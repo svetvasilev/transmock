@@ -71,6 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="MockHelper.cs" />
     <Compile Include="MockTransportConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

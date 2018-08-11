@@ -53,7 +53,7 @@ namespace TransMock.Wcf.Adapter
         /// The internal queue where messages are put when received from an external system
         /// </summary>        
         private Queue<MessageConnectionPair> inboundQueue;
-
+            
         /// <summary>
         /// Object used for synchronizing access to the inbound queue
         /// </summary>
@@ -272,16 +272,6 @@ namespace TransMock.Wcf.Adapter
                         "<MessageContent>{0}</MessageContent>",
                         e.Message.BodyBase64);
 
-                // Adding the message contents to a predefined XML structure
-                // TODO: refactor to a more efficien implementation                
-                //using (MemoryStream memStream = e.MessageStream as MemoryStream)
-                //{
-                //    msgContents = string.Format(
-                //        CultureInfo.InvariantCulture,
-                //        "<MessageContent>{0}</MessageContent>",
-                //        Convert.ToBase64String(memStream.ToArray()));
-                //} 
-
                 XmlReader xr = XmlReader.Create(new StringReader(msgContents));
 
                 Message inMsg = Message.CreateMessage(MessageVersion.Default, string.Empty, xr);
@@ -291,23 +281,9 @@ namespace TransMock.Wcf.Adapter
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
                 // Add any statically configured properties in the message context
-                this.propertyParser.PromoteProperties(inMsg);
+                this.propertyParser.PromoteProperties(inMsg, e.Message.Properties);
 
-                // Add/Update any dynamically configured message properties
-                foreach (var property in e.Message.Properties)
-                {
-                    if (inMsg.Properties.ContainsKey(property.Key))
-                    {
-                        inMsg.Properties[property.Key] = property.Value;
-                    }
-                    else
-                    {
-                        inMsg.Properties.Add(
-                            property.Key, property.Value);
-                    }
-                }
-
-                if (inMsg != null)
+                 if (inMsg != null)
                 {
                     System.Diagnostics.Debug.WriteLine(
                         "Enqueuing message to the internal queue",

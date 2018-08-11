@@ -81,18 +81,33 @@ namespace TransMock.Wcf.Adapter
                     {
                         var utilsType = typeof(Utils.BizTalkProperties.Namespaces);
 
-                        string prefix = (string)utilsType.GetProperties().Where(
-                            p => p.PropertyType == typeof(string) && p.GetValue(null, null).ToString() == propertyParts[0])
-                            .SingleOrDefault()
-                            .Name;
+                        var reflectedProperty = utilsType.GetProperties()
+                            .Where(
+                                p => p.PropertyType == typeof(string) && p.GetValue(null, null).ToString() == propertyParts[0])
+                            .SingleOrDefault();
 
-                        // Adding the message properties to the mock message instance
-                        mockMessage.Properties.Add(
-                        string.Format("{0}.{1}",
-                            prefix, propertyParts[1]),
-                        property.Value == null ?
-                            string.Empty :
-                            property.Value.ToString());
+                        if (reflectedProperty != null)
+                        {
+                            // Adding the adapter propertiy to the mock message instance
+                            mockMessage.Properties.Add(
+                                string.Format(
+                                    "{0}.{1}",
+                                    reflectedProperty.Name, 
+                                    propertyParts[1]),
+                                property.Value == null ?
+                                    string.Empty :
+                                    property.Value.ToString()
+                            );
+                        }
+                        else
+                        {
+                            // No adapter property match found
+                            // Adding custom property to the list of properties
+                            mockMessage.Properties.Add(
+                                property.Key,
+                                (string)property.Value);
+                        }
+                        
                     }
                 }
                 catch (Exception ex)

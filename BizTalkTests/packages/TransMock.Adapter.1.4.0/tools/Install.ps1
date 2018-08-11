@@ -179,7 +179,7 @@ function InstallAdapter{
 		# GAC the adapter
 		# First we need to find gacutil
 		$WinSDKDirectory = "C:\Program Files\Microsoft SDKs\Windows"
-		$CommsAssembly = "TransMock.Communication.NamedPipes.dll"
+		$DependencyAssemblies = @("TransMock.Utils.dll","TransMock.Communication.NamedPipes.dll")
 
 		if([System.Environment]::Is64BitOperatingSystem -eq $true){
 			$WinSDKDirectory = $WinSDKDirectory -replace "Program Files","Program Files (x86)"
@@ -191,9 +191,13 @@ function InstallAdapter{
 		if($GacUtilDir){
 			Write-Debug "GacUtilDir found and is: $($GacUtilDir.FullName)"
 
-			Write-Output "Invoking gacutil.exe to GAC the communications assembly"
-			$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/i" "$($TargetDirectory.FullName)\$CommsAssembly"
-			Write-Output "gacutil.exe returned: $GacUtilOutput"
+			Write-Output "Invoking gacutil.exe to GAC the dependency assemblies"
+
+			$DependencyAssemblies | % {
+				Write-Output "GACing assembly $_"
+				$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/i" "$($TargetDirectory.FullName)\$_"
+				Write-Output "gacutil.exe returned: $GacUtilOutput"
+			}
 
 			Write-Output "Invoking gacutil.exe to GAC the adapter"
 			$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/i" "$($TargetDirectory.FullName)\$BINDING_ASSEMBLY_NAME"

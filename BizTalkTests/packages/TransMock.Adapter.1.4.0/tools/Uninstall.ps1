@@ -145,7 +145,7 @@ function UninstallAdapter{
 	# UnGAC the adapter
 	# First we need to find gacutil
 	$WinSDKDirectory = "C:\Program Files\Microsoft SDKs\Windows"
-	$CommsAssembly = "TransMock.Communication.NamedPipes"
+	$DependencyAssemblies = @("TransMock.Utils","TransMock.Communication.NamedPipes")
 
 	if([System.Environment]::Is64BitOperatingSystem -eq $true){
 		$WinSDKDirectory = $WinSDKDirectory -replace "Program Files","Program Files (x86)"
@@ -157,9 +157,13 @@ function UninstallAdapter{
 	if($GacUtilDir){
 		Write-Debug "GacUtilDir found and is: $($GacUtilDir.FullName)"
 
-		Write-Output "Invoking gacutil.exe to unGAC the communications assembly"
-		$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/u" "$CommsAssembly"
-		Write-Output "gacutil.exe returned: $GacUtilOutput"
+		Write-Output "Invoking gacutil.exe to unGAC the dependency assemblies"
+		
+		$DependencyAssemblies | % {
+				Write-Output "unGACing assembly $_"
+				$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/i" "$($TargetDirectory.FullName)\$_"
+				Write-Output "gacutil.exe returned: $GacUtilOutput"
+			}
 
 		Write-Output "Invoking gacutil.exe to unGAC the adapter"
 		$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/u" "$BINDING_ASSEMBLY_NAME"

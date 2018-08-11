@@ -42,21 +42,15 @@ namespace TransMock.Wcf.Adapter
         #endregion
 
         /// <summary>
-        /// Dictionary containing a list of well known adapter properties
-        /// </summary>
-        private static Dictionary<string, AdapterProperty> wellKnownProperties;
-
-        /// <summary>
         /// Dictionary containing a list of properties to be promoted
         /// </summary>
-        private Dictionary<string, string> propertiesToPromote;
+        private Dictionary<string, string> adapterPropertiesToPromote;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdapterPropertyParser" /> class
         /// </summary>
         public AdapterPropertyParser()
         {
-            InitWellKnownProperties();
         }
 
         /// <summary>
@@ -86,7 +80,7 @@ namespace TransMock.Wcf.Adapter
                 "pairsArray has element num of: " + pairsArray.Length,
                 "PropertyPromotionParser");
 
-            this.propertiesToPromote = new Dictionary<string, string>(pairsArray.Length - 1);
+            this.adapterPropertiesToPromote = new Dictionary<string, string>(pairsArray.Length - 1);
 
             foreach (var s in pairsArray)
             {
@@ -94,53 +88,81 @@ namespace TransMock.Wcf.Adapter
                 {
                     string[] nameValuePair = s.Split('=');
                     
-                    this.propertiesToPromote.Add(nameValuePair[0], nameValuePair[1]);
+                    this.adapterPropertiesToPromote.Add(nameValuePair[0], nameValuePair[1]);
                 }
             }
             
             System.Diagnostics.Debug.WriteLine(
-                "Dictionary propertiesToPromote has element number: " + this.propertiesToPromote.Count, 
+                "Dictionary propertiesToPromote has element number: " + this.adapterPropertiesToPromote.Count, 
                 "PropertyPromotionParser");
         }
 
         /// <summary>
         /// Promotes the already initialized properties to the message context
         /// </summary>
-        /// <param name="msg">The message which will get the properties promoted to</param>
+        /// <param name="message">The message which will get the properties promoted to</param>
+        /// <param name="messagePropertiers">The message level properties that shall be promoted to the inbound message context</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", 
             Justification = "Needed as per design")]
-        public void PromoteProperties(Message msg)
-        {            
-            if (this.propertiesToPromote == null)
+        public void PromoteProperties(Message message, Dictionary<string, string> messageProperties)
+        {
+            List<KeyValuePair<XmlQualifiedName, object>> promoteProps =
+                new List<KeyValuePair<XmlQualifiedName, object>>(3);
+
+            if (this.adapterPropertiesToPromote != null)
             {
-                return;
+                promoteProps.Capacity = this.adapterPropertiesToPromote.Count;
+                // Adding adapter level properties                
+                foreach (string propertyName in this.adapterPropertiesToPromote.Keys)
+                {
+                    try
+                    {
+                        var fullyQualifiedPropertyName = LookupProperty(propertyName);
+
+                        promoteProps.Add(
+                            new KeyValuePair<XmlQualifiedName, object>(
+                                fullyQualifiedPropertyName,
+                                this.adapterPropertiesToPromote[propertyName]));
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine(
+                            "Exception thrown in PromoteProperties: " + ex.Message,
+                            "PropertyPromotionParser");
+                    }
+                }
             }
 
-            List<KeyValuePair<XmlQualifiedName, object>> promoteProps = 
-                new List<KeyValuePair<XmlQualifiedName, object>>(this.propertiesToPromote.Keys.Count);
-                            
-            foreach (string propertyName in this.propertiesToPromote.Keys)
+            if (messageProperties != null)
             {
-                try
+                // Adding message level properties
+                foreach (var propertyKey in messageProperties.Keys)
                 {
-                    var fullyQualifiedPropertyName = LookupProperty(propertyName);
-                    
+                    var fullyQualifiedPropertyName = LookupProperty(propertyKey);
+
+                    KeyValuePair<XmlQualifiedName, object> existingPropertyForPromotion = promoteProps
+                        .SingleOrDefault(elm =>
+                            elm.Key.Name == fullyQualifiedPropertyName.Name
+                            && elm.Key.Name == fullyQualifiedPropertyName.Name);
+
+                    if (!default(KeyValuePair<XmlQualifiedName, object>)
+                            .Equals(existingPropertyForPromotion))
+                    {
+                        // Message level properties override static adapter propertes
+                        promoteProps.Remove(existingPropertyForPromotion);                        
+                    }
+
                     promoteProps.Add(
                         new KeyValuePair<XmlQualifiedName, object>(
-                            fullyQualifiedPropertyName, 
-                            this.propertiesToPromote[propertyName]));
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(
-                        "Exception thrown in PromoteProperties: " + ex.Message,
-                        "PropertyPromotionParser");
+                            fullyQualifiedPropertyName,
+                            messageProperties[propertyKey]));
+                    
                 }
             }
-
+            
             if (promoteProps.Count > 0)
             {
-                msg.Properties[PropertiesToPromoteKey] = promoteProps;
+                message.Properties[PropertiesToPromoteKey] = promoteProps;
             }
         }
 
@@ -149,13 +171,18 @@ namespace TransMock.Wcf.Adapter
         /// </summary>
         public void Clear()
         {
-            if (this.propertiesToPromote != null)
+            if (this.adapterPropertiesToPromote != null)
             {
-                this.propertiesToPromote.Clear();
-                this.propertiesToPromote = null;
+                this.adapterPropertiesToPromote.Clear();
+                this.adapterPropertiesToPromote = null;
             }
         }
 
+        /// <summary>
+        /// Looks up a context property by its name
+        /// </summary>
+        /// <param name="name">The name of the property - shortened syntax <Prefix>.<name> or full type syntax <namespace>#<name></param>
+        /// <returns>An instance of the XmlQualifiedName class containing the fully qualified XML property name</returns>
         private XmlQualifiedName LookupProperty(string name)
         {
             try
@@ -166,255 +193,53 @@ namespace TransMock.Wcf.Adapter
                         name),
                     "TransMock.Wcf.Adapter.AdapterPropertyParser");
 
-                string[] nameParts = name.Split('.');
+                string[] nameParts = null;
+                string contextPropertyName = null;
 
-                // Activator.CreateInstance("TransMock.Utils", );
-                var utilsAssembly = System.Reflection
-                    .Assembly.Load(
-                        "TransMock.Utils");
+                if (!name.Contains("#"))
+                {
+                    // Handling custom promoted property case
+                    nameParts = name.Split('.');
 
-                var propertyType = utilsAssembly.GetTypes()
-                    .Where(t => t.Name == nameParts[0])
-                    .SingleOrDefault();
+                    // Activator.CreateInstance("TransMock.Utils", );
+                    var utilsAssembly = System.Reflection
+                        .Assembly.Load(
+                            "TransMock.Utils");
 
-                string value = propertyType
-                        .GetProperty(nameParts[1])
-                        .GetValue(null).ToString();
+                    var propertyType = utilsAssembly.GetTypes()
+                        .Where(t => t.Name == nameParts[0])
+                        .SingleOrDefault();
 
-                System.Diagnostics.Debug.WriteLine(
-                    string.Format(
-                        "LookupProperty value found: {0}",
-                        value),
-                    "TransMock.Wcf.Adapter.AdapterPropertyParser");
+                    contextPropertyName = propertyType
+                            .GetProperty(nameParts[1])
+                            .GetValue(null).ToString();
 
-                string[] propertyParts = value.Split('#');
+                    System.Diagnostics.Debug.WriteLine(
+                        string.Format(
+                            "LookupProperty value found: {0}",
+                            contextPropertyName),
+                        "TransMock.Wcf.Adapter.AdapterPropertyParser");
+                }
+                else
+                {
+                    contextPropertyName = name;
+                }                
+
+                string[] propertyParts = contextPropertyName.Split('#');
 
                 return new XmlQualifiedName(
                     propertyParts[1], // Property name
                     propertyParts[0]); // Propery namespace
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug
+                    .WriteLine(
+                        "Exception thrown in LookupProperties: " + ex.Message,
+                        "PropertyPromotionParser");
                 throw;
             }
-       }
-
-        /// <summary>
-        /// Initializes well known adapter properties
-        /// </summary>
-        private static void InitWellKnownProperties()
-        {
-            if (wellKnownProperties != null)
-            {
-                return;
-            }
-
-            wellKnownProperties = new Dictionary<string, AdapterProperty>()
-            {                
-                // File adapter
-                {
-                    "FILE.ReceivedFileName", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/file-properties", 
-                        Name = "ReceivedFileName"
-                    }
-                },
-                
-                // FTP Adapter
-                {
-                    "FTP.ReceivedFileName", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/ftp-properties", 
-                        Name = "ReceivedFileName"
-                    }
-                },
-                
-                // POP3 adapter
-                {
-                    "POP3.Subject", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties", 
-                        Name = "Subject"
-                    }
-                },
-                {
-                    "POP3.From", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties", 
-                        Name = "From"
-                    }
-                },
-                {
-                    "POP3.To", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties", 
-                        Name = "To"
-                    }
-                },
-                {
-                    "POP3.ReplyTo", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties", 
-                        Name = "ReplyTo"
-                    }
-                },
-                {
-                    "POP3.Cc", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/pop3-properties", 
-                        Name = "Cc"
-                    }
-                },
-                
-                // MQ-Series adapter
-                {
-                    "MQMD.ApplIdentityData", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_ApplIdentityData"
-                    }
-                },                
-                {
-                    "MQMD.ApplOriginData", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_ApplOriginData"
-                    }
-                },
-                {
-                    "MQMD.CorrelId", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_CorrelId"
-                    }
-                },
-                {
-                    "MQMD.Encoding", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_Encoding"
-                    }
-                },
-                {
-                    "MQMD.Expiry", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_Expiry"
-                    }
-                },
-                {
-                    "MQMD.Format", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_Format"
-                    }
-                },
-                {
-                    "MQMD.GroupID", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_GroupID"
-                    }
-                },
-                {
-                    "MQMD.MsgId", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_MsgId"
-                    }
-                },
-                {
-                    "MQMD.MsgSeqNumber", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_MsgSeqNumber"
-                    }
-                },
-                {
-                    "MQMD.MsgType", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_MsgType"
-                    }
-                },
-                {
-                    "MQMD.Offset", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_Offset"
-                    }
-                },
-                {
-                    "MQMD.OriginalLength", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/mq-properties", 
-                        Name = "MQMD_OriginalLength"
-                    }
-                },
-                
-                // MSMQ Adapter
-                {
-                    "MSMQ.AppSpecific", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties", 
-                        Name = "AppSpecific"
-                    }
-                },
-                {
-                    "MSMQ.CertificateThumbPrint", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties", 
-                        Name = "CertificateThumbPrint"
-                    }
-                },
-                {
-                    "MSMQ.CorrelationId", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties", 
-                        Name = "CorrelationId"
-                    }
-                },
-                {
-                    "MSMQ.Label", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties", 
-                        Name = "Label"
-                    }
-                },
-                {
-                    "MSMQ.Priority", 
-                    new AdapterProperty
-                    {
-                        Namespace = "http://schemas.microsoft.com/BizTalk/2003/msmq-properties", 
-                        Name = "Priority"
-                    }
-                }
-            };            
-        }
+       }        
     }
 }

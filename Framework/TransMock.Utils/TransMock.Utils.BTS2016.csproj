@@ -290,7 +290,13 @@
     <None Include="Resources\PropertySchemaToClass.xslt" />
     <None Include="Resources\PropertySchemaToResx.xslt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertySchemaToMD.xslt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>del $(ProjectDir)obj\*.* /s /f /q</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

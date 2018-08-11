@@ -52,6 +52,10 @@
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013.csproj" />
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj" />
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2016.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2016.csproj" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>

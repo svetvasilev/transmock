@@ -545,7 +545,7 @@ namespace TransMock.Wcf.Adapter.Tests
         } 
         #endregion
 
-        #region Property promotion tests
+        #region Static property promotion tests
         [TestMethod]
         [TestCategory("One Way Tests with Properties")]
         public void TestOneWayReceive_XML_PromoteFileAdapterProperties()
@@ -958,6 +958,136 @@ namespace TransMock.Wcf.Adapter.Tests
             var promotedProperties = msg.Properties
                 .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
                 .Single();                        
+        }
+        #endregion
+
+        #region Message property promotion tests
+        [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
+        public void TestOneWayReceive_XML_PromoteCuastomProperty()
+        {
+            //Initializing the inbound handler again and passing the desired property
+            //InitInboundHandler(
+            //    string.Format(
+            //        "mock://localhost/TestEndpoint{0}",
+            //        endpointId),
+            //    @"FILE.ReceivedFileName=C:\Test\In\File1.xml");
+
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
+                mockMessage.Properties.Add("http://www.example.com/custom-props#MyProp", "SomeValue");
+
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    // pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .SingleOrDefault();
+
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
+
+            VerifyPromotedProperty(propertiesList[0],
+                "http://www.example.com/custom-props",
+                "MyProp",
+                @"SomeValue");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests with Properties")]
+        public void TestOneWayReceive_XML_PromoteFileAdapterProperty_MessageOverride()
+        {
+            //Initializing the inbound handler again and passing the desired property
+            InitInboundHandler(
+                string.Format(
+                    "mock://localhost/TestEndpoint{0}",
+                    endpointId),
+                @"FILE.ReceivedFileName=C:\Test\In\File1.xml");
+
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+
+            //TODO: implement sending XML message to the inbound handler
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                var mockMessage = new MockMessage();
+                mockMessage.Body = xml;
+                mockMessage.Properties.Add("FILE.ReceivedFileName", @"C:\Test\In\File22.xml");
+
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    formatter.Serialize(memStream, mockMessage);
+
+                    pipeClient.Connect(10000);
+                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
+                    // pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+            //Sending empty message to emulate the exact behavior of BizTalk for one way communication
+            reply.Reply(GeneralTestHelper.CreateMessageWithEmptyBody(), TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(xml, GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .SingleOrDefault();
+
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
+
+            VerifyPromotedProperty(propertiesList[0],
+                "http://schemas.microsoft.com/BizTalk/2003/file-properties",
+                "ReceivedFileName",
+                @"C:\Test\In\File22.xml");
         }
         #endregion
 

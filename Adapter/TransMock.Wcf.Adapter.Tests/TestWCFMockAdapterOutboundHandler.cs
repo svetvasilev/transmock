@@ -366,7 +366,8 @@ namespace TransMock.Wcf.Adapter.Tests
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
 
                 // Adding test properties
-                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/http-properties#ContentType", "text/json");                
+                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/http-properties#ContentType", "text/json");
+                AddPromotedProperty(msg, "http://www.example.com/properties#MyProp", "SomeValue");
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
 
@@ -379,11 +380,15 @@ namespace TransMock.Wcf.Adapter.Tests
                 var mockMessage = ConvertToMockMessage(testHelper.memStream);
 
                 Assert.AreEqual(xml, mockMessage.Body, "Contents of received message is different");
-                Assert.IsTrue(mockMessage.Properties.Count == 1, "Number of properties received from outbound adapter is wrong");
+                Assert.IsTrue(mockMessage.Properties.Count == 2, "Number of properties received from outbound adapter is wrong");
+
                 Assert.AreEqual("text/json", 
                     mockMessage.Properties["HTTP.ContentType"], 
-                    "The promoted property is not as expected");
-                
+                    "The promoted property HTTP.Content is not as expected");
+                Assert.AreEqual("SomeValue",
+                    mockMessage.Properties["http://www.example.com/properties#MyProp"],
+                    "The promoted property HTTP.Content is not as expected");
+
             }
         }
 
@@ -400,7 +405,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 Message msg = GeneralTestHelper.CreateMessageWithBase64EncodedBody(xml, Encoding.UTF8);
 
                 // Adding test properties
-                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/zip-properties#Imaginary", "");
+                AddPromotedProperty(msg, "http://schemas.microsoft.com/BizTalk/2003/zip-properties#Imaginary", "StillWorks");
 
                 OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
 
@@ -413,10 +418,10 @@ namespace TransMock.Wcf.Adapter.Tests
                 var mockMessage = ConvertToMockMessage(testHelper.memStream);
 
                 Assert.AreEqual(xml, mockMessage.Body, "Contents of received message is different");
-                Assert.IsTrue(mockMessage.Properties.Count == 0, "Number of properties received from outbound adapter is wrong");
-                //Assert.AreEqual("text/json",
-                //    mockMessage.Properties["HTTP.ContentType"],
-                //    "The promoted property is not as expected");
+                Assert.IsTrue(mockMessage.Properties.Count == 1, "Number of properties received from outbound adapter is wrong");
+                Assert.AreEqual("StillWorks",
+                    mockMessage.Properties["http://schemas.microsoft.com/BizTalk/2003/zip-properties#Imaginary"],
+                    "The promoted property is not as expected");
 
             }
         }

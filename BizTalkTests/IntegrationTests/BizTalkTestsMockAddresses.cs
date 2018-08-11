@@ -61,3 +61,18 @@ namespace BizTalkTests.Test
 
 	}
 }
+			{
+				return "mock://localhost/BTS.OneWayReceive2_FILE";
+			}
+		}
+
+		public static string BTS_TwoWayTestReceive_WCF
+		{
+			get
+			{
+				return "mock://localhost/BTS.TwoWayTestReceive_WCF";
+			}
+		}
+
+	}
+}

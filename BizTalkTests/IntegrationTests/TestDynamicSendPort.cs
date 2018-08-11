@@ -5,7 +5,7 @@ using TransMock.Integration.BizUnit;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BizTalkTest.IntegrationTests
+namespace BizTalkTests.IntegrationTests
 {
     [TestClass]
     public class TestDynamicSendPort
@@ -59,7 +59,7 @@ namespace BizTalkTest.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE,
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -68,7 +68,7 @@ namespace BizTalkTest.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.DynamicPortOut,
+                Url = BizTalkTestsMockAddresses.DynamicPortOut,
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -89,7 +89,7 @@ namespace BizTalkTest.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE,
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -98,7 +98,7 @@ namespace BizTalkTest.IntegrationTests
 
             var outMsgStep = new MockRequestResponseStep()
             {
-                Url = BizTalkTests.Test.BizTalkTestsMockAddresses.DynamicPortOut2Way,                
+                Url = BizTalkTestsMockAddresses.DynamicPortOut2Way,                
                 Encoding = "UTF-8",
                 ResponsePath = "ResponseMessage.xml",
                 Timeout = 10

@@ -7,6 +7,9 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Version 1.4:
+- Introduced new message based asbtraction for communicating with the mock adapter
+
 Version 1.3.3:
 - Fixed issue with incorrect version of the reference to Microsoft.ServiceModel.Channels assembly for BizTalk 2016
 - Fixed issue with named pipe security when executing on machines with non-english locale
