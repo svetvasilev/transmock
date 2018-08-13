@@ -41,6 +41,11 @@ namespace TransMock.Integration.BizUnit
         public string ResponsePath { get; set; }
 
         /// <summary>
+        /// Gets or sets the response selector function that will govern the choice of response content
+        /// </summary>
+        public Func<MockMessage, int, string> ResponseSelector { get; set; }
+
+        /// <summary>
         /// Executes the step
         /// </summary>
         /// <param name="context">The execution context</param>
@@ -57,9 +62,9 @@ namespace TransMock.Integration.BizUnit
         {
             base.Validate(context);
 
-            if (string.IsNullOrEmpty(this.ResponsePath))
+            if (string.IsNullOrEmpty(this.ResponsePath) && this.ResponseSelector == null)
             {
-                throw new ArgumentException("The ResponsePath is not defined!");
+                throw new ArgumentException("The ResponsePath and/or ResponseSelector are not defined!");
             }
         }
 
@@ -67,8 +72,16 @@ namespace TransMock.Integration.BizUnit
         /// Sends a response message to the client
         /// </summary>
         /// <param name="context">The BizUnit execution context</param>
-        protected override void SendResponse(Context context)
+        protected override void SendResponse(Context context, MockMessage request, int batchIndex)
         {
+            if(this.ResponseSelector != null)
+            {
+                context.LogInfo(
+                    "Invoking response selector method.");
+
+                this.ResponsePath = ResponseSelector(request, batchIndex);
+            }
+
             // Here we supply the response
             using (FileStream fs = File.OpenRead(this.ResponsePath))
             {

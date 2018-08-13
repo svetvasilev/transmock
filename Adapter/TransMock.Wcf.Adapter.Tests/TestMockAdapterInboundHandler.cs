@@ -964,7 +964,7 @@ namespace TransMock.Wcf.Adapter.Tests
         #region Message property promotion tests
         [TestMethod]
         [TestCategory("One Way Tests with Properties")]
-        public void TestOneWayReceive_XML_PromoteCuastomProperty()
+        public void TestOneWayReceive_XML_PromoteCustomProperty()
         {
             //Initializing the inbound handler again and passing the desired property
             //InitInboundHandler(
@@ -1146,7 +1146,7 @@ namespace TransMock.Wcf.Adapter.Tests
                 Assert.IsNotNull(receivedResponse, "The response message is null!");   
                 Assert.AreEqual(responseXml, receivedResponse.Body, "The received response is not correct");                
             }
-        }             
+        }       
 
         [TestMethod]
         [TestCategory("Two Way Tests")]

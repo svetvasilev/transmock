@@ -124,6 +124,7 @@ namespace TransMock.Integration.BizUnit
                     // the number of messages specified in DebatchedMessageCount
                     for (int i = 0; i < this.DebatchedMessageCount; i++)
                     {
+                    
                         this.WaitForRequest();
 
                         var receivedMessage = this.receivedMessagesQueue.Dequeue();
@@ -156,7 +157,7 @@ namespace TransMock.Integration.BizUnit
                         this.connectionId = receivedMessage.ConnectionId;
 
                         // Finally we supply response
-                        this.SendResponse(context);  
+                        this.SendResponse(context, receivedMessage.Message, i);  
                     }
                 }
             }
@@ -240,12 +241,16 @@ namespace TransMock.Integration.BizUnit
         protected virtual void CreateServer()
         {
             // We create and start the server
-            this.pipeServer = new StreamingNamedPipeServer(
+            lock (this.syncRoot)
+            {
+                this.pipeServer = new StreamingNamedPipeServer(
                 this.endpointUri.AbsolutePath);
 
-            this.pipeServer.ReadCompleted += this.pipeServer_ReadCompleted;
+                this.pipeServer.ReadCompleted += this.pipeServer_ReadCompleted;
 
-            this.pipeServer.Start();
+                this.pipeServer.Start();
+            }
+            
         }
 
         /// <summary>
@@ -270,7 +275,7 @@ namespace TransMock.Integration.BizUnit
         /// Sends a response to the client. Empty implementation as this is a one way receive step only.
         /// </summary>
         /// <param name="context">The BizUnit execution context</param>
-        protected virtual void SendResponse(Context context)
+        protected virtual void SendResponse(Context context, MockMessage request, int batchIndex)
         {
             // The base implementation is empty as this class covers only one way receive
         }
