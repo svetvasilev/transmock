@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}</ProjectGuid>
+    <ProjectGuid>{78461F08-4259-4289-A242-F0C02A043836}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Utils</RootNamespace>
@@ -291,7 +291,9 @@
     <None Include="Resources\PropertySchemaToResx.xslt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\PropertySchemaToMD.xslt" />
+    <None Include="Resources\PropertySchemaToMD.xslt">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

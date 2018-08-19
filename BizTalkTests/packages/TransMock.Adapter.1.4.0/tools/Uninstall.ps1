@@ -29,7 +29,7 @@ function RemoveMachineConfigurationInfo{
             
 	if ($SectionGroup)
     {
-		Write-Output "serviceModel section group found. Continuing processing" -Foreground Cyan
+		Write-Host "serviceModel section group found. Continuing processing" -ForegroundColor Cyan
         
 		Write-Debug "SectionGroup is: $SectionGroup"
 		Write-Debug "Client is: $($SectionGroup.Client)"
@@ -161,7 +161,7 @@ function UninstallAdapter{
 		
 		$DependencyAssemblies | % {
 				Write-Output "unGACing assembly $_"
-				$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/i" "$($TargetDirectory.FullName)\$_"
+				$GacUtilOutput = & "$($GacUtilDir.FullName)\gacutil.exe" "/u" "$_"
 				Write-Output "gacutil.exe returned: $GacUtilOutput"
 			}
 

@@ -1,5 +1,5 @@
 ﻿
-namespace BizTalkTests.Test
+namespace BizTalkTests.IntegrationTests
 {
 	public static class BizTalkTestsMockAddresses
 	{
@@ -59,20 +59,12 @@ namespace BizTalkTests.Test
 			}
 		}
 
-	}
-}
-			{
-				return "mock://localhost/BTS.OneWayReceive2_FILE";
+        public static string BTS_OneWayStaticReceive_FILE
+        {
+            get
+            {
+				return "mock://localhost/BTS.OneWayStaticReceive_FILE";
 			}
 		}
-
-		public static string BTS_TwoWayTestReceive_WCF
-		{
-			get
-			{
-				return "mock://localhost/BTS.TwoWayTestReceive_WCF";
-			}
-		}
-
 	}
 }
