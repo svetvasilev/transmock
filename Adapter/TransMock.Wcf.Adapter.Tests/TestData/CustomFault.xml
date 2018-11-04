@@ -1,0 +1,13 @@
+﻿<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <s:Fault>
+      <faultcode>s:Client</faultcode>
+      <faultstring xml:lang="en-US">The creator of this fault did not specify a Reason.</faultstring>
+      <detail>
+        <CustomException>
+          <Message>Test fault for triggereing behaviour in the mock adapter</Message>
+        </CustomException>
+      </detail>
+    </s:Fault>
+  </s:Body>
+</s:Envelope>
