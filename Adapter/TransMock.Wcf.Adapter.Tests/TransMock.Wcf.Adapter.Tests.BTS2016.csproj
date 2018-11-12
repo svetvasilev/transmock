@@ -71,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MockAdapterTest.BindingInfo.BTS2013.xml" />
+    <Content Include="TestData\CustomFault.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\MediumMessage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
