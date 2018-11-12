@@ -59,6 +59,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Channels" />
     <Reference Include="System.Xml" />
@@ -99,6 +100,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\CustomFault.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestRequest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

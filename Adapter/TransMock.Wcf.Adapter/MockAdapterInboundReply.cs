@@ -89,35 +89,20 @@ namespace TransMock.Wcf.Adapter
                     return;
                 }
 
-                XmlDictionaryReader xdr = message.GetReaderAtBodyContents();
+                MockMessage mockMessage = PrepareMockMessage(message);
 
-                // Read the start element and extract its contents as a base64 encoded bytes                
-                if (xdr.NodeType == XmlNodeType.Element)
+                if (mockMessage == null)
                 {
-                    // in case the content is nested in an element under the Body element
-                    xdr.Read();
-                }
-
-                byte[] msgBuffer = xdr.ReadContentAsBase64();
-
-                if (msgBuffer.Length == 0)
-                {
-                    // Message is with empty body, simply return
                     System.Diagnostics.Debug.WriteLine(
-                        "Response message has empty body. Exiting.",
-                        "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+                        "Empty response mock message. Exiting",
+                        "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
                     return;
                 }
-
+                
                 System.Diagnostics.Debug.WriteLine(
-                    "Writing the response message to the pipe",
-                    "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
-
-                // Ccreate MockMessage isntance
-                var mockMessage = new MockMessage(
-                    msgBuffer, 
-                    this.encoding);
+                    "Writing the message properties to the response mock message",
+                    "TransMock.Wcf.Adapter.MockAdapterInboundHandler");                
                 
                 // Add the message properties to the mock message
                 foreach (var property in message.Properties)
@@ -126,6 +111,11 @@ namespace TransMock.Wcf.Adapter
                         property.Key,
                         property.Value.ToString());
                 }
+
+                System.Diagnostics.Debug.WriteLine(
+                    "Writing the response mock message to the pipe",
+                    "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
+
                 // Write it to the pipe server
                 //this.pipeServer.WriteAllBytes(this.connectionId, msgBuffer);
                 this.pipeServer.WriteMessage(connectionId, mockMessage);
@@ -151,5 +141,67 @@ namespace TransMock.Wcf.Adapter
             }
         }
         #endregion InboundReply Members
+
+        private MockMessage PrepareMockMessage(System.ServiceModel.Channels.Message message)
+        {
+            byte[] msgBuffer = null;
+
+            if (!message.IsFault)
+            {
+                // Handling regular content messages
+                System.Diagnostics.Debug.WriteLine(
+                    "Handling content response message",
+                    "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+
+                XmlDictionaryReader xdr = message.GetReaderAtBodyContents();
+
+                // Read the start element and extract its contents as a base64 encoded bytes                
+                if (xdr.NodeType == XmlNodeType.Element)
+                {
+                    // in case the content is nested in an element under the Body element
+                    xdr.Read();
+                }
+
+                msgBuffer = xdr.ReadContentAsBase64();                
+                
+            }
+            else
+            {
+                // Handling faults returned by BizTalk
+                System.Diagnostics.Debug.WriteLine(
+                    "Handling fault response message",
+                    "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+                using (var messageBuffer = message.CreateBufferedCopy(1024 ^ 3)) // Allowing for buffer of 1 GB
+                { 
+                    using (var msgStream = new System.IO.MemoryStream(4096))
+                    {
+                        messageBuffer.WriteMessage(msgStream);
+
+                        msgBuffer = Convert.FromBase64String(
+                            Convert.ToBase64String(msgStream.ToArray()));
+                    }
+                    
+                }
+
+            }
+
+            if (msgBuffer.Length == 0)
+            {
+                // Message is with empty body, simply return
+                System.Diagnostics.Debug.WriteLine(
+                    "Response message has empty body. Exiting.",
+                    "TransMock.Wcf.Adapter.MockAdapterInboundReply");
+
+                return null;
+            }
+
+            // Create MockMessage intance
+            var mockMessage = new MockMessage(
+                msgBuffer,
+                this.encoding);
+
+            return mockMessage;
+        }
+
     }
 }
