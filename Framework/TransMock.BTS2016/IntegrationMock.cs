@@ -104,6 +104,25 @@ namespace TransMock
 
             return this;
         }
+
+        public Mold<TAddresses> CreateMold()
+        {
+            return ConcreteMold<TAddresses>.CreateMold(this);
+        }
+
+        // Hiding the implementation of the abstract Mold class
+        internal class ConcreteMold<TAddresses2> : Mold<TAddresses2> where TAddresses2 : class
+        {
+            protected ConcreteMold(IntegrationMock<TAddresses2> casting) : base(casting)
+            {
+
+            }
+            internal static Mold<TAddresses2> CreateMold(IntegrationMock<TAddresses2> casting)
+            {
+                return new ConcreteMold<TAddresses2>(casting)
+                    .WireUp();
+            }
+        }
     }
 
     public class SingleMessageExpectation

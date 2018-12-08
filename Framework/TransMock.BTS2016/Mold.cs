@@ -15,7 +15,7 @@ namespace TransMock
     /// Send operation from the mold isntance corresponds to a receive operation in the casting (integration)
     /// Receive operation in the mold corresponds to a send operation from the casting, and so on.
     /// </summary>
-    public class Mold<TAddresses> where TAddresses : class
+    public abstract class Mold<TAddresses> where TAddresses : class
     {
         private object syncRoot = new object();
 
@@ -28,7 +28,8 @@ namespace TransMock
         internal Dictionary<string, MessageOperationExpectation> operationExpectations;
 
         internal Queue<AsyncReadEventArgs> receivedMessagesQueue;
-        public Mold()
+
+        protected Mold()
         {
             testContext = new TestContext();
 
@@ -39,10 +40,11 @@ namespace TransMock
             operationExpectations = new Dictionary<string, MessageOperationExpectation>(3);
         }
 
-        public Mold(IntegrationMock<TAddresses> casting) : this()
+        protected Mold(IntegrationMock<TAddresses> casting) : this()
         {
             this.casting = casting;
         }
+
 
         /// <summary>
         /// Wires up the mold with the integration mock
@@ -224,6 +226,35 @@ namespace TransMock
             validator);
         }
 
+        public Mold<TAddresses> Receive(
+            Expression<Func<TAddresses, string>> sendAddress,
+            int timeoutInSeconds,
+            int expectedMessageCount,
+            System.Text.Encoding messageEncoding,
+            Action<TestContext> contextAction,
+            Func<int, System.IO.Stream, bool> validator)
+        {
+
+            return ReceiveImplementation((c, a) =>
+            {
+                string url = sendAddress.Compile()(a);
+
+                var endpoindConfig = new SendEndpoint()
+                {
+                    URL = url,
+                    TimeoutInSeconds = timeoutInSeconds,
+                    MessageEncoding = messageEncoding,
+                    ExpectedMessageCount = expectedMessageCount
+                };
+
+                // TODO: Check whether the expected values were configured
+                contextAction(c);
+
+                return endpoindConfig;
+            },
+            validator);
+        }
+
         public Mold<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)
         {
             return this.SendImplementation(receiver);
@@ -271,6 +302,32 @@ namespace TransMock
                 requestFile(receiveEndpoint);
                 fileEncoding(receiveEndpoint);
                 timeoutInSeconds(receiveEndpoint);
+
+                contextAction(c);
+
+                return receiveEndpoint;
+            });
+        }
+
+        public Mold<TAddresses> Send(
+           Expression<Func<TAddresses, string>> receivingAddress,
+           string requestFile,
+           System.Text.Encoding fileEncoding,
+           int timeoutInSeconds,
+           Action<TestContext> contextAction)
+        {
+            return this.SendImplementation((c, a) =>
+            {
+                string url = receivingAddress.Compile()(a);
+
+                //TODO: Lookup in the dictionary of endpoints for the corresponding receive one
+                var receiveEndpoint = new ReceiveEndpoint()
+                {
+                    URL = url,
+                    RequestFilePath = requestFile,
+                    MessageEncoding = fileEncoding,
+                    TimeoutInSeconds = timeoutInSeconds
+                };
 
                 contextAction(c);
 

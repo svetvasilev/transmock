@@ -18,9 +18,9 @@ namespace TransMock.Tests.BTS2016
                 .SetupReceive(a => a.ReceiveFirstMessage_FILE)
                 .SetupSend(a => a.SendFirstMessage_FILE);
 
-            var mold = new Mold<TestMockAddresses>(integrationMock);
+            var mold = integrationMock.CreateMold();
 
-            mold.WireUp()
+            mold//.WireUp()
                 //.Send(r => r.ReceiveFirstMessage_FILE,
                 //    ep => {
                 //        ep.RequestFilePath = "TestFileIn.txt";
