@@ -30,9 +30,9 @@ namespace TransMock.Tests.BTS2016
                 //    ctx => ctx.DebugInfo("Fire in the hall")
                 //)
                 .Send(r => r.ReceiveFirstMessage_FILE,
-                    ep => ep.RequestFilePath = "TestFileIn.txt",
-                    ep => ep.MessageEncoding = System.Text.Encoding.UTF8,
-                    ep => ep.TimeoutInSeconds = 10,
+                    "TestFileIn.txt",
+                    System.Text.Encoding.UTF8,
+                    10,
                     ctx => ctx.DebugInfo("Fire in the hall")
                     )
                 .Receive(
@@ -42,7 +42,7 @@ namespace TransMock.Tests.BTS2016
                         ep.MessageEncoding = System.Text.Encoding.UTF8;
                     },
                     ctx => ctx.DebugInfo("Yet one more blast!"),
-                    (i,v) => { return v.Length > 0; });
+                    (i,v) => { return v.Body.Length > 0; });
         }
     }
 }

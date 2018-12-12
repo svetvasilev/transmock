@@ -195,7 +195,7 @@ namespace TransMock
 
         public Mold<TAddresses> Receive(
             Func<TestContext, TAddresses, SendEndpoint> sender,
-            Func<int, System.IO.Stream, bool> validator)
+            Func<int, MockMessage, bool> validator)
         {
             return ReceiveImplementation(sender, validator);
         }
@@ -204,7 +204,7 @@ namespace TransMock
             Expression<Func<TAddresses, string>> sendAddress,
             Action<SendEndpoint> configurator,
             Action<TestContext> contextAction,
-            Func<int, System.IO.Stream, bool> validator)
+            Func<int, MockMessage, bool> validator)
         {
 
             return ReceiveImplementation((c, a) =>
@@ -232,7 +232,7 @@ namespace TransMock
             int expectedMessageCount,
             System.Text.Encoding messageEncoding,
             Action<TestContext> contextAction,
-            Func<int, System.IO.Stream, bool> validator)
+            Func<int, MockMessage, bool> validator)
         {
 
             return ReceiveImplementation((c, a) =>
@@ -337,8 +337,8 @@ namespace TransMock
 
         public Mold<TAddresses> ReceiveRequestAndSendResponse(
             Func<TestContext, TAddresses, SendEndpoint> sender,
-            Func<int, System.IO.Stream, bool> validator,
-            Func<System.IO.Stream, ResponseStrategy> responseSelector)
+            Func<int, MockMessage, bool> validator,
+            Func<MockMessage, ResponseStrategy> responseSelector)
         {
             return ReceiveImplementation(
                 sender,
@@ -349,7 +349,7 @@ namespace TransMock
 
         public Mold<TAddresses> SendRequestAndReceiveResponse(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
-            Func<System.IO.Stream, bool> validator)
+            Func<MockMessage, bool> validator)
         {
             return this.SendImplementation(
                 receiver,
@@ -409,8 +409,8 @@ namespace TransMock
         /// <returns></returns>
         private Mold<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
-            Func<int, System.IO.Stream, bool> validator,
-            Func<System.IO.Stream, ResponseStrategy> responseSelector = null,
+            Func<int, MockMessage, bool> validator,
+            Func<MockMessage, ResponseStrategy> responseSelector = null,
             Action<MessageOperationExpectation, ResponseStrategy, int> responseSender = null)
         {
             var sendEndpoint = sender(this.testContext, this.casting.mockAddresses);
@@ -445,7 +445,7 @@ namespace TransMock
                     var receivedMessage = this.receivedMessagesQueue.Dequeue();
 
                     // Invoking the validator method
-                    validator(i, receivedMessage.MessageStream);
+                    validator(i, receivedMessage.Message);
 
                     if (responseSender != null)
                     {
@@ -454,7 +454,7 @@ namespace TransMock
                             throw new InvalidOperationException("No response selector defined");
                         }
 
-                        var responseStrategy = responseSelector(receivedMessage.MessageStream);
+                        var responseStrategy = responseSelector(receivedMessage.Message);
                         // In case a response delegate is defined we call it too
                         responseSender(endpointSetup,
                             responseStrategy,
@@ -469,8 +469,8 @@ namespace TransMock
 
         private Mold<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
-            Func<System.IO.Stream, bool> validator = null,
-            Func<MessageOperationExpectation, System.IO.Stream> responseReceiver = null)
+            Func<MockMessage, bool> validator = null,
+            Func<MessageOperationExpectation, MockMessage> responseReceiver = null)
         {
             // We fetch first the actual receiver endpoint
             var receiverEndpoint = receiver(this.testContext, this.casting.mockAddresses);
@@ -493,14 +493,20 @@ namespace TransMock
                 // from the perception of the TestMold. This is because the receiver endpoint needs
                 // to include the path to the file containing the request that is to be sent to the
                 // endpoint represented by the instance of this object.
-                using (var sr =
-                    new System.IO.StreamReader(
-                        receiverEndpoint.RequestFilePath,
-                        receiverEndpoint.MessageEncoding))
-                {
-                    endpointSetup.MockMessageClient
-                        .WriteStream(sr.BaseStream);
-                }
+                //using (var sr =
+                //    new System.IO.StreamReader(
+                //        receiverEndpoint.RequestFilePath,
+                //        receiverEndpoint.MessageEncoding))
+                //{
+                //    endpointSetup.MockMessageClient
+                //        .WriteStream(sr.BaseStream);
+                //}
+                var mockMessage = new MockMessage(
+                    receiverEndpoint.RequestFilePath,
+                    receiverEndpoint.MessageEncoding);
+
+                endpointSetup.MockMessageClient
+                    .WriteMessage(mockMessage);
 
                 if (responseReceiver != null)
                 {
@@ -539,13 +545,13 @@ namespace TransMock
         /// TODO: create a higher abstraction representation of a message for easier work in the validation methods
         /// </summary>
         /// <returns></returns>
-        private System.IO.Stream ReceiveResponse(MessageOperationExpectation endpointSetup)
+        private MockMessage ReceiveResponse(MessageOperationExpectation endpointSetup)
         {
             // We receive the response
-            var responseStream = endpointSetup.MockMessageClient
-                .ReadStream();
+            var responseMessage = endpointSetup.MockMessageClient
+                .ReadMessage();
 
-            return responseStream;
+            return responseMessage;
         }
 
         //public void Fill()
