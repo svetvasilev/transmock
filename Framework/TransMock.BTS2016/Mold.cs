@@ -15,7 +15,7 @@ namespace TransMock
     /// Send operation from the mold isntance corresponds to a receive operation in the casting (integration)
     /// Receive operation in the mold corresponds to a send operation from the casting, and so on.
     /// </summary>
-    public abstract class Mold<TAddresses> where TAddresses : class
+    public abstract class Mold<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
         private object syncRoot = new object();
 
@@ -201,7 +201,7 @@ namespace TransMock
         }
 
         public Mold<TAddresses> Receive(
-            Expression<Func<TAddresses, string>> sendAddress,
+            Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             Action<SendEndpoint> configurator,
             Action<TestContext> contextAction,
             Func<int, MockMessage, bool> validator)
@@ -209,11 +209,11 @@ namespace TransMock
 
             return ReceiveImplementation((c, a) =>
             {
-                string url = sendAddress.Compile()(a);
+                var address = sendAddress.Compile()(a);
 
                 var endpoindConfig = new SendEndpoint()
                 {
-                    URL = url
+                    URL = address.Value
                 };
 
                 configurator(endpoindConfig);
@@ -227,7 +227,7 @@ namespace TransMock
         }
 
         public Mold<TAddresses> Receive(
-            Expression<Func<TAddresses, string>> sendAddress,
+            Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             int timeoutInSeconds,
             int expectedMessageCount,
             System.Text.Encoding messageEncoding,
@@ -237,11 +237,11 @@ namespace TransMock
 
             return ReceiveImplementation((c, a) =>
             {
-                string url = sendAddress.Compile()(a);
+                var address = sendAddress.Compile()(a);
 
                 var endpoindConfig = new SendEndpoint()
                 {
-                    URL = url,
+                    URL = address.Value,
                     TimeoutInSeconds = timeoutInSeconds,
                     MessageEncoding = messageEncoding,
                     ExpectedMessageCount = expectedMessageCount
@@ -255,23 +255,23 @@ namespace TransMock
             validator);
         }
 
-        public Mold<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)
+        public Mold<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)           
         {
             return this.SendImplementation(receiver);
         }
 
-        public Mold<TAddresses> Send(
-            Expression<Func<TAddresses, string>> receivingAddress,
+        public Mold<TAddresses> Send<TReceiveAddress>(
+            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
             Action<ReceiveEndpoint> endpointConfig,
-            Action<TestContext> contextAction)
+            Action<TestContext> contextAction)               
         {
             return this.SendImplementation((c, a) =>
             {
-                string url = receivingAddress.Compile()(a);
+                var address = receivingAddress.Compile()(a);
 
                 var receiveEndpoint = new ReceiveEndpoint()
                 {
-                    URL = url
+                    URL = address.Value
                 };
 
                 endpointConfig(receiveEndpoint);
@@ -283,20 +283,20 @@ namespace TransMock
         }
 
         public Mold<TAddresses> Send(
-           Expression<Func<TAddresses, string>> receivingAddress,
+           Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            Func<ReceiveEndpoint, string> requestFile,
            Func<ReceiveEndpoint, System.Text.Encoding> fileEncoding,
            Func<ReceiveEndpoint, int> timeoutInSeconds,
-           Action<TestContext> contextAction)
+           Action<TestContext> contextAction)           
         {
             return this.SendImplementation((c, a) =>
             {
-                string url = receivingAddress.Compile()(a);
+                var address = receivingAddress.Compile()(a);
                 
                 //TODO: Lookup in the dictionary of endpoints for the corresponding receive one
                 var receiveEndpoint = new ReceiveEndpoint()
                 {
-                    URL = url
+                    URL = address.Value
                 };
 
                 requestFile(receiveEndpoint);
@@ -310,7 +310,7 @@ namespace TransMock
         }
 
         public Mold<TAddresses> Send(
-           Expression<Func<TAddresses, string>> receivingAddress,
+           Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            string requestFile,
            System.Text.Encoding fileEncoding,
            int timeoutInSeconds,
@@ -318,12 +318,12 @@ namespace TransMock
         {
             return this.SendImplementation((c, a) =>
             {
-                string url = receivingAddress.Compile()(a);
+                var address = receivingAddress.Compile()(a);
 
                 //TODO: Lookup in the dictionary of endpoints for the corresponding receive one
                 var receiveEndpoint = new ReceiveEndpoint()
                 {
-                    URL = url,
+                    URL = address.Value,
                     RequestFilePath = requestFile,
                     MessageEncoding = fileEncoding,
                     TimeoutInSeconds = timeoutInSeconds
@@ -349,7 +349,7 @@ namespace TransMock
 
         public Mold<TAddresses> SendRequestAndReceiveResponse(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
-            Func<MockMessage, bool> validator)
+            Func<MockMessage, bool> validator)                
         {
             return this.SendImplementation(
                 receiver,
@@ -470,7 +470,7 @@ namespace TransMock
         private Mold<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator = null,
-            Func<MessageOperationExpectation, MockMessage> responseReceiver = null)
+            Func<MessageOperationExpectation, MockMessage> responseReceiver = null)                
         {
             // We fetch first the actual receiver endpoint
             var receiverEndpoint = receiver(this.testContext, this.casting.mockAddresses);

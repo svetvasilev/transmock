@@ -222,10 +222,10 @@ namespace TransMock.Tests.BTS2016
             .CleanUp(); // We call cleanup at the end
         }
 
-        private void CheckSetupForStatic(Func<TestMockAddresses,string> expression)
+        private void CheckSetupForStatic(Func<TestMockAddresses,Addressing.OneWayReceiveAddress> expression)
         {
             var mockAddresses = new TestMockAddresses();
-            string value = expression(mockAddresses);
+            string value = expression(mockAddresses).Value;
 
             System.Diagnostics.Trace.WriteLine(string.Format("returned string was: {0}", value));
         } 

@@ -19,7 +19,7 @@ namespace TransMock
     /// endpoint and vice versa.
     /// IDEA: To use the casting for performing the mocking on the fly?
     /// </summary>
-    public class IntegrationMock<TAddresses> where TAddresses : class
+    public class IntegrationMock<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
         internal TAddresses mockAddresses;        
 
@@ -41,13 +41,13 @@ namespace TransMock
         /// </summary>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public IntegrationMock<TAddresses> SetupReceive(Expression<Func<TAddresses, string>> receiver)
+        public IntegrationMock<TAddresses> SetupReceive(Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receiver)
         {   
             var receiveEndpoint = new ReceiveEndpoint();
 
             // Compile the expression and fetch the value of the corresponding property
             
-            receiveEndpoint.URL = receiver.Compile()(this.mockAddresses);
+            receiveEndpoint.URL = receiver.Compile()(this.mockAddresses).Value;
 
             if (this.endpointsMap.ContainsKey(receiveEndpoint.URL))
             {
@@ -61,12 +61,12 @@ namespace TransMock
             return this;
         }        
 
-        public IntegrationMock<TAddresses> SetupSend(Expression<Func<TAddresses, string>> sender)
+        public IntegrationMock<TAddresses> SetupSend(Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sender)
         {
             var sendEndpoint = new SendEndpoint();
 
             // Invoke the callback for setting the send endpoint properties as well as the expectation method
-            sendEndpoint.URL = sender.Compile()(this.mockAddresses);
+            sendEndpoint.URL = sender.Compile()(this.mockAddresses).Value;
 
             if (this.endpointsMap.ContainsKey(sendEndpoint.URL))
             {
@@ -81,24 +81,24 @@ namespace TransMock
             
         }
 
-        public IntegrationMock<TAddresses> SetupReceiveRequestAndSendResponse(Expression<Func<TAddresses, string>> receiver)
+        public IntegrationMock<TAddresses> SetupReceiveRequestAndSendResponse(Expression<Func<TAddresses, Addressing.TwoWayReceiveAddress>> receiver)
         {
             var receiveSendEndpoint = new TwoWayReceiveEndpoint();
 
             // Invoke the callback for setting the send endpoint properties as well as the expectation method
-            receiveSendEndpoint.URL = receiver.Compile()(this.mockAddresses);
+            receiveSendEndpoint.URL = receiver.Compile()(this.mockAddresses).Value;
 
             endpointsMap.Add(receiveSendEndpoint.URL, receiveSendEndpoint);
 
             return this;
         }
 
-        public IntegrationMock<TAddresses> SetupSendRequestAndReceiveResponse(Expression<Func<TAddresses, string>> sender)
+        public IntegrationMock<TAddresses> SetupSendRequestAndReceiveResponse(Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> sender)
         {
             var sendReceiveEndpoint = new TwoWaySendEndpoint();
 
             // Invoke the callback for setting the send endpoint properties as well as the expectation method
-            sendReceiveEndpoint.URL = sender.Compile()(this.mockAddresses);            
+            sendReceiveEndpoint.URL = sender.Compile()(this.mockAddresses).Value;            
 
             endpointsMap.Add(sendReceiveEndpoint.URL, sendReceiveEndpoint);
 
@@ -111,7 +111,7 @@ namespace TransMock
         }
 
         // Hiding the implementation of the abstract Mold class
-        internal class ConcreteMold<TAddresses2> : Mold<TAddresses2> where TAddresses2 : class
+        internal class ConcreteMold<TAddresses2> : Mold<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
         {
             protected ConcreteMold(IntegrationMock<TAddresses2> casting) : base(casting)
             {

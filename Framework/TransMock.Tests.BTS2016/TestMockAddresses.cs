@@ -1,25 +1,33 @@
-﻿namespace TransMock.Tests.BTS2016
+﻿using System;
+using TransMock.Addressing;
+
+namespace TransMock.Tests.BTS2016
 {
-    internal class TestMockAddresses
+    internal class TestMockAddresses : EndpointAddress
     {
-        public string ReceiveFirstMessage_FILE
+        public OneWayReceiveAddress ReceiveFirstMessage_FILE
         {
-            get { return "mock://localhost/ReceiveFirstMessage_FILE"; }
+            get { return new OneWayReceiveAddress("mock://localhost/ReceiveFirstMessage_FILE"); }
         }
 
-        public string SendFirstMessage_FILE
+        public OneWaySendAddress SendFirstMessage_FILE
         {
-            get { return "mock://localhost/SendFirstMessage_FILE"; }
+            get { return new OneWaySendAddress("mock://localhost/SendFirstMessage_FILE"); }
         }
 
-        public string TwoWayReceive_WebHTTP
+        public TwoWayReceiveAddress TwoWayReceive_WebHTTP
         {
-            get { return "mock://localhost/TwoWayReceive_WebHTTP"; }
+            get { return new TwoWayReceiveAddress("mock://localhost/TwoWayReceive_WebHTTP"); }
         }
 
-        public string TwoWaySend_WebHTTP
+        public TwoWaySendAddress TwoWaySend_WebHTTP
         {
-            get { return "mock://localhost/TwoWaySend_WebHTTP"; }
+            get { return new TwoWaySendAddress("mock://localhost/TwoWaySend_WebHTTP"); }
+        }
+
+        public override string Capabilities()
+        {
+            return "";
         }
     }
 }

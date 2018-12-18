@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Addressing\EndpointAddressTypes.cs" />
     <Compile Include="MessageOperationExpectation.cs" />
     <Compile Include="ResponseStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />
