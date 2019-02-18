@@ -602,7 +602,8 @@ namespace TransMock.Wcf.Adapter.Tests
 
             Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
                 
-            VerifyPromotedProperty(propertiesList[0],
+            MessagePropertyValidator
+                .ValidatePromotedProperty(propertiesList[0],
                 "http://schemas.microsoft.com/BizTalk/2003/file-properties",
                 "ReceivedFileName",
                 @"C:\Test\In\File1.xml");
@@ -660,10 +661,11 @@ namespace TransMock.Wcf.Adapter.Tests
 
             Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
 
-            VerifyPromotedProperty(propertiesList[0],
-                "http://schemas.microsoft.com/BizTalk/2003/ftp-properties",
-                "ReceivedFileName",
-                "File1.xml");        
+            MessagePropertyValidator
+                .ValidatePromotedProperty(propertiesList[0],
+                    "http://schemas.microsoft.com/BizTalk/2003/ftp-properties",
+                    "ReceivedFileName",
+                    "File1.xml");        
         }
 
         [TestMethod]
@@ -736,10 +738,11 @@ namespace TransMock.Wcf.Adapter.Tests
             {
                 string[] propertyDetails = propertyArray[i].Split('=');
 
-                VerifyPromotedProperty(propertiesList[i],
-                    adapterNamespace,
-                    propertyDetails[0].Replace("POP3.", string.Empty),
-                    propertyDetails[1]);
+                MessagePropertyValidator.
+                    ValidatePromotedProperty(propertiesList[i],
+                        adapterNamespace,
+                        propertyDetails[0].Replace("POP3.", string.Empty),
+                        propertyDetails[1]);
             }        
         }
 
@@ -822,10 +825,11 @@ namespace TransMock.Wcf.Adapter.Tests
             {
                 string[] propertyDetails = propertyArray[i].Split('=');
 
-                VerifyPromotedProperty(propertiesList[i],
-                    adapterNamespace,
-                    propertyDetails[0].Replace("MQSeries.", string.Empty),
-                    propertyDetails[1]);                    
+                MessagePropertyValidator.
+                    ValidatePromotedProperty(propertiesList[i],
+                        adapterNamespace,
+                        propertyDetails[0].Replace("MQSeries.", string.Empty),
+                        propertyDetails[1]);                    
             }                      
         }
 
@@ -900,7 +904,8 @@ namespace TransMock.Wcf.Adapter.Tests
             {
                 string[] propertyDetails = propertyArray[i].Split('=');
 
-                VerifyPromotedProperty(propertiesList[i],
+                MessagePropertyValidator
+                    .ValidatePromotedProperty(propertiesList[i],
                     adapterNamespace,
                     propertyDetails[0].Replace("MSMQ.", string.Empty),
                     propertyDetails[1]);
@@ -1020,10 +1025,11 @@ namespace TransMock.Wcf.Adapter.Tests
 
             Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
 
-            VerifyPromotedProperty(propertiesList[0],
-                "http://www.example.com/custom-props",
-                "MyProp",
-                @"SomeValue");
+            MessagePropertyValidator.
+                ValidatePromotedProperty(propertiesList[0],
+                    "http://www.example.com/custom-props",
+                    "MyProp",
+                    @"SomeValue");
         }
 
         [TestMethod]
@@ -1084,7 +1090,8 @@ namespace TransMock.Wcf.Adapter.Tests
 
             Assert.AreEqual(propertiesList.Count, 1, "The element count in the promoted properties list differ");
 
-            VerifyPromotedProperty(propertiesList[0],
+            MessagePropertyValidator.
+                ValidatePromotedProperty(propertiesList[0],
                 "http://schemas.microsoft.com/BizTalk/2003/file-properties",
                 "ReceivedFileName",
                 @"C:\Test\In\File22.xml");
@@ -1307,24 +1314,6 @@ namespace TransMock.Wcf.Adapter.Tests
             inboundHandler = new MockAdapterInboundHandler(connection, null);
         }        
 
-        private static void VerifyPromotedProperty(
-            KeyValuePair<XmlQualifiedName, object> promotedProperty, 
-            string expectedNamespace,
-            string expectedName,
-            string expectedValue)
-        {
-            Assert.AreEqual(expectedNamespace, 
-                promotedProperty.Key.Namespace,
-                "The promoted property namespace differ");
-            
-            Assert.AreEqual(expectedName, 
-                promotedProperty.Key.Name,
-                "The promoted property namespace differ");
-            
-            Assert.AreEqual(expectedValue, 
-                promotedProperty.Value, 
-                "The value of the promoted property differ");
-        }
     }
 
     

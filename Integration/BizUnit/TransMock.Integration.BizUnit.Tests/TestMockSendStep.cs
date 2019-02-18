@@ -25,6 +25,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Xml;
 
 using TransMock.TestUtils;
 using TransMock.Wcf.Adapter;
@@ -165,6 +166,71 @@ namespace TransMock.Integration.BizUnit.Tests
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
             
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestRequest.xml")]
+        public void TestSendSmallMessage_XML_MessageProperties()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockSendStep step = new MockSendStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.RequestPath = "TestRequest.xml";
+            step.Encoding = "UTF-8";
+            step.Timeout = 30;
+
+            step.MessageProperties.Add(
+                Utils.BizTalkProperties.BTS.Operation,
+                "SomeTestOperation.com");
+
+            step.MessageProperties.Add(
+                Utils.BizTalkProperties.FILE.ReceivedFileName,
+                @"\blabla\bla\TestFile.xml");
+            //Validating the test step
+            step.Validate(context);
+            //Executing the step
+            step.Execute(context);
+
+            //Now we read the message in the inbound handler
+            Message msg = null;
+            IInboundReply reply;
+            inboundHandler.TryReceive(TimeSpan.FromSeconds(10), out msg, out reply);
+
+            Assert.IsNotNull(msg, "Message instance was not returned");
+            Assert.AreEqual(ReadRequestFileContent(step.RequestPath),
+                GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8), "Message contents of received message is different");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
+
+            //Verify the promoted properties
+            var promotedProperties = msg.Properties
+                .Where(p => p.Key == "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/Promote")
+                .SingleOrDefault();
+
+            Assert.IsNotNull(promotedProperties, "The promoted properties list is not present");
+
+            var propertiesList = promotedProperties.Value as List<KeyValuePair<XmlQualifiedName, object>>;
+
+            Assert.AreEqual(2, propertiesList.Count, "The element count in the promoted properties list differ");
+
+            MessagePropertyValidator
+                .ValidatePromotedProperty(propertiesList[0],
+                "http://schemas.microsoft.com/BizTalk/2003/system-properties",
+                "Operation",
+                @"SomeTestOperation.com");
+
+            MessagePropertyValidator
+                .ValidatePromotedProperty(propertiesList[1],
+                "http://schemas.microsoft.com/BizTalk/2003/file-properties",
+                "ReceivedFileName",
+                @"\blabla\bla\TestFile.xml");
+
         }
 
         [TestMethod]
