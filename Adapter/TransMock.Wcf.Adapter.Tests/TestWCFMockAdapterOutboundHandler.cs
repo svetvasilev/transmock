@@ -354,6 +354,48 @@ namespace TransMock.Wcf.Adapter.Tests
         }
 
         [TestMethod]
+        [TestCategory("Two Way Tests")]
+        [DeploymentItem(@"..\TestData\CustomFault.xml")]
+        public void TestSendTwoWay_SoapFaultResponse()
+        {
+            using (NamedPipeServerStream pipeServer = new NamedPipeServerStream(
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, 1,
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous))
+            {
+                Message msg = GeneralTestHelper
+                    .CreateMessageWithBase64EncodedBody(
+                        File.ReadAllBytes(
+                            testContextInstance.TestDeploymentDir + @"\CustomFault.xml"));
+                //Setting up the BTS.IsSolicitResponse property
+                msg.Properties.Add("http://schemas.microsoft.com/BizTalk/2003/system-properties#IsSolicitResponse", true);
+
+                OutboundTestHelper testHelper = new OutboundTestHelper(pipeServer);
+                //We set the response message content
+                testHelper.responsePath = "CustomFault.xml";
+
+                pipeServer.BeginWaitForConnection(cb => testHelper
+                    .ClientConnectedSyncronous(cb, ctx => SendResponse(ctx)), testHelper);
+
+                Message responseMsg = outboundHandler.Execute(msg, new TimeSpan(0, 0, 10));
+                //Calculating the hashes of the messages and the file
+                byte[] responseMessageBytes = GeneralTestHelper.GetBodyAsBytes(responseMsg);
+
+                var mockMessage = ConvertToMockMessage(testHelper.memStream);
+
+                string receivedMessageHash = GeneralTestHelper.CalculateBytesHash(
+                    Convert.FromBase64String(mockMessage.BodyBase64));
+                string responseMessageHash = GeneralTestHelper.CalculateBytesHash(responseMessageBytes);
+                string fileHash = GeneralTestHelper.CalculateFileHash("CustomFault.xml");
+                //Validating the results
+                Assert.AreEqual(fileHash, receivedMessageHash, "Contents of the request message is different");
+
+                Assert.AreEqual(fileHash,
+                    responseMessageHash,
+                    "Contents of the response message is different");
+            }
+        }
+
+        [TestMethod]
         [TestCategory("One Way Tests with Properties")]
         public void TestSendOneWay_XML_WithProperties()
         {

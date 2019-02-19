@@ -83,6 +83,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MockAdapterTest.BindingInfo.xml" />
+    <Content Include="TestData\CustomFault.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MediumMessage.xml" />
+    <Content Include="TestData\SmallMessage.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

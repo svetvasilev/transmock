@@ -179,7 +179,66 @@ namespace TransMock.Integration.BizUnit.Tests
                 It.Is<string>(s => !string.IsNullOrEmpty(s)),
                 It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
             
-        }        
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestRequest.xml")]
+        [DeploymentItem(@"TestData\CustomFault.xml")]
+        public void TestSendSmallMessage_XML_FaultResponse()
+        {
+            //Setting up the ILogger moq
+            var loggerMock = CreateLoggerMock();
+
+            Context context = new Context(loggerMock.Object);
+
+            MockSolicitResponseStep step = new MockSolicitResponseStep();
+            step.Url = connectionUri.Uri.OriginalString;
+            step.RequestPath = "TestRequest.xml";
+            step.Encoding = "UTF-8";
+            step.Timeout = 30;
+            //Validating the test step
+            step.Validate(context);
+            //Setting up a manual reset event
+            System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+            //here we queue up the step.Execute method in a separate thread as the execution model would actually be
+            Message msg = null;
+            IInboundReply reply;
+            //Creating the reply message
+            //Message msgReply = GeneralTestHelper.CreateMessageWithBase64EncodedBody(
+            //    ReadRequestFileContent("CustomFault.xml"), Encoding.UTF8);
+            Message msgReply = Message.CreateMessage(
+                MessageVersion.Default,
+                MessageFault.CreateFault(
+                    new FaultCode("Custom"),
+                    "wanna fail"),
+                    "Test action");
+                
+
+            System.Threading.ThreadPool.QueueUserWorkItem((state) =>
+            {
+                //Now we read the message in the inbound handler                
+                inboundHandler.TryReceive(TimeSpan.FromSeconds(10), out msg, out reply);
+                reply.Reply(msgReply, TimeSpan.FromSeconds(10));
+                manualEvent.Set();
+            });
+            //Executing the step
+            step.Execute(context);
+
+            manualEvent.WaitOne(10000);
+
+            Assert.IsNotNull(msg, "Message instance was not received");
+            string expectedRequest = ReadRequestFileContent(step.RequestPath);
+            string actualRequest = GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8);
+            Assert.AreEqual(expectedRequest, actualRequest,
+                "Message contents of received message is different");
+
+            loggerMock.Verify(l => l.LogData(
+                It.Is<string>(s => !string.IsNullOrEmpty(s)),
+                It.Is<string>(s => !string.IsNullOrEmpty(s))), Times.AtLeastOnce(), "The LogData message was not called");
+
+
+
+        }
 
         internal static Mock<ILogger> CreateLoggerMock()
         {

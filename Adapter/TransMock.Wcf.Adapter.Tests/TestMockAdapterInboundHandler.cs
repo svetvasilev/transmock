@@ -1295,8 +1295,96 @@ namespace TransMock.Wcf.Adapter.Tests
                     "The received response is not correct");                
             }
         }
+
+        [TestMethod]
+        [TestCategory("Two Way Tests")]
+        [DeploymentItem(@"TestData\MediumMessage.xml")]
+        [DeploymentItem(@"TestData\CustomFault.xml")]
+        public void TestTwoWayReceive_XML_FaultResponse()
+        {
+            inboundHandler.StartListener(null, new TimeSpan(0, 0, 60));
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                int bytesCountRead = 0;
+                byte[] xmlBytes = new byte[4096];
+
+                int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
+
+                pipeClient.Connect(10000);
+
+                var mockMessage = new MockMessage(
+                    "MediumMessage.xml",
+                    Encoding.UTF8);
+
+                using (var memStream = new MemoryStream())
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    formatter.Serialize(memStream, mockMessage);
+                    memStream.Seek(0, SeekOrigin.Begin);
+
+                    while ((bytesCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
+                    {
+                        pipeClient.Write(xmlBytes, 0, bytesCountRead);
+                    }
+
+                    // pipeClient.WriteByte(0x00);
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                //Now we read the message in the inbound handler
+                Message msg = null;
+                IInboundReply reply;
+                inboundHandler.TryReceive(new TimeSpan(0, 0, 10), out msg, out reply);
+
+                Assert.IsNotNull(msg, "Message instance was not returned");
+
+                byte[] msgBytes = GeneralTestHelper.GetBodyAsBytes(msg);
+
+                Assert.AreEqual(fileLength, msgBytes.Length, "The message length is not correct");
+
+                string requestMessageHash = GeneralTestHelper.CalculateBytesHash(msgBytes);
+                string fileHash = GeneralTestHelper.CalculateFileHash("MediumMessage.xml");
+
+                Assert.AreEqual(fileHash,
+                    requestMessageHash, "Message contents of received message is different");
+                //we send the response message
+
+                Message responseMessage = GeneralTestHelper
+                    .CreateMessageWithBase64EncodedBody(
+                        File.ReadAllBytes("CustomFault.xml"));
+
+                MockMessage receivedResponse = null;
+
+                System.Threading.ManualResetEvent manualEvent = new System.Threading.ManualResetEvent(false);
+
+                System.Threading.ThreadPool.QueueUserWorkItem(cb =>
+                {
+                    receivedResponse = TestUtils.ReceiveResponse(pipeClient);
+
+                    manualEvent.Set();
+                }
+                );
+
+                reply.Reply(responseMessage, new TimeSpan(0, 0, 10));
+                //We wait for the event to be signalled
+                manualEvent.WaitOne(10000);
+
+                Assert.IsNotNull(receivedResponse, "Received response is null!");
+
+                string responseHash = GeneralTestHelper.CalculateBytesHash(
+                    Convert.FromBase64String(
+                        receivedResponse.BodyBase64));
+
+                fileHash = GeneralTestHelper.CalculateFileHash("CustomFault.xml");
+
+                Assert.AreEqual(fileHash, responseHash,
+                    "The received response is not correct");
+            }
+        }
         #endregion
-       
+
         private void InitInboundHandler(string address, string adapterProperties)
         {
             connectionUri = new MockAdapterConnectionUri(new Uri(address));
