@@ -1,0 +1,46 @@
+
+namespace TestApplication.IntegrationTests
+{
+	public static class TestApplicationMockAddresses
+	{
+		public static OneWaySendAddress DynamicPortOut
+		{
+			get
+			{
+				return new OneWaySendAddress("mock://localhost/DynamicPortOut");
+			}
+		}
+
+		public static OneWaySendAddress OneWaySendFILE
+		{
+			get
+			{
+				return new OneWaySendAddress("mock://localhost/OneWaySendFILE");
+			}
+		}
+
+		public static TwoWaySendAddress TwoWayTestSendWCF
+		{
+			get
+			{
+				return new TwoWaySendAddress("mock://localhost/TwoWayTestSendWCF");
+			}
+		}
+
+		public static OneWayReceiveAddress OneWayReceive_FILE
+		{
+			get
+			{
+				return new OneWayReceiveAddress("mock://localhost/OneWayReceive_FILE");
+			}
+		}
+
+		public static TwoWayReceiveAddress TwoWayTestReceive_WCF
+		{
+			get
+			{
+				return new TwoWayReceiveAddress("mock://localhost/TwoWayTestReceive_WCF");
+			}
+		}
+	}
+}

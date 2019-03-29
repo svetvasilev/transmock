@@ -36,22 +36,7 @@ namespace TransMock.Mockifier.Parser.Tests
     [TestClass]
     public class TestBindingsParser
     {
-        private const string GeneratedClassContents = "\r\nnamespace TestApplication.Test\r\n{\r\n\tpublic static class TestApplicationMockAddresses\r\n\t{\r\n\t\t" +
-            "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWaySendFILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
-            "public static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestSendWCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
-            "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayReceive_FILE\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t"+
-            "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayTestReceive_WCF\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
-
-        private const string GeneratedClassContentsCustomURL = "\r\nnamespace TestApplication.Test\r\n{\r\n\tpublic static class TestApplicationMockAddresses\r\n\t{\r\n\t\t" +
-            "public static string DynamicPortOut\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string DynamicPortOut2Way\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/DynamicPortOut2Way\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string OneWaySendFILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayOutEndpoint\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string TwoWayTestSendWCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayOutEndpoint/UpdateState\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string OneWayReceive_FILE\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/OneWayInEndpoint/StateChanged\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t" +
-            "public static string TwoWayTestReceive_WCF\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\treturn \"mock://localhost/TwoWayInEndpoint\";\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t}\r\n}";
-
+        
         private static Dictionary<string, string> expectedTransportConfig;
 
         private static Dictionary<string, string> expectedCustomURLs;
@@ -160,6 +145,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_BTS2010()
         {            
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -188,18 +174,21 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents, 
-                    "The generated MockAddresses class has wrong contents");                
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
             }
             
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_Unescape_BTS2010()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -229,11 +218,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -241,6 +232,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_ClassOutputSpecified_BTS2010()
         {            
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -270,24 +262,28 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents, "The generated MockAddresses class has wrong contents");
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
             }
 
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem("Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_MockedFileWriter_BTS2010()
         {            
             //Creating a mock for the file writer
             var fileWriterMock = new Mock<IFileWriter>();
             fileWriterMock.Setup(m => m.WriteTextFile(
                 It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
-                It.Is<string>(contents => contents == GeneratedClassContents)));
+                It.Is<string>(contents => contents != null)));
 
             BizTalkBindingsParser parser = new BizTalkBindingsParser(fileWriterMock.Object);
 
@@ -315,13 +311,21 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            fileWriterMock.Verify(m => m.WriteTextFile(
-                It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
-                It.Is<string>(contents => contents == GeneratedClassContents)), Times.Once());
+            using (var srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
+            {   
+                string classVerify = srVerify.ReadToEnd();
+
+                //Verifying the contents of the generated class
+                fileWriterMock.Verify(m => m.WriteTextFile(
+                    It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
+                    It.Is<string>(contents => contents == classVerify)), 
+                    Times.Once());
+            }
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.BTDF.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_BTDFdirectives_BTS2010()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -350,11 +354,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -362,6 +368,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddressesWithProps.cs.txt")]
         public void TestInlineParsing_WithPromotedProperties_BTS2010()
         {            
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -401,10 +408,22 @@ namespace TransMock.Mockifier.Parser.Tests
                     expectedPromotedProperties);
                 
             }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddressesWithProps.cs.txt"))
+            {
+                string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
+
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.BTDF.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddressesWithProps.cs.txt")]
         public void TestInlineParsing_WithPromotedProperties_BTDFdirectives_BTS2010()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -444,10 +463,22 @@ namespace TransMock.Mockifier.Parser.Tests
                     expectedPromotedProperties);
 
             }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddressesWithProps.cs.txt"))
+            {
+                string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
+
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.CustomURL.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.CustomURL.cs.txt")]
         public void TestInlineParsing_SimpleMock_CustomURL_BTS2010()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -478,11 +509,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.CustomURL.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContentsCustomURL, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -490,6 +523,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -519,11 +553,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -531,6 +567,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_Unescape_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -560,11 +597,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -572,6 +611,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_ClassOutputSpecified_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -601,17 +641,21 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents, "The generated MockAddresses class has wrong contents");
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
             }
 
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.BTDF.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_BTDFdirectives_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -641,11 +685,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContents, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -653,6 +699,7 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.CustomURL.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.CustomURL.cs.txt")]
         public void TestInlineParsing_SimpleMock_CustomURL_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -685,11 +732,13 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"))
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddresses.CustomURL.cs.txt"))
             {
                 string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
 
-                Assert.AreEqual(GeneratedClassContentsCustomURL, classContents,
+                Assert.AreEqual(classVerify, classContents,
                     "The generated MockAddresses class has wrong contents");
             }
 
@@ -697,13 +746,14 @@ namespace TransMock.Mockifier.Parser.Tests
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfo.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddresses.cs.txt")]
         public void TestInlineParsing_SimpleMock_MockedFileWriter_BTS2013()
         {
             //Creating a mock for the file writer
             var fileWriterMock = new Mock<IFileWriter>();
             fileWriterMock.Setup(m => m.WriteTextFile(
                 It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
-                It.Is<string>(contents => contents == GeneratedClassContents)));
+                It.Is<string>(contents => contents != null)));
 
             BizTalkBindingsParser parser = new BizTalkBindingsParser(fileWriterMock.Object);
 
@@ -731,13 +781,21 @@ namespace TransMock.Mockifier.Parser.Tests
             }
 
             //Verifying the contents of the generated class
-            fileWriterMock.Verify(m => m.WriteTextFile(
-                It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
-                It.Is<string>(contents => contents == GeneratedClassContents)), Times.Once());
+            using (var srVerify = System.IO.File.OpenText("Verify.MockAddresses.cs.txt"))
+            {
+                string classVerify = srVerify.ReadToEnd();
+
+                fileWriterMock.Verify(m => m.WriteTextFile(
+                    It.Is<string>(path => path.EndsWith("TestApplicationMockAddresses.cs")),
+                    It.Is<string>(contents => contents == classVerify)), Times.Once());
+            }
+            //Verifying the contents of the generated class
+            
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddressesWithProps.cs.txt")]
         public void TestInlineParsing_WithPromotedProperties_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -777,10 +835,22 @@ namespace TransMock.Mockifier.Parser.Tests
                     expectedPromotedProperties);
 
             }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddressesWithProps.cs.txt"))
+            {
+                string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
+
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
+            }
         }
 
         [TestMethod]
         [DeploymentItem(@"TestData\TestApplication.BindingInfoWithProps.BTDF.xml")]
+        [DeploymentItem(@"TestData\Verify.MockAddressesWithProps.cs.txt")]
         public void TestInlineParsing_WithPromotedProperties_BTDFdirectives_BTS2013()
         {
             BizTalkBindingsParser parser = new BizTalkBindingsParser();
@@ -819,6 +889,17 @@ namespace TransMock.Mockifier.Parser.Tests
                 VerifyReceiceLocationConfig(receiveLocationElement, "BTS2013",
                     expectedPromotedProperties);
 
+            }
+
+            //Verifying the contents of the generated class
+            using (System.IO.StreamReader sr = System.IO.File.OpenText("TestApplicationMockAddresses.cs"),
+                srVerify = System.IO.File.OpenText("Verify.MockAddressesWithProps.cs.txt"))
+            {
+                string classContents = sr.ReadToEnd();
+                string classVerify = srVerify.ReadToEnd();
+
+                Assert.AreEqual(classVerify, classContents,
+                    "The generated MockAddresses class has wrong contents");
             }
         }
 

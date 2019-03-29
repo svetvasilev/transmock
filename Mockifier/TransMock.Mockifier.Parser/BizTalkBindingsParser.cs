@@ -105,7 +105,7 @@ namespace TransMock.Mockifier.Parser
         /// <summary>
         /// A dictionary containing mapping between the endpoints and their mock URLs
         /// </summary>
-        private Dictionary<string, string> endpointMockUrls;
+        private Dictionary<string, EndpointSettings> mockedEndpointSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BizTalkBindingsParser"/> class
@@ -114,7 +114,7 @@ namespace TransMock.Mockifier.Parser
         {
             this.resourceReader = new ResourceReader();
             this.fileWriter = new FileWriter();
-            this.endpointMockUrls = new Dictionary<string, string>(5);
+            this.mockedEndpointSettings = new Dictionary<string, EndpointSettings>(5);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace TransMock.Mockifier.Parser
         {
             this.resourceReader = resourceReader;
             this.fileWriter = new FileWriter();
-            this.endpointMockUrls = new Dictionary<string, string>(5);
+            this.mockedEndpointSettings = new Dictionary<string, EndpointSettings>(5);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace TransMock.Mockifier.Parser
         {
             this.fileWriter = fileWriter;
             this.resourceReader = new ResourceReader();
-            this.endpointMockUrls = new Dictionary<string, string>(5);
+            this.mockedEndpointSettings = new Dictionary<string, EndpointSettings>(5);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace TransMock.Mockifier.Parser
         {
             this.fileWriter = fileWriter;
             this.resourceReader = resourceReader;
-            this.endpointMockUrls = new Dictionary<string, string>(5);
+            this.mockedEndpointSettings = new Dictionary<string, EndpointSettings>(5);
         }
         
         /// <summary>
@@ -225,7 +225,7 @@ namespace TransMock.Mockifier.Parser
         /// <param name="classFilePath">The path to the class file</param>
         private void GenerateURLHelperClass(XElement root, string classFilePath)
         {
-            if (this.endpointMockUrls.Count == 0)
+            if (this.mockedEndpointSettings.Count == 0)
             {
                 return;                
             }
@@ -240,30 +240,36 @@ namespace TransMock.Mockifier.Parser
                 .Replace("[Application:", string.Empty)
                 .Replace("]", string.Empty);
 
+            // Washing the application name string for unwanted characters
+            applicationName = applicationName
+                       .Trim()
+                       .Replace("-", "_")
+                       .Replace(".", "_");
+
             // Generating the namespace definition
             StringBuilder helperClassBuilder = new StringBuilder(512);
 
             helperClassBuilder.AppendLine()
                 .AppendFormat(
-                    "namespace {0}.Test",
-                    applicationName) // Namespace definition start
+                    "namespace {0}.IntegrationTests",
+                    applicationName
+                   ) // Namespace definition start
                 // Generating the class definition
                 .AppendLine()
                 .AppendLine("{")
                     .Append("\t").AppendFormat(
                         "public static class {0}MockAddresses", 
-                        applicationName
-                            .Replace(".", string.Empty)
-                            .Replace("-", "_"))
+                        applicationName)
                         .AppendLine()
                         .Append("\t{"); // URL helper class definition start
 
-            foreach (var mockEndpoint in this.endpointMockUrls)
+            foreach (var mockEndpoint in this.mockedEndpointSettings)
             {
                 helperClassBuilder.AppendLine();
                 helperClassBuilder.Append("\t\t");
                 helperClassBuilder.AppendFormat(
-                    "public static string {0}",
+                    "public static {0} {1}",
+                    ParseAddressPropertyTypeName(mockEndpoint.Value),
                     mockEndpoint.Key
                         .Replace(".", "_")
                         .Replace(" ", string.Empty)) // Property definition start
@@ -275,8 +281,9 @@ namespace TransMock.Mockifier.Parser
                                 .Append("\t\t\t").Append("{") // Opening the property getter
                                 .AppendLine()
                                     .Append("\t\t\t\t").AppendFormat(
-                                        "return \"{0}\";",
-                                        mockEndpoint.Value) // The getter body
+                                        "return new {0}(\"{1}\");",
+                                        ParseAddressPropertyTypeName(mockEndpoint.Value),
+                                        mockEndpoint.Value.Address) // The getter body
                                     .AppendLine()                                
                                 .Append("\t\t\t").Append("}") // Closing the property getter
                             .AppendLine()
@@ -284,7 +291,7 @@ namespace TransMock.Mockifier.Parser
                         .AppendLine();
             }
 
-            helperClassBuilder.AppendLine()
+            helperClassBuilder//.AppendLine()
                 .Append("\t").Append("}") // Closing the class
             .AppendLine()
             .Append("}"); // Closing the namespace
@@ -304,6 +311,30 @@ namespace TransMock.Mockifier.Parser
                 this.fileWriter.WriteTextFile(
                     Path.ChangeExtension(classFilePath, "cs"), 
                     helperClassBuilder.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Parses the type name for the address property
+        /// </summary>
+        /// <param name="mockEndpointSettings"></param>
+        /// <returns></returns>
+        private string ParseAddressPropertyTypeName(EndpointSettings mockEndpointSettings)
+        {
+            switch (mockEndpointSettings.Direction)
+            {
+                case EndpointDirection.Receive:
+                    if (mockEndpointSettings.IsTwoWay)
+                        return "TwoWayReceiveAddress";
+                    else
+                        return "OneWayReceiveAddress";                                        
+                case EndpointDirection.Send:
+                    if (mockEndpointSettings.IsTwoWay)
+                        return "TwoWaySendAddress";
+                    else
+                        return "OneWaySendAddress";
+                default:
+                    return "OneWayReceiveAddress";
             }
         }
 
@@ -371,7 +402,8 @@ namespace TransMock.Mockifier.Parser
                     else
                     {
                         // We process dynamic send ports in a different way
-                        this.ProcessDynamicSendPort(portComment.Parent);
+                        this.ProcessDynamicSendPort(
+                            portComment.Parent);
                     }                    
                 }
             }
@@ -394,11 +426,20 @@ namespace TransMock.Mockifier.Parser
             if (sendPortRefElement != null)
             {
                 string logicalPortName = sendPortRefElement.Parent.Attribute("Name").Value;
+                string mockAddress = string.Format(MockDynamicAddressTemplate, logicalPortName);
+
+                var isTwoWayAttribute = dynamciSendPortElement.Attribute("IsTwoWay");
+                bool isTwoWayPort = bool.Parse(isTwoWayAttribute.Value);
 
                 // Adding the mock endpoint URL for the dynamic port                 
-                this.endpointMockUrls.Add(
+                this.mockedEndpointSettings.Add(
                     string.Format("Dynamic{0}", logicalPortName),
-                    string.Format(MockDynamicAddressTemplate, logicalPortName));
+                    new EndpointSettings
+                    {
+                        Address = mockAddress,
+                        IsTwoWay = isTwoWayPort,
+                        Direction = EndpointDirection.Send
+                    });
             }            
         }
 
@@ -491,9 +532,6 @@ namespace TransMock.Mockifier.Parser
             string mockAddress = this.GenerateMockAddress(mockSettings, sendPortName);            
 
             addressElement.SetValue(mockAddress);
-            
-            // Adding the port name and mocked address to the dictionary
-            this.endpointMockUrls.Add(sendPortName, mockAddress);
 
             System.Diagnostics.Debug.WriteLine("Mock address set to: " + mockAddress);
             #endregion
@@ -525,6 +563,14 @@ namespace TransMock.Mockifier.Parser
             #endregion
 
             bool isTwoWay = bool.Parse(sendPortElement.Attribute(XmlNodeNames.IsTwoWay).Value);
+
+            // Adding the port name and mocked address to the dictionary
+            this.mockedEndpointSettings.Add(sendPortName, 
+                new EndpointSettings {
+                    Address = mockAddress,
+                    IsTwoWay = isTwoWay,
+                    Direction = EndpointDirection.Send
+                });
 
             // We navigate to the element containing the transport configuration
             var transportInfo = transportElement.Element(XmlNodeNames.TransportTypeData);
@@ -597,9 +643,6 @@ namespace TransMock.Mockifier.Parser
             string mockAddress = this.GenerateMockAddress(mockSettings, receiveLocationName);
 
             addressElement.SetValue(mockAddress);
-            
-            // Adding the receive location name and the mocked address to the dictionary
-            this.endpointMockUrls.Add(receiveLocationName, mockAddress);
 
             System.Diagnostics.Debug.WriteLine("Mock address set to: " + mockAddress);
             #endregion
@@ -632,7 +675,16 @@ namespace TransMock.Mockifier.Parser
             #endregion
             
             bool isTwoWay = bool.Parse(receivePortElement.Attribute(XmlNodeNames.IsTwoWay).Value);
-            
+
+            // Adding the port name and mocked address to the dictionary
+            this.mockedEndpointSettings.Add(receiveLocationName,
+                new EndpointSettings
+                {
+                    Address = mockAddress,
+                    IsTwoWay = isTwoWay,
+                    Direction = EndpointDirection.Receive
+                });
+
             // Navigate to the element containing the transport configuration
             var transportInfo = receiveLocationElement.Element(XmlNodeNames.ReceiveLocationTransportTypeData);
 
