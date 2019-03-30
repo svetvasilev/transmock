@@ -58,13 +58,13 @@
     <Compile Include="TestMockMold.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2016.csproj">
+    <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013.csproj">
       <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
-      <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
+      <Name>TransMock.Communication.NamedPipes.BTS2013</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TransMock\TransMock.BTS2016.csproj">
+    <ProjectReference Include="..\TransMock\TransMock.BTS2013.csproj">
       <Project>{5c00df71-e9b7-4a2b-8bf3-fe7e0cc7a7ac}</Project>
-      <Name>TransMock.BTS2016</Name>
+      <Name>TransMock.BTS2013</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
