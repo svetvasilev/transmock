@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FCBD2200-2998-4A52-8D49-FC17F21A4750}</ProjectGuid>
+    <ProjectGuid>{98F23F99-F1FA-49CB-B32B-7F17FB955817}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Integration.BizUnit.Tests</RootNamespace>

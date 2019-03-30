@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6C9E0C6C-4E2B-40A1-8413-980538762DDE}</ProjectGuid>
+    <ProjectGuid>{51C54397-0A93-421D-BFBA-FF920A48C19E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Communication.NamedPipes</RootNamespace>

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}</ProjectGuid>
+    <ProjectGuid>{5DCF0313-B04A-4727-91B9-11C618250A97}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Mockifier</RootNamespace>
