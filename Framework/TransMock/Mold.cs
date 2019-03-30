@@ -19,13 +19,13 @@ namespace TransMock
     {
         private object syncRoot = new object();
 
-        private IntegrationMock<TAddresses> casting;
+        private CastingMock<TAddresses> casting;
 
         private TestContext testContext;
 
         private List<Task<Mold<TAddresses>>> parallelOperationsList;
 
-        internal Dictionary<string, MessageOperationExpectation> operationExpectations;
+        internal Dictionary<string, MessageOperationConfig> operationConfigurations;
 
         internal Queue<AsyncReadEventArgs> receivedMessagesQueue;
 
@@ -37,10 +37,10 @@ namespace TransMock
 
             receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
 
-            operationExpectations = new Dictionary<string, MessageOperationExpectation>(3);
+            operationConfigurations = new Dictionary<string, MessageOperationConfig>(3);
         }
 
-        protected Mold(IntegrationMock<TAddresses> casting) : this()
+        protected Mold(CastingMock<TAddresses> casting) : this()
         {
             this.casting = casting;
         }
@@ -92,14 +92,14 @@ namespace TransMock
 
         private void SetupReceive(SendEndpoint sendEndpoint)
         {
-            if (this.operationExpectations.ContainsKey(sendEndpoint.URL))
+            if (this.operationConfigurations.ContainsKey(sendEndpoint.URL))
             {
                 // We have an expectation set for this endpoint
                 // so we exit gracefully
                 return;
             }
 
-            var receiveOperation = new MessageOperationExpectation()
+            var receiveOperation = new MessageOperationConfig()
             {
                 SendEndpoint = sendEndpoint,
                 MockMessageServer = new StreamingNamedPipeServer(
@@ -116,26 +116,26 @@ namespace TransMock
 
 
             // TODO: There should be added a check for uniqueness of the key
-            operationExpectations.Add(sendEndpoint.URL, receiveOperation);
+            operationConfigurations.Add(sendEndpoint.URL, receiveOperation);
 
         }
 
         private void SetupSend(ReceiveEndpoint receiveEndpoint)
         {
-            if (this.operationExpectations.ContainsKey(receiveEndpoint.URL))
+            if (this.operationConfigurations.ContainsKey(receiveEndpoint.URL))
             {
                 // We have an expectation set for this endpoint
                 // so we exit gracefully
                 return;
             }
 
-            var sendOperation = new MessageOperationExpectation()
+            var sendOperation = new MessageOperationConfig()
             {
                 ReceiveEndpoint = receiveEndpoint,
                 MockMessageClient = new StreamingNamedPipeClient(new System.Uri(receiveEndpoint.URL))
             };
 
-            operationExpectations.Add(receiveEndpoint.URL, sendOperation);
+            operationConfigurations.Add(receiveEndpoint.URL, sendOperation);
 
             return;
 
@@ -143,7 +143,7 @@ namespace TransMock
 
         private void SetupReceiveRequestAndSendResponse(TwoWaySendEndpoint sendReceiveEndpoint)
         {
-            var receiveSendOperation = new MessageOperationExpectation()
+            var receiveSendOperation = new MessageOperationConfig()
             {
                 TwoWaySendEndpoint = sendReceiveEndpoint,
                 MockMessageServer = new StreamingNamedPipeServer(
@@ -153,26 +153,26 @@ namespace TransMock
             receiveSendOperation.MockMessageServer.ReadCompleted += MockMessageServer_ReadCompleted;
             receiveSendOperation.MockMessageServer.Start();
 
-            operationExpectations.Add(sendReceiveEndpoint.URL, receiveSendOperation);
+            operationConfigurations.Add(sendReceiveEndpoint.URL, receiveSendOperation);
 
         }
 
         private void SetupSendRequestAndReceiveResponse(TwoWayReceiveEndpoint receiveSendEndpoint)
         {
-            var sendReceiveOperation = new MessageOperationExpectation()
+            var sendReceiveOperation = new MessageOperationConfig()
             {
                 TwoWayReceiveEndpoint = receiveSendEndpoint,
                 MockMessageClient = new StreamingNamedPipeClient(new System.Uri(receiveSendEndpoint.URL))
             };
 
-            operationExpectations.Add(receiveSendEndpoint.URL, sendReceiveOperation);
+            operationConfigurations.Add(receiveSendEndpoint.URL, sendReceiveOperation);
 
         }
 
         internal void TearDown()
         {
             // Stopping all the inbound message mock servers
-            foreach (var item in this.operationExpectations.Values)
+            foreach (var item in this.operationConfigurations.Values)
             {
                 if (item.MockMessageServer != null)
                 {
@@ -411,11 +411,11 @@ namespace TransMock
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseStrategy> responseSelector = null,
-            Action<MessageOperationExpectation, ResponseStrategy, int> responseSender = null)
+            Action<MessageOperationConfig, ResponseStrategy, int> responseSender = null)
         {
             var sendEndpoint = sender(this.testContext, this.casting.mockAddresses);
 
-            var endpointSetup = this.operationExpectations
+            var endpointSetup = this.operationConfigurations
                 .Where(kvp => kvp.Key == sendEndpoint.URL)
                 .FirstOrDefault().Value;
 
@@ -470,12 +470,12 @@ namespace TransMock
         private Mold<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator = null,
-            Func<MessageOperationExpectation, MockMessage> responseReceiver = null)                
+            Func<MessageOperationConfig, MockMessage> responseReceiver = null)                
         {
             // We fetch first the actual receiver endpoint
             var receiverEndpoint = receiver(this.testContext, this.casting.mockAddresses);
 
-            var endpointSetup = this.operationExpectations
+            var endpointSetup = this.operationConfigurations
                 .Where(kvp => kvp.Key == receiverEndpoint.URL)
                 .FirstOrDefault().Value;
 
@@ -528,7 +528,7 @@ namespace TransMock
             return this;
         }
 
-        private void SendResponse(MessageOperationExpectation endpointSetup, ResponseStrategy responseStrategy, int connectionId)
+        private void SendResponse(MessageOperationConfig endpointSetup, ResponseStrategy responseStrategy, int connectionId)
         {
             // Fetch the message based on the configured strategy
             var responseMessage = responseStrategy.FetchResponseMessage();
@@ -545,7 +545,7 @@ namespace TransMock
         /// TODO: create a higher abstraction representation of a message for easier work in the validation methods
         /// </summary>
         /// <returns></returns>
-        private MockMessage ReceiveResponse(MessageOperationExpectation endpointSetup)
+        private MockMessage ReceiveResponse(MessageOperationConfig endpointSetup)
         {
             // We receive the response
             var responseMessage = endpointSetup.MockMessageClient

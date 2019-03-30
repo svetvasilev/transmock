@@ -1,6 +1,6 @@
 ﻿namespace TransMock
 {
-    public class SendEndpoint : MockEndpoint
+    public class SendEndpoint : MockedEndpoint
     {
         public SendEndpoint()
         {
@@ -12,7 +12,7 @@
         public int ExpectedMessageCount { get; set; }
     }
 
-    public abstract class MockEndpoint
+    public abstract class MockedEndpoint
     {
         
         public string URL { get; set; }

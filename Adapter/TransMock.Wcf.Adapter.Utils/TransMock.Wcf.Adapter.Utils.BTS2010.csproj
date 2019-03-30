@@ -7,8 +7,8 @@
     <ProjectGuid>{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransMock.Utils</RootNamespace>
-    <AssemblyName>TransMock.Utils</AssemblyName>
+    <RootNamespace>TransMock.Wcf.Adapter.Utils</RootNamespace>
+    <AssemblyName>TransMock.Wcf.Adapter.Utils</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs">
+    <Compile Include="..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BizTalkProperties\AppStream.Designer.cs">

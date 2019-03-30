@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F2F99399-ED10-4329-A4EA-E43F48CC2E02}</ProjectGuid>
+    <ProjectGuid>{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransMock.Utils</RootNamespace>
-    <AssemblyName>TransMock.Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>TransMock.Wcf.Adapter.Utils</RootNamespace>
+    <AssemblyName>TransMock.Wcf.Adapter.Utils</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\net451\</OutputPath>
+    <OutputPath>bin\Debug\net46\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\net451\</OutputPath>
+    <OutputPath>bin\Release\net46\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs">
+    <Compile Include="..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BizTalkProperties\AppStream.Designer.cs">
@@ -289,6 +289,11 @@
   <ItemGroup>
     <None Include="Resources\PropertySchemaToClass.xslt" />
     <None Include="Resources\PropertySchemaToResx.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertySchemaToMD.xslt">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

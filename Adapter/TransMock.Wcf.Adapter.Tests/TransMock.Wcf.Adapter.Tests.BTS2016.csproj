@@ -89,13 +89,13 @@
       <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2016.csproj">
-      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
-      <Name>TransMock.Utils.BTS2016</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Test\TransMock.TestUtils\TransMock.TestUtils.BTS2016.csproj">
       <Project>{5891035f-5346-4a15-bb61-09018d5cc4ae}</Project>
       <Name>TransMock.TestUtils.BTS2016</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2016.csproj">
+      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
+      <Name>TransMock.Wcf.Adapter.Utils.BTS2016</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2016.csproj">
       <Project>{1f8b806e-b479-4db0-9896-1d29e288a2f2}</Project>

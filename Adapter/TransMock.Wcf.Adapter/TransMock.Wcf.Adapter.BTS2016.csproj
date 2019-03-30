@@ -140,9 +140,9 @@
       <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2016.csproj">
+    <ProjectReference Include="..\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2016.csproj">
       <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
-      <Name>TransMock.Utils.BTS2016</Name>
+      <Name>TransMock.Wcf.Adapter.Utils.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

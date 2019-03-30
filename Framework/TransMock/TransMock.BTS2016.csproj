@@ -40,16 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
-    <Compile Include="MessageOperationExpectation.cs" />
+    <Compile Include="MessageOperationConfig.cs" />
+    <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />
     <Compile Include="StaticFileResponseStrategy.cs" />
-    <Compile Include="IntegrationMock.cs" />
-    <Compile Include="TestCasting.cs" />
+    <Compile Include="CastingMock.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="Mold.cs" />
-    <Compile Include="TestMold.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwoWayReceiveEndpoint.cs" />
     <Compile Include="TwoWaySendEndpoint.cs" />

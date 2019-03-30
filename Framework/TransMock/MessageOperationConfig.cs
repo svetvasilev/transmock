@@ -8,7 +8,7 @@ using TransMock.Communication.NamedPipes;
 
 namespace TransMock
 {
-    internal class MessageOperationExpectation
+    internal class MessageOperationConfig
     {
         public SendEndpoint SendEndpoint { get; set; }
 
@@ -22,6 +22,5 @@ namespace TransMock
 
         public Communication.NamedPipes.StreamingNamedPipeClient MockMessageClient { get; set; }
 
-        public Func<SingleMessageExpectation, bool> Expectation { get; set; }
     }
 }

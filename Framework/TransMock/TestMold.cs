@@ -320,10 +320,6 @@ namespace TransMock
         //}
     }
 
-    public class ReceiveEndpoint : MockEndpoint
-    {
-        public string RequestFilePath { get; set; }
-    }
 
     public class MockedAddressBase
     {

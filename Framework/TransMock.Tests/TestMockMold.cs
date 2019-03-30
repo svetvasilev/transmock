@@ -12,7 +12,7 @@ namespace TransMock.Tests.BTS2016
         [DeploymentItem(@"TestData\TestFileIn.txt")]
         public void SimpleFlow_HappyPath()
         {
-            var integrationMock = new IntegrationMock<TestMockAddresses>();
+            var integrationMock = new CastingMock<TestMockAddresses>();
 
             integrationMock
                 .SetupReceive(a => a.ReceiveFirstMessage_FILE)

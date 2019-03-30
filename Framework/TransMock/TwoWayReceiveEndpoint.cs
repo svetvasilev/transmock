@@ -1,6 +1,6 @@
 ﻿namespace TransMock
 {
-    public class TwoWayReceiveEndpoint : MockEndpoint
+    public class TwoWayReceiveEndpoint : MockedEndpoint
     {
         public string RequestFilePath;
     }

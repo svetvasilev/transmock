@@ -53,7 +53,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TestMockAddresses.cs" />
-    <None Include="TestMockCasting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestMockMold.cs" />
   </ItemGroup>
@@ -62,7 +61,7 @@
       <Project>{6c9e0c6c-4e2b-40a1-8413-980538762dde}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2016</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TransMock.BTS2016\TransMock.BTS2016.csproj">
+    <ProjectReference Include="..\TransMock\TransMock.BTS2016.csproj">
       <Project>{5c00df71-e9b7-4a2b-8bf3-fe7e0cc7a7ac}</Project>
       <Name>TransMock.BTS2016</Name>
     </ProjectReference>
