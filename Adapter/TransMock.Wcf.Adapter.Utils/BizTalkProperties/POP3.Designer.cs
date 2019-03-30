@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TransMock.Utils.BizTalkProperties {
+namespace TransMock.Wcf.Adapter.Utils.BizTalkProperties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace TransMock.Utils.BizTalkProperties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TransMock.Utils.BizTalkProperties.POP3", typeof(POP3).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TransMock.Wcf.Adapter.Utils.BizTalkProperties.POP3", typeof(POP3).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
