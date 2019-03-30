@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using TransMock;
 
-namespace TransMock.Tests.BTS2016
+namespace TransMock.Tests
 {
     [TestClass]
     public class TestMockMold

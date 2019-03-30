@@ -1,7 +1,7 @@
 ﻿using System;
 using TransMock.Addressing;
 
-namespace TransMock.Tests.BTS2016
+namespace TransMock.Tests
 {
     internal class TestMockAddresses : EndpointAddress
     {
