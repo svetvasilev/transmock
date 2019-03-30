@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.BTS20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Tests.BTS2013", "Adapter\TransMock.Wcf.Adapter.Tests\TransMock.Wcf.Adapter.Tests.BTS2013.csproj", "{3A5DA031-BA2D-49A3-A202-06D328D514EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Utils.BTS2013R2", "Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2013.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8CCED02-CA1A-4408-9A80-BA606A66CE24}"
 	ProjectSection(SolutionItems) = preProject
 		BuildTransMock_Debug.bat = BuildTransMock_Debug.bat
@@ -67,8 +69,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.Tests.BTS2013", "Communication\TransMock.Communication.NamedPipes.Tests\TransMock.Communication.NamedPipes.Tests.BTS2013.csproj", "{DAEFE276-BFF4-45F6-AA22-413528E44998}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{F9261BE5-AAB7-4D44-B0A3-5974FD1EF812}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Utils.BTS2013", "Framework\TransMock.Utils\TransMock.Utils.BTS2013.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

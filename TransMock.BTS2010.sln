@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.BTS20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Tests.BTS2010", "Adapter\TransMock.Wcf.Adapter.Tests\TransMock.Wcf.Adapter.Tests.BTS2010.csproj", "{1DD6AC74-FACD-46CA-A8FB-0E39653A2B2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Utils.BTS2010", "Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2010.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8CCED02-CA1A-4408-9A80-BA606A66CE24}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings

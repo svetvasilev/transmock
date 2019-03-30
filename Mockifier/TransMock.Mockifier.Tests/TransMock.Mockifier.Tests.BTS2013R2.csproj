@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{793A39ED-3464-4589-86CD-3FDF491D365C}</ProjectGuid>
+    <ProjectGuid>{F4E6707A-1B29-4F36-A5B8-92C8BAE0FF3F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Mockifier.Tests</RootNamespace>
