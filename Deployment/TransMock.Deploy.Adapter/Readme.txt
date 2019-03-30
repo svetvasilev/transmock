@@ -7,6 +7,9 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Version 1.5.0:
+- No functional changes, only some assembly reference refactoring
+
 Version 1.4.1:
 - Fixed issue with handling faults as response messsages from the inbound mock adapter
 
