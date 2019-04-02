@@ -6,29 +6,21 @@ using TransMock;
 namespace TransMock.Tests
 {
     [TestClass]
-    public class TestMockMold
+    public class TestSimpleMoc
     {
         [TestMethod]
         [DeploymentItem(@"TestData\TestFileIn.txt")]
         public void SimpleFlow_HappyPath()
         {
-            var integrationMock = new CastingMock<TestMockAddresses>();
+            var integrationMock = new EndpointsMock<TestMockAddresses>();
 
             integrationMock
                 .SetupReceive(a => a.ReceiveFirstMessage_FILE)
                 .SetupSend(a => a.SendFirstMessage_FILE);
 
-            var mold = integrationMock.CreateMold();
+            var emulator = integrationMock.CreateMessagingPatternEmulator();
 
-            mold//.WireUp()
-                //.Send(r => r.ReceiveFirstMessage_FILE,
-                //    ep => {
-                //        ep.RequestFilePath = "TestFileIn.txt";
-                //        ep.TimeoutInSeconds = 10;
-                //        ep.MessageEncoding = System.Text.Encoding.UTF8;
-                //        },
-                //    ctx => ctx.DebugInfo("Fire in the hall")
-                //)
+            emulator
                 .Send(r => r.ReceiveFirstMessage_FILE,
                     "TestFileIn.txt",
                     System.Text.Encoding.UTF8,

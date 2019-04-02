@@ -15,32 +15,32 @@ namespace TransMock
     /// Send operation from the mold isntance corresponds to a receive operation in the casting (integration)
     /// Receive operation in the mold corresponds to a send operation from the casting, and so on.
     /// </summary>
-    public abstract class Mold<TAddresses> where TAddresses : Addressing.EndpointAddress
+    public abstract class MessagingPatternEmulator<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
         private object syncRoot = new object();
 
-        private CastingMock<TAddresses> casting;
+        private EndpointsMock<TAddresses> casting;
 
         private TestContext testContext;
 
-        private List<Task<Mold<TAddresses>>> parallelOperationsList;
+        private List<Task<MessagingPatternEmulator<TAddresses>>> parallelOperationsList;
 
         internal Dictionary<string, MessageOperationConfig> operationConfigurations;
 
         internal Queue<AsyncReadEventArgs> receivedMessagesQueue;
 
-        protected Mold()
+        protected MessagingPatternEmulator()
         {
             testContext = new TestContext();
 
-            parallelOperationsList = new List<Task<Mold<TAddresses>>>(3);
+            parallelOperationsList = new List<Task<MessagingPatternEmulator<TAddresses>>>(3);
 
             receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
 
             operationConfigurations = new Dictionary<string, MessageOperationConfig>(3);
         }
 
-        protected Mold(CastingMock<TAddresses> casting) : this()
+        protected MessagingPatternEmulator(EndpointsMock<TAddresses> casting) : this()
         {
             this.casting = casting;
         }
@@ -50,7 +50,7 @@ namespace TransMock
         /// Wires up the mold with the integration mock
         /// </summary>
         /// <returns></returns>
-        public Mold<TAddresses> WireUp()
+        public MessagingPatternEmulator<TAddresses> WireUp()
         {
             if (this.casting == null)
             {
@@ -193,14 +193,14 @@ namespace TransMock
             }
         }
 
-        public Mold<TAddresses> Receive(
+        public MessagingPatternEmulator<TAddresses> Receive(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator)
         {
             return ReceiveImplementation(sender, validator);
         }
 
-        public Mold<TAddresses> Receive(
+        public MessagingPatternEmulator<TAddresses> Receive(
             Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             Action<SendEndpoint> configurator,
             Action<TestContext> contextAction,
@@ -226,7 +226,7 @@ namespace TransMock
             validator);
         }
 
-        public Mold<TAddresses> Receive(
+        public MessagingPatternEmulator<TAddresses> Receive(
             Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             int timeoutInSeconds,
             int expectedMessageCount,
@@ -255,12 +255,12 @@ namespace TransMock
             validator);
         }
 
-        public Mold<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)           
+        public MessagingPatternEmulator<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)           
         {
             return this.SendImplementation(receiver);
         }
 
-        public Mold<TAddresses> Send<TReceiveAddress>(
+        public MessagingPatternEmulator<TAddresses> Send<TReceiveAddress>(
             Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
             Action<ReceiveEndpoint> endpointConfig,
             Action<TestContext> contextAction)               
@@ -282,7 +282,7 @@ namespace TransMock
             });
         }
 
-        public Mold<TAddresses> Send(
+        public MessagingPatternEmulator<TAddresses> Send(
            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            Func<ReceiveEndpoint, string> requestFile,
            Func<ReceiveEndpoint, System.Text.Encoding> fileEncoding,
@@ -309,7 +309,7 @@ namespace TransMock
             });
         }
 
-        public Mold<TAddresses> Send(
+        public MessagingPatternEmulator<TAddresses> Send(
            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            string requestFile,
            System.Text.Encoding fileEncoding,
@@ -335,7 +335,7 @@ namespace TransMock
             });
         }
 
-        public Mold<TAddresses> ReceiveRequestAndSendResponse(
+        public MessagingPatternEmulator<TAddresses> ReceiveRequestAndSendResponse(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseStrategy> responseSelector)
@@ -347,7 +347,7 @@ namespace TransMock
                 SendResponse);
         }
 
-        public Mold<TAddresses> SendRequestAndReceiveResponse(
+        public MessagingPatternEmulator<TAddresses> SendRequestAndReceiveResponse(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator)                
         {
@@ -357,13 +357,13 @@ namespace TransMock
                 this.ReceiveResponse);
         }
 
-        public Mold<TAddresses> InParallel(params Func<Mold<TAddresses>, Mold<TAddresses>>[] parallelActions)
+        public MessagingPatternEmulator<TAddresses> InParallel(params Func<MessagingPatternEmulator<TAddresses>, MessagingPatternEmulator<TAddresses>>[] parallelActions)
         {
             //var actionsList = parallelActions(new List<TestMold<TAddresses>>());
 
             foreach (var action in parallelActions)
             {
-                var task = new Task<Mold<TAddresses>>(
+                var task = new Task<MessagingPatternEmulator<TAddresses>>(
                     () =>
                     {
                         return action(this);
@@ -407,7 +407,7 @@ namespace TransMock
         /// <param name="validator"></param>
         /// <param name="responseSender"></param>
         /// <returns></returns>
-        private Mold<TAddresses> ReceiveImplementation(
+        private MessagingPatternEmulator<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseStrategy> responseSelector = null,
@@ -467,7 +467,7 @@ namespace TransMock
             return this;
         }
 
-        private Mold<TAddresses> SendImplementation(
+        private MessagingPatternEmulator<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator = null,
             Func<MessageOperationConfig, MockMessage> responseReceiver = null)                

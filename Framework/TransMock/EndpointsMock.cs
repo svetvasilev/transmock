@@ -18,7 +18,7 @@ namespace TransMock
     /// This is why the Setup methods match the direction of the message flow, e.g. SetupReceive is setting up a receive
     /// endpoint and vice versa.
     /// </summary>
-    public class CastingMock<TAddresses> where TAddresses : Addressing.EndpointAddress
+    public class EndpointsMock<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
         internal TAddresses mockAddresses;        
 
@@ -29,7 +29,7 @@ namespace TransMock
         /// <summary>
         /// Creates an instance of class <class ref="CastingMock" /> 
         /// </summary>
-        public CastingMock()
+        public EndpointsMock()
         {
             endpointsMap = new Dictionary<string, MockedEndpoint>(3);
             // Create a single instance of the mock addresses class to be used to fetch
@@ -43,7 +43,7 @@ namespace TransMock
         /// </summary>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public CastingMock<TAddresses> SetupReceive(Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receiver)
+        public EndpointsMock<TAddresses> SetupReceive(Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receiver)
         {   
             var receiveEndpoint = new ReceiveEndpoint();
 
@@ -68,7 +68,7 @@ namespace TransMock
         /// </summary>
         /// <param name="sender"></param>
         /// <returns></returns>
-        public CastingMock<TAddresses> SetupSend(Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sender)
+        public EndpointsMock<TAddresses> SetupSend(Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sender)
         {
             var sendEndpoint = new SendEndpoint();
 
@@ -93,7 +93,7 @@ namespace TransMock
         /// </summary>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public CastingMock<TAddresses> SetupReceiveRequestAndSendResponse(Expression<Func<TAddresses, Addressing.TwoWayReceiveAddress>> receiver)
+        public EndpointsMock<TAddresses> SetupReceiveRequestAndSendResponse(Expression<Func<TAddresses, Addressing.TwoWayReceiveAddress>> receiver)
         {
             var receiveSendEndpoint = new TwoWayReceiveEndpoint();
 
@@ -110,7 +110,7 @@ namespace TransMock
         /// </summary>
         /// <param name="sender"></param>
         /// <returns></returns>
-        public CastingMock<TAddresses> SetupSendRequestAndReceiveResponse(Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> sender)
+        public EndpointsMock<TAddresses> SetupSendRequestAndReceiveResponse(Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> sender)
         {
             var sendReceiveEndpoint = new TwoWaySendEndpoint();
 
@@ -126,21 +126,21 @@ namespace TransMock
         /// Creates a Mold instance that is modeled as per the casting instance
         /// </summary>
         /// <returns></returns>
-        public Mold<TAddresses> CreateMold()
+        public MessagingPatternEmulator<TAddresses> CreateMessagingPatternEmulator()
         {
-            return ConcreteMold<TAddresses>.CreateMold(this);
+            return ConcreteMessagingPatternEmulator<TAddresses>.CreateInstance(this);
         }
 
         // Hiding the implementation of the abstract Mold class
-        internal class ConcreteMold<TAddresses2> : Mold<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
+        internal class ConcreteMessagingPatternEmulator<TAddresses2> : MessagingPatternEmulator<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
         {
-            protected ConcreteMold(CastingMock<TAddresses2> casting) : base(casting)
+            protected ConcreteMessagingPatternEmulator(EndpointsMock<TAddresses2> casting) : base(casting)
             {
 
             }
-            internal static Mold<TAddresses2> CreateMold(CastingMock<TAddresses2> casting)
+            internal static MessagingPatternEmulator<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> casting)
             {
-                return new ConcreteMold<TAddresses2>(casting)
+                return new ConcreteMessagingPatternEmulator<TAddresses2>(casting)
                     .WireUp();
             }
         }
