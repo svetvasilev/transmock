@@ -44,14 +44,14 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
+    <Compile Include="EndpointsMock.cs" />
     <Compile Include="MessageOperationConfig.cs" />
+    <Compile Include="MessagingPatternEmulator.cs" />
     <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />
     <Compile Include="StaticFileResponseStrategy.cs" />
-    <Compile Include="CastingMock.cs" />
     <Compile Include="TestContext.cs" />
-    <Compile Include="Mold.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwoWayReceiveEndpoint.cs" />
     <Compile Include="TwoWaySendEndpoint.cs" />
