@@ -45,8 +45,8 @@
     </Compile>
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
     <Compile Include="EndpointsMock.cs" />
+    <Compile Include="InverseMessagingClient.cs" />
     <Compile Include="MessageOperationConfig.cs" />
-    <Compile Include="MessagingPatternEmulator.cs" />
     <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />

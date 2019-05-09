@@ -126,19 +126,19 @@ namespace TransMock
         /// Creates a Mold instance that is modeled as per the casting instance
         /// </summary>
         /// <returns></returns>
-        public MessagingPatternEmulator<TAddresses> CreateMessagingPatternEmulator()
+        public InverseMessagingClient<TAddresses> CreateMessagingPatternEmulator()
         {
             return ConcreteMessagingPatternEmulator<TAddresses>.CreateInstance(this);
         }
 
         // Hiding the implementation of the abstract Mold class
-        internal class ConcreteMessagingPatternEmulator<TAddresses2> : MessagingPatternEmulator<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
+        internal class ConcreteMessagingPatternEmulator<TAddresses2> : InverseMessagingClient<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
         {
             protected ConcreteMessagingPatternEmulator(EndpointsMock<TAddresses2> casting) : base(casting)
             {
 
             }
-            internal static MessagingPatternEmulator<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> casting)
+            internal static InverseMessagingClient<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> casting)
             {
                 return new ConcreteMessagingPatternEmulator<TAddresses2>(casting)
                     .WireUp();

@@ -10,12 +10,14 @@ using TransMock.Communication.NamedPipes;
 namespace TransMock
 {
     /// <summary>
-    /// This class represent the actual mocked mold where the operations are mirrored compared to the
-    /// actual integration represented by the TestCasting object. 
-    /// Send operation from the mold isntance corresponds to a receive operation in the casting (integration)
-    /// Receive operation in the mold corresponds to a send operation from the casting, and so on.
+    /// This class implements the logic for inverse communication with counterpart endpoints represented by the EndpointsMock instance.
+    /// This class is abstract and cannot be created directly but rather only by a factory method from the EndpointsMock isntance it is
+    /// intended to be used against.
+    /// Send operation from the this class corresponds to a receive endpoint in the related EndpointsMock instance.
+    /// Receive operation in this class corresponds to a send endpoint in the related EndpointsMock instance.
+    /// Same applies for 2-way communication.
     /// </summary>
-    public abstract class MessagingPatternEmulator<TAddresses> where TAddresses : Addressing.EndpointAddress
+    public abstract class InverseMessagingClient<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
         private object syncRoot = new object();
 
@@ -23,24 +25,24 @@ namespace TransMock
 
         private TestContext testContext;
 
-        private List<Task<MessagingPatternEmulator<TAddresses>>> parallelOperationsList;
+        private List<Task<InverseMessagingClient<TAddresses>>> parallelOperationsList;
 
         internal Dictionary<string, MessageOperationConfig> operationConfigurations;
 
         internal Queue<AsyncReadEventArgs> receivedMessagesQueue;
 
-        protected MessagingPatternEmulator()
+        protected InverseMessagingClient()
         {
             testContext = new TestContext();
 
-            parallelOperationsList = new List<Task<MessagingPatternEmulator<TAddresses>>>(3);
+            parallelOperationsList = new List<Task<InverseMessagingClient<TAddresses>>>(3);
 
             receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
 
             operationConfigurations = new Dictionary<string, MessageOperationConfig>(3);
         }
 
-        protected MessagingPatternEmulator(EndpointsMock<TAddresses> casting) : this()
+        protected InverseMessagingClient(EndpointsMock<TAddresses> casting) : this()
         {
             this.casting = casting;
         }
@@ -50,7 +52,7 @@ namespace TransMock
         /// Wires up the mold with the integration mock
         /// </summary>
         /// <returns></returns>
-        public MessagingPatternEmulator<TAddresses> WireUp()
+        public InverseMessagingClient<TAddresses> WireUp()
         {
             if (this.casting == null)
             {
@@ -193,14 +195,14 @@ namespace TransMock
             }
         }
 
-        public MessagingPatternEmulator<TAddresses> Receive(
+        public InverseMessagingClient<TAddresses> Receive(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator)
         {
             return ReceiveImplementation(sender, validator);
         }
 
-        public MessagingPatternEmulator<TAddresses> Receive(
+        public InverseMessagingClient<TAddresses> Receive(
             Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             Action<SendEndpoint> configurator,
             Action<TestContext> contextAction,
@@ -226,7 +228,7 @@ namespace TransMock
             validator);
         }
 
-        public MessagingPatternEmulator<TAddresses> Receive(
+        public InverseMessagingClient<TAddresses> Receive(
             Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sendAddress,
             int timeoutInSeconds,
             int expectedMessageCount,
@@ -255,12 +257,12 @@ namespace TransMock
             validator);
         }
 
-        public MessagingPatternEmulator<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)           
+        public InverseMessagingClient<TAddresses> Send(Func<TestContext, TAddresses, ReceiveEndpoint> receiver)           
         {
             return this.SendImplementation(receiver);
         }
 
-        public MessagingPatternEmulator<TAddresses> Send<TReceiveAddress>(
+        public InverseMessagingClient<TAddresses> Send<TReceiveAddress>(
             Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
             Action<ReceiveEndpoint> endpointConfig,
             Action<TestContext> contextAction)               
@@ -282,7 +284,7 @@ namespace TransMock
             });
         }
 
-        public MessagingPatternEmulator<TAddresses> Send(
+        public InverseMessagingClient<TAddresses> Send(
            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            Func<ReceiveEndpoint, string> requestFile,
            Func<ReceiveEndpoint, System.Text.Encoding> fileEncoding,
@@ -309,7 +311,7 @@ namespace TransMock
             });
         }
 
-        public MessagingPatternEmulator<TAddresses> Send(
+        public InverseMessagingClient<TAddresses> Send(
            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
            string requestFile,
            System.Text.Encoding fileEncoding,
@@ -335,7 +337,7 @@ namespace TransMock
             });
         }
 
-        public MessagingPatternEmulator<TAddresses> ReceiveRequestAndSendResponse(
+        public InverseMessagingClient<TAddresses> ReceiveRequestAndSendResponse(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseStrategy> responseSelector)
@@ -347,7 +349,7 @@ namespace TransMock
                 SendResponse);
         }
 
-        public MessagingPatternEmulator<TAddresses> SendRequestAndReceiveResponse(
+        public InverseMessagingClient<TAddresses> SendRequestAndReceiveResponse(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator)                
         {
@@ -357,13 +359,13 @@ namespace TransMock
                 this.ReceiveResponse);
         }
 
-        public MessagingPatternEmulator<TAddresses> InParallel(params Func<MessagingPatternEmulator<TAddresses>, MessagingPatternEmulator<TAddresses>>[] parallelActions)
+        public InverseMessagingClient<TAddresses> InParallel(params Func<InverseMessagingClient<TAddresses>, InverseMessagingClient<TAddresses>>[] parallelActions)
         {
             //var actionsList = parallelActions(new List<TestMold<TAddresses>>());
 
             foreach (var action in parallelActions)
             {
-                var task = new Task<MessagingPatternEmulator<TAddresses>>(
+                var task = new Task<InverseMessagingClient<TAddresses>>(
                     () =>
                     {
                         return action(this);
@@ -407,7 +409,7 @@ namespace TransMock
         /// <param name="validator"></param>
         /// <param name="responseSender"></param>
         /// <returns></returns>
-        private MessagingPatternEmulator<TAddresses> ReceiveImplementation(
+        private InverseMessagingClient<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseStrategy> responseSelector = null,
@@ -467,7 +469,7 @@ namespace TransMock
             return this;
         }
 
-        private MessagingPatternEmulator<TAddresses> SendImplementation(
+        private InverseMessagingClient<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<MockMessage, bool> validator = null,
             Func<MessageOperationConfig, MockMessage> responseReceiver = null)                
