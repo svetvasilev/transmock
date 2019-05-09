@@ -1,7 +1,8 @@
 ﻿using System;
 using BizUnit;
+using TransMock;
 using TransMock.Integration.BizUnit;
-using TransMock.Utils;
+using TransMock.Wcf.Adapter.Utils;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TransMock.Communication.NamedPipes;
@@ -19,7 +20,7 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayStaticReceive_FILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE.ToString(),
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -28,7 +29,7 @@ namespace BizTalkTests.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE.ToString(),
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -54,21 +55,21 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayStaticReceive_FILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE.ToString(),
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
 
             inMsgStep.MessageProperties
                 .Add(
-                    TransMock.Utils.BizTalkProperties.BTS.Operation,
+                    TransMock.Wcf.Adapter.Utils.BizTalkProperties.BTS.Operation,
                     "SomeTestOperation");
 
             testCase.ExecutionSteps.Add(inMsgStep);
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE,
+                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE.ToString(),
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -84,6 +85,45 @@ namespace BizTalkTests.IntegrationTests
             BizUnit.Core.TestRunner testRunner = new BizUnit.Core.TestRunner(testCase);
 
             testRunner.Run();
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\StartMessage.xml")]
+        public void TestOneWayFlow_NewSyntax()
+        {
+            var epMock = new EndpointsMock<BizTalkTestsNewMockAddresses>();
+
+            epMock.SetupReceive(
+                r => r.BTS_OneWayReceive2_FILE);
+            epMock.SetupSend(
+                s => s.BTS_OneWaySendFILE);
+
+            var messanger = epMock.CreateMessagingPatternEmulator();
+
+            messanger.Send(
+                r => r.BTS_OneWayReceive2_FILE,
+                "StartMessage.xml",
+                System.Text.Encoding.UTF8,
+                10,
+                (ctx) => { ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE"); }
+                )
+                .Receive(
+                s => s.BTS_OneWaySendFILE,
+                ep =>
+                {
+                    ep.TimeoutInSeconds = 10;
+                    ep.MessageEncoding = System.Text.Encoding.UTF8;
+                },
+                ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
+                (idx, msg) =>
+                {
+                    Assert.IsTrue(idx == 0, "Message index is wrong!");
+                    Assert.IsTrue(msg.Body.Length > 0, "Received message is empty");
+
+                    return true;
+                });
+
+
         }
 
         private bool ValidateOutMessage(MockMessage message)

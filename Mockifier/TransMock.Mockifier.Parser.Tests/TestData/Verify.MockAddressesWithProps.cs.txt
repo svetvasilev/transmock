@@ -1,9 +1,11 @@
 
 namespace TestApplication.IntegrationTests
 {
-	public static class TestApplicationMockAddresses
+	using TransMock.Addressing;
+
+	public class TestApplicationMockAddresses : EndpointAddress
 	{
-		public static OneWaySendAddress DynamicPortOut
+		public OneWaySendAddress DynamicPortOut
 		{
 			get
 			{
@@ -11,7 +13,7 @@ namespace TestApplication.IntegrationTests
 			}
 		}
 
-		public static OneWaySendAddress OneWaySendFILE
+		public OneWaySendAddress OneWaySendFILE
 		{
 			get
 			{
@@ -19,7 +21,7 @@ namespace TestApplication.IntegrationTests
 			}
 		}
 
-		public static TwoWaySendAddress TwoWayTestSendWCF
+		public TwoWaySendAddress TwoWayTestSendWCF
 		{
 			get
 			{
@@ -27,7 +29,7 @@ namespace TestApplication.IntegrationTests
 			}
 		}
 
-		public static OneWayReceiveAddress OneWayReceive_FILE
+		public OneWayReceiveAddress OneWayReceive_FILE
 		{
 			get
 			{
@@ -35,7 +37,7 @@ namespace TestApplication.IntegrationTests
 			}
 		}
 
-		public static TwoWayReceiveAddress TwoWayTestReceive_WCF
+		public TwoWayReceiveAddress TwoWayTestReceive_WCF
 		{
 			get
 			{

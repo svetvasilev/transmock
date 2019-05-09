@@ -46,28 +46,32 @@
       <HintPath>..\packages\BizUnit.TestSteps.5.0.5\lib\net45\BizUnit.TestSteps.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.4.1\lib\net46\Microsoft.ServiceModel.Channels.dll</HintPath>
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\Microsoft.ServiceModel.Channels.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TransMock.Communication.NamedPipes, Version=1.4.0.6217, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.4.1\lib\net46\TransMock.Communication.NamedPipes.dll</HintPath>
+    <Reference Include="TransMock, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Framework.1.5.0-beta1\lib\net451\TransMock.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TransMock.Integration.BizUnit, Version=1.4.0.6217, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Framework.1.4.0\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
+    <Reference Include="TransMock.Communication.NamedPipes, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Communication.NamedPipes.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TransMock.Utils, Version=1.4.0.6217, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.4.1\lib\net46\TransMock.Utils.dll</HintPath>
+    <Reference Include="TransMock.Integration.BizUnit, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Framework.1.5.0-beta1\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TransMock.Wcf.Adapter, Version=1.4.1.8216, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.4.1\lib\net46\TransMock.Wcf.Adapter.dll</HintPath>
+    <Reference Include="TransMock.Wcf.Adapter, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Wcf.Adapter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TransMock.Wcf.Adapter.Utils, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Wcf.Adapter.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -86,6 +90,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BizTalkTestsNewMockAddresses.cs" />
     <Compile Include="BizTalkTestsMockAddresses.cs" />
     <Compile Include="TestDynamicSendPort.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

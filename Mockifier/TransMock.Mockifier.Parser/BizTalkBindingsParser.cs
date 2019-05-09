@@ -257,8 +257,10 @@ namespace TransMock.Mockifier.Parser
                 // Generating the class definition
                 .AppendLine()
                 .AppendLine("{")
+                    .Append("\t").AppendLine("using TransMock.Addressing;")
+                    .AppendLine()
                     .Append("\t").AppendFormat(
-                        "public static class {0}MockAddresses", 
+                        "public class {0}MockAddresses : EndpointAddress", 
                         applicationName)
                         .AppendLine()
                         .Append("\t{"); // URL helper class definition start
@@ -268,7 +270,7 @@ namespace TransMock.Mockifier.Parser
                 helperClassBuilder.AppendLine();
                 helperClassBuilder.Append("\t\t");
                 helperClassBuilder.AppendFormat(
-                    "public static {0} {1}",
+                    "public {0} {1}",
                     ParseAddressPropertyTypeName(mockEndpoint.Value),
                     mockEndpoint.Key
                         .Replace(".", "_")
