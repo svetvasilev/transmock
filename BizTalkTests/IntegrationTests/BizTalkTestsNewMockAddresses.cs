@@ -60,10 +60,5 @@ namespace BizTalkTests.IntegrationTests
 				return new TwoWayReceiveAddress("mock://localhost/BTS.TwoWayTestReceive_WCF");
 			}
 		}
-
-        public override string Capabilities()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

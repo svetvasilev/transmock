@@ -2,11 +2,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using TransMock;
+using TransMock.Addressing;
 
 namespace TransMock.Tests
 {
     [TestClass]
-    public class TestSimpleMoc
+    public class TestSimpleMock
     {
         [TestMethod]
         [DeploymentItem(@"TestData\TestFileIn.txt")]
@@ -18,23 +19,69 @@ namespace TransMock.Tests
                 .SetupReceive(a => a.ReceiveFirstMessage_FILE)
                 .SetupSend(a => a.SendFirstMessage_FILE);
 
-            var emulator = integrationMock.CreateMessagingPatternEmulator();
+            var emulator = integrationMock.CreateMessagingClient();
 
             emulator
                 .Send(r => r.ReceiveFirstMessage_FILE,
                     "TestFileIn.txt",
                     System.Text.Encoding.UTF8,
                     10,
-                    ctx => ctx.DebugInfo("Fire in the hall")
-                    )
+                    contextAction: ctx => ctx.DebugInfo("Fire in the hall")
+                 )
                 .Receive(
-                    s => s.SendFirstMessage_FILE, 
-                    ep => {
-                        ep.TimeoutInSeconds = 10;
-                        ep.MessageEncoding = System.Text.Encoding.UTF8;
-                    },
-                    ctx => ctx.DebugInfo("Yet one more blast!"),
-                    (i,v) => { return v.Body.Length > 0; });
+                    s => s.SendFirstMessage_FILE,                                         
+                    contextAction: ctx => ctx.DebugInfo("Yet one more blast!"),
+                    validator: (i,v) => { return v.Body.Length > 0; });
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\TestFileRequest.txt")]
+        [DeploymentItem(@"TestData\TestFileResponse.txt")]
+        public void Simple2WayFlow_HappyPath()
+        {
+            var integrationMock = new EndpointsMock<TestMockAddresses>();
+
+            integrationMock.
+                SetupSendRequestAndReceiveResponse(
+                    r => r.TwoWaySend_WebHTTP)
+                .SetupReceiveRequestAndSendResponse(
+                    s => s.TwoWayReceive_WebHTTP);
+
+            var messageClient = integrationMock.CreateMessagingClient();
+
+            messageClient.InParallel(
+                 (m) => m.ReceiveRequestAndSendResponse(
+                     s => s.TwoWaySend_WebHTTP,
+                     rs => new StaticFileResponseStrategy()
+                     {
+                         FilePath = "TestFileResponse.txt"
+                     },
+                     requestValidator: (i, v) =>
+                     {
+                         Assert.IsTrue(v.Body.Length > 0, "The received request is empty!");
+                         Assert.IsTrue(
+                             v.Body.Equals("This is a test request file",
+                                StringComparison.InvariantCulture),
+                             "The contents of the request message is not the same");
+                         return true;
+                     }
+                )
+            )
+            .SendRequestAndReceiveResponse(
+                r => r.TwoWayReceive_WebHTTP,
+                "TestFileRequest.txt",
+                responseValidator: v =>
+                {
+                    Assert.IsTrue(v.Body.Length > 0, "The response message is empty");
+                    Assert.AreEqual(
+                        "This is a test response file",
+                        v.Body,
+                             "The contents of the response message is not the same");
+                    return true;
+                }
+            )
+            .ValidateParallel();
+
         }
     }
 }

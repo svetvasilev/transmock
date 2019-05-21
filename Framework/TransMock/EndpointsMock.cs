@@ -1,4 +1,26 @@
-﻿using System;
+﻿
+/***************************************
+//   Copyright 2019 - Svetoslav Vasilev
+
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+*****************************************/
+
+/// -----------------------------------------------------------------------------------------------------------
+/// Module      :  EndpointsMock.cs
+/// Description :  This class implements the logic for mocking service endpoints in order to be tested.
+/// -----------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,10 +33,10 @@ using TransMock.Communication.NamedPipes;
 namespace TransMock
 {
     /// <summary>
-    /// The casting mock represents a service/integration implementation from its endpoints point of view and it is setup once for a test suite.
-    /// This is because a service/integration flow has a finite and predictable set of receive and send ports at any given time.
+    /// This class represents a mock of a service/integration implementation from its endpoints point of view and it is setup once for a test suite.
+    /// This is because a service/integration flow has a finite and predictable set of receive and send operations to/from its endpoints at any given time.
     /// What varies during execution is the messages received over/sent to a given endpoint instance.
-    /// This behavior is driven by the Mold class where the corresponding message operations are set.
+    /// This behavior is driven by the <see cref="InverseMessagingClient{TAddresses}"/> class where the corresponding messaging operations are performed.
     /// This is why the Setup methods match the direction of the message flow, e.g. SetupReceive is setting up a receive
     /// endpoint and vice versa.
     /// </summary>
@@ -27,7 +49,7 @@ namespace TransMock
         internal Dictionary<string, MockedEndpoint> endpointsMap;
 
         /// <summary>
-        /// Creates an instance of class <class ref="CastingMock" /> 
+        /// Creates an instance of the <see cref="EndpointsMock{TAddresses}"/> class
         /// </summary>
         public EndpointsMock()
         {
@@ -42,7 +64,7 @@ namespace TransMock
         /// getters of type string
         /// </summary>
         /// <param name="receiver"></param>
-        /// <returns></returns>
+        /// <returns>The current instance of the <see cref="EndpointsMock{TAddresses}"/> class</returns>
         public EndpointsMock<TAddresses> SetupReceive(Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receiver)
         {   
             var receiveEndpoint = new ReceiveEndpoint();
@@ -61,13 +83,13 @@ namespace TransMock
             endpointsMap.Add(receiveEndpoint.URL, receiveEndpoint);            
 
             return this;
-        }        
+        }
 
         /// <summary>
-        /// 
+        /// Sets up a mock for a send endpoint
         /// </summary>
-        /// <param name="sender"></param>
-        /// <returns></returns>
+        /// <param name="sender">An expression that returns the address of the send endpoint</param>
+        /// <returns>The current instance of the <see cref="EndpointsMock{TAddresses}"/> class</returns>
         public EndpointsMock<TAddresses> SetupSend(Expression<Func<TAddresses, Addressing.OneWaySendAddress>> sender)
         {
             var sendEndpoint = new SendEndpoint();
@@ -89,10 +111,10 @@ namespace TransMock
         }
 
         /// <summary>
-        /// 
+        /// Sets up a mock for a 2-way receive operation where a request is received and a response is supplied back.
         /// </summary>
-        /// <param name="receiver"></param>
-        /// <returns></returns>
+        /// <param name="receiver">An expression that returns the address of the 2-way receive endpoint</param>
+        /// <returns>The current instance of the <see cref="EndpointsMock{TAddresses}"/> class</returns>
         public EndpointsMock<TAddresses> SetupReceiveRequestAndSendResponse(Expression<Func<TAddresses, Addressing.TwoWayReceiveAddress>> receiver)
         {
             var receiveSendEndpoint = new TwoWayReceiveEndpoint();
@@ -106,10 +128,11 @@ namespace TransMock
         }
 
         /// <summary>
-        /// 
+        /// Sets up an endpoint that follows 2-way outbound communication pattern - 
+        /// send a request and expects a response synchronously
         /// </summary>
-        /// <param name="sender"></param>
-        /// <returns></returns>
+        /// <param name="sender">An expression that returns the address of the send endpoint for this operation</param>
+        /// <returns>The current instance of the <see cref="EndpointsMock{TAddresses}"/> class</returns>
         public EndpointsMock<TAddresses> SetupSendRequestAndReceiveResponse(Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> sender)
         {
             var sendReceiveEndpoint = new TwoWaySendEndpoint();
@@ -123,24 +146,25 @@ namespace TransMock
         }
 
         /// <summary>
-        /// Creates a Mold instance that is modeled as per the casting instance
+        /// Creates an InverseMessagingClient instance that is modeled as per the casting instance
         /// </summary>
-        /// <returns></returns>
-        public InverseMessagingClient<TAddresses> CreateMessagingPatternEmulator()
+        /// <returns>An instance of the <see cref="InverseMessagingClient{TAddresses}"/> class</returns>
+        public InverseMessagingClient<TAddresses> CreateMessagingClient()
         {
-            return ConcreteMessagingPatternEmulator<TAddresses>.CreateInstance(this);
+            return ConcreteInverceMessagingClient<TAddresses>.CreateInstance(this);
         }
 
-        // Hiding the implementation of the abstract Mold class
-        internal class ConcreteMessagingPatternEmulator<TAddresses2> : InverseMessagingClient<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
+        // Hiding the implementation of the abstract InverseMessagingClient class
+        internal class ConcreteInverceMessagingClient<TAddresses2> : InverseMessagingClient<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
         {
-            protected ConcreteMessagingPatternEmulator(EndpointsMock<TAddresses2> casting) : base(casting)
+            protected ConcreteInverceMessagingClient(EndpointsMock<TAddresses2> mock) : base(mock)
             {
 
             }
-            internal static InverseMessagingClient<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> casting)
+
+            internal static InverseMessagingClient<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> mock)
             {
-                return new ConcreteMessagingPatternEmulator<TAddresses2>(casting)
+                return new ConcreteInverceMessagingClient<TAddresses2>(mock)
                     .WireUp();
             }
         }

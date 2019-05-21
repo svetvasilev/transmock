@@ -24,10 +24,5 @@ namespace TransMock.Tests
         {
             get { return new TwoWaySendAddress("mock://localhost/TwoWaySend_WebHTTP"); }
         }
-
-        public override string Capabilities()
-        {
-            return "";
-        }
     }
 }

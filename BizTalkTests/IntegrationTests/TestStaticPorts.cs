@@ -98,32 +98,27 @@ namespace BizTalkTests.IntegrationTests
             epMock.SetupSend(
                 s => s.BTS_OneWaySendFILE);
 
-            var messanger = epMock.CreateMessagingPatternEmulator();
+            var messanger = epMock.CreateMessagingClient();
 
-            messanger.Send(
-                r => r.BTS_OneWayReceive2_FILE,
-                "StartMessage.xml",
-                System.Text.Encoding.UTF8,
-                10,
-                (ctx) => { ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE"); }
+            messanger
+                .Send(
+                    r => r.BTS_OneWayReceive2_FILE,
+                    "StartMessage.xml",
+                    System.Text.Encoding.UTF8,
+                    10,
+                    contextAction: ctx =>  ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE") 
                 )
                 .Receive(
-                s => s.BTS_OneWaySendFILE,
-                ep =>
-                {
-                    ep.TimeoutInSeconds = 10;
-                    ep.MessageEncoding = System.Text.Encoding.UTF8;
-                },
-                ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
-                (idx, msg) =>
-                {
-                    Assert.IsTrue(idx == 0, "Message index is wrong!");
-                    Assert.IsTrue(msg.Body.Length > 0, "Received message is empty");
+                    s => s.BTS_OneWaySendFILE,                
+                    contextAction: ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
+                    validator: (idx, msg) =>
+                        {
+                            Assert.IsTrue(idx == 0, "Message index is wrong!");
+                            Assert.IsTrue(msg.Body.Length > 0, "Received message is empty");
 
-                    return true;
-                });
-
-
+                            return true;
+                        }
+                );
         }
 
         private bool ValidateOutMessage(MockMessage message)

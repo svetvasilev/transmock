@@ -47,7 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta2\lib\net451\Microsoft.ServiceModel.Channels.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -55,23 +55,23 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="TransMock, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Framework.1.5.0-beta1\lib\net451\TransMock.dll</HintPath>
+      <HintPath>..\packages\TransMock.Framework.1.5.0-beta2\lib\net451\TransMock.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="TransMock.Communication.NamedPipes, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Communication.NamedPipes.dll</HintPath>
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta2\lib\net451\TransMock.Communication.NamedPipes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="TransMock.Integration.BizUnit, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Framework.1.5.0-beta1\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
+      <HintPath>..\packages\TransMock.Framework.1.5.0-beta2\lib\net451\TransMock.Integration.BizUnit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="TransMock.Wcf.Adapter, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Wcf.Adapter.dll</HintPath>
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta2\lib\net451\TransMock.Wcf.Adapter.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="TransMock.Wcf.Adapter.Utils, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ac50b018392a433b, processorArchitecture=MSIL">
-      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta1\lib\net451\TransMock.Wcf.Adapter.Utils.dll</HintPath>
+      <HintPath>..\packages\TransMock.Adapter.1.5.0-beta2\lib\net451\TransMock.Wcf.Adapter.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

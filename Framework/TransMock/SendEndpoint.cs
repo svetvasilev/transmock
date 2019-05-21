@@ -1,5 +1,30 @@
-﻿namespace TransMock
+﻿
+/***************************************
+//   Copyright 2019 - Svetoslav Vasilev
+
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+*****************************************/
+
+/// -----------------------------------------------------------------------------------------------------------
+/// Module      :  SendEndpoint.cs
+/// Description :  This class represents a 1-way send endpoint.
+/// -----------------------------------------------------------------------------------------------------------
+
+namespace TransMock
 {
+    /// <summary>
+    /// Represents a 1-way send mocked endpoint
+    /// </summary>
     public class SendEndpoint : MockedEndpoint
     {
         public SendEndpoint()
@@ -7,24 +32,8 @@
             ExpectedMessageCount = 1;
         }
 
-        public string ResponseFilePath;
-
         public int ExpectedMessageCount { get; set; }
     }
 
-    public abstract class MockedEndpoint
-    {
-        
-        public string URL { get; set; }
 
-        public int TimeoutInSeconds { get; set; }
-
-        /// <summary>
-        /// Represents the default expected encoding of the messages for 
-        /// a given endpoint instance
-        /// </summary>
-        public System.Text.Encoding MessageEncoding { get; set; }
-
-
-    }
 }
