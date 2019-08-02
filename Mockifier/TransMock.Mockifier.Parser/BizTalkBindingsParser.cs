@@ -273,6 +273,8 @@ namespace TransMock.Mockifier.Parser
                     "public {0} {1}",
                     ParseAddressPropertyTypeName(mockEndpoint.Value),
                     mockEndpoint.Key
+                        .Trim()
+                        .Replace("-", "_")
                         .Replace(".", "_")
                         .Replace(" ", string.Empty)) // Property definition start
                     .AppendLine()

@@ -26,11 +26,11 @@ namespace TransMock.Tests
                     "TestFileIn.txt",
                     System.Text.Encoding.UTF8,
                     10,
-                    contextAction: ctx => ctx.DebugInfo("Fire in the hall")
+                    beforeSendAction: ctx => ctx.DebugInfo("Fire in the hall")
                  )
                 .Receive(
                     s => s.SendFirstMessage_FILE,                                         
-                    contextAction: ctx => ctx.DebugInfo("Yet one more blast!"),
+                    beforeReceiveAction: ctx => ctx.DebugInfo("Yet one more blast!"),
                     validator: (i,v) => { return v.Body.Length > 0; });
         }
 
@@ -80,7 +80,7 @@ namespace TransMock.Tests
                     return true;
                 }
             )
-            .ValidateParallel();
+            .VerifyParallel();
 
         }
     }

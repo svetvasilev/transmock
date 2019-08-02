@@ -254,7 +254,7 @@ namespace TransMock
         /// <param name="timeoutInSeconds">Timeout in seconds for waiting for connection from the send endpoint. Default is 10.</param>
         /// <param name="expectedMessageCount">The number of expected messages from the service send endpoint. Default is 1.</param>
         /// <param name="messageEncoding">The expected encoding of the messages contents. Default is UTF-8</param>
-        /// <param name="contextAction">An action against the test context. Optional.</param>
+        /// <param name="beforeReceiveAction">An action against the test context. Optional.</param>
         /// <param name="validator">A function performing validation logic on a single received message. Optional</param>
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         public InverseMessagingClient<TAddresses> Receive(
@@ -262,7 +262,8 @@ namespace TransMock
             int timeoutInSeconds=10,
             int expectedMessageCount=1,
             System.Text.Encoding messageEncoding=null,
-            Action<TestContext> contextAction=null,
+            Action<TestContext> beforeReceiveAction=null,
+            Action<TestContext> afterReceiveAction = null,
             Func<int, MockMessage, bool> validator=null)
         {
 
@@ -278,11 +279,13 @@ namespace TransMock
                     ExpectedMessageCount = expectedMessageCount
                 };
 
-                contextAction?.Invoke(c);
+                beforeReceiveAction?.Invoke(c);
 
                 return endpoindConfig;
             },
-            validator);
+            validator,
+            afterReceiveAction: afterReceiveAction);
+
         }
         #endregion
 
@@ -295,7 +298,7 @@ namespace TransMock
         /// <param name="messageEncoding">The encoding of the message contents.Default is UTF-8</param>
         /// <param name="timeoutInSeconds">Timeout in seconds to wait for connection to the receive endpoint.Default is 10</param>
         /// <param name="messagePropertiesSetter">An optional function for setting message properties for promotion</param>
-        /// <param name="contextAction">An optional action on the test context</param>
+        /// <param name="beforeSendAction">An optional action on the test context</param>
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         public InverseMessagingClient<TAddresses> Send(
            Expression<Func<TAddresses, Addressing.OneWayReceiveAddress>> receivingAddress,
@@ -303,7 +306,8 @@ namespace TransMock
            System.Text.Encoding messageEncoding=null,
            int timeoutInSeconds=10,
            Func<Dictionary<string, string>, Dictionary<string, string>> messagePropertiesSetter = null,
-           Action<TestContext> contextAction=null)
+           Action<TestContext> beforeSendAction=null,
+           Action<TestContext> afterSendAction = null)
         {
             return this.SendImplementation((c, a) =>
             {
@@ -318,11 +322,12 @@ namespace TransMock
                     TimeoutInSeconds = timeoutInSeconds
                 };
 
-                contextAction?.Invoke(c);
+                beforeSendAction?.Invoke(c);
 
                 return receiveEndpoint;
             },
-            messagePropertiesSetter);
+            messagePropertiesSetter,
+            afterSendAction: afterSendAction);
         }
         #endregion
 
@@ -336,8 +341,10 @@ namespace TransMock
         /// <param name="timeoutInSeconds">Timeout in seconds. Default is 30</param>
         /// <param name="expectedMessageCount">Expected message count. Default is 1</param>
         /// <param name="messageEncoding">Expected request and ersponse messages encoding. Default is UTF-8</param>
-        /// <param name="contextAction">Action for performing operations against the test context</param>
+        /// <param name="beforeRequestAction">Action for performing operations against the test context</param>
         /// <param name="requestValidator">Function for performing validation logic on the request MocMessage instance</param>
+        /// <param name="afterRequestAction">An optional action that can be performed after the request was sent</param>
+        /// <param name="afterResponseAction">An optional action that can be performed after the reresponse was received</param>
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         public InverseMessagingClient<TAddresses> ReceiveRequestAndSendResponse(
             Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> senderAddress,
@@ -345,8 +352,10 @@ namespace TransMock
             int timeoutInSeconds = 30,
             int expectedMessageCount = 1,
             System.Text.Encoding messageEncoding = null,
-            Action<TestContext> contextAction = null,
-            Func<int, MockMessage, bool> requestValidator = null)
+            Action<TestContext> beforeRequestAction = null,
+            Func<int, MockMessage, bool> requestValidator = null,
+            Action<TestContext> afterRequestAction = null,
+            Action<TestContext> afterResponseAction = null)
         {
             return ReceiveImplementation((c, a) =>
                 {
@@ -360,13 +369,15 @@ namespace TransMock
                         ExpectedMessageCount = expectedMessageCount
                     };
 
-                    contextAction?.Invoke(c);
+                    beforeRequestAction?.Invoke(c);
 
                     return endpoindConfig;
                 },
                 requestValidator,
                 responseSelector,
-                this.SendResponse);
+                this.SendResponse,
+                afterRequestAction,
+                afterResponseAction);
         }
         #endregion
 
@@ -378,8 +389,10 @@ namespace TransMock
         /// <param name="requestFilePath">The path to the file that contains the request contents</param>
         /// <param name="messageEncoding">The encodings of the request and send messages. Default is UTF-8</param>
         /// <param name="timeoutInSeconds">Timeout is seconds for waiting for connection to the recieve endpoint.Default is 10.</param>
-        /// <param name="contextAction">An optional action to be performed on the test context</param>
+        /// <param name="beforeRequestAction">An optional action to be performed on the test context</param>
         /// <param name="responseValidator">An optional response validator</param>
+        /// <param name="afterRequestAction">An optional action that can be performed after the request was sent</param>
+        /// <param name="afterResponseAction">An optional action that can be performed after the reresponse was received</param>
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         public InverseMessagingClient<TAddresses> SendRequestAndReceiveResponse(
            Expression<Func<TAddresses, Addressing.TwoWayReceiveAddress>> receivingAddress,
@@ -387,8 +400,10 @@ namespace TransMock
            System.Text.Encoding messageEncoding=null,
            int timeoutInSeconds=10,
            Func<Dictionary<string, string>, Dictionary<string, string>> messagePropertiesSetter = null,
-           Action<TestContext> contextAction=null,
-           Func<MockMessage, bool> responseValidator=null)
+           Action<TestContext> beforeRequestAction=null,
+           Func<MockMessage, bool> responseValidator=null,
+           Action<TestContext> afterRequestAction = null,
+           Action<TestContext> afterResponseAction = null)
         {
             return this.SendImplementation((c, a) =>
                 {
@@ -403,17 +418,20 @@ namespace TransMock
                         TimeoutInSeconds = timeoutInSeconds
                     };
 
-                    contextAction?.Invoke(c);
+                    beforeRequestAction?.Invoke(c);
 
                     return receiveEndpoint;
                 },
                 messagePropertiesSetter,
                 responseValidator,
-                this.ReceiveResponse
+                this.ReceiveResponse,
+                afterRequestAction,
+                afterResponseAction
             );            
         }
         #endregion
 
+        #region Parallel processing methods
         /// <summary>
         /// Configures mock operations to be executed in parallel to the main test execution thread.
         /// Each configured operation is executed in a separate task.
@@ -446,7 +464,7 @@ namespace TransMock
         /// In case some experienced an error the corresponding exception will be re-thrown 
         /// in the main execution thread
         /// </summary>
-        public void ValidateParallel()
+        public void VerifyParallel()
         {
             try
             {
@@ -455,7 +473,7 @@ namespace TransMock
                 {
                     if (!operation.IsCompleted)
                     {
-                        operation.Wait();
+                        operation.Wait(3000);
                     }
 
                     if (operation.IsFaulted)
@@ -473,7 +491,9 @@ namespace TransMock
                 parallelOperationsList.Clear();
             }
         }
+        #endregion
 
+        #region Private messaging implementation methods
         /// <summary>
         /// This is the implementation method of the Receive operation
         /// </summary>
@@ -481,12 +501,15 @@ namespace TransMock
         /// <param name="validator">A function for performing validation logic on the received message</param>
         /// <param name="responseSelector">A function for performing response selection logic. Default is null for one way receives</param>
         /// <param name="responseSender">A function for performing response send logic. Default is null for one-way receives</param>
+        /// <param name="afterReceiveAction">An action for performing an operation after the request is received</param>
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         private InverseMessagingClient<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
             Func<int, MockMessage, bool> validator,
             Func<MockMessage, ResponseSelectionStrategy> responseSelector = null,
-            Action<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage> responseSender = null)
+            Action<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage> responseSender = null,
+            Action<TestContext> afterReceiveAction = null,
+            Action<TestContext> afterSendAction = null)
         {
             var sendEndpoint = sender(this.testContext, this.endpointsMock.mockAddresses);
 
@@ -522,6 +545,9 @@ namespace TransMock
                     // Invoking the validator method
                     validator(i, receivedMessage.Message);
 
+                    // Invoking the after request reception action
+                    afterReceiveAction?.Invoke(this.testContext);
+
                     if (responseSender != null)
                     {
                         if (responseSelector == null)
@@ -537,6 +563,9 @@ namespace TransMock
                             receivedMessage.ConnectionId,
                             i,
                             receivedMessage.Message);
+
+                        // Invoking the after response send action
+                        afterSendAction?.Invoke(this.testContext);
                     }
                 }
 
@@ -553,12 +582,15 @@ namespace TransMock
         /// message properties for promotion</param>
         /// <param name="validator">A optional function performing validation on the received response in a 2/way scenario</param>
         /// <param name="responseReceiver">An optional function that receives a response in a 2-way scenario</param>
+        /// <param name="afterSendAction">An optional action that can be performed after a message has beend sent</param>
         /// <returns></returns>
         private InverseMessagingClient<TAddresses> SendImplementation(
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Func<Dictionary<string,string>, Dictionary<string, string>> messagePropertiesSetter = null,
             Func<MockMessage, bool> validator = null,
-            Func<MessageOperationConfig, MockMessage> responseReceiver = null)                
+            Func<MessageOperationConfig, MockMessage> responseReceiver = null,
+            Action<TestContext> afterSendAction = null,
+            Action<TestContext> afterReceivAction = null)                
         {
             // We fetch first the actual receiver endpoint
             var receiverEndpoint = receiver(this.testContext, this.endpointsMock.mockAddresses);
@@ -590,12 +622,18 @@ namespace TransMock
                 endpointSetup.MockMessageClient
                     .WriteMessage(mockMessage);
 
+                // Invoking the after send action
+                afterSendAction?.Invoke(this.testContext);
+
                 if (responseReceiver != null)
                 {
                     var responseMessage = responseReceiver(endpointSetup);
 
                     // Finally we validate the received response message
                     validator?.Invoke(responseMessage);
+
+                    // Invoking the after receive action
+                    afterReceivAction?.Invoke(this.testContext);
                 }
             }
             finally
@@ -646,6 +684,7 @@ namespace TransMock
                 .ReadMessage();
 
             return responseMessage;
-        }      
+        }
+        #endregion
     }
 }
