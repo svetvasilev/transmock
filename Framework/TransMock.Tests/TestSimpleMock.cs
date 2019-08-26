@@ -31,7 +31,7 @@ namespace TransMock.Tests
                 .Receive(
                     s => s.SendFirstMessage_FILE,                                         
                     beforeReceiveAction: ctx => ctx.DebugInfo("Yet one more blast!"),
-                    validator: (i,v) => { return v.Body.Length > 0; });
+                    validator: v => { return v.Message.Body.Length > 0; });
         }
 
         [TestMethod]
@@ -56,11 +56,11 @@ namespace TransMock.Tests
                      {
                          FilePath = "TestFileResponse.txt"
                      },
-                     requestValidator: (i, v) =>
+                     requestValidator: v =>
                      {
-                         Assert.IsTrue(v.Body.Length > 0, "The received request is empty!");
+                         Assert.IsTrue(v.Message.Body.Length > 0, "The received request is empty!");
                          Assert.IsTrue(
-                             v.Body.Equals("This is a test request file",
+                             v.Message.Body.Equals("This is a test request file",
                                 StringComparison.InvariantCulture),
                              "The contents of the request message is not the same");
                          return true;

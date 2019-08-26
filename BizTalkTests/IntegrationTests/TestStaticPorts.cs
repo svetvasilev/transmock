@@ -106,11 +106,11 @@ namespace BizTalkTests.IntegrationTests
                     "StartMessage.xml",
                     System.Text.Encoding.UTF8,
                     10,
-                    contextAction: ctx =>  ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE") 
+                    beforeSendAction: ctx =>  ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE") 
                 )
                 .Receive(
-                    s => s.BTS_OneWaySendFILE,                
-                    contextAction: ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
+                    s => s.BTS_OneWaySendFILE,
+                    beforeReceiveAction: ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
                     validator: (idx, msg) =>
                         {
                             Assert.IsTrue(idx == 0, "Message index is wrong!");

@@ -41,7 +41,9 @@ namespace TransMock
     /// </summary>
     public abstract class InverseMessagingClient<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
-        private object syncRoot = new object();
+        private object sendSyncRoot = new object();
+
+        private object receiveSyncRoot = new object();
 
         private EndpointsMock<TAddresses> endpointsMock;
 
@@ -62,11 +64,36 @@ namespace TransMock
             receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
 
             operationConfigurations = new Dictionary<string, MessageOperationConfig>(3);
+
+            //InitLogging();           
         }
 
         protected InverseMessagingClient(EndpointsMock<TAddresses> endpointsMock) : this()
         {
             this.endpointsMock = endpointsMock;
+        }
+
+        /// <summary>
+        /// Initializes the log listeners
+        /// </summary>
+        protected void InitLogging()
+        {
+            bool hasConsoleListener = false;
+
+            foreach (var listener in System.Diagnostics.Trace.Listeners)
+            {
+                if (listener is System.Diagnostics.ConsoleTraceListener)
+                {
+                    hasConsoleListener = true;
+                    break;
+                }
+            }
+
+            if (!hasConsoleListener)
+            {
+                System.Diagnostics.Trace.Listeners.Add
+                    (new System.Diagnostics.ConsoleTraceListener());
+            }
         }
 
 
@@ -123,10 +150,18 @@ namespace TransMock
         /// <param name="sendEndpoint">The service send endpoint from which messages will be received</param>
         private void SetupReceive(SendEndpoint sendEndpoint)
         {
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupReceive() called for send endpoint with URL: " + sendEndpoint.URL,
+                "TransMock.InverseMessagingClient");
+
             if (this.operationConfigurations.ContainsKey(sendEndpoint.URL))
             {
-                // We have an expectation set for this endpoint
+                // We have a receive mock endpoint set for this service endpoint
                 // so we exit gracefully
+                System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupReceive() found existing endpoint for URL: " + sendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
                 return;
             }
 
@@ -145,9 +180,16 @@ namespace TransMock
             receiveOperation.MockMessageServer.ReadCompleted += MockMessageServer_ReadCompleted;
             receiveOperation.MockMessageServer.Start();
 
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupReceive() mock endpoint started listening for URL: " + sendEndpoint.URL,
+                "TransMock.InverseMessagingClient");
 
             // TODO: There should be added a check for uniqueness of the key
             operationConfigurations.Add(sendEndpoint.URL, receiveOperation);
+
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupReceive() addaded to the list mock endpoint for URL: " + sendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
 
         }
 
@@ -157,10 +199,18 @@ namespace TransMock
         /// <param name="receiveEndpoint">The service receive endpoint to which messages shall be sent</param>
         private void SetupSend(ReceiveEndpoint receiveEndpoint)
         {
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupSend() called for receive endpoint with URL: " + receiveEndpoint.URL,
+                "TransMock.InverseMessagingClient");
+
             if (this.operationConfigurations.ContainsKey(receiveEndpoint.URL))
             {
                 // We have an expectation set for this endpoint
                 // so we exit gracefully
+                System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupSend() found existing endpoint for URL: " + receiveEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
                 return;
             }
 
@@ -172,6 +222,10 @@ namespace TransMock
 
             operationConfigurations.Add(receiveEndpoint.URL, sendOperation);
 
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupSend() addaded to the list mock endpoint for URL: " + receiveEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
             return;
 
         }
@@ -182,6 +236,21 @@ namespace TransMock
         /// <param name="sendReceiveEndpoint">The 2-way service send endpoint from which requests shall be received and responses sent to</param>
         private void SetupReceiveRequestAndSendResponse(TwoWaySendEndpoint sendReceiveEndpoint)
         {
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupReceiveRequestAndSendResponse() called for 2-way send endpoint with URL: " + sendReceiveEndpoint.URL,
+                "TransMock.InverseMessagingClient");
+
+            if (this.operationConfigurations.ContainsKey(sendReceiveEndpoint.URL))
+            {
+                // We have an expectation set for this endpoint
+                // so we exit gracefully
+                System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupReceiveRequestAndSendResponse() found existing endpoint for URL: " + sendReceiveEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
+                return;
+            }
+
             var receiveSendOperation = new MessageOperationConfig()
             {
                 TwoWaySendEndpoint = sendReceiveEndpoint,
@@ -192,7 +261,15 @@ namespace TransMock
             receiveSendOperation.MockMessageServer.ReadCompleted += MockMessageServer_ReadCompleted;
             receiveSendOperation.MockMessageServer.Start();
 
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupReceiveRequestAndSendResponse() mock endpoint started listening for URL: " + sendReceiveEndpoint.URL,
+                "TransMock.InverseMessagingClient");
+
             operationConfigurations.Add(sendReceiveEndpoint.URL, receiveSendOperation);
+
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupReceiveRequestAndSendResponse() addaded to the list mock endpoint for URL: " + sendReceiveEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
 
         }
 
@@ -202,6 +279,21 @@ namespace TransMock
         /// <param name="receiveSendEndpoint">The 2-way service receive endpoing to whcih requests shall be sent and responses received from</param>
         private void SetupSendRequestAndReceiveResponse(TwoWayReceiveEndpoint receiveSendEndpoint)
         {
+            System.Diagnostics.Trace.WriteLine(
+                "InverseMessagingClient.SetupSendRequestAndReceiveResponse() called for 2-way send endpoint with URL: " + receiveSendEndpoint.URL,
+                "TransMock.InverseMessagingClient");
+
+            if (this.operationConfigurations.ContainsKey(receiveSendEndpoint.URL))
+            {
+                // We have an expectation set for this endpoint
+                // so we exit gracefully
+                System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupSendRequestAndReceiveResponse() found existing endpoint for URL: " + receiveSendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
+                return;
+            }
+
             var sendReceiveOperation = new MessageOperationConfig()
             {
                 TwoWayReceiveEndpoint = receiveSendEndpoint,
@@ -209,6 +301,10 @@ namespace TransMock
             };
 
             operationConfigurations.Add(receiveSendEndpoint.URL, sendReceiveOperation);
+
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SetupSendRequestAndReceiveResponse() addaded to the list mock endpoint for URL: " + receiveSendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
 
         }
 
@@ -228,13 +324,13 @@ namespace TransMock
         }
         
         /// <summary>
-        /// Event handler for whe messages are received on receive mock endpoints.
+        /// Event handler for receiving messages by mocked receive endpoints.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MockMessageServer_ReadCompleted(object sender, AsyncReadEventArgs e)
         {
-            lock (this.syncRoot)
+            lock (this.receiveSyncRoot)
             {
                 this.receivedMessagesQueue.Enqueue(e);
 
@@ -242,7 +338,7 @@ namespace TransMock
                     "Message received in the MockMessageServer_ReadCompleted handler",
                     "TransMock.InverseMessagingClient");
 
-                System.Threading.Monitor.Pulse(this.syncRoot);
+                System.Threading.Monitor.Pulse(this.receiveSyncRoot);
             }
         }
 
@@ -264,8 +360,11 @@ namespace TransMock
             System.Text.Encoding messageEncoding=null,
             Action<TestContext> beforeReceiveAction=null,
             Action<TestContext> afterReceiveAction = null,
-            Func<int, MockMessage, bool> validator=null)
+            Func<ValidatableMessageReception, bool> validator=null)
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.Receive() called",
+                    "TransMock.InverseMessagingClient");
 
             return ReceiveImplementation((c, a) =>
             {
@@ -309,6 +408,10 @@ namespace TransMock
            Action<TestContext> beforeSendAction=null,
            Action<TestContext> afterSendAction = null)
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.Send() called",
+                    "TransMock.InverseMessagingClient");
+
             return this.SendImplementation((c, a) =>
             {
                 var address = receivingAddress.Compile()(a);
@@ -338,6 +441,7 @@ namespace TransMock
         /// </summary>
         /// <param name="senderAddress">The corresponding 2-way sending endpoint address</param>
         /// <param name="responseSelector">The desired response selector function</param>
+        /// <param name="responsePropertiesSetter">Function for setting message context properties in the response message</param>
         /// <param name="timeoutInSeconds">Timeout in seconds. Default is 30</param>
         /// <param name="expectedMessageCount">Expected message count. Default is 1</param>
         /// <param name="messageEncoding">Expected request and ersponse messages encoding. Default is UTF-8</param>
@@ -349,14 +453,19 @@ namespace TransMock
         public InverseMessagingClient<TAddresses> ReceiveRequestAndSendResponse(
             Expression<Func<TAddresses, Addressing.TwoWaySendAddress>> senderAddress,
             Func<MockMessage, ResponseSelectionStrategy> responseSelector,
+            Func<Dictionary<string, string>, Dictionary<string, string>> responsePropertiesSetter = null,
             int timeoutInSeconds = 30,
             int expectedMessageCount = 1,
             System.Text.Encoding messageEncoding = null,
             Action<TestContext> beforeRequestAction = null,
-            Func<int, MockMessage, bool> requestValidator = null,
+            Func<ValidatableMessageReception, bool> requestValidator = null,
             Action<TestContext> afterRequestAction = null,
             Action<TestContext> afterResponseAction = null)
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.ReceiveRequestAndSendResponse() called",
+                    "TransMock.InverseMessagingClient");
+
             return ReceiveImplementation((c, a) =>
                 {
                     var address = senderAddress.Compile()(a);
@@ -375,6 +484,7 @@ namespace TransMock
                 },
                 requestValidator,
                 responseSelector,
+                responsePropertiesSetter,
                 this.SendResponse,
                 afterRequestAction,
                 afterResponseAction);
@@ -405,6 +515,10 @@ namespace TransMock
            Action<TestContext> afterRequestAction = null,
            Action<TestContext> afterResponseAction = null)
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SendRequestAndReceiveResponse() called",
+                    "TransMock.InverseMessagingClient");
+
             return this.SendImplementation((c, a) =>
                 {
                     var address = receivingAddress.Compile()(a);
@@ -505,12 +619,17 @@ namespace TransMock
         /// <returns>The current instanse of the InverseMessagingClient</returns>
         private InverseMessagingClient<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
-            Func<int, MockMessage, bool> validator,
+            Func<ValidatableMessageReception, bool> validator,
             Func<MockMessage, ResponseSelectionStrategy> responseSelector = null,
-            Action<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage> responseSender = null,
+            Func<Dictionary<string, string>, Dictionary<string, string>> responsePropertiesSetter = null,
+            Action<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage, Func<Dictionary<string, string>, Dictionary<string, string>>> responseSender = null,
             Action<TestContext> afterReceiveAction = null,
             Action<TestContext> afterSendAction = null)
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.ReceiveImplementation() called",
+                    "TransMock.InverseMessagingClient");
+
             var sendEndpoint = sender(this.testContext, this.endpointsMock.mockAddresses);
 
             var endpointSetup = this.operationConfigurations
@@ -519,60 +638,170 @@ namespace TransMock
 
             if (endpointSetup == null)
             {
-                throw new InvalidOperationException("No corresponding endpoint setup found");
+                System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.ReceiveImplementation() did not find endpoint setup for URL: " + sendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
+                throw new InvalidOperationException("No corresponding endpoint setup found for URL" + sendEndpoint.URL);
             }
 
-            lock (this.syncRoot)
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.ReceiveImplementation() fetched endpoint setup for URL: " + sendEndpoint.URL,
+                    "TransMock.InverseMessagingClient");
+
+            lock (this.receiveSyncRoot)
             {
                 // Covering debatching scenarios
                 for (int i = 0; i < sendEndpoint.ExpectedMessageCount; i++)
                 {
+                    
+
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() waiting for message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                    "TransMock.InverseMessagingClient");
+
                     // Now we wait for the reception of a message
                     bool waitElapsed = System.Threading.Monitor
                         .Wait(
-                            this.syncRoot,
+                            this.receiveSyncRoot,
                             sendEndpoint.TimeoutInSeconds * 1000);
 
                     if (!waitElapsed)
                     {
+                        Console.WriteLine(
+                            "Message {0} from send endpoint with URL: {1} not received in allotted time",
+                            i,
+                            sendEndpoint.URL);
+
+                        System.Diagnostics.Trace.WriteLine(
+                            string.Format(@"InverseMessagingClient.ReceiveImplementation() 
+                                        did not receive in time message {0} from send endpoint with URL: {1}",
+                                i,
+                                sendEndpoint.URL),
+                            "TransMock.InverseMessagingClient");
+
                         throw new TimeoutException("No message received for the wait time set.");
                     }
 
-                    // Now we read the message from the message queue
+                    Console.WriteLine();
+                    Console.WriteLine("<<<<<<< Receiving message from send endpoint with URL: {0} <<<<<<<",
+                        sendEndpoint.URL);
+                    Console.WriteLine();
 
+                    // Now we read the message from the message queue
                     var receivedMessage = this.receivedMessagesQueue.Dequeue();
 
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() received message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                    "TransMock.InverseMessagingClient");
+
+                    Console.WriteLine(
+                        "Received message {0} out of {1} from send endpoint with URL: {2}",
+                        i+1,
+                        sendEndpoint.ExpectedMessageCount,
+                        sendEndpoint.URL);
+
+                    LogMessageContents(receivedMessage.Message);
+
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() invoking validator for message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                        "TransMock.InverseMessagingClient");
+
+                    var validatableReception = new ValidatableMessageReception()
+                    {
+                        Index = i,
+                        Message = receivedMessage.Message
+                    };
+
                     // Invoking the validator method
-                    validator(i, receivedMessage.Message);
+                    validator(validatableReception);
+
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() invoking afterReceiveAction for message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                        "TransMock.InverseMessagingClient");
 
                     // Invoking the after request reception action
                     afterReceiveAction?.Invoke(this.testContext);
 
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() done with received message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                        "TransMock.InverseMessagingClient");
+
+                    // In case a response delegate is defined we call it too
                     if (responseSender != null)
                     {
+                        Console.WriteLine(
+                            ">>>>>>> Sending response for request message {0} from 2-way send endpoint with URL: {1}",
+                            i+1,
+                            sendEndpoint.URL);
+
+                        System.Diagnostics.Trace.WriteLine(
+                            string.Format("InverseMessagingClient.ReceiveImplementation() sending response for request message {0} from 2-way send endpoint with URL: {1}",
+                                i,
+                                sendEndpoint.URL),
+                            "TransMock.InverseMessagingClient");
+
                         if (responseSelector == null)
                         {
-                            throw new InvalidOperationException("No response selector defined");
+                            Console.WriteLine(
+                                "No response strategy selector defined for message {0} from 2-way send endpoint with URL: {1}",
+                                i+1,
+                                sendEndpoint.URL);
+
+                            throw new InvalidOperationException("No response selector defined for 2-way send endpoint with URL: " + sendEndpoint.URL);
                         }
 
                         var responseStrategy = responseSelector(receivedMessage.Message);
+
+                        System.Diagnostics.Trace.WriteLine(
+                            string.Format("InverseMessagingClient.ReceiveImplementation() response strategy set for request message {0} from 2-way send endpoint with URL: {1}",
+                                i,
+                                sendEndpoint.URL),
+                            "TransMock.InverseMessagingClient");
                         
-                        // In case a response delegate is defined we call it too
                         responseSender(endpointSetup,
                             responseStrategy,
                             receivedMessage.ConnectionId,
                             i,
-                            receivedMessage.Message);
+                            receivedMessage.Message,
+                            responsePropertiesSetter);
+
+                        System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() invoking afterSendAction for message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                        "TransMock.InverseMessagingClient");
 
                         // Invoking the after response send action
                         afterSendAction?.Invoke(this.testContext);
-                    }
-                }
 
+                        System.Diagnostics.Trace.WriteLine(
+                        string.Format("InverseMessagingClient.ReceiveImplementation() done with response for message {0} from send endpoint with URL: {1}",
+                            i,
+                            sendEndpoint.URL),
+                        "TransMock.InverseMessagingClient");
+
+                        Console.WriteLine(">>>>>>> End of Sending response message to 2-way send endpoint >>>>>>>");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("<<<<<<< End of Receiving message from send endpoint <<<<<<<");
+                    Console.WriteLine();
+                }
             }
 
             return this;
-        }
+        }        
 
         /// <summary>
         /// Implements the logic for sending a message to a corespongind receive endpoint and optionally receiving a response
@@ -580,7 +809,7 @@ namespace TransMock
         /// <param name="receiver">A function performing logic for configuring the corresponding receive endpoint details</param>
         /// <param name="messagePropertiesSetter">A function that receives an empty dictionary and returns is populated with 
         /// message properties for promotion</param>
-        /// <param name="validator">A optional function performing validation on the received response in a 2/way scenario</param>
+        /// <param name="validator">An optional function performing validation on the received response in a 2/way scenario</param>
         /// <param name="responseReceiver">An optional function that receives a response in a 2-way scenario</param>
         /// <param name="afterSendAction">An optional action that can be performed after a message has beend sent</param>
         /// <returns></returns>
@@ -592,6 +821,10 @@ namespace TransMock
             Action<TestContext> afterSendAction = null,
             Action<TestContext> afterReceivAction = null)                
         {
+            System.Diagnostics.Trace.WriteLine(
+                    "InverseMessagingClient.SendImplementation() called",
+                    "TransMock.InverseMessagingClient");
+
             // We fetch first the actual receiver endpoint
             var receiverEndpoint = receiver(this.testContext, this.endpointsMock.mockAddresses);
 
@@ -601,43 +834,138 @@ namespace TransMock
 
             if (endpointSetup == null)
             {
+                System.Diagnostics.Trace.WriteLine(
+                   "InverseMessagingClient.SendImplementation() did not find endpoint setup for URL: " + receiverEndpoint.URL,
+                   "TransMock.InverseMessagingClient");
+
                 throw new InvalidOperationException("No corresponding endpoint setup found");
             }
 
+            System.Diagnostics.Trace.WriteLine(
+                   "InverseMessagingClient.SendImplementation() found endpoint setup for URL: " + receiverEndpoint.URL,
+                   "TransMock.InverseMessagingClient");
+
             try
             {
-                endpointSetup.MockMessageClient
-                    .Connect(receiverEndpoint.TimeoutInSeconds * 1000);
-                                
-                var mockMessage = new MockMessage(
-                    receiverEndpoint.RequestFilePath,
-                    receiverEndpoint.MessageEncoding);
+                lock (this.sendSyncRoot)
+                {   
+                    System.Diagnostics.Trace.WriteLine(
+                       "InverseMessagingClient.SendImplementation() connecting endpoint setup for URL: " + receiverEndpoint.URL,
+                       "TransMock.InverseMessagingClient");
 
-                Dictionary<string, string> messageProperties =
-                    new Dictionary<string, string>(3);
+                    endpointSetup.MockMessageClient
+                        .Connect(receiverEndpoint.TimeoutInSeconds * 1000);
 
-                mockMessage.Properties = messagePropertiesSetter?
-                    .Invoke(messageProperties);                
+                    System.Diagnostics.Debug.WriteLine(
+                       string.Format(
+                            "InverseMessagingClient.SendImplementation() reading message contents from file {0} for receive endpoint with URL: {1}",
+                            receiverEndpoint.RequestFilePath,
+                            receiverEndpoint.URL),
+                       "TransMock.InverseMessagingClient");
 
-                endpointSetup.MockMessageClient
-                    .WriteMessage(mockMessage);
+                    var mockMessage = new MockMessage(
+                        receiverEndpoint.RequestFilePath,
+                        receiverEndpoint.MessageEncoding);
 
-                // Invoking the after send action
-                afterSendAction?.Invoke(this.testContext);
+                    System.Diagnostics.Debug.WriteLine(
+                       string.Format(
+                            "InverseMessagingClient.SendImplementation() setting up properties in request message for receive endpoint with URL: {0}",
+                            receiverEndpoint.URL),
+                       "TransMock.InverseMessagingClient");
 
-                if (responseReceiver != null)
-                {
-                    var responseMessage = responseReceiver(endpointSetup);
+                    Dictionary<string, string> messageProperties =
+                        new Dictionary<string, string>(3);
 
-                    // Finally we validate the received response message
-                    validator?.Invoke(responseMessage);
+                    var properties = messagePropertiesSetter?
+                        .Invoke(messageProperties);
 
-                    // Invoking the after receive action
-                    afterReceivAction?.Invoke(this.testContext);
+                    if (properties != null)
+                    {
+                        mockMessage.Properties = properties;
+                    }
+
+                    Console.WriteLine(
+                        ">>>>>>> Sending message to receive endpoint with URL: {0} >>>>>>>",
+                        receiverEndpoint.URL);
+
+                    System.Diagnostics.Trace.WriteLine(
+                       string.Format(
+                            "InverseMessagingClient.SendImplementation() sending message to receive endpoint with URL: {0}",
+                            receiverEndpoint.URL),
+                       "TransMock.InverseMessagingClient");
+
+                    LogMessageContents(mockMessage);
+
+                    endpointSetup.MockMessageClient
+                        .WriteMessage(mockMessage);
+
+                    System.Diagnostics.Trace.WriteLine(
+                       string.Format(
+                            "InverseMessagingClient.SendImplementation() invoking afterSendAction for receive endpoint with URL: {0}",
+                            receiverEndpoint.URL),
+                       "TransMock.InverseMessagingClient");
+
+                    // Invoking the after send action
+                    afterSendAction?.Invoke(this.testContext);
+
+                    if (responseReceiver != null)
+                    {
+                        Console.WriteLine(
+                            "<<<<<<< Receiving response from 2-way receive endpoint with URL: {0}",
+                            receiverEndpoint.URL);
+
+                        System.Diagnostics.Trace.WriteLine(
+                           string.Format(
+                                "InverseMessagingClient.SendImplementation() receiving response from 2-way receive endpoint with URL: {0}",
+                                receiverEndpoint.URL),
+                           "TransMock.InverseMessagingClient");
+
+                        var responseMessage = responseReceiver(endpointSetup);
+
+                        LogMessageContents(responseMessage);
+
+                        System.Diagnostics.Trace.WriteLine(
+                           string.Format(
+                                "InverseMessagingClient.SendImplementation() invoking the response validator for 2-way receive endpoint with URL: {0}",
+                                receiverEndpoint.URL),
+                           "TransMock.InverseMessagingClient");
+
+                        // Finally we validate the received response message
+                        validator?.Invoke(responseMessage);
+
+                        System.Diagnostics.Trace.WriteLine(
+                           string.Format(
+                                "InverseMessagingClient.SendImplementation() invoking afterReceiveAction for 2-way receive endpoint with URL: {0}",
+                                receiverEndpoint.URL),
+                           "TransMock.InverseMessagingClient");
+
+                        // Invoking the after receive action
+                        afterReceivAction?.Invoke(this.testContext);
+
+                        System.Diagnostics.Trace.WriteLine(
+                           string.Format(
+                                "InverseMessagingClient.SendImplementation() done with response from for 2-way receive endpoint with URL: {0}",
+                                receiverEndpoint.URL),
+                           "TransMock.InverseMessagingClient");
+
+                        Console.WriteLine();
+                        Console.WriteLine("<<<<<<< End of Receiving response message from 2-way receive endpoint");
+                        Console.WriteLine();
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine(">>>>>>> End of Sending message to receive endpoint >>>>>>>");
+                    Console.WriteLine();
                 }
             }
             finally
             {
+                System.Diagnostics.Trace.WriteLine(
+                       string.Format(
+                            "InverseMessagingClient.SendImplementation() disconnecting for receive endpoint with URL: {0}",
+                            receiverEndpoint.URL),
+                       "TransMock.InverseMessagingClient");
+
                 endpointSetup.MockMessageClient
                     .Disconnect();
             }
@@ -658,18 +986,55 @@ namespace TransMock
             ResponseSelectionStrategy responseStrategy,             
             int connectionId,
             int requestIndex,
-            MockMessage requestMessage)
+            MockMessage requestMessage,
+            Func<Dictionary<string, string>, Dictionary<string, string>> messagePropertiesSetter = null)
         {
-            
+            System.Diagnostics.Trace.WriteLine(
+                string.Format("InverseMessagingClient.SendResponse() sending response for request message {0} from 2-way send endpoint with URL: {1}",
+                    requestIndex,
+                    endpointSetup.TwoWaySendEndpoint.URL),
+                "TransMock.InverseMessagingClient");
+
             // Fetch the message based on the configured strategy
             var responseMessage = responseStrategy.SelectResponseMessage(
                 requestIndex,
-                requestMessage);            
+                requestMessage);
+
+            System.Diagnostics.Trace.WriteLine(
+                string.Format("InverseMessagingClient.SendResponse() response message set for request message {0} from 2-way send endpoint with URL: {1}",
+                    requestIndex,
+                    endpointSetup.TwoWaySendEndpoint.URL),
+                "TransMock.InverseMessagingClient");
+
+            Dictionary<string, string> messageProperties =
+                        new Dictionary<string, string>(3);
+
+            var properties = messagePropertiesSetter?
+                        .Invoke(messageProperties);
+
+            if (properties != null)
+            {
+                System.Diagnostics.Trace.WriteLine(
+                    string.Format("InverseMessagingClient.SendResponse() setting properties in response message for request message {0} from 2-way send endpoint with URL: {1}",
+                        requestIndex,
+                        endpointSetup.TwoWaySendEndpoint.URL),
+                    "TransMock.InverseMessagingClient");
+
+                responseMessage.Properties = properties;
+            }
+
+            LogMessageContents(responseMessage);
 
             endpointSetup.MockMessageServer
                 .WriteMessage(
                     connectionId,
                     responseMessage);
+
+            System.Diagnostics.Trace.WriteLine(
+                string.Format("InverseMessagingClient.SendResponse() sent response message for request message {0} from 2-way send endpoint with URL: {1}",
+                    requestIndex,
+                    endpointSetup.TwoWaySendEndpoint.URL),
+                "TransMock.InverseMessagingClient");
 
         }
 
@@ -678,13 +1043,62 @@ namespace TransMock
         /// </summary>
         /// <returns>An instance of the <see cref="MockMessage"/> class representing the received response</returns>
         private MockMessage ReceiveResponse(MessageOperationConfig endpointSetup)
-        {
+        {   
             // We receive the response
             var responseMessage = endpointSetup.MockMessageClient
                 .ReadMessage();
 
+            System.Diagnostics.Trace.WriteLine(
+                string.Format("InverseMessagingClient.ReceiveResponse() received response from 2-way receive endpoint with URL: {0}",
+                    endpointSetup.TwoWayReceiveEndpoint.URL),
+                "TransMock.InverseMessagingClient");
+
             return responseMessage;
         }
         #endregion
+
+        #region Log methods
+        /// <summary>
+        /// Logs the message contents to the configured trace output
+        /// </summary>
+        /// <param name="message">The mock message instance to be logged</param>
+        private void LogMessageContents(MockMessage message)
+        {
+            Console.WriteLine(
+                "************** Message contents ****************");            
+
+            if (message != null)
+            {
+                Console.WriteLine(
+                    "+++++++ Message properties +++++++++++++");
+
+                foreach (var messageProperty in message.Properties)
+                {
+                    Console.WriteLine(
+                        "\tName: {0}   Value: {1}",
+                        messageProperty.Key,
+                        messageProperty.Value);
+                }
+
+                Console.WriteLine(
+                    "+++++++ End of Message properties +++++++");
+                Console.WriteLine();
+
+                Console.WriteLine(
+                    "------- Message body --------------");
+
+                Console.WriteLine(
+                    message.Body);
+
+                Console.WriteLine(
+                    "------- End of Message body -------");
+            }
+
+            Console.WriteLine(
+                "************** End message contents ************");
+            Console.WriteLine();
+        }
+        #endregion
+
     }
 }

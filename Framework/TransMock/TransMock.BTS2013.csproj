@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwoWayReceiveEndpoint.cs" />
     <Compile Include="TwoWaySendEndpoint.cs" />
+    <Compile Include="ValidatableMessageReception.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013.csproj">
