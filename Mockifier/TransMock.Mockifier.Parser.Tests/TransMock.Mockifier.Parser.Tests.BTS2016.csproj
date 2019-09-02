@@ -58,9 +58,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBindingsParserLegacy.cs" />
     <Compile Include="TestBindingsParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\Verify.LegacyMockAddresses.CustomURL.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.LegacyMockAddressesWithProps.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.LegacyMockAddresses.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Verify.MockAddressesWithProps.cs.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -61,7 +61,6 @@
     </Compile>
     <Compile Include="Mockifier.cs" />
     <Compile Include="MockifierArguments.cs" />
-    <Compile Include="ParameterCombination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

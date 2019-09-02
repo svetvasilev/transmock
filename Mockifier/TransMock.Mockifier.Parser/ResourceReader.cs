@@ -80,12 +80,18 @@ namespace TransMock.Mockifier.Parser
         {
             try
             {
+                int btsVersionNumber;
+                if (!int.TryParse(btsVersion, out btsVersionNumber))
+                {
+                    btsVersionNumber = 2013;
+                }
+                
                 return Resources.ResourceManager
                     .GetString(
                         string.Format(
                             CultureInfo.InvariantCulture,
                             "BTS{0}_{1}",
-                            btsVersion, 
+                            btsVersionNumber >= 2013 ? "2013" : btsVersion, 
                             configKey));           
             }
             catch (Exception ex)

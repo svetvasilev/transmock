@@ -33,10 +33,10 @@ using TransMock.Communication.NamedPipes;
 namespace TransMock
 {
     /// <summary>
-    /// This class represents a mock of a service/integration implementation from its endpoints point of view and it is setup once for a test suite.
-    /// This is because a service/integration flow has a finite and predictable set of receive and send operations to/from its endpoints at any given time.
+    /// This class represents a mock of a service/integration implementation from its endpoints point of view and it is set up once for a test suite.
+    /// This is because a service/integration flow has a finite and predictable set of receive and send endpoints.
     /// What varies during execution is the messages received over/sent to a given endpoint instance.
-    /// This behavior is driven by the <see cref="InverseMessagingClient{TAddresses}"/> class where the corresponding messaging operations are performed.
+    /// This behavior is driven by the <see cref="TestMessagingClient{TAddresses}"/> class from where the corresponding messaging operations are performed.
     /// This is why the Setup methods match the direction of the message flow, e.g. SetupReceive is setting up a receive
     /// endpoint and vice versa.
     /// </summary>
@@ -146,25 +146,25 @@ namespace TransMock
         }
 
         /// <summary>
-        /// Creates an InverseMessagingClient instance that is modeled as per the casting instance
+        /// Creates an TestMessagingClient instance that is modeled as per the casting instance
         /// </summary>
-        /// <returns>An instance of the <see cref="InverseMessagingClient{TAddresses}"/> class</returns>
-        public InverseMessagingClient<TAddresses> CreateMessagingClient()
+        /// <returns>An instance of the <see cref="TestMessagingClient{TAddresses}"/> class</returns>
+        public TestMessagingClient<TAddresses> CreateMessagingClient()
         {
-            return ConcreteInverceMessagingClient<TAddresses>.CreateInstance(this);
+            return ConcreteTestMessagingClient<TAddresses>.CreateInstance(this);
         }
 
-        // Hiding the implementation of the abstract InverseMessagingClient class
-        internal class ConcreteInverceMessagingClient<TAddresses2> : InverseMessagingClient<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
+        // Hiding the implementation of the abstract TestMessagingClient class
+        internal class ConcreteTestMessagingClient<TAddresses2> : TestMessagingClient<TAddresses2> where TAddresses2 : Addressing.EndpointAddress
         {
-            protected ConcreteInverceMessagingClient(EndpointsMock<TAddresses2> mock) : base(mock)
+            protected ConcreteTestMessagingClient(EndpointsMock<TAddresses2> mock) : base(mock)
             {
 
             }
 
-            internal static InverseMessagingClient<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> mock)
+            internal static TestMessagingClient<TAddresses2> CreateInstance(EndpointsMock<TAddresses2> mock)
             {
-                return new ConcreteInverceMessagingClient<TAddresses2>(mock)
+                return new ConcreteTestMessagingClient<TAddresses2>(mock)
                     .WireUp();
             }
         }

@@ -45,7 +45,7 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
-    <Compile Include="InverseMessagingClient.cs" />
+    <Compile Include="TestMessagingClient.cs" />
     <Compile Include="MessageOperationConfig.cs" />
     <Compile Include="MockedEndpoint.cs" />
     <Compile Include="ReceiveEndpoint.cs" />

@@ -45,133 +45,24 @@ namespace TransMock.Mockifier
 
                 if (CommandLine.Parser.Default.ParseArguments(args, parsedArguments))
                 {
-                    Console.Out.WriteLine("About to execute with the following parameters:");  
-               
-                    // Parsing the arguments was successfull, parsing the bindings file
-                    ParameterCombination paramCombination = parsedArguments.EvaluateParametersCombination();
+                    Console.Out.WriteLine("About to execute with the following parameters:");
+
+                    Console.Out.WriteLine("/bindings: " + parsedArguments.InputBindings);
+                    Console.Out.WriteLine("/output: " + parsedArguments.OutputBindings);
+                    Console.Out.WriteLine("/classOutput: " + parsedArguments.OutputClass);
+                    Console.Out.WriteLine("/legacyMode: " + parsedArguments.Legacy);
+                    Console.Out.WriteLine("/btsVersion: " + parsedArguments.BtsVersion);
+                    Console.Out.WriteLine("/unescape: " + parsedArguments.Unescape);                    
 
                     BizTalkBindingsParser bindingsParser = new BizTalkBindingsParser();
 
-                    switch (paramCombination)
-                    {
-                        case ParameterCombination.NoParams:
-                            break;
-                        case ParameterCombination.DefaultParams:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-
-                            // Saving to the same file as the input
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings, 
-                                parsedArguments.InputBindings);
-                            break;
-                        case ParameterCombination.OutputBindingsOnly:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputBindings);
-                            break;
-                        case ParameterCombination.OutputClassOnly:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.InputBindings, 
-                                parsedArguments.OutputClass);
-                            break;
-                        case ParameterCombination.OutputBindingsAndUnescape:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputBindings, 
-                                null,
-                                "2013", 
-                                parsedArguments.Unescape);
-                            break;
-                        case ParameterCombination.OutputClassAndUnescape:                            
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.InputBindings, 
-                                parsedArguments.OutputClass,
-                                "2013", 
-                                parsedArguments.Unescape);
-                            break;
-                        case ParameterCombination.OutputBindingsAndClassOutput:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputBindings,
-                                parsedArguments.OutputClass);
-                            break;
-                        case ParameterCombination.OutputBindingsAndClassOutputAndUnescape:
-                            // TODO:
-                            break;
-                        case ParameterCombination.OutputBindingsAndBtsVersion:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings, 
-                                parsedArguments.OutputBindings,
-                                parsedArguments.BtsVersion);
-                            break;                        
-                        case ParameterCombination.OutputClassAndBtsVersion:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputClass,
-                                parsedArguments.BtsVersion);
-                            break;
-                        case ParameterCombination.OutputBindingsAndBtsVersionAndUnescape:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.InputBindings);                            
-                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
-                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputBindings,
-                                null,
-                                parsedArguments.BtsVersion,
-                                parsedArguments.Unescape);                            
-                            break;
-                        case ParameterCombination.AllParams:
-                            Console.Out.WriteLine("bindings: " + parsedArguments.InputBindings);
-                            Console.Out.WriteLine("output: " + parsedArguments.OutputBindings);
-                            Console.Out.WriteLine("classOutput: " + parsedArguments.OutputClass);
-                            Console.Out.WriteLine("btsVersion: " + parsedArguments.BtsVersion);
-                            Console.Out.WriteLine("unescape: " + parsedArguments.Unescape);
-
-                            bindingsParser.ParseBindings(
-                                parsedArguments.InputBindings,
-                                parsedArguments.OutputBindings,
-                                parsedArguments.OutputClass,
-                                parsedArguments.BtsVersion,
-                                parsedArguments.Unescape);
-                            break;
-                        default:
-                            Console.Out.WriteLine("Mockifying with mock map is still not supported!");
-                            break;
-                    }
+                    bindingsParser.ParseBindings(
+                        parsedArguments.InputBindings,
+                        parsedArguments.OutputBindings ?? parsedArguments.InputBindings,
+                        parsedArguments.OutputClass,
+                        parsedArguments.BtsVersion,
+                        parsedArguments.Unescape,
+                        parsedArguments.Legacy);
 
                     Console.Out.WriteLine("Bindings mockified successfully!Exiting...");
                 }

@@ -182,11 +182,12 @@ namespace TransMock.Mockifier.Parser
         /// <param name="btsVersion">The version of BizTalk server the bindings are intended to. Default is the latest version.</param>
         /// <param name="unescape">Flag indicating whether to unescape the transport configuration. Default is false</param>
         public void ParseBindings(
-            string srcBindingsPath, 
-            string outBindingsPath, 
-            string outClassPath, 
-            string btsVersion = "2013", 
-            bool unescape = false)
+            string srcBindingsPath,
+            string outBindingsPath,
+            string outClassPath,
+            string btsVersion = "2016",
+            bool unescape = false,
+            bool legacyMockAddressesClass = false)
         {
             XDocument bindingsDoc = XDocument.Load(srcBindingsPath);
 
@@ -200,7 +201,14 @@ namespace TransMock.Mockifier.Parser
             bindingsDoc.Save(outBindingsPath);
 
             // Generate the helper class with the mocked urls.
-            this.GenerateURLHelperClass(bindingsDoc.Root, outClassPath ?? outBindingsPath);
+            if (legacyMockAddressesClass)
+            {
+                this.GenerateLegacyURLHelperClass(bindingsDoc.Root, outClassPath ?? outBindingsPath);
+            }
+            else
+            { 
+                this.GenerateURLHelperClass(bindingsDoc.Root, outClassPath ?? outBindingsPath);
+            }
         }
 
         /// <summary>
@@ -219,7 +227,105 @@ namespace TransMock.Mockifier.Parser
         }
 
         /// <summary>
-        /// Generates the contents of the mock URL helper class
+        /// Generates the contents of the mock URL helper class for the BizUnit based programming model
+        /// </summary>
+        /// <param name="root">The root element of the bindings file</param>
+        /// <param name="classFilePath">The path to the class file</param>
+        private void GenerateLegacyURLHelperClass(XElement root, string classFilePath)
+        {
+            if (this.mockedEndpointSettings.Count == 0)
+            {
+                return;
+            }
+
+            // Getting the BizTalk application name
+            string applicationName = root.Descendants()
+                .Where(d => d.Name == "ModuleRef" && d.Attributes("Name")
+                    .First().Value.StartsWith("[Application:"))
+                .First().Attribute("Name").Value;
+
+            applicationName = applicationName
+                .Replace("[Application:", string.Empty)
+                .Replace("]", string.Empty);
+
+            // Washing the application name string for unwanted characters
+            applicationName = applicationName
+                       .Trim()
+                       .Replace("-", "_")
+                       .Replace(".", "_");
+
+            // Generating the namespace definition
+            StringBuilder helperClassBuilder = new StringBuilder(512);
+
+            GenerateHelperClassHeader(helperClassBuilder);
+
+            helperClassBuilder.AppendLine()
+                .AppendFormat(
+                    "namespace {0}.IntegrationTests",
+                    applicationName
+                   ) // Namespace definition start
+                     // Generating the class definition
+                .AppendLine()
+                .AppendLine("{")
+                    .Append("\t").AppendFormat(
+                        "public static class {0}MockAddresses",
+                        applicationName)
+                        .AppendLine()
+                        .Append("\t{"); // URL helper class definition start
+
+            foreach (var mockEndpoint in this.mockedEndpointSettings)
+            {
+                helperClassBuilder.AppendLine();
+                helperClassBuilder.Append("\t\t");
+                helperClassBuilder.AppendFormat(
+                    "public static string {0}",
+                    mockEndpoint.Key
+                        .Trim()
+                        .Replace("-", "_")
+                        .Replace(".", "_")
+                        .Replace(" ", string.Empty)) // Property definition start
+                    .AppendLine()
+                        .Append("\t\t").Append("{")
+                        .AppendLine()
+                            .Append("\t\t\t").Append("get") // Getter definition start
+                            .AppendLine()
+                                .Append("\t\t\t").Append("{") // Opening the property getter
+                                .AppendLine()
+                                    .Append("\t\t\t\t").AppendFormat(
+                                        "return \"{0}\";",
+                                        mockEndpoint.Value.Address) // The getter body
+                                    .AppendLine()
+                                .Append("\t\t\t").Append("}") // Closing the property getter
+                            .AppendLine()
+                        .Append("\t\t").Append("}") // Closing the property
+                        .AppendLine();
+            }
+
+            helperClassBuilder//.AppendLine()
+                .Append("\t").Append("}") // Closing the class
+            .AppendLine()
+            .Append("}"); // Closing the namespace
+
+            if (!Directory.Exists(classFilePath))
+            {
+                // In case the path is not a directory, we get the path to it.
+                classFilePath = Path.GetDirectoryName(classFilePath);
+            }
+
+            classFilePath = Path.Combine(classFilePath, applicationName + "MockAddresses");
+            classFilePath = Path.ChangeExtension(classFilePath, "cs");
+
+            // Saving the class to a file
+            if (this.fileWriter != null)
+            {
+                this.fileWriter.WriteTextFile(
+                    Path.ChangeExtension(classFilePath, "cs"),
+                    helperClassBuilder.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Generates the contents of the mock URL helper class for v1.5 and above programming model
         /// </summary>
         /// <param name="root">The root element of the bindings file</param>
         /// <param name="classFilePath">The path to the class file</param>
@@ -248,6 +354,8 @@ namespace TransMock.Mockifier.Parser
 
             // Generating the namespace definition
             StringBuilder helperClassBuilder = new StringBuilder(512);
+
+            GenerateHelperClassHeader(helperClassBuilder);
 
             helperClassBuilder.AppendLine()
                 .AppendFormat(
@@ -316,6 +424,20 @@ namespace TransMock.Mockifier.Parser
                     Path.ChangeExtension(classFilePath, "cs"), 
                     helperClassBuilder.ToString());
             }
+        }
+
+        /// <summary>
+        /// Generates a comment header in the mock addresses helper class
+        /// </summary>
+        /// <param name="sb"></param>
+        private void GenerateHelperClassHeader(StringBuilder sb)
+        {
+            sb.AppendLine("/******************************************************/")
+                .AppendLine("/* This is an automacitally generated class by tool ")
+                .AppendFormat("/* TransMock.Mockifier, version {0}", 
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Version)
+                .AppendLine()
+                .AppendLine("/******************************************************/");
         }
 
         /// <summary>

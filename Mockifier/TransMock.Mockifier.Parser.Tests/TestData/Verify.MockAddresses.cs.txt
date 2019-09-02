@@ -1,4 +1,9 @@
 
+/******************************************************/
+/* This is an automacitally generated class by tool 
+/* TransMock.Mockifier, version 1.5.0.0
+/******************************************************/
+
 namespace TestApplication.IntegrationTests
 {
 	using TransMock.Addressing;

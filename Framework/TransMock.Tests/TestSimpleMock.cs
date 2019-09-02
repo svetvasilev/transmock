@@ -35,6 +35,33 @@ namespace TransMock.Tests
         }
 
         [TestMethod]
+        [DeploymentItem(@"TestData\TestFileIn.txt")]
+        public void SimpleFlow_PromotedProperties_HappyPath()
+        {
+            var integrationMock = new EndpointsMock<TestMockAddresses>();
+
+            integrationMock
+                .SetupReceive(a => a.ReceiveFirstMessage_FILE)
+                .SetupSend(a => a.SendFirstMessage_FILE);
+
+            var emulator = integrationMock.CreateMessagingClient();
+
+            emulator
+                .Send(r => r.ReceiveFirstMessage_FILE,
+                    "TestFileIn.txt",
+                    System.Text.Encoding.UTF8,
+                    10,
+                    messagePropertiesSetter: p => p.Add(
+                        "BTS.RequestFileName", "SomeFIleName.fln"),
+                    beforeSendAction: ctx => ctx.DebugInfo("Fire in the hall")
+                 )
+                .Receive(
+                    s => s.SendFirstMessage_FILE,
+                    beforeReceiveAction: ctx => ctx.DebugInfo("Yet one more blast!"),
+                    validator: v => { return v.Message.Body.Length > 0; });
+        }
+
+        [TestMethod]
         [DeploymentItem(@"TestData\TestFileRequest.txt")]
         [DeploymentItem(@"TestData\TestFileResponse.txt")]
         public void Simple2WayFlow_HappyPath()
