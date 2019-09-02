@@ -146,7 +146,8 @@ namespace TransMock
         }
 
         /// <summary>
-        /// Creates an TestMessagingClient instance that is modeled as per the casting instance
+        /// Creates a <see cref="TestMessagingClient{TAddresses}"/> instance that can be used to send messages for testing 
+        /// a service that is represented by this endpoints mock instance
         /// </summary>
         /// <returns>An instance of the <see cref="TestMessagingClient{TAddresses}"/> class</returns>
         public TestMessagingClient<TAddresses> CreateMessagingClient()
