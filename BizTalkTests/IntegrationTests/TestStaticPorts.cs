@@ -111,10 +111,10 @@ namespace BizTalkTests.IntegrationTests
                 .Receive(
                     s => s.BTS_OneWaySendFILE,
                     beforeReceiveAction: ctx => ctx.DebugInfo("Receiving message from BTS_OneWaySendFILE"),
-                    validator: (idx, msg) =>
+                    validator: v =>
                         {
-                            Assert.IsTrue(idx == 0, "Message index is wrong!");
-                            Assert.IsTrue(msg.Body.Length > 0, "Received message is empty");
+                            Assert.IsTrue(v.Index == 0, "Message index is wrong!");
+                            Assert.IsTrue(v.Message.Body.Length > 0, "Received message is empty");
 
                             return true;
                         }
