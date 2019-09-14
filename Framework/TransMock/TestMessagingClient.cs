@@ -47,19 +47,22 @@ namespace TransMock
 
         private EndpointsMock<TAddresses> endpointsMock;
 
-        private TestContext testContext;
+        private TestContext testContext;        
 
-        private IList<Task<TestMessagingClient<TAddresses>>> parallelOperationsList;
+        private IList<Task> parallelControllers;
 
         internal IDictionary<string, MessageOperationConfig> operationConfigurations;
 
         internal Queue<AsyncReadEventArgs> receivedMessagesQueue;
 
+        /// <summary>
+        /// Creates a default instance of the <see cref="TestMessagingClient{TAddresses}"/>
+        /// </summary>
         protected TestMessagingClient()
         {
-            testContext = new TestContext();
+            testContext = new TestContext();            
 
-            parallelOperationsList = new List<Task<TestMessagingClient<TAddresses>>>(3);
+            parallelControllers = new List<Task>(3);
 
             receivedMessagesQueue = new Queue<AsyncReadEventArgs>(3);
 
@@ -67,6 +70,10 @@ namespace TransMock
        
         }
 
+        /// <summary>
+        /// Creates an instance of the <see cref="TestMessagingClient{TAddresses}"/> class for the provided <see cref="EndpointsMock{TAddresses}"/> instance
+        /// </summary>
+        /// <param name="endpointsMock"></param>
         protected TestMessagingClient(EndpointsMock<TAddresses> endpointsMock) : this()
         {
             this.endpointsMock = endpointsMock;
@@ -475,6 +482,7 @@ namespace TransMock
         /// <param name="requestFilePath">The path to the file that contains the request contents</param>
         /// <param name="messageEncoding">The encodings of the request and send messages. Default is UTF-8</param>
         /// <param name="timeoutInSeconds">Timeout is seconds for waiting for connection to the recieve endpoint.Default is 10.</param>
+        /// <param name="messagePropertiesSetter">An optional action for setting custom message properties in the request message</param>
         /// <param name="beforeRequestAction">An optional action to be performed on the test context</param>
         /// <param name="responseValidator">An optional response validator</param>
         /// <param name="afterRequestAction">An optional action that can be performed after the request was sent</param>
@@ -530,7 +538,7 @@ namespace TransMock
         /// <returns>The current instanse of the TestMessagingClient</returns>
         public TestMessagingClient<TAddresses> InParallel(params Func<TestMessagingClient<TAddresses>, TestMessagingClient<TAddresses>>[] parallelActions)
         {
-            //var actionsList = parallelActions(new List<TestMold<TAddresses>>());
+            var tasks = new List<Task<TestMessagingClient<TAddresses>>>(parallelActions.Length);
 
             foreach (var action in parallelActions)
             {
@@ -543,33 +551,59 @@ namespace TransMock
 
                 task.Start();
 
-                parallelOperationsList.Add(task);
+                tasks.Add(task);
             }
+
+            // Starting a controller task for the set of parallel operations
+            var controllerTask = new Task(
+                () =>
+                {
+                    try
+                    {
+                        Task.WaitAll(tasks.ToArray(), TimeSpan.FromMinutes(5));
+                    }
+                    catch(AggregateException aggException)
+                    {
+                        foreach (var ex in aggException.InnerExceptions)
+                        {
+                            LogException(ex);
+                        }
+                    }
+                });
+
+            controllerTask.Start();
+
+            parallelControllers.Add(controllerTask);
 
             return this;
         }
 
         /// <summary>
-        /// Validates that all configured parallel operations have completed.
-        /// In case some experienced an error the corresponding exception will be re-thrown 
-        /// in the main execution thread
+        /// Verifies that all configured parallel operations have completed.
+        /// In case some experienced an error the corresponding exception will be
+        /// logged for further troubleshooting
         /// </summary>
         public void VerifyParallel()
         {
             try
             {
-                // Cleanup any parallel tasks configured
-                foreach (var operation in parallelOperationsList)
+                // Wait for any parallel tasks to complete for a reasonable wait time
+                if (parallelControllers.Count() > 0)
                 {
-                    if (!operation.IsCompleted)
+                    if (!Task.WaitAll(
+                            parallelControllers.ToArray(),
+                            TimeSpan.FromMinutes(5)))
                     {
-                        operation.Wait(3000);
+                        throw new TimeoutException(
+                            "Waiting for the parallel operations to complete exceeded the allotted time!");
                     }
-
-                    if (operation.IsFaulted)
-                    {
-                        throw operation.Exception.InnerException;
-                    }
+                }                
+            }
+            catch(AggregateException aggException)
+            {
+                foreach (var ex in aggException.InnerExceptions)
+                {
+                    LogException(ex);
                 }
             }
             finally
@@ -578,9 +612,10 @@ namespace TransMock
                 this.TearDown();
 
                 // Clearing the list
-                parallelOperationsList.Clear();
+                parallelControllers.Clear();
             }
         }
+
         #endregion
 
         #region Private messaging implementation methods
@@ -894,6 +929,11 @@ namespace TransMock
                             "<<<<<<< Receiving response from 2-way receive endpoint with URL: {0}",
                             receiverEndpoint.URL);
 
+                        endpointSetup.TwoWayReceiveEndpoint
+                            .TimeoutInSeconds = receiverEndpoint.TimeoutInSeconds;
+                        endpointSetup.TwoWayReceiveEndpoint
+                            .MessageEncoding = receiverEndpoint.MessageEncoding;
+
                         System.Diagnostics.Trace.WriteLine(
                            string.Format(
                                 "TestMessagingClient.SendImplementation() receiving response from 2-way receive endpoint with URL: {0}",
@@ -1023,17 +1063,36 @@ namespace TransMock
         /// </summary>
         /// <returns>An instance of the <see cref="MockMessage"/> class representing the received response</returns>
         private MockMessage ReceiveResponse(MessageOperationConfig endpointSetup)
-        {   
-            // We receive the response
-            var responseMessage = endpointSetup.MockMessageClient
-                .ReadMessage();
+        {
+            // We receive the response in an async way
+            // as we need to cancel the operation in case the timeout period is exceeded
+            var responseReceptionTask = new Task<MockMessage>(
+                () =>
+                {
+                    var responseMessage = endpointSetup.MockMessageClient
+                            .ReadMessage();
 
-            System.Diagnostics.Trace.WriteLine(
-                string.Format("TestMessagingClient.ReceiveResponse() received response from 2-way receive endpoint with URL: {0}",
-                    endpointSetup.TwoWayReceiveEndpoint.URL),
-                "TransMock.TestMessagingClient");
+                    System.Diagnostics.Trace.WriteLine(
+                        string.Format("TestMessagingClient.ReceiveResponse() received response from 2-way receive endpoint with URL: {0}",
+                            endpointSetup.TwoWayReceiveEndpoint.URL),
+                        "TransMock.TestMessagingClient");
 
-            return responseMessage;
+                    return responseMessage;
+                });
+
+            responseReceptionTask.Start();
+
+            if(!responseReceptionTask.Wait(
+                TimeSpan.FromSeconds(
+                    endpointSetup.TwoWayReceiveEndpoint.TimeoutInSeconds)))
+            {
+                throw new TimeoutException(
+                    string.Format("Response reception from 2-way receive endpoint with URL: {0} exceeded allotted wait time!",
+                        endpointSetup.TwoWayReceiveEndpoint.URL));
+            }
+
+            return responseReceptionTask.Result;
+            
         }
         #endregion
 
@@ -1076,6 +1135,37 @@ namespace TransMock
 
             Console.WriteLine(
                 "************** End message contents ************");           
+        }
+
+
+        private void LogException(Exception ex)
+        {
+            Console.WriteLine(
+               "!!!!!!!!!!!!!! Exception thrown !!!!!!!!!!!!!!");
+
+            LogExceptionDetails(ex);
+
+            Console.WriteLine(
+               "!!!!!!!!!!!!!! End of Exception !!!!!!!!!!!!!!");
+
+        }
+
+        private void LogExceptionDetails(Exception ex, bool inner=false)
+        {
+            Console.WriteLine();
+
+            if (inner)
+            {
+                Console.WriteLine("!!!!! Inner exception details !!!!!!");
+            }
+
+            Console.WriteLine($"Error message: {ex.Message}");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
+            if (ex.InnerException != null)
+                LogExceptionDetails(ex.InnerException, true);
+
         }
         #endregion
 

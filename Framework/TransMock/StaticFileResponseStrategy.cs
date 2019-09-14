@@ -37,6 +37,9 @@ namespace TransMock
     /// </summary>
     public class StaticFileResponseStrategy : ResponseSelectionStrategy
     {
+        /// <summary>
+        /// The path to the file which will be used to populate the responce mock message contents
+        /// </summary>
         public string FilePath { get; set; }
 
         /// <summary>
@@ -53,30 +56,11 @@ namespace TransMock
                 throw new InvalidOperationException("No file path specified for fetching the response contents!");
             }
 
-            MemoryStream s = new MemoryStream(128);
+            var mockResponse = new MockMessage(
+                this.FilePath,
+                requestMessage.Encoding);
 
-            using (var fs = File.OpenRead(this.FilePath))
-            {   
-                fs.CopyTo(s);                
-                // Rewinding the stream
-                s.Position = 0;
-            }
-            // Check whether the first 3 bytes are the BOM
-            bool skipBom = false;
-            byte[] bomBytes = new byte[3];
-
-            int bytesRead = s.Read(bomBytes, 0, 3);
-            if (bytesRead == 3 && bomBytes[0] == 0xEF && bomBytes[1] == 0xBB && bomBytes[2] == 0xBF)
-            {
-                skipBom = true;
-            }
-
-            // Rewind the stream again
-            s.Position = 0;
-            
-            return new MockMessage(
-                skipBom ? s.ToArray().Skip(3).ToArray()
-                    : s.ToArray(), requestMessage.Encoding);
+            return mockResponse;
         }
     }
 }

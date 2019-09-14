@@ -50,8 +50,9 @@
     <Compile Include="MessageOperationConfig.cs" />
     <Compile Include="MockedEndpoint.cs" />
     <Compile Include="ReceiveEndpoint.cs" />
-    <Compile Include="ResponseStrategy.cs" />
+    <Compile Include="ResponseSelectionStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />
+    <Compile Include="SerialStaticFilesResponseSelector.cs" />
     <Compile Include="StaticFileResponseStrategy.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

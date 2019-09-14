@@ -77,6 +77,8 @@
     <Content Include="TestData\TestFileIn.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\TestRequest.xml" />
+    <Content Include="TestData\TestResponse.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
