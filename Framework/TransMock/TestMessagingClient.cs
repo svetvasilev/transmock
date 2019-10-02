@@ -342,7 +342,7 @@ namespace TransMock
             System.Text.Encoding messageEncoding=null,
             Action<TestContext> beforeReceiveAction=null,
             Action<TestContext> afterReceiveAction = null,
-            Func<ValidatableMessageReception, bool> validator=null)
+            Func<IndexedMessageReception, bool> validator=null)
         {
             System.Diagnostics.Trace.WriteLine(
                     "TestMessagingClient.Receive() called",
@@ -441,7 +441,7 @@ namespace TransMock
             int expectedMessageCount = 1,
             System.Text.Encoding messageEncoding = null,
             Action<TestContext> beforeRequestAction = null,
-            Func<ValidatableMessageReception, bool> requestValidator = null,
+            Func<IndexedMessageReception, bool> requestValidator = null,
             Action<TestContext> afterRequestAction = null,
             Action<TestContext> afterResponseAction = null)
         {
@@ -632,7 +632,7 @@ namespace TransMock
         /// <returns>The current instanse of the TestMessagingClient</returns>
         private TestMessagingClient<TAddresses> ReceiveImplementation(
             Func<TestContext, TAddresses, SendEndpoint> sender,
-            Func<ValidatableMessageReception, bool> validator,
+            Func<IndexedMessageReception, bool> validator,
             Func<MockMessage, ResponseSelectionStrategy> responseSelector = null,
             Action<IDictionary<string, string>> responsePropertiesSetter = null,
             Action<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage, 
@@ -727,7 +727,7 @@ namespace TransMock
                             sendEndpoint.URL),
                         "TransMock.TestMessagingClient");
 
-                    var validatableReception = new ValidatableMessageReception()
+                    var validatableReception = new IndexedMessageReception()
                     {
                         Index = i,
                         Message = receivedMessage.Message

@@ -25,9 +25,9 @@ using TransMock.Communication.NamedPipes;
 namespace TransMock
 {
     /// <summary>
-    /// This class represents a validatble reception of a mock message which is represented by its index and corresponding contents
+    /// This class represents a reception of a mock message with a corresponding index value indicating the order of reception
     /// </summary>
-    public class ValidatableMessageReception
+    public class IndexedMessageReception
     {
         /// <summary>
         /// The index of the received message

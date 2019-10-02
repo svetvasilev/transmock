@@ -59,7 +59,7 @@
     <Compile Include="TestMessagingClient.cs" />
     <Compile Include="TwoWayReceiveEndpoint.cs" />
     <Compile Include="TwoWaySendEndpoint.cs" />
-    <Compile Include="ValidatableMessageReception.cs" />
+    <Compile Include="IndexedMessageReception.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2010.csproj">

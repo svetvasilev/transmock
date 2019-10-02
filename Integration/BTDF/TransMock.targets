@@ -21,6 +21,9 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 		<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''"></TransMockHomeDir>
     <BTSVersion Condition="'$(BTSVersion)' == ''">2013</BTSVersion>    
     <TransMockAddressClassDir Condition="'$(TransMockAddressClassDir)' == ''"></TransMockAddressClassDir>
+    <!-- Governs which programming model shall be used to generate the MockAddresses helper class -->
+    <!-- Allowed values: Legacy, New -->
+    <TransMockProgModel Condition="'$(TransMockProgModel)' == ''">Legacy</TransMockProgModel>
     <TransMockDebug Condition="'$(TransMockDebug)' == ''">false</TransMockDebug>
 	</PropertyGroup>
   
@@ -60,13 +63,23 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
     <Message Text="------ Extension point for TransMock. Invoking the Mockifier -----" />
     
     <Message Text="DEBUG: value of MockAddressHelperClassDir is: $(MockAddressHelperClassDir)" Condition="'$(TransMockDebug)' == 'true'"/>
+    <Message Text="DEBUG: value of BTSVersion is: $(BTSVersion)" Condition="'$(TransMockDebug)' == 'true'"/>
+    <Message Text="DEBUG: value of TransMockProgModel is: $(TransMockProgModel)" Condition="'$(TransMockDebug)' == 'true'"/>
 		
-    <Exec Condition="'$(BTSVersion)' != '2013'"
+    <Exec Condition="'$(BTSVersion)' != '2013' and '$(TransMockProgModel)' != 'Legacy'"
       Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot; -r $(BTSVersion)" 
       ContinueOnError="false"></Exec>
+
+    <Exec Condition="'$(BTSVersion)' != '2013' and '$(TransMockProgModel)' == 'Legacy'"
+      Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot; -r $(BTSVersion) -l"
+      ContinueOnError="false"></Exec>
     
-    <Exec Condition="'$(BTSVersion)' == '2013'"
+    <Exec Condition="'$(BTSVersion)' == '2013' and '$(TransMockProgModel)' != 'Legacy'"
       Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot;"
+      ContinueOnError="false"></Exec>
+
+    <Exec Condition="'$(BTSVersion)' == '2013' and '$(TransMockProgModel)' == 'Legacy'"
+      Command="&quot;$(TransMockHomeDir)\TransMock.Mockifier.exe&quot; -b &quot;$(PortBindings)&quot; -c &quot;$(MockAddressHelperClassDir)&quot; -l"
       ContinueOnError="false"></Exec>
     
 		<Message Text="------ The Mockifier execution completed. -------" />
