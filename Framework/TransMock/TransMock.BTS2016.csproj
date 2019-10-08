@@ -54,7 +54,7 @@
     <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseSelectionStrategy.cs" />
     <Compile Include="SendEndpoint.cs" />
-    <Compile Include="StaticFileResponseStrategy.cs" />
+    <Compile Include="StaticFileResponseSelector.cs" />
     <Compile Include="EndpointsMock.cs" />
     <Compile Include="TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -16,7 +16,7 @@
 *****************************************/
 
 /// -----------------------------------------------------------------------------------------------------------
-/// Module      :  StaticFileResponseStrategy.cs
+/// Module      :  StaticFileResponseSelector.cs
 /// Description :  This class represents a response selector strategy where contents for response
 ///                 is taken from a static file.
 /// -----------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace TransMock
     /// <summary>
     /// This class implements the logic for fetching the response contents from a static file
     /// </summary>
-    public class StaticFileResponseStrategy : ResponseSelectionStrategy
+    public class StaticFileResponseSelector : ResponseSelectionStrategy
     {
         /// <summary>
         /// The path to the file which will be used to populate the responce mock message contents

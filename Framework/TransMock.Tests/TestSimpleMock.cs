@@ -80,7 +80,7 @@ namespace TransMock.Tests
             messageClient.InParallel(
                  (m) => m.ReceiveRequestAndSendResponse(
                      s => s.TwoWaySend_WebHTTP,
-                     rs => new StaticFileResponseStrategy()
+                     rs => new StaticFileResponseSelector()
                      {
                          FilePath = "TestFileResponse.txt"
                      },
@@ -130,7 +130,7 @@ namespace TransMock.Tests
             messageClient.InParallel(
                  (m) => m.ReceiveRequestAndSendResponse(
                      s => s.TwoWaySend_WebHTTP,
-                     rs => new StaticFileResponseStrategy()
+                     rs => new StaticFileResponseSelector()
                      {
                          FilePath = "TestFileResponse.txt"
                      },
@@ -180,7 +180,7 @@ namespace TransMock.Tests
             messageClient.InParallel(
                  (m) => m.ReceiveRequestAndSendResponse(
                      s => s.TwoWaySend_WebHTTP,
-                     rs => new StaticFileResponseStrategy()
+                     rs => new StaticFileResponseSelector()
                      {
                          FilePath = "TestResponse.xml"
                      },
