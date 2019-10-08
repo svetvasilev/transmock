@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Mockifier.Parser.Tests</RootNamespace>
     <AssemblyName>TransMock.Mockifier.Parser.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SccProjectName>SAK</SccProjectName>
@@ -58,12 +58,37 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestBindingsParserLegacy.cs" />
     <Compile Include="TestBindingsParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\TestApplication.BindingInfo.BTDF.xml" />
-    <Content Include="TestData\TestApplication.BindingInfo.CustomURL.xml" />
-    <Content Include="TestData\TestApplication.BindingInfoWithProps.BTDF.xml" />
+    <Content Include="TestData\Verify.LegacyMockAddresses.CustomURL.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.LegacyMockAddressesWithProps.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.LegacyMockAddresses.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.MockAddressesWithProps.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.MockAddresses.CustomURL.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Verify.MockAddresses.cs.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestApplication.BindingInfo.BTDF.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestApplication.BindingInfo.CustomURL.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestApplication.BindingInfoWithProps.BTDF.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestApplication.BindingInfoWithProps.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -52,6 +52,7 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="BizTalkBindingsParser.cs" />
+    <Compile Include="EndpointSettings.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="ResourceReader.cs" />
     <Compile Include="MockSettings.cs" />

@@ -24,6 +24,7 @@
     
     <TransMockAddressClassDir>..\IntegrationTests</TransMockAddressClassDir>
     <TransMockDebug>true</TransMockDebug>
+    <TransMockProgModel>New</TransMockProgModel>
     <!--<TargetBTSEnvironment>DEVelopment</TargetBTSEnvironment>-->
     
   </PropertyGroup>
@@ -93,6 +94,6 @@
   </Target>
   <!-- !!! TODO !!! -->
   <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
-  <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.4.0\BTDF\TransMock.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.5.0-beta3\BTDF\TransMock.targets" />
 
 </Project>

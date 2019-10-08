@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBindingsParser.cs" />
+    <Compile Include="TestBindingsParserLegacy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\TestApplication.BindingInfo.CustomURL.xml">
@@ -76,6 +77,9 @@
     <Content Include="TestData\TestApplication.BindingInfo.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\Verify.MockAddresses.cs.txt" />
+    <Content Include="TestData\Verify.MockAddresses.CustomURL.cs.txt" />
+    <Content Include="TestData\Verify.MockAddressesWithProps.cs.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

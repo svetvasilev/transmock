@@ -52,6 +52,15 @@ namespace TransMock.Mockifier
         public string OutputClass { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the unescape mode is defined
+        /// </summary>
+        [Option('l', "legacyModel", Required = false,
+            DefaultValue = false,
+            HelpText = @"Specifies whether the mocked URL helper class should be generated for the legacy, 
+                BizUnit based programming model. Default is false. Optional.")]
+        public bool Legacy { get; set; }
+
+        /// <summary>
         /// Gets or sets the path to the mock mapping file
         /// </summary>
         [Option('m', "mockmap", Required = false,
@@ -62,7 +71,7 @@ namespace TransMock.Mockifier
         /// Gets or sets the version of BizTalk server
         /// </summary>
         [Option('r', "btsVersion", Required = false,
-             DefaultValue = "2013",
+            DefaultValue = "2016",            
             HelpText = "The BizTalk server version. Default is the latest version. Optional.")]
         public string BtsVersion { get; set; }
 
@@ -70,10 +79,10 @@ namespace TransMock.Mockifier
         /// Gets or sets a value indicating whether the unescape mode is defined
         /// </summary>
         [Option('u', "unescape", Required = false,
-             DefaultValue = false,
+            DefaultValue = false,
             HelpText = "Specifies whether the transport configuration should be unescaped. Default is false. Optional.")]
         public bool Unescape { get; set; }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether the verbosity is turned on
         /// </summary>
@@ -97,97 +106,6 @@ namespace TransMock.Mockifier
             return HelpText.AutoBuild(
                 this,
                 (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
-
-        /// <summary>
-        /// Parses the parameters and evaluates which ones have been provided
-        /// </summary>
-        /// <returns>The enumeration value representing which parameters were supplied at the command prompt</returns>
-        public ParameterCombination EvaluateParametersCombination()
-        {
-            if (string.IsNullOrEmpty(this.OutputBindings) && string.IsNullOrEmpty(this.OutputClass))
-            {
-                return ParameterCombination.DefaultParams;
-            }
-            else if (!string.IsNullOrEmpty(this.OutputBindings) && string.IsNullOrEmpty(this.OutputClass))
-            {
-                if (this.BtsVersion == "2013")
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.OutputBindingsAndUnescape;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputBindingsOnly;
-                    }
-                }
-                else
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.OutputBindingsAndBtsVersionAndUnescape;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputBindingsAndBtsVersion;
-                    }
-                }
-            }
-            else if (string.IsNullOrEmpty(this.OutputBindings) && !string.IsNullOrEmpty(this.OutputClass))
-            {
-                if (this.BtsVersion == "2013")
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.OutputClassAndUnescape;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputClassOnly;
-                    }
-                }
-                else
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.OutputClassAndBtsVersionAndUnescape;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputClassAndBtsVersion;
-                    }
-                }
-            }
-            else if (!string.IsNullOrEmpty(this.OutputBindings) && !string.IsNullOrEmpty(this.OutputClass))
-            {
-                if (this.BtsVersion == "2013")
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.OutputBindingsAndClassOutputAndUnescape;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputBindingsAndClassOutput;
-                    }
-                }
-                else
-                {
-                    if (this.Unescape)
-                    {
-                        return ParameterCombination.AllParams;
-                    }
-                    else
-                    {
-                        return ParameterCombination.OutputBindingsAndClassOutputAndBtsVersion;
-                    }
-                }
-            }
-            else
-            {
-                return ParameterCombination.NoParams;
-            }
         }
     }
 }

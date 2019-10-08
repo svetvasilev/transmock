@@ -19,7 +19,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TransMock.Adapter</Id>
-    <Version>1.4.1</Version>
+    <Version>1.5.0</Version>
     <Title>TransMock Adapter</Title>
     <Authors>Svetoslav Vasilev</Authors>
     <Owners>$(Authors)</Owners>
@@ -44,6 +44,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2016.csproj" />
     <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2010.csproj" />
     <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013.csproj" />
     <ProjectReference Include="..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2013R2.csproj" />
@@ -52,10 +56,6 @@
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013.csproj" />
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2013R2.csproj" />
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2016.csproj" />
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2010.csproj" />
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013.csproj" />
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2013R2.csproj" />
-    <ProjectReference Include="..\..\Framework\TransMock.Utils\TransMock.Utils.BTS2016.csproj" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>

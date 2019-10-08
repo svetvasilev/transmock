@@ -49,7 +49,7 @@ namespace TransMock.Mockifier.Parser
         {
             FileStream classFileStream = File.Open(
                 path,
-                FileMode.OpenOrCreate, 
+                FileMode.Create, 
                 FileAccess.Write);
            
             using (StreamWriter sw = new StreamWriter(classFileStream, Encoding.UTF8))

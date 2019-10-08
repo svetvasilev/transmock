@@ -19,7 +19,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TransMock.Framework</Id>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Title>TransMock Framework</Title>
     <Authors>Svetoslav Vasilev</Authors>
     <Owners>$(Authors)</Owners>
@@ -29,7 +29,7 @@
     </ReleaseNotes>
     <ProjectUrl>https://github.com/svetvasilev/transmock</ProjectUrl>
     <LicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</LicenseUrl>
-    <Copyright>Copyright 2014-2018 © Svetoslav Vasilev</Copyright>
+    <Copyright>Copyright 2014-2019 © Svetoslav Vasilev</Copyright>
     <Tags>TransMock BizTalk testing mocking</Tags>
     <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
   </PropertyGroup>
@@ -130,6 +130,10 @@
     </Dependency>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Framework\TransMock\TransMock.BTS2010.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock\TransMock.BTS2013.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock\TransMock.BTS2013R2.csproj" />
+    <ProjectReference Include="..\..\Framework\TransMock\TransMock.BTS2016.csproj" />
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2010.csproj" />
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013.csproj" />
     <ProjectReference Include="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.BTS2013R2.csproj" />

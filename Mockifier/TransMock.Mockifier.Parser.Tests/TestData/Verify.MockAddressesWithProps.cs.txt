@@ -1,0 +1,52 @@
+/******************************************************/
+/* This is an automacitally generated class by tool 
+/* TransMock.Mockifier, version 1.5.0.0
+/******************************************************/
+
+namespace TestApplication.IntegrationTests
+{
+	using TransMock.Addressing;
+
+	public class TestApplicationMockAddresses : EndpointAddress
+	{
+		public OneWaySendAddress DynamicPortOut
+		{
+			get
+			{
+				return new OneWaySendAddress("mock://localhost/DynamicPortOut");
+			}
+		}
+
+		public OneWaySendAddress OneWaySendFILE
+		{
+			get
+			{
+				return new OneWaySendAddress("mock://localhost/OneWaySendFILE");
+			}
+		}
+
+		public TwoWaySendAddress TwoWayTestSendWCF
+		{
+			get
+			{
+				return new TwoWaySendAddress("mock://localhost/TwoWayTestSendWCF");
+			}
+		}
+
+		public OneWayReceiveAddress OneWayReceive_FILE
+		{
+			get
+			{
+				return new OneWayReceiveAddress("mock://localhost/OneWayReceive_FILE");
+			}
+		}
+
+		public TwoWayReceiveAddress TwoWayTestReceive_WCF
+		{
+			get
+			{
+				return new TwoWayReceiveAddress("mock://localhost/TwoWayTestReceive_WCF");
+			}
+		}
+	}
+}
