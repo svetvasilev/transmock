@@ -93,7 +93,7 @@ As you can see in only few lines of code one is capable of both interacating wit
 ### Further reading
 **Blog articles**
 For version 1.5
-* [Introducing the new programming model of TransMock](https://bizzitalk.blogspot.com/2019/09/introducing-new-programming-model-of.html)
+* [Introducing the new programming model of TransMock](https://bizzitalk.blogspot.com/2019/10/introducing-new-programming-model-of.html)
 
 For versions prior to 1.5
 * [Testing a real world BizTalk integration with TransMock - part 1](http://bizzitalk.blogspot.com/2015/01/testing-real-world-biztalk-integration.html)
