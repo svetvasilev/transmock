@@ -48,6 +48,22 @@
           <Roles />
           <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
         </Service>
+        <Service Name="Orchestrations.SBusAdapterPropertiesTest" State="Unenlisted" TrackingOption="ServiceStartEnd MessageSendReceive OrchestrationEvents">
+          <Ports>
+            <Port Name="ServiceBusPortIn" Modifier="2" BindingOption="1">
+              <SendPortRef xsi:nil="true" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef Name="BTS.OneWayTestReceive2" />
+            </Port>
+            <Port Name="ServiceBusPortOut" Modifier="1" BindingOption="1">
+              <SendPortRef Name="BTS.OneWayTestSend_SBus" />
+              <DistributionListRef xsi:nil="true" />
+              <ReceivePortRef xsi:nil="true" />
+            </Port>
+          </Ports>
+          <Roles />
+          <Host Name="BizTalkServerApplication" NTGroupName="BizTalk Application Users" Type="1" Trusted="false" />
+        </Service>
       </Services>
       <TrackedSchemas />    
     </ModuleRef>
@@ -126,6 +142,125 @@
       <Tracking>0</Tracking>
       <Filter />
       <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
+    <SendPort Name="BTS.OneWayTestSend_SBus" IsStatic="true" IsTwoWay="false" BindingOption="0">
+      <!-- <Mock />-->
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <PrimaryTransport>
+        <Address>C:\Projects\BTS.TestOut\%MessageID%.xml</Address>
+        <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
+        <TransportTypeData>
+          <CustomProps>
+            <UseTempFileOnWrite vt="11">0</UseTempFileOnWrite>
+            <AllowCacheOnWrite vt="11">0</AllowCacheOnWrite>
+            <CopyMode vt="19">1</CopyMode>
+            <FileName vt="8">%MessageID%.xml</FileName>
+          </CustomProps>
+        </TransportTypeData>
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>true</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler Name="BizTalkServerApplication" HostTrusted="false">
+          <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
+        </SendHandler>
+      </PrimaryTransport>
+      <SecondaryTransport>
+        <Address />
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>false</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler xsi:nil="true" />
+      </SecondaryTransport>
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <OrderedDelivery>false</OrderedDelivery>
+      <Priority>5</Priority>
+      <StopSendingOnFailure>false</StopSendingOnFailure>
+      <RouteFailedMessage>false</RouteFailedMessage>
+      <ApplicationName>BizTalkTests</ApplicationName>
+    </SendPort>
+    <SendPort Name="BTS.TwoWayTestSendWCF" IsStatic="true" IsTwoWay="true" BindingOption="0">
+      <!-- <Mock />-->
+      <Description xsi:nil="true" />
+      <TransmitPipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruTransmit, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="2" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <PrimaryTransport>		
+        <Address>http://localhost/TestApp/BTS.TestOutService.svc</Address>
+        <TransportType Name="WCF-BasicHttp" Capabilities="899" ConfigurationClsid="467c1a52-373f-4f09-9008-27af6b985f14" />
+        <TransportTypeData>
+			<CustomProps>
+				<MessageEncoding vt="8">Text</MessageEncoding>
+				<ServiceCertificate vt="8" />
+				<InboundBodyPathExpression vt="8" />
+				<OutboundBodyLocation vt="8">UseBodyElement</OutboundBodyLocation>
+				<InboundNodeEncoding vt="8">Xml</InboundNodeEncoding>
+				<CloseTimeout vt="8">00:01:00</CloseTimeout>
+				<StaticAction vt="8" />
+				<ProxyAddress vt="8" />
+				<MaxReceivedMessageSize vt="3">65536</MaxReceivedMessageSize>
+				<ClientCertificate vt="8" />
+				<AlgorithmSuite vt="8">Basic256</AlgorithmSuite>
+				<ProxyUserName vt="8" />
+				<OutboundXmlTemplate vt="8">&amp;lt;bts-msg-body xmlns="http://www.microsoft.com/schemas/bts2007" encoding="xml"/&amp;gt;</OutboundXmlTemplate>
+				<TextEncoding vt="8">utf-8</TextEncoding>
+				<PropagateFaultMessage vt="11">-1</PropagateFaultMessage>
+				<SecurityMode vt="8">None</SecurityMode>
+				<ProxyToUse vt="8">Default</ProxyToUse>
+				<TransportClientCredentialType vt="8">None</TransportClientCredentialType>
+				<OpenTimeout vt="8">00:01:00</OpenTimeout>
+				<InboundBodyLocation vt="8">UseBodyElement</InboundBodyLocation>
+				<MessageClientCredentialType vt="8">UserName</MessageClientCredentialType>
+				<SendTimeout vt="8">00:01:00</SendTimeout>
+				<UseSSO vt="11">0</UseSSO>
+			</CustomProps>
+		</TransportTypeData>
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>true</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler Name="BizTalkServerApplication" HostTrusted="false">
+          <TransportType Name="WCF-BasicHttp" Capabilities="899" ConfigurationClsid="467c1a52-373f-4f09-9008-27af6b985f14" />
+        </SendHandler>
+      </PrimaryTransport>
+      <SecondaryTransport>
+        <Address />
+        <RetryCount>3</RetryCount>
+        <RetryInterval>5</RetryInterval>
+        <ServiceWindowEnabled>false</ServiceWindowEnabled>
+        <FromTime>2014-02-18T23:00:00</FromTime>
+        <ToTime>2014-02-19T22:59:59</ToTime>
+        <Primary>false</Primary>
+        <OrderedDelivery>false</OrderedDelivery>
+        <DeliveryNotification>1</DeliveryNotification>
+        <SendHandler xsi:nil="true" />
+      </SecondaryTransport>
+      <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.PassThruReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.PassThruReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+      <ReceivePipelineData xsi:nil="true" />
+      <Tracking>0</Tracking>
+      <Filter />
+      <Transforms />
+      <InboundTransforms />
       <OrderedDelivery>false</OrderedDelivery>
       <Priority>5</Priority>
       <StopSendingOnFailure>false</StopSendingOnFailure>
@@ -293,13 +428,50 @@
             <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
           </ReceiveHandler>
         </ReceiveLocation>
+        <ReceiveLocation Name="BTS.OneWayReceive2_SBus">
+          <!-- <Mock />-->
+          <Description xsi:nil="true" />
+          <Address>C:\Projects\BTS.SBus\*.xml</Address>
+          <PublicAddress />
+          <Primary>true</Primary>
+          <ReceiveLocationServiceWindowEnabled>false</ReceiveLocationServiceWindowEnabled>
+          <ReceiveLocationFromTime>2014-02-18T23:00:00</ReceiveLocationFromTime>
+          <ReceiveLocationToTime>2014-02-19T22:59:59</ReceiveLocationToTime>
+          <ReceiveLocationStartDateEnabled>false</ReceiveLocationStartDateEnabled>
+          <ReceiveLocationStartDate>2014-02-19T00:00:00</ReceiveLocationStartDate>
+          <ReceiveLocationEndDateEnabled>false</ReceiveLocationEndDateEnabled>
+          <ReceiveLocationEndDate>2014-02-20T00:00:00</ReceiveLocationEndDate>
+          <ReceiveLocationTransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
+          <ReceiveLocationTransportTypeData>
+            <CustomProps>
+              <RemoveReceivedFileDelay vt="19">10</RemoveReceivedFileDelay>
+              <RemoveReceivedFileMaxInterval vt="19">300000</RemoveReceivedFileMaxInterval>
+              <FileMask vt="8">*.xml</FileMask>
+              <RenameReceivedFiles vt="11">0</RenameReceivedFiles>
+              <FileNetFailRetryInt vt="19">5</FileNetFailRetryInt>
+              <RemoveReceivedFileRetryCount vt="19">5</RemoveReceivedFileRetryCount>
+              <BatchSizeInBytes vt="19">102400</BatchSizeInBytes>
+              <PollingInterval vt="19">60000</PollingInterval>
+              <FileNetFailRetryCount vt="19">5</FileNetFailRetryCount>
+              <BatchSize vt="19">20</BatchSize>
+            </CustomProps>
+          </ReceiveLocationTransportTypeData>
+          <ReceivePipeline Name="Microsoft.BizTalk.DefaultPipelines.XMLReceive" FullyQualifiedName="Microsoft.BizTalk.DefaultPipelines.XMLReceive, Microsoft.BizTalk.DefaultPipelines, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Type="1" TrackingOption="ServiceStartEnd MessageSendReceive PipelineEvents" />
+          <ReceivePipelineData xsi:nil="true" />
+          <SendPipeline xsi:nil="true" />
+          <SendPipelineData xsi:nil="true" />
+          <Enable>false</Enable>
+          <ReceiveHandler Name="BizTalkServerApplication" HostTrusted="false">
+            <TransportType Name="FILE" Capabilities="11" ConfigurationClsid="5e49e3a6-b4fc-4077-b44c-22f34a242fdb" />
+          </ReceiveHandler>
+        </ReceiveLocation>
       </ReceiveLocations>
       <SendPipelineData xsi:nil="true" />
       <Authentication>0</Authentication>
       <Tracking>0</Tracking>
       <Transforms />
       <RouteFailedMessage>false</RouteFailedMessage>
-      <ApplicationName>BizTalkTests</ApplicationName>
+      <ApplicationName>BizTalkTests</ApplicationName>      
     </ReceivePort>
     <ReceivePort Name="BTS.TwoWayTestReceive" IsTwoWay="true" BindingOption="0">
       <Description xsi:nil="true" />

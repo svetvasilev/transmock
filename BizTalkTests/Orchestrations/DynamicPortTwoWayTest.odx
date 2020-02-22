@@ -17,13 +17,13 @@
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="StartProcess" />
                 <om:Property Name="Signal" Value="True" />
-                <om:Element Type="MessageRef" OID="f73f9537-44f7-4188-b299-712945655a87" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.36">
-                    <om:Property Name="Ref" Value="Schemas.TestSchema.Root" />
+                <om:Element Type="MessageRef" OID="f73f9537-44f7-4188-b299-712945655a87" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.39">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema.Request" />
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Request" />
                     <om:Property Name="Signal" Value="True" />
                 </om:Element>
-                <om:Element Type="MessageRef" OID="b118e28b-dfbf-40bd-8f17-6c3f8829ac71" ParentLink="OperationDeclaration_ResponseMessageRef" LowerBound="8.38" HigherBound="8.65">
+                <om:Element Type="MessageRef" OID="b118e28b-dfbf-40bd-8f17-6c3f8829ac71" ParentLink="OperationDeclaration_ResponseMessageRef" LowerBound="8.41" HigherBound="8.68">
                     <om:Property Name="Ref" Value="Schemas.TestSchema.Response" />
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Response" />
@@ -47,14 +47,14 @@
                 <om:Property Name="Signal" Value="True" />
             </om:Element>
             <om:Element Type="MessageDeclaration" OID="d1ab726c-2205-4826-8764-0b2c6dfe33b0" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="18.1" HigherBound="19.1">
-                <om:Property Name="Type" Value="Schemas.TestSchema.Root" />
+                <om:Property Name="Type" Value="Schemas.TestSchema.Request" />
                 <om:Property Name="ParamDirection" Value="In" />
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="OutMsg" />
                 <om:Property Name="Signal" Value="True" />
             </om:Element>
             <om:Element Type="MessageDeclaration" OID="a4dd1348-e8ae-44bd-a38f-e909322b56b8" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="19.1" HigherBound="20.1">
-                <om:Property Name="Type" Value="Schemas.TestSchema.Root" />
+                <om:Property Name="Type" Value="Schemas.TestSchema.Request" />
                 <om:Property Name="ParamDirection" Value="In" />
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="StartMsg" />
@@ -140,7 +140,7 @@
             <om:Element Type="PortDeclaration" OID="1103745c-4756-46b4-be5e-b1d0fd333d44" ParentLink="ServiceDeclaration_PortDeclaration" LowerBound="16.1" HigherBound="18.1">
                 <om:Property Name="PortModifier" Value="Uses" />
                 <om:Property Name="Orientation" Value="Right" />
-                <om:Property Name="PortIndex" Value="-1" />
+                <om:Property Name="PortIndex" Value="23" />
                 <om:Property Name="IsWebPort" Value="False" />
                 <om:Property Name="OrderedDelivery" Value="False" />
                 <om:Property Name="DeliveryNotification" Value="None" />
@@ -169,7 +169,7 @@ module Orchestrations
     {
         requestresponse StartProcess
         {
-            Schemas.TestSchema.Root, Schemas.TestSchema.Response
+            Schemas.TestSchema.Request, Schemas.TestSchema.Response
         };
     };
     [Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
@@ -179,8 +179,8 @@ module Orchestrations
         port implements InStartPortType PortIn;
         [Microsoft.XLANGs.BaseTypes.PhysicalBinding(typeof(Microsoft.BizTalk.DefaultPipelines.XMLReceive), typeof(Microsoft.BizTalk.DefaultPipelines.PassThruTransmit))]
         port uses dynamic RequestResponsePortType PortOut2Way;
-        message Schemas.TestSchema.Root OutMsg;
-        message Schemas.TestSchema.Root StartMsg;
+        message Schemas.TestSchema.Request OutMsg;
+        message Schemas.TestSchema.Request StartMsg;
         message Schemas.TestSchema.Response OutRespMsg;
         TransMock.TestUtils.BizTalk.MockTransportConfig MockConfig;
         body ()

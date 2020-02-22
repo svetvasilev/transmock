@@ -17,8 +17,8 @@
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="StartProcess" />
                 <om:Property Name="Signal" Value="True" />
-                <om:Element Type="MessageRef" OID="0cfe3469-e3ef-45ae-89de-c40e08d08f32" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.36">
-                    <om:Property Name="Ref" Value="Schemas.TestSchema.Root" />
+                <om:Element Type="MessageRef" OID="0cfe3469-e3ef-45ae-89de-c40e08d08f32" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.39">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema.Request" />
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Request" />
                     <om:Property Name="Signal" Value="True" />
@@ -36,8 +36,8 @@
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="SendOutMessage" />
                 <om:Property Name="Signal" Value="True" />
-                <om:Element Type="MessageRef" OID="727c0eb1-f138-4efe-b520-851a8bc55aa0" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="15.13" HigherBound="15.36">
-                    <om:Property Name="Ref" Value="Schemas.TestSchema.Root" />
+                <om:Element Type="MessageRef" OID="727c0eb1-f138-4efe-b520-851a8bc55aa0" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="15.13" HigherBound="15.39">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema.Request" />
                     <om:Property Name="ReportToAnalyst" Value="True" />
                     <om:Property Name="Name" Value="Request" />
                     <om:Property Name="Signal" Value="True" />
@@ -60,14 +60,14 @@
                 <om:Property Name="Signal" Value="True" />
             </om:Element>
             <om:Element Type="MessageDeclaration" OID="c46f75a0-0106-49de-9c4c-a07f087cd5d7" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="25.1" HigherBound="26.1">
-                <om:Property Name="Type" Value="Schemas.TestSchema.Root" />
+                <om:Property Name="Type" Value="Schemas.TestSchema.Request" />
                 <om:Property Name="ParamDirection" Value="In" />
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="StartMsg" />
                 <om:Property Name="Signal" Value="True" />
             </om:Element>
             <om:Element Type="MessageDeclaration" OID="52ef2607-5e54-4f39-b74a-35eae6224d43" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="26.1" HigherBound="27.1">
-                <om:Property Name="Type" Value="Schemas.TestSchema.Root" />
+                <om:Property Name="Type" Value="Schemas.TestSchema.Request" />
                 <om:Property Name="ParamDirection" Value="In" />
                 <om:Property Name="ReportToAnalyst" Value="True" />
                 <om:Property Name="Name" Value="OutMsg" />
@@ -165,14 +165,14 @@ module Orchestrations
     {
         oneway StartProcess
         {
-            Schemas.TestSchema.Root
+            Schemas.TestSchema.Request
         };
     };
     internal porttype OutPortType
     {
         oneway SendOutMessage
         {
-            Schemas.TestSchema.Root
+            Schemas.TestSchema.Request
         };
     };
     [Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
@@ -182,8 +182,8 @@ module Orchestrations
         port implements InStartPortType PortIn;
         [Microsoft.XLANGs.BaseTypes.PhysicalBinding(typeof(Microsoft.BizTalk.DefaultPipelines.PassThruTransmit))]
         port uses dynamic OutPortType PortOut;
-        message Schemas.TestSchema.Root StartMsg;
-        message Schemas.TestSchema.Root OutMsg;
+        message Schemas.TestSchema.Request StartMsg;
+        message Schemas.TestSchema.Request OutMsg;
         TransMock.TestUtils.BizTalk.MockTransportConfig MockConfig;
         body ()
         {
