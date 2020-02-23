@@ -25,10 +25,9 @@ namespace BizTalkTests.IntegrationTests
 
             messagingClient.Send(r => r.BTS_OneWayReceive3_SBus,
                 "StartMessage.xml",
-                messagePropertiesSetter: msp => new Dictionary<string, string>()
-                {
-                    { "ServiceBus.CorrelationId", "SomeCorrelationID" }
-                })
+                messagePropertiesSetter: msp => msp.Add(
+                    SBMessaging.CorrelationId, "SomeCorrelationID")
+                 )
                 .Receive(s => s.BTS_OneWayTestSend_SBus,
                     validator: v => ValidateCorrelationId(v, "SomeCorrelationID"));
 

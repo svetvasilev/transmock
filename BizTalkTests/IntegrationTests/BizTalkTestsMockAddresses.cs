@@ -1,6 +1,6 @@
 ﻿/******************************************************/
 /* This is an automacitally generated class by tool 
-/* TransMock.Mockifier, version 1.5.0.0
+/* TransMock.Mockifier, version 1.5.1.0
 /******************************************************/
 
 namespace BizTalkTests.IntegrationTests
