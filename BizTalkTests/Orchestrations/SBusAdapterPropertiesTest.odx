@@ -90,7 +90,7 @@
                     <om:Property Name="Name" Value="Construct_ResponseMessage" />
                     <om:Property Name="Signal" Value="True" />
                     <om:Element Type="MessageAssignment" OID="1caea247-edbe-428c-8be8-a74fd3990648" ParentLink="ComplexStatement_Statement" LowerBound="36.1" HigherBound="43.1">
-                        <om:Property Name="Expression" Value="xmlDoc = new System.Xml.XmlDocument();&#xD;&#xA;xmlDoc.LoadXml(&quot;&lt;ns0:Response xmlns:ns0=\&quot;\&quot;&gt;&lt;CorrelationId&gt;&lt;/CorrelationId&gt;&lt;ns0:Response&gt;&quot;);&#xD;&#xA;&#xD;&#xA;ResponseMessage = xmlDoc;&#xD;&#xA;&#xD;&#xA;ResponseMessage.CorrelationId = RequestMessage(SBMessaging.CorrelationId);" />
+                        <om:Property Name="Expression" Value="xmlDoc = new System.Xml.XmlDocument();&#xD;&#xA;xmlDoc.LoadXml(&quot;&lt;ns0:Response xmlns:ns0=\&quot;http://Schemas.TestSchema\&quot;&gt;&lt;CorrelationId&gt;&lt;/CorrelationId&gt;&lt;/ns0:Response&gt;&quot;);&#xD;&#xA;&#xD;&#xA;ResponseMessage = xmlDoc;&#xD;&#xA;&#xD;&#xA;ResponseMessage.CorrelationId = RequestMessage(SBMessaging.CorrelationId);" />
                         <om:Property Name="ReportToAnalyst" Value="False" />
                         <om:Property Name="Name" Value="MessageAssignment_1" />
                         <om:Property Name="Signal" Value="True" />
@@ -184,7 +184,7 @@ module Orchestrations
             {
                 [Microsoft.XLANGs.BaseTypes.DesignerPosition("1caea247-edbe-428c-8be8-a74fd3990648")]
                 xmlDoc = new System.Xml.XmlDocument();
-                xmlDoc.LoadXml("<ns0:Response xmlns:ns0=\"\"><CorrelationId></CorrelationId><ns0:Response>");
+                xmlDoc.LoadXml("<ns0:Response xmlns:ns0=\"http://Schemas.TestSchema\"><CorrelationId></CorrelationId></ns0:Response>");
                 
                 ResponseMessage = xmlDoc;
                 

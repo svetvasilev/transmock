@@ -20,7 +20,7 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE.ToString(),
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWayReceive_FILE.ToString(),
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -29,7 +29,7 @@ namespace BizTalkTests.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE.ToString(),
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWaySendFILE.ToString(),
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -55,7 +55,7 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE.ToString(),
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWayReceive2_FILE.ToString(),
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -69,7 +69,7 @@ namespace BizTalkTests.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWaySendFILE.ToString(),
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWaySendFILE.ToString(),
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -91,7 +91,7 @@ namespace BizTalkTests.IntegrationTests
         [DeploymentItem(@"TestData\StartMessage.xml")]
         public void TestOneWayFlow_NewSyntax()
         {
-            var epMock = new EndpointsMock<BizTalkTestsNewMockAddresses>();
+            var epMock = new EndpointsMock<BizTalkTestsMockAddresses>();
 
             epMock.SetupReceive(
                 r => r.BTS_OneWayReceive2_FILE);

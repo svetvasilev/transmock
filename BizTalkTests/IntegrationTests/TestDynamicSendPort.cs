@@ -59,7 +59,7 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive_FILE,
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWayReceive_FILE,
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -68,7 +68,7 @@ namespace BizTalkTests.IntegrationTests
 
             var outMsgStep = new MockReceiveStep()
             {
-                Url = BizTalkTestsMockAddresses.DynamicPortOut,
+                Url = BizTalkTestsOldMockAddresses.DynamicPortOut,
                 Encoding = "UTF-8",
                 Timeout = 10
             };
@@ -89,7 +89,7 @@ namespace BizTalkTests.IntegrationTests
 
             var inMsgStep = new MockSendStep()
             {
-                Url = BizTalkTestsMockAddresses.BTS_OneWayReceive2_FILE,
+                Url = BizTalkTestsOldMockAddresses.BTS_OneWayReceive2_FILE,
                 RequestPath = "StartMessage.xml",
                 Encoding = "UTF-8"
             };
@@ -98,7 +98,7 @@ namespace BizTalkTests.IntegrationTests
 
             var outMsgStep = new MockRequestResponseStep()
             {
-                Url = BizTalkTestsMockAddresses.DynamicPortOut2Way,                
+                Url = BizTalkTestsOldMockAddresses.DynamicPortOut2Way,                
                 Encoding = "UTF-8",
                 ResponsePath = "ResponseMessage.xml",
                 Timeout = 10
