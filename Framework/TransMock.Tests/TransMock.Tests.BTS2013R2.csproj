@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BE274A23-F9AC-4FCC-8514-B3377EC9C2DC}</ProjectGuid>
+    <ProjectGuid>{E4235F89-DED8-44AF-9124-0917D65ADBE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Tests.BTS2016</RootNamespace>

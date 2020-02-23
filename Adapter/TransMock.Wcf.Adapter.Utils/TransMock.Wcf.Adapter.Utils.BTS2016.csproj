@@ -65,6 +65,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="BizTalkProperties\SBMessaging.Designer.cs">
+      <DependentUpon>SBMessaging.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="BizTalkProperties\SMTP.Designer.cs">
       <DependentUpon>SMTP.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -171,6 +176,11 @@
     <EmbeddedResource Include="BizTalkProperties\MIME.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MIME.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BizTalkProperties\SBMessaging.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SBMessaging.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="BizTalkProperties\SMTP.resx">

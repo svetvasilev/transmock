@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B9650B94-9889-4B50-AB6A-6BE8FB7B4F40}</ProjectGuid>
+    <ProjectGuid>{5C00DF71-E9B7-4A2B-8BF3-FE7E0CC7A7AC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock</RootNamespace>

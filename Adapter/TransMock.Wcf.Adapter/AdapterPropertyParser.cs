@@ -38,7 +38,8 @@ namespace TransMock.Wcf.Adapter
         /// Namespace used for writing header properties to the BizTalk message context
         /// </summary>
         private const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
-        
+
+        private const string UtilsAssemblyName = "TransMock.Wcf.Adapter.Utils";
         #endregion
 
         /// <summary>
@@ -198,13 +199,23 @@ namespace TransMock.Wcf.Adapter
 
                 if (!name.Contains("#"))
                 {
-                    // Handling custom promoted property case
+                    // Handling shorter syntax for promoted property
                     nameParts = name.Split('.');
 
-                    // Activator.CreateInstance("TransMock.Utils", );
+                    if (nameParts.Length < 1)
+                    {
+                        System.Diagnostics.Trace.WriteLine(
+                        string.Format(
+                            "LookupProperty exits prematurely due to invalid property name: {0}",
+                            contextPropertyName),
+                        "TransMock.Wcf.Adapter.AdapterPropertyParser");
+
+                        return null;
+                    }
+
                     var utilsAssembly = System.Reflection
                         .Assembly.Load(
-                            "TransMock.Utils");
+                            UtilsAssemblyName);
 
                     var propertyType = utilsAssembly.GetTypes()
                         .Where(t => t.Name == nameParts[0])
@@ -214,7 +225,7 @@ namespace TransMock.Wcf.Adapter
                             .GetProperty(nameParts[1])
                             .GetValue(null).ToString();
 
-                    System.Diagnostics.Debug.WriteLine(
+                    System.Diagnostics.Trace.WriteLine(
                         string.Format(
                             "LookupProperty value found: {0}",
                             contextPropertyName),

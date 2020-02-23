@@ -7,6 +7,7 @@ using System.Xml;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+
 namespace TransMock.TestUtils
 {
     public static class MessagePropertyValidator

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7C1E39B3-1CE5-4979-B2FE-A8D2823C63EC}</ProjectGuid>
+    <ProjectGuid>{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Wcf.Adapter.Utils</RootNamespace>
@@ -64,6 +64,11 @@
       <DependentUpon>MIME.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="BizTalkProperties\SBMessaging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SBMessaging.resx</DependentUpon>
     </Compile>
     <Compile Include="BizTalkProperties\SMTP.Designer.cs">
       <DependentUpon>SMTP.resx</DependentUpon>
@@ -172,6 +177,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MIME.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BizTalkProperties\SBMessaging.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SBMessaging.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="BizTalkProperties\SMTP.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
