@@ -64,6 +64,12 @@ namespace TransMock.Communication.NamedPipes
         Stream ReadStream();
 
         /// <summary>
+        /// Reads a mocke message instance from the underlying communication line
+        /// </summary>
+        /// <returns>An instance of <see cref="MockMessage"/> class</returns>
+        MockMessage ReadMessage();
+
+        /// <summary>
         /// Writes all the bytes provided to the stream and sends them to the server named pipe endpoint
         /// </summary>
         /// <param name="data">Array of bytes containing all the data that is to be sent to the server</param>

@@ -55,9 +55,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ComplexFlowMock.cs" />
+    <Compile Include="ComplexFlowMockAddresses.cs" />
     <Compile Include="TestMockAddresses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestSimpleMock.cs" />
+    <Compile Include="TestComplexMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.BTS2016.csproj">
