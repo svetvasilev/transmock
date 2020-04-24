@@ -1,69 +1,83 @@
-﻿
+﻿/******************************************************/
+/* This is an automacitally generated class by tool 
+/* TransMock.Mockifier, version 1.5.1.0
+/******************************************************/
+
 namespace BizTalkTests.IntegrationTests
 {
-	public static class BizTalkTestsMockAddresses
+	using TransMock.Addressing;
+
+	public class BizTalkTestsMockAddresses : EndpointAddress
 	{
-		public static string DynamicPortOut
+		public OneWaySendAddress DynamicPortOut
 		{
 			get
 			{
-				return "mock://localhost/DynamicPortOut";
+				return new OneWaySendAddress("mock://localhost/DynamicPortOut");
 			}
 		}
 
-		public static string DynamicPortOut2Way
+		public TwoWaySendAddress DynamicPortOut2Way
 		{
 			get
 			{
-				return "mock://localhost/DynamicPortOut2Way";
+				return new TwoWaySendAddress("mock://localhost/DynamicPortOut2Way");
 			}
 		}
 
-		public static string BTS_OneWaySendFILE
+		public OneWaySendAddress BTS_OneWaySendFILE
 		{
 			get
 			{
-				return "mock://localhost/BTS.OneWaySendFILE";
+				return new OneWaySendAddress("mock://localhost/BTS.OneWaySendFILE");
 			}
 		}
 
-		public static string BTS_TwoWayTestSendWCF
+		public OneWaySendAddress BTS_OneWayTestSend_SBus
 		{
 			get
 			{
-				return "mock://localhost/BTS.TwoWayTestSendWCF";
+				return new OneWaySendAddress("mock://localhost/BTS.OneWayTestSend_SBus");
 			}
 		}
 
-		public static string BTS_OneWayReceive_FILE
+		public TwoWaySendAddress BTS_TwoWayTestSendWCF
 		{
 			get
 			{
-				return "mock://localhost/BTS.OneWayReceive_FILE";
+				return new TwoWaySendAddress("mock://localhost/BTS.TwoWayTestSendWCF");
 			}
 		}
 
-		public static string BTS_OneWayReceive2_FILE
+		public OneWayReceiveAddress BTS_OneWayReceive_FILE
 		{
 			get
 			{
-				return "mock://localhost/BTS.OneWayReceive2_FILE";
+				return new OneWayReceiveAddress("mock://localhost/BTS.OneWayReceive_FILE");
 			}
 		}
 
-		public static string BTS_TwoWayTestReceive_WCF
+		public OneWayReceiveAddress BTS_OneWayReceive2_FILE
 		{
 			get
 			{
-				return "mock://localhost/BTS.TwoWayTestReceive_WCF";
+				return new OneWayReceiveAddress("mock://localhost/BTS.OneWayReceive2_FILE");
 			}
 		}
 
-        public static string BTS_OneWayStaticReceive_FILE
-        {
-            get
-            {
-				return "mock://localhost/BTS.OneWayStaticReceive_FILE";
+		public OneWayReceiveAddress BTS_OneWayReceive3_SBus
+		{
+			get
+			{
+				return new OneWayReceiveAddress("mock://localhost/BTS.OneWayReceive3_SBus");
+			}
+		}
+
+		public TwoWayReceiveAddress BTS_TwoWayTestReceive_WCF
+		{
+			get
+			{
+				return new TwoWayReceiveAddress("mock://localhost/BTS.TwoWayTestReceive_WCF");
 			}
 		}
 	}

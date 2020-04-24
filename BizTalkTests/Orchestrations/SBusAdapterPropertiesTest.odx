@@ -1,0 +1,198 @@
+﻿#if __DESIGNER_DATA
+#error Do not define __DESIGNER_DATA.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<om:MetaModel MajorVersion="1" MinorVersion="3" Core="2b131234-7959-458d-834f-2dc0769ce683" ScheduleModel="66366196-361d-448d-976f-cab5e87496d2" xmlns:om="http://schemas.microsoft.com/BizTalk/2003/DesignerData">
+    <om:Element Type="Module" OID="b1c0ec4c-d22a-48ef-8061-7cfdc8d9419a" LowerBound="1.1" HigherBound="49.1">
+        <om:Property Name="ReportToAnalyst" Value="True" />
+        <om:Property Name="Name" Value="Orchestrations" />
+        <om:Property Name="Signal" Value="False" />
+        <om:Element Type="PortType" OID="8da58b22-8eeb-43ad-bbbe-a92e1bd440d0" ParentLink="Module_PortType" LowerBound="4.1" HigherBound="11.1">
+            <om:Property Name="Synchronous" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="ServiceBusReceivePortType" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="OperationDeclaration" OID="79181f9e-0409-42c5-90fc-bb6d356468fc" ParentLink="PortType_OperationDeclaration" LowerBound="6.1" HigherBound="10.1">
+                <om:Property Name="OperationType" Value="OneWay" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="ReceiveSBMessage" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="MessageRef" OID="61894a9f-7c09-41e7-9be4-54028c17e791" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="8.13" HigherBound="8.39">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema.Request" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Request" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+        <om:Element Type="PortType" OID="ca373836-7780-44d5-a79b-261bfe6a0e68" ParentLink="Module_PortType" LowerBound="11.1" HigherBound="18.1">
+            <om:Property Name="Synchronous" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="ServiceBusSendPortType" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="OperationDeclaration" OID="e55f5ce2-d753-4de1-808a-9f5f1676b949" ParentLink="PortType_OperationDeclaration" LowerBound="13.1" HigherBound="17.1">
+                <om:Property Name="OperationType" Value="OneWay" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="SendSBMessage" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="MessageRef" OID="8fc2f035-aef6-463b-a848-5230aa7df4de" ParentLink="OperationDeclaration_RequestMessageRef" LowerBound="15.13" HigherBound="15.40">
+                    <om:Property Name="Ref" Value="Schemas.TestSchema.Response" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Request" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+        <om:Element Type="ServiceDeclaration" OID="9a628f8f-1dd3-424f-a049-118026aef999" ParentLink="Module_ServiceDeclaration" LowerBound="18.1" HigherBound="48.1">
+            <om:Property Name="InitializedTransactionType" Value="False" />
+            <om:Property Name="IsInvokable" Value="False" />
+            <om:Property Name="TypeModifier" Value="Internal" />
+            <om:Property Name="ReportToAnalyst" Value="True" />
+            <om:Property Name="Name" Value="SBusAdapterPropertiesTest" />
+            <om:Property Name="Signal" Value="False" />
+            <om:Element Type="VariableDeclaration" OID="b0830e8f-0184-4ec2-8849-f47fdd8c579b" ParentLink="ServiceDeclaration_VariableDeclaration" LowerBound="27.1" HigherBound="28.1">
+                <om:Property Name="UseDefaultConstructor" Value="True" />
+                <om:Property Name="Type" Value="System.Xml.XmlDocument" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="xmlDoc" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="MessageDeclaration" OID="9ee9d678-f52f-4378-b079-375cc8ba95a6" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="25.1" HigherBound="26.1">
+                <om:Property Name="Type" Value="Schemas.TestSchema.Request" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="RequestMessage" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="MessageDeclaration" OID="9c1ccfaf-a5ce-434c-914d-021a219e25cd" ParentLink="ServiceDeclaration_MessageDeclaration" LowerBound="26.1" HigherBound="27.1">
+                <om:Property Name="Type" Value="Schemas.TestSchema.Response" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="ResponseMessage" />
+                <om:Property Name="Signal" Value="True" />
+            </om:Element>
+            <om:Element Type="ServiceBody" OID="255c391c-ce80-452d-96af-9e03660f4b52" ParentLink="ServiceDeclaration_ServiceBody">
+                <om:Property Name="Signal" Value="False" />
+                <om:Element Type="Receive" OID="799b88e2-eea4-42e2-b747-c67d779a00ef" ParentLink="ServiceBody_Statement" LowerBound="30.1" HigherBound="33.1">
+                    <om:Property Name="Activate" Value="True" />
+                    <om:Property Name="PortName" Value="ServiceBusPortIn" />
+                    <om:Property Name="MessageName" Value="RequestMessage" />
+                    <om:Property Name="OperationName" Value="ReceiveSBMessage" />
+                    <om:Property Name="OperationMessageName" Value="Request" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Receive_Request" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+                <om:Element Type="Construct" OID="811be278-92cf-4931-a7eb-1c1378ee0f69" ParentLink="ServiceBody_Statement" LowerBound="33.1" HigherBound="44.1">
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Construct_ResponseMessage" />
+                    <om:Property Name="Signal" Value="True" />
+                    <om:Element Type="MessageAssignment" OID="1caea247-edbe-428c-8be8-a74fd3990648" ParentLink="ComplexStatement_Statement" LowerBound="36.1" HigherBound="43.1">
+                        <om:Property Name="Expression" Value="xmlDoc = new System.Xml.XmlDocument();&#xD;&#xA;xmlDoc.LoadXml(&quot;&lt;ns0:Response xmlns:ns0=\&quot;http://Schemas.TestSchema\&quot;&gt;&lt;CorrelationId&gt;&lt;/CorrelationId&gt;&lt;/ns0:Response&gt;&quot;);&#xD;&#xA;&#xD;&#xA;ResponseMessage = xmlDoc;&#xD;&#xA;&#xD;&#xA;ResponseMessage.CorrelationId = RequestMessage(SBMessaging.CorrelationId);" />
+                        <om:Property Name="ReportToAnalyst" Value="False" />
+                        <om:Property Name="Name" Value="MessageAssignment_1" />
+                        <om:Property Name="Signal" Value="True" />
+                    </om:Element>
+                    <om:Element Type="MessageRef" OID="e08bc956-53bd-41e9-9d9e-87595660c22d" ParentLink="Construct_MessageRef" LowerBound="34.23" HigherBound="34.38">
+                        <om:Property Name="Ref" Value="ResponseMessage" />
+                        <om:Property Name="ReportToAnalyst" Value="True" />
+                        <om:Property Name="Signal" Value="False" />
+                    </om:Element>
+                </om:Element>
+                <om:Element Type="Send" OID="ec0682ab-811a-42a6-81e4-d323a3ef2e5c" ParentLink="ServiceBody_Statement" LowerBound="44.1" HigherBound="46.1">
+                    <om:Property Name="PortName" Value="ServiceBusPortOut" />
+                    <om:Property Name="MessageName" Value="ResponseMessage" />
+                    <om:Property Name="OperationName" Value="SendSBMessage" />
+                    <om:Property Name="OperationMessageName" Value="Request" />
+                    <om:Property Name="ReportToAnalyst" Value="True" />
+                    <om:Property Name="Name" Value="Send_Response" />
+                    <om:Property Name="Signal" Value="True" />
+                </om:Element>
+            </om:Element>
+            <om:Element Type="PortDeclaration" OID="28ee09aa-1a59-4158-862c-f0e72960dfd9" ParentLink="ServiceDeclaration_PortDeclaration" LowerBound="21.1" HigherBound="23.1">
+                <om:Property Name="PortModifier" Value="Implements" />
+                <om:Property Name="Orientation" Value="Left" />
+                <om:Property Name="PortIndex" Value="-1" />
+                <om:Property Name="IsWebPort" Value="False" />
+                <om:Property Name="OrderedDelivery" Value="False" />
+                <om:Property Name="DeliveryNotification" Value="None" />
+                <om:Property Name="Type" Value="Orchestrations.ServiceBusReceivePortType" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="ServiceBusPortIn" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="LogicalBindingAttribute" OID="1accd63f-aabd-47bb-9a48-88fdf3dc17a0" ParentLink="PortDeclaration_CLRAttribute" LowerBound="21.1" HigherBound="22.1">
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+            <om:Element Type="PortDeclaration" OID="90b2b4b8-077d-40aa-968c-054c616af17e" ParentLink="ServiceDeclaration_PortDeclaration" LowerBound="23.1" HigherBound="25.1">
+                <om:Property Name="PortModifier" Value="Uses" />
+                <om:Property Name="Orientation" Value="Left" />
+                <om:Property Name="PortIndex" Value="12" />
+                <om:Property Name="IsWebPort" Value="False" />
+                <om:Property Name="OrderedDelivery" Value="False" />
+                <om:Property Name="DeliveryNotification" Value="None" />
+                <om:Property Name="Type" Value="Orchestrations.ServiceBusSendPortType" />
+                <om:Property Name="ParamDirection" Value="In" />
+                <om:Property Name="ReportToAnalyst" Value="True" />
+                <om:Property Name="Name" Value="ServiceBusPortOut" />
+                <om:Property Name="Signal" Value="True" />
+                <om:Element Type="LogicalBindingAttribute" OID="50f3adf1-06b8-489b-be9b-bc0da06b5210" ParentLink="PortDeclaration_CLRAttribute" LowerBound="23.1" HigherBound="24.1">
+                    <om:Property Name="Signal" Value="False" />
+                </om:Element>
+            </om:Element>
+        </om:Element>
+    </om:Element>
+</om:MetaModel>
+#endif // __DESIGNER_DATA
+[Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+module Orchestrations
+{
+    internal porttype ServiceBusReceivePortType
+    {
+        oneway ReceiveSBMessage
+        {
+            Schemas.TestSchema.Request
+        };
+    };
+    internal porttype ServiceBusSendPortType
+    {
+        oneway SendSBMessage
+        {
+            Schemas.TestSchema.Response
+        };
+    };
+    [Microsoft.XLANGs.BaseTypes.BPELExportable(false)]
+    internal service SBusAdapterPropertiesTest
+    {
+        [Microsoft.XLANGs.BaseTypes.LogicalBinding()]
+        port implements ServiceBusReceivePortType ServiceBusPortIn;
+        [Microsoft.XLANGs.BaseTypes.LogicalBinding()]
+        port uses ServiceBusSendPortType ServiceBusPortOut;
+        message Schemas.TestSchema.Request RequestMessage;
+        message Schemas.TestSchema.Response ResponseMessage;
+        System.Xml.XmlDocument xmlDoc;
+        body ()
+        {
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("799b88e2-eea4-42e2-b747-c67d779a00ef")]
+            activate receive (ServiceBusPortIn.ReceiveSBMessage, RequestMessage);
+            xmlDoc = new System.Xml.XmlDocument();
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("811be278-92cf-4931-a7eb-1c1378ee0f69")]
+            construct ResponseMessage
+            {
+                [Microsoft.XLANGs.BaseTypes.DesignerPosition("1caea247-edbe-428c-8be8-a74fd3990648")]
+                xmlDoc = new System.Xml.XmlDocument();
+                xmlDoc.LoadXml("<ns0:Response xmlns:ns0=\"http://Schemas.TestSchema\"><CorrelationId></CorrelationId></ns0:Response>");
+                
+                ResponseMessage = xmlDoc;
+                
+                ResponseMessage.CorrelationId = RequestMessage(SBMessaging.CorrelationId);
+            }
+            [Microsoft.XLANGs.BaseTypes.DesignerPosition("ec0682ab-811a-42a6-81e4-d323a3ef2e5c")]
+            send (ServiceBusPortOut.SendSBMessage, ResponseMessage);
+        }
+    }
+}
+

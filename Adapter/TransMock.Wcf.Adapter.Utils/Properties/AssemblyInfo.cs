@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TransMock.Utils")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("TransMock.Wcf.Adapter.Utils")]
+[assembly: AssemblyDescription("Utilities for the TransMock WCF adapter for BizTalk")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TransMock.Utils")]
+[assembly: AssemblyProduct("TransMock")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

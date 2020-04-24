@@ -106,6 +106,13 @@
       <Name>Schemas.BTS2016</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <XLang Include="SBusAdapterPropertiesTest.odx">
+      <TypeName>SBusAdapterPropertiesTest</TypeName>
+      <Namespace>Orchestrations</Namespace>
+      <SubType>Task</SubType>
+    </XLang>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\BizTalk\BizTalkC.targets" />
 </Project>

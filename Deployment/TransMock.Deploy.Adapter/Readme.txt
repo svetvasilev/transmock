@@ -7,6 +7,9 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Version 1.5.1:
+- Fixed issue with adapter properties promotion in messages
+
 Version 1.5.0:
 - No functional changes, only some assembly reference refactoring
 
