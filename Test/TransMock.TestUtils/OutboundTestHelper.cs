@@ -28,6 +28,12 @@ namespace TransMock.TestUtils
     /// </summary>
     public class OutboundTestHelper
     {
+        public static readonly byte[] EndOfMessage = new byte[3] {
+            0x54, // T
+            0x4d, // M
+            0x04 // End of transmission
+        };
+
         public NamedPipeServerStream pipeServer;
         public System.Threading.ManualResetEvent syncEvent;
         
@@ -78,8 +84,12 @@ namespace TransMock.TestUtils
                     byteCountRead = testHelper.pipeServer.Read(outBuffer, 0, outBuffer.Length);
                     totalBytesCount += byteCountRead;
 
-                    eofReached =  byteCountRead < outBuffer.Length ||
-                        byteCountRead == 0 ;
+                    eofReached =  IsEndOfMessage(outBuffer, byteCountRead);
+
+                    if (eofReached)
+                    {
+                        byteCountRead -= EndOfMessage.Length;
+                    }
 
                     memStream.Write(outBuffer, 0, byteCountRead);
                 }               
@@ -126,8 +136,7 @@ namespace TransMock.TestUtils
 
                     totalBytesCount += byteCountRead;
 
-                    eofReached = byteCountRead < outBuffer.Length ||
-                        byteCountRead == 0;                   
+                    eofReached = IsEndOfMessage(outBuffer, byteCountRead);
 
                     memStream.Write(outBuffer, 0, byteCountRead);                        
                                     
@@ -141,6 +150,25 @@ namespace TransMock.TestUtils
                 //We signal the event
                 testHelper.syncEvent.Set();
             }
+        }
+
+        private static bool IsEndOfMessage(byte[] data, int byteCount)
+        {
+            if (byteCount == 0)
+            {
+                return true;
+            }
+
+            bool eofReached = false;
+
+            // Take the last meaningful 3 bytes
+            var eot = data.Skip(byteCount - 3)
+                .Take(3)
+                .ToArray();
+
+            eofReached = eot.SequenceEqual(EndOfMessage);
+
+            return eofReached;
         }
     }
 }

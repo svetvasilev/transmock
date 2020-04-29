@@ -222,13 +222,23 @@ namespace TransMock.Communication.NamedPipes
                     byteCountRead = this.pipeClient.Read(inBuffer, 0, inBuffer.Length);
 
                     eofReached = NamedPipeMessageUtils.IsEndOfMessage(
-                        inBuffer.Length, 
+                        inBuffer, 
                         byteCountRead);
 
+                    if (eofReached && byteCountRead > 0)
+                    {
+                        byteCountRead -= NamedPipeMessageUtils.EndOfMessage.Length;
+                        // We take tha contents without the EndOfMessage sequence
+                        //inBuffer = inBuffer
+                        //    .Take(byteCountRead)
+                        //    .ToArray();
+                    }
+                    
                     msgStream.Write(
                         inBuffer,
                         0,
                         byteCountRead);
+                    
                 }
 
                 System.Diagnostics.Trace.WriteLine(
@@ -348,6 +358,12 @@ namespace TransMock.Communication.NamedPipes
                     var formatter = new BinaryFormatter();
 
                     formatter.Serialize(msgStream, message);
+
+                    // Writing the TransMock EndOfMessage sequence
+                    msgStream.Write(NamedPipeMessageUtils.EndOfMessage,
+                        0,
+                        NamedPipeMessageUtils.EndOfMessage.Length);
+
                     // Rewinding the stream to the beginning
                     msgStream.Seek(0, SeekOrigin.Begin);
 

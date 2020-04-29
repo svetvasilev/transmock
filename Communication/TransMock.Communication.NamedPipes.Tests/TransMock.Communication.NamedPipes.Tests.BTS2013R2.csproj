@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B08F87E7-B580-4E42-BAF0-7F8233153230}</ProjectGuid>
+    <ProjectGuid>{9F033655-BF47-440E-90F6-B72886A2EBAA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Communication.NamedPipes.Tests</RootNamespace>
@@ -58,6 +58,11 @@
       <Project>{51c54397-0a93-421d-bfba-ff920a48c19e}</Project>
       <Name>TransMock.Communication.NamedPipes.BTS2013R2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\StartMessage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

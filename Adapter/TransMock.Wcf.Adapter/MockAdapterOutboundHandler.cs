@@ -174,7 +174,6 @@ namespace TransMock.Wcf.Adapter
                     "The pipe client was connected!Sending the outbound message over the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
-                // pipeClient.WriteAllBytes(msgBuffer);
                 pipeClient.WriteMessage(mockMessage);
 
                 System.Diagnostics.Debug.WriteLine(

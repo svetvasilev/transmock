@@ -94,6 +94,6 @@
   </Target>
   <!-- !!! TODO !!! -->
   <Import Project="$(DeploymentFrameworkTargetsPath)BizTalkDeploymentFramework.targets" />
-  <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.5.1\BTDF\TransMock.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.5.2\BTDF\TransMock.targets" />
 
 </Project>

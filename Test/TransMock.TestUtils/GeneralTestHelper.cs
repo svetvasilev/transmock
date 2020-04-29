@@ -53,7 +53,21 @@ namespace TransMock.TestUtils
         {
             XmlDictionaryReader xdr = msg.GetReaderAtBodyContents();
             xdr.ReadStartElement("MessageContent");
-            return encoding.GetString(xdr.ReadContentAsBase64());            
+            byte[] messageBytes = xdr.ReadContentAsBase64();
+            byte[] preemble = encoding.GetPreamble();
+
+            if (preemble != null
+                && messageBytes
+                    .Take(preemble.Length).ToArray()
+                    .SequenceEqual(preemble))
+            {
+                // Skipping the BOM in case available in the byte array
+                messageBytes = messageBytes.Skip(preemble.Length)
+                    .ToArray();
+            }
+
+            string messageContents = encoding.GetString(messageBytes);
+            return messageContents;   
         }
 
         /// <summary>
@@ -95,9 +109,22 @@ namespace TransMock.TestUtils
         /// <returns>WCF message with a base64 encoded body</returns>
         public static Message CreateMessageWithBase64EncodedBody(string bodyContents, Encoding encoding)
         {
+            byte[] messageBytes = encoding.GetBytes(bodyContents);
+            byte[] preemble = encoding.GetPreamble();
+
+            if (preemble != null
+                && !messageBytes
+                    .Take(preemble.Length).ToArray()
+                    .SequenceEqual(preemble))
+            {
+                // Skipping the BOM in case available in the byte array
+                messageBytes = preemble.Concat(messageBytes)
+                    .ToArray();
+            }
+
             Message responseMessage = Message.CreateMessage(MessageVersion.Default, 
                 string.Empty,
-                Convert.ToBase64String(encoding.GetBytes(bodyContents)));
+                Convert.ToBase64String(messageBytes));
 
             return responseMessage;
         }

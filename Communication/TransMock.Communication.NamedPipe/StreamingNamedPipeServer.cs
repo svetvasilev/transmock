@@ -627,7 +627,7 @@ namespace TransMock.Communication.NamedPipes
             try
             {
                 System.Diagnostics.Debug.WriteLine(
-                    "Beginning reading from the pipe",
+                    $"Beginning reading from the pipe. Thread id: {Thread.CurrentThread.ManagedThreadId}.",
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
                 // Extracting the pipe connection from which the data is being read
@@ -636,6 +636,11 @@ namespace TransMock.Communication.NamedPipes
                 
                 lock (this.pipeSyncLock)
                 {
+                    System.Diagnostics.Debug.WriteLine(
+                        $@"Acquired lock for getting connection for client id: {state.ConnectionId}. 
+                            Thread id: {Thread.CurrentThread.ManagedThreadId}.",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
                     pipeConnection = this.pipeServerConnections[state.ConnectionId];
                 }
 
@@ -649,17 +654,24 @@ namespace TransMock.Communication.NamedPipes
                         bytesRead),
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
-                if (bytesRead > 0)
-                {
-                    eofReached = NamedPipeMessageUtils.IsEndOfMessage(
-                        state.RawData.Length, 
-                        bytesRead);
-                }
-                else
-                {
-                    eofReached = true;
-                }
+                eofReached = NamedPipeMessageUtils.IsEndOfMessage(
+                    state.RawData, 
+                    bytesRead);
 
+                System.Diagnostics.Debug.WriteLine(
+                        $@"eofReached is: {eofReached}. 
+                            Thread id: {Thread.CurrentThread.ManagedThreadId}.",
+                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
+
+                if (eofReached && bytesRead > 0)
+                {
+                    bytesRead -= NamedPipeMessageUtils.EndOfMessage.Length;
+                    // We take tha contents without the EndOfMessage sequence
+                    state.RawData = state.RawData
+                        .Take(bytesRead)
+                        .ToArray();
+                }
+                
                 state.InStream.Write(
                     state.RawData, 
                     0,

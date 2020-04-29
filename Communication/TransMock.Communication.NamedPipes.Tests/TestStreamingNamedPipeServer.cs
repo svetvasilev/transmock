@@ -80,8 +80,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -121,8 +120,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -163,8 +161,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -205,8 +202,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.Flush();
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -250,8 +246,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.Flush();
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -291,9 +286,8 @@ namespace TransMock.Communication.NamedPipes.Tests
                     pipeClient.Connect(10000);
 
                     formatter.Serialize(msgStream, mockMessage);
-                    
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -337,8 +331,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -382,8 +375,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -399,6 +391,95 @@ namespace TransMock.Communication.NamedPipes.Tests
             Assert.IsNotNull(receivedXml, "Message was not received by the server");
             Assert.AreEqual(xmlBase64, receivedXml, "Contents of received message is different");
         }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        public void TestOneWayReceive_MockMessage_XML_ASCII_Base64()
+        {
+            string xml = "<SomeTestMessage><Element1 attribute1=\"attributeValue\"></Element1><Element2>Some element content</Element2></SomeTestMessage>";
+            string receivedXml = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) =>
+            {
+                receivedXml = readArgs.Message.BodyBase64;
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                var mockMessage = new MockMessage()
+                {
+                    Encoding = Encoding.ASCII
+                };
+                mockMessage.Body = xml;
+
+                using (MemoryStream msgStream = new MemoryStream())
+                {
+                    var formatter = new BinaryFormatter();
+                    pipeClient.Connect(10000);
+
+                    formatter.Serialize(msgStream, mockMessage);
+
+                    WriteMockMessage(pipeClient, msgStream);
+
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            string xmlBase64 = Convert.ToBase64String(
+                Encoding.ASCII.GetBytes(xml));
+
+            Assert.IsNotNull(receivedXml, "Message was not received by the server");
+            Assert.AreEqual(xmlBase64, receivedXml, "Contents of received message is different");
+        }
+
+        [TestMethod]
+        [TestCategory("One Way Tests")]
+        [DeploymentItem(@"TestData\StartMessage.xml")]
+        public void TestOneWayReceive_MockMessage_XML_FromFile()
+        {
+            string xml = File.ReadAllText("StartMessage.xml");
+            string receivedXml = null;
+
+            pipeServer.ReadCompleted += (o, readArgs) => {
+
+                receivedXml = readArgs.Message.Body;
+
+                syncEvent.Set();
+            };
+
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
+                "TestPipeServer", PipeDirection.InOut, PipeOptions.Asynchronous))
+            {
+                var mockMessage = new MockMessage("StartMessage.xml", Encoding.UTF8);               
+
+                using (MemoryStream msgStream = new MemoryStream())
+                {
+                    var formatter = new BinaryFormatter();
+                    pipeClient.Connect(10000);
+
+                    formatter.Serialize(msgStream, mockMessage);
+
+                    WriteMockMessage(pipeClient, msgStream);
+
+                    pipeClient.WaitForPipeDrain();
+                }
+
+                pipeClient.Close();
+            }
+            //Now we read the message in the inbound handler
+            syncEvent.Wait(TimeSpan.FromSeconds(10));
+
+            Assert.IsNotNull(receivedXml, "Message was not received by the server");
+            Assert.AreEqual(xml, receivedXml.Trim('\u0000'), "Contents of received message is different");
+        }
+
 
         [TestMethod]
         [TestCategory("One Way Tests")]
@@ -427,8 +508,9 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
+
+                    pipeClient.Flush();
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -472,8 +554,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -521,8 +602,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
                     formatter.Serialize(msgStream, mockMessage);
 
-                    pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
-                    // pipeClient.WriteByte(0x00);// Write the EOF byte
+                    WriteMockMessage(pipeClient, msgStream);
 
                     pipeClient.WaitForPipeDrain();
                 }
@@ -534,6 +614,16 @@ namespace TransMock.Communication.NamedPipes.Tests
 
             Assert.IsNotNull(receivedContent, "Message was not received by the server");
             Assert.AreEqual(ffContent, receivedContent, "Contents of received message is different");
+        }
+
+        private void WriteMockMessage(NamedPipeClientStream pipeClient, MemoryStream msgStream)
+        {
+            pipeClient.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
+            // Write EndOfMessage
+            pipeClient.Write(
+                NamedPipeMessageUtils.EndOfMessage,
+                0,
+                NamedPipeMessageUtils.EndOfMessage.Length);
         }
     }
 }

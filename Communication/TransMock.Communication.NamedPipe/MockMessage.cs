@@ -100,19 +100,40 @@ namespace TransMock.Communication.NamedPipes
         }
 
         /// <summary>
-        /// String representation of the message body
+        /// Sets or gets the message body as string
         /// </summary>
         public string Body
         {
             set
             {
+                byte[] preemble = this.Encoding.GetPreamble();
                 this.MessageBody = this.Encoding.GetBytes(value);
+
+                if (preemble != null 
+                    && !this.MessageBody
+                        .Take(preemble.Length).ToArray()
+                        .SequenceEqual(preemble))
+                {
+                    // Prefixing with the BOM in case no BOM available
+                    // This way it will be consistent with the case when
+                    // message body is read from a file, where the BOM is usually present.
+                    this.MessageBody = preemble.Concat(this.MessageBody)
+                        .ToArray();
+                }
             }
 
             get
             {
-                return this.Encoding.GetString(
-                    this.MessageBody);
+                string body;
+                using (MemoryStream ms = new MemoryStream(this.MessageBody))
+                {
+                    using (StreamReader sr = new StreamReader(ms))
+                    {   
+                        body = sr.ReadToEnd();
+                    }
+                }
+
+                return body;                
             }
         }
 
@@ -122,8 +143,8 @@ namespace TransMock.Communication.NamedPipes
         public string BodyBase64
         {
             get
-            {
-                return Convert.ToBase64String(this.MessageBody);
+            {   
+                return Convert.ToBase64String(this.MessageBody);               
             }
         }
 

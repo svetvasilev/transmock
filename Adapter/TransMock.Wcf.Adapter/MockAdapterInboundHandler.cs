@@ -283,7 +283,7 @@ namespace TransMock.Wcf.Adapter
                 // Add any statically configured properties in the message context
                 this.propertyParser.PromoteProperties(inMsg, e.Message.Properties);
 
-                 if (inMsg != null)
+                if (inMsg != null)
                 {
                     System.Diagnostics.Debug.WriteLine(
                         "Enqueuing message to the internal queue",

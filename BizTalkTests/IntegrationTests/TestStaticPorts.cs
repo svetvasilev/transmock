@@ -104,7 +104,7 @@ namespace BizTalkTests.IntegrationTests
                 .Send(
                     r => r.BTS_OneWayReceive2_FILE,
                     "StartMessage.xml",
-                    System.Text.Encoding.UTF8,
+                    System.Text.Encoding.Unicode,
                     10,
                     beforeSendAction: ctx =>  ctx.DebugInfo("Sending messagein to OneWayReceive2_FILE") 
                 )

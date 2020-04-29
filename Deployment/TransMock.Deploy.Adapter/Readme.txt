@@ -7,6 +7,10 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Version 1.5.2:
+- Fixed issue with adapter failing occasionally with 'Attempting to deserialize from empty stream' error when receiving message
+- Fixed issue with outputting message contents to the test execution output log with \0 charecters 
+
 Version 1.5.1:
 - Fixed issue with adapter properties promotion in messages
 

@@ -126,8 +126,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();                   
                 }
 
@@ -168,8 +169,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -208,8 +210,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -256,14 +259,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     formatter.Serialize(memStream, mockMessage);
                     memStream.Seek(0, SeekOrigin.Begin);
-                    
-                    
-                    while ((byteCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
-                    {
-                        pipeClient.Write(xmlBytes, 0, byteCountRead);
-                    }
 
-                    // pipeClient.WriteByte(0x00);
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }                
             }
@@ -304,8 +302,6 @@ namespace TransMock.Wcf.Adapter.Tests
             {
                 pipeClient.Connect(10000);
 
-                int byteCountRead = 0;
-
                 var mockMessage = new MockMessage(
                     "MediumMessage.xml",
                     Encoding.UTF8);
@@ -317,12 +313,8 @@ namespace TransMock.Wcf.Adapter.Tests
                     // rewinding the message stream
                     memStream.Seek(0, SeekOrigin.Begin);
 
-                    while ((byteCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
-                    {
-                        pipeClient.Write(xmlBytes, 0, byteCountRead);
-                    }
+                    WriteMockMessage(pipeClient, memStream);
 
-                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
             }
@@ -372,8 +364,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -403,8 +396,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -441,8 +435,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -484,8 +479,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -524,8 +520,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -575,8 +572,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -634,8 +632,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -707,8 +706,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -793,8 +793,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -872,8 +873,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -948,8 +950,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1024,8 +1027,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1094,8 +1098,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1146,8 +1151,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1203,8 +1209,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1268,8 +1275,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1326,8 +1334,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1384,8 +1393,9 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
 
                     pipeClient.Connect(10000);
-                    pipeClient.Write(memStream.ToArray(), 0, (int)memStream.Length);
-                    // pipeClient.WriteByte(0x00);
+
+                    WriteMockMessage(pipeClient, memStream);
+
                     pipeClient.WaitForPipeDrain();
                 }
                 //Now we read the message in the inbound handler
@@ -1427,8 +1437,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
             using (NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost",
                 connectionUri.Uri.AbsolutePath, PipeDirection.InOut, PipeOptions.Asynchronous))
-            {
-                int bytesCountRead = 0;                
+            {                  
                 byte[] xmlBytes = new byte[4096];
 
                 int fileLength = (int)File.OpenRead("MediumMessage.xml").Length;
@@ -1445,12 +1454,8 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
                     memStream.Seek(0, SeekOrigin.Begin);
 
-                    while ((bytesCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
-                    {
-                        pipeClient.Write(xmlBytes, 0, bytesCountRead);
-                    }
+                    WriteMockMessage(pipeClient, memStream);
 
-                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1530,12 +1535,8 @@ namespace TransMock.Wcf.Adapter.Tests
                     formatter.Serialize(memStream, mockMessage);
                     memStream.Seek(0, SeekOrigin.Begin);
 
-                    while ((bytesCountRead = memStream.Read(xmlBytes, 0, xmlBytes.Length)) > 0)
-                    {
-                        pipeClient.Write(xmlBytes, 0, bytesCountRead);
-                    }
+                    WriteMockMessage(pipeClient, memStream);
 
-                    // pipeClient.WriteByte(0x00);
                     pipeClient.WaitForPipeDrain();
                 }
 
@@ -1606,7 +1607,28 @@ namespace TransMock.Wcf.Adapter.Tests
                 connectionUri, null, adapter);
             MockAdapterConnection connection = new MockAdapterConnection(connectionFactory);
             inboundHandler = new MockAdapterInboundHandler(connection, null);
-        }        
+        }
+
+        private void WriteMockMessage(NamedPipeClientStream pipeClient, MemoryStream msgStream)
+        {
+            int bytesRead = 0;
+            byte[] buffer = new byte[128];
+
+            msgStream.Seek(0, SeekOrigin.Begin);
+
+            while ((bytesRead = msgStream.Read(buffer,0,buffer.Length)) > 0)
+            {
+                pipeClient.Write(buffer, 0, bytesRead);
+            }
+           
+            // Write EndOfMessage
+            pipeClient.Write(
+                NamedPipeMessageUtils.EndOfMessage,
+                0,
+                NamedPipeMessageUtils.EndOfMessage.Length);
+
+            pipeClient.Flush();
+        }
 
     }
 

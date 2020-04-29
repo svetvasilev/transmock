@@ -489,10 +489,12 @@ namespace TransMock.Wcf.Adapter.Tests
                 {
                     var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     formatter.Serialize(msgStream, responseMessage);
+                    
                     msgStream.Seek(0, SeekOrigin.Begin);
 
                     //We write the response content back and flush it down the drain.
                     testHelper.pipeServer.Write(msgStream.ToArray(), 0, (int)msgStream.Length);
+                    
                 }
 
             }
@@ -518,8 +520,12 @@ namespace TransMock.Wcf.Adapter.Tests
             else
                 throw new InvalidOperationException("There was no response content defined");
 
-            //Write the EOF bytes
-            testHelper.pipeServer.WriteByte(0x00);
+            // Writing the EndOfMessage sequence to the end of stream
+            testHelper.pipeServer.Write(
+                OutboundTestHelper.EndOfMessage,
+                0,
+                OutboundTestHelper.EndOfMessage.Length);
+
             testHelper.pipeServer.Flush();
 
             testHelper.pipeServer.WaitForPipeDrain();
