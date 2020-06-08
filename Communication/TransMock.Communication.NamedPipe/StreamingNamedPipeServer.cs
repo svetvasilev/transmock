@@ -304,13 +304,20 @@ namespace TransMock.Communication.NamedPipes
 
                 var formatter = new BinaryFormatter();
 
-                using (MemoryStream msgStream = new MemoryStream())
+                using (MemoryStream msgStream = new MemoryStream(4096))
                 {
                     System.Diagnostics.Debug.WriteLine(
                         "Serializing the message to a stream.",
                         "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
 
                     formatter.Serialize(msgStream, message);
+
+                    // Writing EndOfMessage sequence
+                    msgStream.Write(
+                        NamedPipeMessageUtils.EndOfMessage,
+                        0,
+                        NamedPipeMessageUtils.EndOfMessage.Length);
+
                     msgStream.Seek(0, SeekOrigin.Begin);
 
                     this.WriteStream(connectionId, msgStream);
@@ -361,13 +368,6 @@ namespace TransMock.Communication.NamedPipes
                 {
                     pipeConnection.Write(outBuffer, 0, byteReadCount);
                 }
-
-                //System.Diagnostics.Debug.WriteLine(
-                //    "Writing the EOF byte.",
-                //    "TransMock.Communication.NamedPipe.StreamingNamedPipeServer");
-                
-                //// Write the EOF bite
-                //pipeConnection.WriteByte(0x00);
 
                 System.Diagnostics.Debug.WriteLine(
                     "Message sent to the client.",

@@ -360,7 +360,8 @@ namespace TransMock.Communication.NamedPipes
                     formatter.Serialize(msgStream, message);
 
                     // Writing the TransMock EndOfMessage sequence
-                    msgStream.Write(NamedPipeMessageUtils.EndOfMessage,
+                    msgStream.Write(
+                        NamedPipeMessageUtils.EndOfMessage,
                         0,
                         NamedPipeMessageUtils.EndOfMessage.Length);
 
@@ -395,7 +396,7 @@ namespace TransMock.Communication.NamedPipes
                     "WriteStream() called",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
 
-                byte[] outBuffer = new byte[256];
+                byte[] outBuffer = new byte[4096];
 
                 System.Diagnostics.Debug.WriteLine(
                     "Writing message to the server",

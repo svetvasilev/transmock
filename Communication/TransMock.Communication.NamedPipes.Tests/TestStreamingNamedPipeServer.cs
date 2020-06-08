@@ -354,7 +354,7 @@ namespace TransMock.Communication.NamedPipes.Tests
 
             pipeServer.ReadCompleted += (o, readArgs) =>
             {
-                receivedXml = readArgs.Message.BodyBase64;
+                receivedXml = readArgs.Message.Body;
 
                 syncEvent.Set();
             };
@@ -385,11 +385,11 @@ namespace TransMock.Communication.NamedPipes.Tests
             //Now we read the message in the inbound handler
             syncEvent.Wait(TimeSpan.FromSeconds(10));
 
-            string xmlBase64 = Convert.ToBase64String(
-                Encoding.Unicode.GetBytes(xml));
+            //string xmlBase64 = Convert.ToBase64String(
+            //    Encoding.Unicode.GetBytes(xml));
 
             Assert.IsNotNull(receivedXml, "Message was not received by the server");
-            Assert.AreEqual(xmlBase64, receivedXml, "Contents of received message is different");
+            Assert.AreEqual(xml, receivedXml, "Contents of received message is different");
         }
 
         [TestMethod]
