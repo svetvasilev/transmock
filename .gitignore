@@ -132,28 +132,35 @@ publish/
 *.pubxml
 
 # NuGet Packages
-#packages/*
-packages/*/*/*/*.xml
-packages/*/*/*.xml
-packages/*/*.txt
 *.nupkg
-*.nuspec
-## TODO: If the tool you use requires repositories.config
-## uncomment the next line
-!packages/repositories.config
-
-# Enable "build/" folder in the NuGet Packages folder since
-# NuGet packages use it for MSBuild targets.
-# This line needs to be after the ignore of the build folder
-# (and the packages folder if the line above has been uncommented)
-!packages/build/
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
 
 # Windows Azure Build Output
 csx/
 *.build.csdef
 
-# Windows Store app package directory
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Windows Store app package directories and files
 AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
 
 # Others
 sql/
@@ -191,7 +198,17 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
+# BizTalk build output
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs
+
 # BTDF Exported settings
 Exported*.xml
 /Adapter.BTS2016.txt
 /Adapter.IDE.BTS2016
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
