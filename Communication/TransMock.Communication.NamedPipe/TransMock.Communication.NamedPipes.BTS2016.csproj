@@ -50,11 +50,15 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="EventArgs.cs" />
+    <Compile Include="IStreamingClientAsync.cs" />
+    <Compile Include="IStreamingServerAsync.cs" />
     <Compile Include="IStreamingClient.cs" />
     <Compile Include="IAsyncStreamingServer.cs" />
     <Compile Include="MockMessage.cs" />
     <Compile Include="NamedPipeMessageUtils.cs" />
+    <Compile Include="StreamingNamedPipeClientAsync.cs" />
     <Compile Include="StreamingNamedPipeClient.cs" />
+    <Compile Include="StreamingNamedPipeServerAsync.cs" />
     <Compile Include="StreamingNamedPipeServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

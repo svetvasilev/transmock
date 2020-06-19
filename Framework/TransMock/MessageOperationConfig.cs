@@ -43,9 +43,9 @@ namespace TransMock
 
         public TwoWaySendEndpoint TwoWaySendEndpoint { get; set; }
 
-        public Communication.NamedPipes.StreamingNamedPipeServer MockMessageServer { get; set; }
+        public Communication.NamedPipes.IStreamingServerAsync MockMessageServer { get; set; }
 
-        public Communication.NamedPipes.StreamingNamedPipeClient MockMessageClient { get; set; }
+        public Communication.NamedPipes.IStreamingClientAsync MockMessageClient { get; set; }
 
     }
 }

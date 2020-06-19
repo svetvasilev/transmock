@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 using TransMock.Communication.NamedPipes;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TransMock.Tests.BTS2016
 {
     public class ComplexFlowMock
     {
-        IAsyncStreamingServer mockServer;
+        IStreamingServerAsync mockServer;
 
         // IStreamingClient mockClient;
 
-        Queue<AsyncReadEventArgs> inboundMesageQueue;
+        ConcurrentQueue<AsyncReadEventArgs> inboundMesageQueue;
 
-        object receiveSync = new object();        
+        Task receiverTask;
+
+        ManualResetEventSlim syncEvent;      
 
         int connectionId = 0;
 
@@ -24,41 +30,47 @@ namespace TransMock.Tests.BTS2016
             string receiveURL,
             string sendUrl)
         {
-            //taskRunner = Task.Run(
-            ThreadPool.QueueUserWorkItem(
-                cb =>
+            syncEvent = new ManualResetEventSlim(false);
+
+            receiverTask = Task.Run(
+            //    .ContinueWith(
+            //ThreadPool.QueueUserWorkItem(
+                async () =>              
                 {
                     Console.WriteLine("Starting execution of flow 1");
+                    
 
-                    InitServer(receiveURL);
+                    await InitServerAsync(receiveURL)
+                        .ConfigureAwait(false);
 
                     MockMessage requestMessage;
 
-                    // First we wait for a receive message
-                    lock (this.receiveSync)
+                    bool success = syncEvent.Wait(20000);
+
+                    if (!success)
                     {
-                        bool success = Monitor.Wait(receiveSync, 20000);
+                        Console.Out.Write("The receive operation timed out");
 
-                        if (!success)
-                        {
-                            Console.Out.Write("The receive operation timed out");
-
-                            throw new TimeoutException("The receive operation timed out");
-                        }
-
-                        var receivedMessageEvent = inboundMesageQueue.Dequeue();
-                        connectionId = receivedMessageEvent.ConnectionId;
-
-                        requestMessage = receivedMessageEvent.Message;
+                        throw new TimeoutException("The receive operation timed out");
                     }
+
+                    AsyncReadEventArgs receivedMessageEvent;
+                    inboundMesageQueue.TryDequeue(out receivedMessageEvent);
+
+                    connectionId = receivedMessageEvent.ConnectionId;
+                    requestMessage = receivedMessageEvent.Message;
+
+                    syncEvent.Reset();
 
                     MockMessage responseMessage = null;
                     // Then we send a request and wait for a response - first time
-                    using (var mockClient = InitClient(sendUrl))
+                    using (var mockClient = await InitClientAsync(sendUrl))
                     {
-                        mockClient.WriteMessage(requestMessage);
+                        await mockClient.WriteMessageAsync(requestMessage)
+                            .ConfigureAwait(false);
                         // We wait for the response
-                        responseMessage = mockClient.ReadMessage();
+                        responseMessage = await mockClient.ReadMessageAsync()
+                            .ConfigureAwait(false);
 
                         if (responseMessage == null)
                         {
@@ -68,36 +80,41 @@ namespace TransMock.Tests.BTS2016
 
                         Console.WriteLine("First response message received from server.");
                         // Disconnecting as with the actual implementation
-                        mockClient.Disconnect();
+                        await mockClient.DisconnectAsync()
+                            .ConfigureAwait(false);
                     }
 
                     // Second pass with request/response
-                    using (var mockClient = InitClient(sendUrl))
+                    using (var mockClient = await InitClientAsync(sendUrl))
                     {
 
-                        mockClient.WriteMessage(requestMessage);
+                        await mockClient.WriteMessageAsync(requestMessage)
+                            .ConfigureAwait(false);
 
-                        responseMessage = mockClient.ReadMessage();
+                        responseMessage = await mockClient.ReadMessageAsync()
+                            .ConfigureAwait(false);
 
                         if (responseMessage == null)
                         {
                             throw new ApplicationException("Second response message was null!");
-
                         }
 
                         Console.WriteLine("Second response message received from server.");
                         // Disconnecting as with the actual implementation
-                        mockClient.Disconnect();
+                        await mockClient.DisconnectAsync()
+                            .ConfigureAwait(false);
                     }
 
                     // Sending the second response back to initial caller
-                    mockServer.WriteMessage(
+                    await mockServer.WriteMessageAsync(
                         connectionId,
-                        responseMessage);
+                        responseMessage)
+                        .ConfigureAwait(false);
 
                 });
 
-            //taskRunner.Wait();
+            // Initiating the wait just to kick start the task
+            //receiverTask.Start();
         }
 
     
@@ -106,43 +123,42 @@ namespace TransMock.Tests.BTS2016
             
         }
 
-        private void InitServer(string receiveURL)
+        private async Task InitServerAsync(string receiveURL)
         {
-            inboundMesageQueue = new Queue<AsyncReadEventArgs>(3);
+            inboundMesageQueue = new ConcurrentQueue<AsyncReadEventArgs>();
 
-            mockServer = new StreamingNamedPipeServer(new Uri(receiveURL).AbsolutePath);
+            mockServer = new StreamingNamedPipeServerAsync(new Uri(receiveURL).AbsolutePath);
             mockServer.ReadCompleted += MockServer_ReadCompleted;
 
-            mockServer.Start();
+            await mockServer.StartAsync();
 
             Console.WriteLine($"ComplexFlow server started listening on {receiveURL}");
         }
 
         private void MockServer_ReadCompleted(object sender, AsyncReadEventArgs e)
         {
-            lock (this.receiveSync)
-            {
-                inboundMesageQueue.Enqueue(e);
+            
+            inboundMesageQueue.Enqueue(e);
 
-                Monitor.Pulse(this.receiveSync);
-            }
+            syncEvent.Set();
+
         }
 
-        private void CleanupServer()
+        private async void CleanupServer()
         {
-            inboundMesageQueue.Clear();
+            inboundMesageQueue = null;
 
-            mockServer.Stop();
+            await mockServer.StopAsync();
             mockServer = null;
 
             Console.WriteLine($"ComplexFlow server stopped successfully");
         }
 
-        public StreamingNamedPipeClient InitClient(string URL)
+        public async Task<StreamingNamedPipeClientAsync> InitClientAsync(string URL)
         {
-            var mockClient = new StreamingNamedPipeClient(new Uri(URL));
+            var mockClient = new StreamingNamedPipeClientAsync(new Uri(URL));
 
-            bool connected = mockClient.Connect(10000);
+            bool connected = await mockClient.ConnectAsync(10000);
 
             if (!connected)
             {

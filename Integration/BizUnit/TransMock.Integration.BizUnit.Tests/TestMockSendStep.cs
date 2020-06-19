@@ -29,6 +29,7 @@ using System.Xml;
 
 using TransMock.TestUtils;
 using TransMock.Wcf.Adapter;
+using TransMock.Wcf.Adapter.Utils;
 using TransMock.Integration.BizUnit;
 
 using BizUnit;
@@ -184,11 +185,11 @@ namespace TransMock.Integration.BizUnit.Tests
             step.Timeout = 30;
 
             step.MessageProperties.Add(
-                Utils.BizTalkProperties.BTS.Operation,
+                Wcf.Adapter.Utils.BizTalkProperties.BTS.Operation,
                 "SomeTestOperation.com");
 
             step.MessageProperties.Add(
-                Utils.BizTalkProperties.FILE.ReceivedFileName,
+                Wcf.Adapter.Utils.BizTalkProperties.FILE.ReceivedFileName,
                 @"\blabla\bla\TestFile.xml");
             //Validating the test step
             step.Validate(context);
