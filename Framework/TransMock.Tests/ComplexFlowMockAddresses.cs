@@ -25,5 +25,13 @@ namespace TransMock.Tests.BTS2016
                 return new TwoWaySendAddress("mock://localhost/Send_Test_2Way");
             }
         }
+
+        public TwoWaySendAddress Send_Test_2Way2
+        {
+            get
+            {
+                return new TwoWaySendAddress("mock://localhost/Send_Test_2Way2");
+            }
+        }
     }
 }

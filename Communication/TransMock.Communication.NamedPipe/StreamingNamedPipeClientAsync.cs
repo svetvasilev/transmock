@@ -123,8 +123,7 @@ namespace TransMock.Communication.NamedPipes
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(
-                    "ConnectAsync() threw an exception: " +
-                    ex.Message,
+                    $"ConnectAsync() threw an exception while connetcting to {this.HostName}/{this.PipeName}: {ex.Message}",
                     "TransMock.Communication.NamedPipes.StreamingNamedPipeClientAsync");
 
                 return false;

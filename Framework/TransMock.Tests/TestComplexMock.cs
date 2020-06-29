@@ -52,25 +52,7 @@ namespace TransMock.Tests.BTS2016
                              "The contents of the request message is not the same");
                          return true;
                      }
-                )
-                //,(m) => m.ReceiveRequestAndSendResponse(
-                //     s => s.Send_Test_2Way,
-                //     rs => new StaticFileResponseSelector()
-                //     {
-                //         FilePath = "TestResponse.xml"
-                //     },
-                //     requestValidator: v =>
-                //     {
-                //         Assert.IsTrue(v.Message.Body.Length > 0, "The received request is empty!");
-
-                //         var xDoc = XDocument.Load(v.Message.BodyStream);
-
-                //         Assert.IsTrue(
-                //             xDoc.Root.Name.LocalName == "TestRequest",
-                //             "The contents of the request message is not the same");
-                //         return true;
-                //     }
-                //)
+                )                
             )
             .SendRequestAndReceiveResponse(
                 r => r.Receive_Test_2Way,
@@ -100,14 +82,18 @@ namespace TransMock.Tests.BTS2016
         public void TestComplexFlow_2ParallelOperations_HappyPath()
         {
             var flowMock = new ComplexFlowMock();
-            flowMock.RunComplexFlow1(
-                "mock://localhost/Receive_Test_2Way", "mock://localhost/Send_Test_2Way");
+            flowMock.RunComplexFlow2(
+                "mock://localhost/Receive_Test_2Way", 
+                "mock://localhost/Send_Test_2Way",
+                "mock://localhost/Send_Test_2Way2");
 
             var integrationMock = new EndpointsMock<ComplexFlowMockAddresses>();
 
-            integrationMock.
-                SetupSendRequestAndReceiveResponse(
+            integrationMock
+                .SetupSendRequestAndReceiveResponse(
                     r => r.Send_Test_2Way)
+                .SetupSendRequestAndReceiveResponse(
+                    r => r.Send_Test_2Way2)
                 .SetupReceiveRequestAndSendResponse(
                     s => s.Receive_Test_2Way);
 
@@ -120,7 +106,7 @@ namespace TransMock.Tests.BTS2016
                      {
                          FilePath = "TestResponse.xml"
                      },
-                     expectedMessageCount: 2,
+                     //expectedMessageCount: 2,
                      requestValidator: v =>
                      {
                          Assert.IsTrue(v.Message.Body.Length > 0, "The received request is empty!");
@@ -133,24 +119,25 @@ namespace TransMock.Tests.BTS2016
                          return true;
                      }
                 )
-            //,(m) => m.ReceiveRequestAndSendResponse(
-            //     s => s.Send_Test_2Way,
-            //     rs => new StaticFileResponseSelector()
-            //     {
-            //         FilePath = "TestResponse.xml"
-            //     },
-            //     requestValidator: v =>
-            //     {
-            //         Assert.IsTrue(v.Message.Body.Length > 0, "The received request is empty!");
+                ,(m) => m.ReceiveRequestAndSendResponse(
+                      s => s.Send_Test_2Way2,
+                      rs => new StaticFileResponseSelector()
+                      {
+                          FilePath = "TestResponse.xml"
+                      },
+                      expectedMessageCount: 2,
+                      requestValidator: v =>
+                      {
+                          Assert.IsTrue(v.Message.Body.Length > 0, "The received request is empty!");
 
-            //         var xDoc = XDocument.Load(v.Message.BodyStream);
+                          var xDoc = XDocument.Load(v.Message.BodyStream);
 
-            //         Assert.IsTrue(
-            //             xDoc.Root.Name.LocalName == "TestRequest",
-            //             "The contents of the request message is not the same");
-            //         return true;
-            //     }
-            //)
+                          Assert.IsTrue(
+                              xDoc.Root.Name.LocalName == "TestRequest",
+                              "The contents of the request message is not the same");
+                          return true;
+                      }
+                 )
             )
             .SendRequestAndReceiveResponse(
                 r => r.Receive_Test_2Way,

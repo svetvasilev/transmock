@@ -488,7 +488,7 @@ namespace TransMock.Communication.NamedPipes
                         System.Security.AccessControl.AccessControlType.Allow));
 
                 System.Diagnostics.Trace.WriteLine(
-                    string.Format("Creating named pipe server with URL: {0}", this.URL),
+                    $"Creating named pipe server with URL: {URL}",
                        "TransMock.Communication.NamedPipe.StreamingNamedPipeServerAsync");
                 
                 // Creating the named pipe server
@@ -507,7 +507,7 @@ namespace TransMock.Communication.NamedPipes
                 this.pipeServerConnections.TryAdd(connectionId, pipeServer);
 
                 System.Diagnostics.Debug.WriteLine(
-                    $"CreatePipeServer() created a new pipe server instance with id: {connectionId}",
+                    $"CreatePipeServer() created a new pipe server instance with id: {connectionId} for with URL: {URL}",
                     "TransMock.Communication.NamedPipe.StreamingNamedPipeServerAsync");
 
                 this.activePipeConnectionCount++;

@@ -42,11 +42,11 @@ namespace TransMock
     /// </summary>
     public abstract class TestMessagingClient<TAddresses> where TAddresses : Addressing.EndpointAddress
     {
-        private object sendSyncRoot = new object();
+        //private object sendSyncRoot = new object();
 
-        private object receiveSyncRoot = new object();
+        //private object receiveSyncRoot = new object();
 
-        private static System.Threading.ManualResetEventSlim syncEvent;
+        //private static System.Threading.ManualResetEventSlim syncEvent;
 
         private EndpointsMock<TAddresses> endpointsMock;
 
@@ -54,9 +54,9 @@ namespace TransMock
 
         private IList<Task> parallelControllers;
 
-        internal IDictionary<string, MessageOperationConfig> operationConfigurations;
+        internal IDictionary<string, MessageOperationHandler> operationConfigurations;
 
-        internal ConcurrentDictionary<int,AsyncReadEventArgs> receivedMessagesDictionary;
+        //internal ConcurrentDictionary<int,AsyncReadEventArgs> receivedMessagesDictionary;
 
         /// <summary>
         /// Creates a default instance of the <see cref="TestMessagingClient{TAddresses}"/>
@@ -65,13 +65,13 @@ namespace TransMock
         {
             testContext = new TestContext();
 
-            syncEvent = new System.Threading.ManualResetEventSlim(false);
+            //syncEvent = new System.Threading.ManualResetEventSlim(false);
 
             parallelControllers = new List<Task>(3);
 
-            receivedMessagesDictionary = new ConcurrentDictionary<int, AsyncReadEventArgs>();
+            //receivedMessagesDictionary = new ConcurrentDictionary<int, AsyncReadEventArgs>();
 
-            operationConfigurations = new Dictionary<string, MessageOperationConfig>(3);
+            operationConfigurations = new Dictionary<string, MessageOperationHandler>(3);
        
         }
 
@@ -152,20 +152,13 @@ namespace TransMock
                 return;
             }
 
-            var receiveOperation = new MessageOperationConfig()
+            var receiveOperation = new MessageOperationHandler()
             {
-                SendEndpoint = sendEndpoint,
-                MockMessageServer = new StreamingNamedPipeServerAsync(
-                    new Uri(sendEndpoint.URL).AbsolutePath)
+                SendEndpoint = sendEndpoint,                
             };
 
-            // We start the server as this is the whole point of the setup process
-            // The mock should be ready to receive messages from the tested service
-            // Before calling Start we need to hook the event handler for ReadCompleted
-            // This brings some challanges with the chosen model, as the mock should then 
-            // expose a public property exhibiting the queue that contains the received messages
-            receiveOperation.MockMessageServer.ReadCompleted += MockMessageServer_ReadCompleted;
-            receiveOperation.MockMessageServer.StartAsync().ConfigureAwait(false);
+            // Initializing the server
+            receiveOperation.InitMessagingServer();
 
             System.Diagnostics.Trace.WriteLine(
                 "TestMessagingClient.SetupReceive() mock endpoint started listening for URL: " + sendEndpoint.URL,
@@ -201,12 +194,12 @@ namespace TransMock
                 return;
             }
 
-            var sendOperation = new MessageOperationConfig()
+            var sendOperation = new MessageOperationHandler()
             {
-                ReceiveEndpoint = receiveEndpoint,
-                MockMessageClient = new StreamingNamedPipeClientAsync(
-                    new System.Uri(receiveEndpoint.URL))
+                ReceiveEndpoint = receiveEndpoint,                
             };
+
+            sendOperation.InitMessagingClient();
 
             operationConfigurations.Add(receiveEndpoint.URL, sendOperation);
 
@@ -239,15 +232,12 @@ namespace TransMock
                 return;
             }
 
-            var receiveSendOperation = new MessageOperationConfig()
+            var receiveSendOperation = new MessageOperationHandler()
             {
-                TwoWaySendEndpoint = sendReceiveEndpoint,
-                MockMessageServer = new StreamingNamedPipeServerAsync(
-                    new Uri(sendReceiveEndpoint.URL).AbsolutePath)
+                TwoWaySendEndpoint = sendReceiveEndpoint,                
             };
 
-            receiveSendOperation.MockMessageServer.ReadCompleted += MockMessageServer_ReadCompleted;
-            receiveSendOperation.MockMessageServer.StartAsync().ConfigureAwait(false);
+            receiveSendOperation.InitMessagingServer();
 
             System.Diagnostics.Trace.WriteLine(
                 "TestMessagingClient.SetupReceiveRequestAndSendResponse() mock endpoint started listening for URL: " + sendReceiveEndpoint.URL,
@@ -282,12 +272,12 @@ namespace TransMock
                 return;
             }
 
-            var sendReceiveOperation = new MessageOperationConfig()
+            var sendReceiveOperation = new MessageOperationHandler()
             {
-                TwoWayReceiveEndpoint = receiveSendEndpoint,
-                MockMessageClient = new StreamingNamedPipeClientAsync(
-                    new System.Uri(receiveSendEndpoint.URL))
+                TwoWayReceiveEndpoint = receiveSendEndpoint,                
             };
+
+            sendReceiveOperation.InitMessagingClient();
 
             operationConfigurations.Add(receiveSendEndpoint.URL, sendReceiveOperation);
 
@@ -305,11 +295,7 @@ namespace TransMock
             // Stopping all the inbound message mock servers
             foreach (var item in this.operationConfigurations.Values)
             {
-                if (item.MockMessageServer != null)
-                {
-                    var stopTask = item.MockMessageServer.StopAsync();
-                    stopTask.Wait();
-                }
+                item.ClearServer();
             }
         }
         
@@ -318,24 +304,28 @@ namespace TransMock
         /// </summary>
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">An instance of <see cref="AsyncReadEventArgs"/> class containing the details of the receive operation</param>
-        private void MockMessageServer_ReadCompleted(object sender, AsyncReadEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                $"Message received in the MockMessageServer_ReadCompleted handler for connection id: {e.ConnectionId}",
-                "TransMock.TestMessagingClient");
+        //private void MockMessageServer_ReadCompleted(object sender, AsyncReadEventArgs e)
+        //{
+        //    System.Diagnostics.Debug.WriteLine(
+        //        $"Message received in the MockMessageServer_ReadCompleted handler for connection id: {e.ConnectionId}",
+        //        "TransMock.TestMessagingClient");
 
-            while (!this.receivedMessagesDictionary.TryAdd(e.ConnectionId, e))
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    "Message did not get added to the collection. Attempting again!",
-                    "TransMock.TestMessagingClient");
-            }
-            
-            // Releasing the same number of threads as the number of messages in the collection
-            // This is especially usefull for handling situations where multiple
-            // receive operations are being processed
-            syncEvent.Set();
-        }
+        //    while (!this.receivedMessagesDictionary.TryAdd(e.ConnectionId, e))
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(
+        //            "Message did not get added to the collection. Attempting again!",
+        //            "TransMock.TestMessagingClient");
+        //    }
+
+        //    // Releasing the same number of threads as the number of messages in the collection
+        //    // This is especially usefull for handling situations where multiple
+        //    // receive operations are being processed
+        //    //System.Diagnostics.Debug.WriteLine(
+        //    //        $"MockMessageServer_ReadCompleted() syncEvent status is {syncEvent.IsSet}",
+        //    //        "TransMock.TestMessagingClient");
+
+        //    //syncEvent.Set();
+        //}
 
         #region 1-way receive methods
         /// <summary>
@@ -664,7 +654,7 @@ namespace TransMock
             Func<IndexedMessageReception, bool> validator,
             Func<MockMessage, ResponseSelectionStrategy> responseSelector = null,
             Action<IDictionary<string, string>> responsePropertiesSetter = null,
-            Func<MessageOperationConfig, ResponseSelectionStrategy, int,int,MockMessage, 
+            Func<MessageOperationHandler, ResponseSelectionStrategy, int,int,MockMessage, 
                 Action<IDictionary<string, string>>, Task> responseSender = null,
             Action<TestContext> afterReceiveAction = null,
             Action<TestContext> afterSendAction = null)
@@ -686,12 +676,16 @@ namespace TransMock
                     "TransMock.TestMessagingClient");
 
                 throw new InvalidOperationException("No corresponding endpoint setup found for URL" + sendEndpoint.URL);
-            }
+            }            
 
             System.Diagnostics.Trace.WriteLine(
-                    "TestMessagingClient.ReceiveImplementationAsync() fetched endpoint setup for URL: " + sendEndpoint.URL,
+                    "TestMessagingClient.ReceiveImplementationAsync() found endpoint setup for URL: " + sendEndpoint.URL,
                     "TransMock.TestMessagingClient");
 
+            endpointSetup.CopySendEndpointConfig(sendEndpoint);
+            endpointSetup.StartServer();
+
+            int connectionId = 0;
             for (int i = 0; i < sendEndpoint.ExpectedMessageCount; i++)
             {
                     
@@ -701,65 +695,19 @@ namespace TransMock
                         sendEndpoint.URL),
                     "TransMock.TestMessagingClient");
 
-                AsyncReadEventArgs receivedMessage = null;
-                bool messageReceived = false;
-                while (!messageReceived)
-                {
-                    // Now we wait for the reception of a message
-                    bool waitElapsed = syncEvent.Wait(sendEndpoint.TimeoutInSeconds * 1000);
+                Console.WriteLine();
+                Console.WriteLine("<<<<<<< Receiving message {0} from send endpoint with URL: {1} <<<<<<<",
+                    i,
+                    sendEndpoint.URL);
+                Console.WriteLine();
 
-                    try
-                    {
-                        if (!waitElapsed)
-                        {
-                            Console.WriteLine(
-                                "Message {0} from send endpoint with URL: {1} not received in allotted time",
-                                i,
-                                sendEndpoint.URL);
-
-                            System.Diagnostics.Trace.WriteLine(
-                                string.Format(@"TestMessagingClient.ReceiveImplementationAsync() 
-                                    did not receive in time message {0} from send endpoint with URL: {1}",
-                                    i,
-                                    sendEndpoint.URL),
-                                "TransMock.TestMessagingClient");
-
-                            throw new TimeoutException("No message received for the wait time set.");
-                        }
-                    }
-                    finally
-                    {
-                        // Releasing the semaphore
-                        syncEvent.Reset();
-                    }
-                    
-                    Console.WriteLine();
-                    Console.WriteLine("<<<<<<< Receiving message from send endpoint with URL: {0} <<<<<<<",
-                        sendEndpoint.URL);
-                    Console.WriteLine();
-
-                    // Now we read the message from the message queue
-                    
-                    int connectionId = endpointSetup.MockMessageServer.ConnectionId; // This is the connection/server Id
-
-                    messageReceived = this.receivedMessagesDictionary
-                    .TryRemove(
-                        connectionId,
-                        out receivedMessage);
-
-                    if (!messageReceived)
-                    {
-                        System.Diagnostics.Trace.WriteLine(
-                        $"TestMessagingClient.ReceiveImplementationAsync() did not manage to fetch message from internal collection for send endpoint with URL: {sendEndpoint.URL} and connection Id: {connectionId}. Continuing to try!",
-                        "TransMock.TestMessagingClient");
-                    }
-                }
+                // We get the connection id right after we start with the proess of listening
+                // cause otherwise it may change right after the reception event has been handled.
+                // connectionId = endpointSetup.ConnectionId;
+                var receivedMessage = endpointSetup.GetNextMessage();                
                 
-                
-                System.Diagnostics.Trace.WriteLine(
-                    string.Format("TestMessagingClient.ReceiveImplementationAsync() received message {0} from send endpoint with URL: {1}",
-                        i,
-                        sendEndpoint.URL),
+                System.Diagnostics.Debug.WriteLine(
+                    $"TestMessagingClient.ReceiveImplementationAsync() received message {i+1} from send endpoint with URL: {sendEndpoint.URL}, connection id: {connectionId}",                        
                     "TransMock.TestMessagingClient");
 
                     Console.WriteLine(
@@ -882,7 +830,7 @@ namespace TransMock
             Func<TestContext, TAddresses, ReceiveEndpoint> receiver,
             Action<IDictionary<string,string>> messagePropertiesSetter = null,
             Func<MockMessage, bool> validator = null,
-            Func<MessageOperationConfig, Task<MockMessage>> responseReceiverAsync = null,
+            Func<MessageOperationHandler, Task<MockMessage>> responseReceiverAsync = null,
             Action<TestContext> afterSendAction = null,
             Action<TestContext> afterReceiveAction = null)                
         {
@@ -904,22 +852,22 @@ namespace TransMock
                    "TransMock.TestMessagingClient");
 
                 throw new InvalidOperationException("No corresponding endpoint setup found");
-            }
+            }            
 
             System.Diagnostics.Trace.WriteLine(
                    "TestMessagingClient.SendImplementation() found endpoint setup for URL: " + receiverEndpoint.URL,
                    "TransMock.TestMessagingClient");
 
+            endpointSetup.CopyRecieveEndpointConfig(receiverEndpoint);
+
             try
             {
                   
-                    System.Diagnostics.Trace.WriteLine(
-                       "TestMessagingClient.SendImplementation() connecting endpoint setup for URL: " + receiverEndpoint.URL,
-                       "TransMock.TestMessagingClient");
+                System.Diagnostics.Trace.WriteLine(
+                    "TestMessagingClient.SendImplementation() connecting endpoint setup for URL: " + receiverEndpoint.URL,
+                    "TransMock.TestMessagingClient");
 
-                    await endpointSetup.MockMessageClient
-                        .ConnectAsync(receiverEndpoint.TimeoutInSeconds * 1000)
-                        .ConfigureAwait(false);
+                await endpointSetup.ConnectClientAsync();
 
                     System.Diagnostics.Debug.WriteLine(
                        string.Format(
@@ -961,9 +909,7 @@ namespace TransMock
 
                     LogMessageContents(mockMessage);
 
-                    await endpointSetup.MockMessageClient
-                        .WriteMessageAsync(mockMessage)
-                        .ConfigureAwait(false);
+                await endpointSetup.WriteClientMessageAsync(mockMessage);
 
                     System.Diagnostics.Trace.WriteLine(
                        string.Format(
@@ -1037,9 +983,7 @@ namespace TransMock
                             receiverEndpoint.URL),
                        "TransMock.TestMessagingClient");
 
-                await endpointSetup.MockMessageClient
-                    .DisconnectAsync()
-                    .ConfigureAwait(false);
+                await endpointSetup.DisconnectClient();
             }
 
             return this;
@@ -1054,7 +998,7 @@ namespace TransMock
         /// <param name="requestIndex">The index of the received request, that is used in the <see cref="ResponseSelectionStrategy" /> instance for selecting the correct response</param>
         /// <param name="requestMessage">The request message, that is used in the <see cref="ResponseSelectionStrategy" /> instance for selecting the correct response<</param>
         private async Task SendResponseAsync(
-            MessageOperationConfig endpointSetup, 
+            MessageOperationHandler endpointSetup, 
             ResponseSelectionStrategy responseStrategy,             
             int connectionId,
             int requestIndex,
@@ -1097,10 +1041,9 @@ namespace TransMock
 
             LogMessageContents(responseMessage);
 
-            await endpointSetup.MockMessageServer
-                .WriteMessageAsync(
-                    connectionId,
-                    responseMessage);
+            await endpointSetup.WriteServerMessageAsync(
+                connectionId, 
+                requestMessage);
 
             System.Diagnostics.Trace.WriteLine(
                 string.Format("TestMessagingClient.SendResponse() sent response message for request message {0} from 2-way send endpoint with URL: {1}",
@@ -1114,12 +1057,12 @@ namespace TransMock
         /// Internal implementatino of the receive response logic from a corersponding 2-way service receive endpoint
         /// </summary>
         /// <returns>An instance of the <see cref="MockMessage"/> class representing the received response</returns>
-        private async Task<MockMessage> ReceiveResponseAsync(MessageOperationConfig endpointSetup)
+        private async Task<MockMessage> ReceiveResponseAsync(MessageOperationHandler endpointSetup)
         {
             // We receive the response in an async way
             // as we need to cancel the operation in case the timeout period is exceeded
             var responseReceptionTask = endpointSetup
-                .MockMessageClient.ReadMessageAsync();
+                .ReadClientMessageAsync();
 
             var resultTask = await Task.WhenAny(
                 responseReceptionTask,
