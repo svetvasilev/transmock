@@ -49,7 +49,7 @@
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
     <Compile Include="SerialStaticFilesResponseSelector.cs" />
     <Compile Include="TestMessagingClient.cs" />
-    <Compile Include="MessageOperationHandler.cs" />
+    <Compile Include="EndpointMessagingOperation.cs" />
     <Compile Include="MockedEndpoint.cs" />
     <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseSelectionStrategy.cs" />

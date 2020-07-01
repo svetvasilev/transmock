@@ -79,13 +79,16 @@ namespace TransMock.Tests.BTS2016
         [TestMethod]
         [DeploymentItem(@"TestData\TestRequest.xml")]
         [DeploymentItem(@"TestData\TestResponse.xml")]
+        [DeploymentItem(@"TestData\TestRequest2.xml")]
+        [DeploymentItem(@"TestData\TestResponse2.xml")]
         public void TestComplexFlow_2ParallelOperations_HappyPath()
         {
             var flowMock = new ComplexFlowMock();
             flowMock.RunComplexFlow2(
                 "mock://localhost/Receive_Test_2Way", 
                 "mock://localhost/Send_Test_2Way",
-                "mock://localhost/Send_Test_2Way2");
+                "mock://localhost/Send_Test_2Way2",
+                "TestRequest2.xml");
 
             var integrationMock = new EndpointsMock<ComplexFlowMockAddresses>();
 
@@ -123,7 +126,7 @@ namespace TransMock.Tests.BTS2016
                       s => s.Send_Test_2Way2,
                       rs => new StaticFileResponseSelector()
                       {
-                          FilePath = "TestResponse.xml"
+                          FilePath = "TestResponse2.xml"
                       },
                       expectedMessageCount: 2,
                       requestValidator: v =>
@@ -133,7 +136,7 @@ namespace TransMock.Tests.BTS2016
                           var xDoc = XDocument.Load(v.Message.BodyStream);
 
                           Assert.IsTrue(
-                              xDoc.Root.Name.LocalName == "TestRequest",
+                              xDoc.Root.Name.LocalName == "TestRequest2",
                               "The contents of the request message is not the same");
                           return true;
                       }

@@ -82,6 +82,12 @@
     <Content Include="TestData\TestFileIn.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\TestRequest2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

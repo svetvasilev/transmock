@@ -18,11 +18,11 @@ namespace TransMock.Tests.BTS2016
 
         // IStreamingClient mockClient;
 
-        ConcurrentQueue<AsyncReadEventArgs> inboundMesageQueue;
+        ConcurrentDictionary<int, AsyncReadEventArgs> inboundMesageQueue;
 
         Task receiverTask;
 
-        ManualResetEventSlim syncEvent;      
+        SemaphoreSlim syncEvent;      
 
         int connectionId = 0;
 
@@ -37,7 +37,7 @@ namespace TransMock.Tests.BTS2016
             string receiveURL,
             string sendUrl)
         {
-            syncEvent = new ManualResetEventSlim(false);
+            syncEvent = new SemaphoreSlim(0,10);
 
             receiverTask = Task.Run(
             //    .ContinueWith(
@@ -56,18 +56,21 @@ namespace TransMock.Tests.BTS2016
 
                     if (!success)
                     {
-                        Console.Out.Write("The receive operation timed out");
+                        Console.Out.WriteLine("The receive operation timed out");
 
                         throw new TimeoutException("The receive operation timed out");
                     }
 
                     AsyncReadEventArgs receivedMessageEvent;
-                    inboundMesageQueue.TryDequeue(out receivedMessageEvent);
+                    while (!inboundMesageQueue.TryRemove(connectionId, out receivedMessageEvent))
+                    {
+                        Console.Out.WriteLine($"Did not managed to fetch message for connection {connectionId}. Trying again");
+                    }
 
-                    connectionId = receivedMessageEvent.ConnectionId;
+                    //connectionId = receivedMessageEvent.ConnectionId;
                     requestMessage = receivedMessageEvent.Message;
 
-                    syncEvent.Reset();
+                    syncEvent.Release();
 
                     MockMessage responseMessage = null;
                     // Then we send a request and wait for a response - first time
@@ -136,9 +139,10 @@ namespace TransMock.Tests.BTS2016
         public void RunComplexFlow2(
             string receiveURL,
             string sendUrl1,
-            string sendUrl2)
+            string sendUrl2,
+            string request2Path)
         {
-            syncEvent = new ManualResetEventSlim(false);
+            syncEvent = new SemaphoreSlim(0,10);
 
             receiverTask = Task.Run(
             //    .ContinueWith(
@@ -163,12 +167,15 @@ namespace TransMock.Tests.BTS2016
                     }
 
                     AsyncReadEventArgs receivedMessageEvent;
-                    inboundMesageQueue.TryDequeue(out receivedMessageEvent);
+                    while (!inboundMesageQueue.TryRemove(connectionId, out receivedMessageEvent))
+                    {
+                        Console.Out.WriteLine($"Did not managed to fetch message for connection {connectionId}. Trying again");
+                    }
 
                     connectionId = receivedMessageEvent.ConnectionId;
                     requestMessage = receivedMessageEvent.Message;
 
-                    syncEvent.Reset();
+                    syncEvent.Release();
 
                     var parallelTask1 = Task.Run(async () =>
                     {
@@ -203,6 +210,8 @@ namespace TransMock.Tests.BTS2016
                     {
                         Console.WriteLine("Starting execution of parallel task 2");
 
+                        MockMessage secondRequest = new MockMessage(request2Path, Encoding.UTF8);
+
                         MockMessage responseMessage = null;
                         // Doing 2 rounds of execution to the second endpont
                         for (int i = 0; i < 2; i++)
@@ -212,7 +221,7 @@ namespace TransMock.Tests.BTS2016
                             using (var mockClient = await InitClientAsync(sendUrl2))
                             {
 
-                                await mockClient.WriteMessageAsync(requestMessage)
+                                await mockClient.WriteMessageAsync(secondRequest)
                                     .ConfigureAwait(false);
 
                                 responseMessage = await mockClient.ReadMessageAsync()
@@ -255,7 +264,7 @@ namespace TransMock.Tests.BTS2016
 
         private async Task InitServerAsync(string receiveURL)
         {
-            inboundMesageQueue = new ConcurrentQueue<AsyncReadEventArgs>();
+            inboundMesageQueue = new ConcurrentDictionary<int, AsyncReadEventArgs>();
 
             mockServer = new StreamingNamedPipeServerAsync(new Uri(receiveURL).AbsolutePath);
             mockServer.ReadCompleted += MockServer_ReadCompleted;
@@ -267,10 +276,10 @@ namespace TransMock.Tests.BTS2016
 
         private void MockServer_ReadCompleted(object sender, AsyncReadEventArgs e)
         {
-            
-            inboundMesageQueue.Enqueue(e);
+            connectionId = e.ConnectionId;
+            inboundMesageQueue.TryAdd(e.ConnectionId, e);
 
-            syncEvent.Set();
+            syncEvent.Release(1);
 
         }
 
