@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BE274A23-F9AC-4FCC-8514-B3377EC9C2DC}</ProjectGuid>
+    <ProjectGuid>{E4235F89-DED8-44AF-9124-0917D65ADBE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Tests.BTS2016</RootNamespace>
@@ -37,6 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,7 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ComplexFlowMock.cs" />
+    <Compile Include="ComplexFlowMock.Net4.cs" />
     <Compile Include="ComplexFlowMockAddresses.cs" />
     <Compile Include="TestComplexMock.cs" />
     <Compile Include="TestMockAddresses.cs" />
@@ -80,10 +82,18 @@
     <Content Include="TestData\TestFileIn.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\TestRequest.xml" />
-    <Content Include="TestData\TestRequest2.xml" />
-    <Content Include="TestData\TestResponse.xml" />
-    <Content Include="TestData\TestResponse2.xml" />
+    <Content Include="TestData\TestRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestRequest2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
