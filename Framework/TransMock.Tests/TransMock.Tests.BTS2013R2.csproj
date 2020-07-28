@@ -53,6 +53,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ComplexFlowMock.cs" />
+    <Compile Include="ComplexFlowMockAddresses.cs" />
+    <Compile Include="TestComplexMock.cs" />
     <Compile Include="TestMockAddresses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestSimpleMock.cs" />
@@ -78,7 +81,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\TestRequest.xml" />
+    <Content Include="TestData\TestRequest2.xml" />
     <Content Include="TestData\TestResponse.xml" />
+    <Content Include="TestData\TestResponse2.xml" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

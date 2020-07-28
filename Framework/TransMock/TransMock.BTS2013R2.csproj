@@ -47,7 +47,7 @@
     </Compile>
     <Compile Include="Addressing\EndpointAddressTypes.cs" />
     <Compile Include="EndpointsMock.cs" />
-    <Compile Include="MessageOperationConfig.cs" />
+    <Compile Include="EndpointMessagingOperation.cs" />
     <Compile Include="MockedEndpoint.cs" />
     <Compile Include="ReceiveEndpoint.cs" />
     <Compile Include="ResponseSelectionStrategy.cs" />

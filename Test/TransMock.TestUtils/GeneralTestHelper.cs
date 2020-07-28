@@ -48,15 +48,17 @@ namespace TransMock.TestUtils
         /// </summary>
         /// <param name="msg">The message from which the body will be extracted</param>
         /// <param name="encoding">The encoding in which the body is expected to be</param>
+        /// <param name="withPreemble">A flag indicating whether to return the preemble as part of the string</param>
         /// <returns>The message body in string representation</returns>
-        public static string GetBodyAsString(Message msg, Encoding encoding)
+        public static string GetBodyAsString(Message msg, Encoding encoding, bool withPreemble=true)
         {
             XmlDictionaryReader xdr = msg.GetReaderAtBodyContents();
             xdr.ReadStartElement("MessageContent");
             byte[] messageBytes = xdr.ReadContentAsBase64();
             byte[] preemble = encoding.GetPreamble();
 
-            if (preemble != null
+            if (withPreemble 
+                && preemble != null
                 && messageBytes
                     .Take(preemble.Length).ToArray()
                     .SequenceEqual(preemble))

@@ -7,6 +7,9 @@ It contains the assemblies for the adapter for the following BizTalk Server vers
 - BizTalk Server 2016
 
 **** Release notes ****
+Verion 1.6.0:
+- Introduced new implemetations of the streaming client and server classes based on the TPL
+
 Version 1.5.3:
 - Fixed issue with inbound adapter failing occasionally with 'Attempting to deserialize from empty stream' error 
   when receiving response from 2-way receive location

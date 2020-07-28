@@ -75,9 +75,13 @@
     <Compile Include="TestMockReceiveStep.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\CustomFault.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\TestRequest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -87,8 +91,21 @@
     <Content Include="TestData\TestResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\TestResponse0.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.BTS2010.csproj">
+      <Project>{35f5c7fa-4ee0-4e03-849e-fc7ea463c2ec}</Project>
+      <Name>TransMock.Wcf.Adapter.Utils.BTS2010</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.BTS2010.csproj">
       <Project>{10b17c1a-69ec-4a58-904f-16037427dc03}</Project>
       <Name>TransMock.Wcf.Adapter.BTS2010</Name>

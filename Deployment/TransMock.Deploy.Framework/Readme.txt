@@ -10,6 +10,10 @@ NB: Please note that for each version update the btdfproj file has to be updated
 	         v1.4.0 reference will be: <Import Project="$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.1.4.0\BTDF\TransMock.targets" />
 
 **** Release notes ****
+Version 1.6:
+- Major rewrite of the messaging handling logic in the TestMessingClient class
+- Fix of a synchronization issue that lead to deadlocks in some complex scenarios
+
 Version 1.5:
 - Introduced the new programming model based on functional programming and fluid syntax
 	* Still contains the BizUnit based programming model, but it will be phased out in the future

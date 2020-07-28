@@ -171,7 +171,7 @@ namespace TransMock.Integration.BizUnit.Tests
 
             Assert.IsNotNull(msg, "Message instance was not received");
             string expectedRequest = ReadRequestFileContent(step.RequestPath);
-            string actualRequest = GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8);
+            string actualRequest = GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8, false);
             Assert.AreEqual(expectedRequest, actualRequest, 
                 "Message contents of received message is different");
                         
@@ -228,7 +228,7 @@ namespace TransMock.Integration.BizUnit.Tests
 
             Assert.IsNotNull(msg, "Message instance was not received");
             string expectedRequest = ReadRequestFileContent(step.RequestPath);
-            string actualRequest = GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8);
+            string actualRequest = GeneralTestHelper.GetBodyAsString(msg, Encoding.UTF8, false);
             Assert.AreEqual(expectedRequest, actualRequest,
                 "Message contents of received message is different");
 

@@ -993,7 +993,7 @@ namespace TransMock.Wcf.Adapter.Tests
 
         [TestMethod]
         [TestCategory("One Way Tests with Properties")]
-        public void TestOneWayReceive_XML_PromoteSserviceBusAdapterProperties()
+        public void TestOneWayReceive_XML_PromoteServiceBusAdapterProperties()
         {
             const string adapterNamespace = "http://schemas.microsoft.com/BizTalk/2012/Adapter/BrokeredMessage-properties";
 

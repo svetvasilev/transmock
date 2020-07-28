@@ -1067,13 +1067,14 @@ namespace TransMock
             var responseReceptionTask = endpointSetup
                 .ReceiveClientMessageAsync();
 
-            var resultTask = await Task.WhenAny(
-                responseReceptionTask,
-                Task.Delay(
+            var completedTaskIndex = await Task.Factory.StartNew(
+                () => Task.WaitAny(
+                    new Task[] { responseReceptionTask },               
                     TimeSpan.FromSeconds(
-                        endpointSetup.TwoWayReceiveEndpoint.TimeoutInSeconds)));
+                        endpointSetup.TwoWayReceiveEndpoint.TimeoutInSeconds))
+                );
 
-            if(resultTask == responseReceptionTask)
+            if(completedTaskIndex != -1)
             {
                 System.Diagnostics.Trace.WriteLine(
                         string.Format("TestMessagingClient.ReceiveResponse() received response from 2-way receive endpoint with URL: {0}",
