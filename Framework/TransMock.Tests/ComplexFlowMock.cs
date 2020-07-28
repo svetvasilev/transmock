@@ -70,7 +70,7 @@ namespace TransMock.Tests.BTS2016
                     //connectionId = receivedMessageEvent.ConnectionId;
                     requestMessage = receivedMessageEvent.Message;
 
-                    syncEvent.Release();
+                    //syncEvent.Release();
 
                     MockMessage responseMessage = null;
                     // Then we send a request and wait for a response - first time
@@ -121,10 +121,10 @@ namespace TransMock.Tests.BTS2016
                         responseMessage)
                         .ConfigureAwait(false);
 
-                });
+                    await CleanupServer()
+                        .ConfigureAwait(false);
 
-            // Initiating the wait just to kick start the task
-            //receiverTask.Start();
+                });            
         }
 
         /// <summary>
@@ -144,9 +144,7 @@ namespace TransMock.Tests.BTS2016
         {
             syncEvent = new SemaphoreSlim(0,10);
 
-            receiverTask = Task.Run(
-            //    .ContinueWith(
-            //ThreadPool.QueueUserWorkItem(
+            receiverTask = Task.Run(            
                 async () =>
                 {
                     Console.WriteLine("Starting execution of flow 2");
@@ -175,7 +173,7 @@ namespace TransMock.Tests.BTS2016
                     connectionId = receivedMessageEvent.ConnectionId;
                     requestMessage = receivedMessageEvent.Message;
 
-                    syncEvent.Release();
+                    // syncEvent.Release();
 
                     var parallelTask1 = Task.Run(async () =>
                     {
@@ -252,6 +250,9 @@ namespace TransMock.Tests.BTS2016
                         connectionId,
                         parallelTask1.Result)
                         .ConfigureAwait(false);
+
+                    await CleanupServer()
+                        .ConfigureAwait(false);
                     
                 });
             }
@@ -279,11 +280,11 @@ namespace TransMock.Tests.BTS2016
             connectionId = e.ConnectionId;
             inboundMesageQueue.TryAdd(e.ConnectionId, e);
 
-            syncEvent.Release(1);
+            syncEvent.Release();
 
         }
 
-        private async void CleanupServer()
+        private async Task CleanupServer()
         {
             inboundMesageQueue = null;
 
