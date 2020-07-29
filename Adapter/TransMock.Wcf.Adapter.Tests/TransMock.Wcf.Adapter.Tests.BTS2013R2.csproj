@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{43289D5B-19BD-4FD1-A8A7-05996A688BEE}</ProjectGuid>
+    <ProjectGuid>{8522A0F5-87CD-4552-8E7F-FBC196265E8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Wcf.Adapter.Tests</RootNamespace>

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}</ProjectGuid>
+    <ProjectGuid>{8B26EB48-4497-47D9-82CC-6F4C63DFA9EC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TransMock.Wcf.Adapter.Utils</RootNamespace>
