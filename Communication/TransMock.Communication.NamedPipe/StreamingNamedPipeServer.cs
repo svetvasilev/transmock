@@ -33,6 +33,7 @@ using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
+#if NET40 || NET45 || NET451
     /// <summary>
     /// This class implements the logic of a streaming named pipe server
     /// </summary>
@@ -762,7 +763,8 @@ namespace TransMock.Communication.NamedPipes
                 this.serverStopEvent.Set();
             }
         }
-    }   
+    }
+#endif
 
     /// <summary>
     /// Helper class for keeping the relation between the connection and the data that is read from it

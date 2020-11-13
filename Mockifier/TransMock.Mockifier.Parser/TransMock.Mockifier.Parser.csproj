@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>    
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock.Mockifier.Parser</AssemblyTitle>
+    <Product>TransMock</Product>
+    <Description>Contains the component which parses the binding files</Description>
+    <Copyright>Copyright © 2014</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\VersionInfo.cs" Link="VersionInfo.cs" />
+    <Compile Update="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Mock.xsd" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,287 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock.Wcf.Adapter.Utils</AssemblyTitle>
+    <Product>TransMock</Product>
+    <Description>Utilities for the TransMock WCF adapter for BizTalk</Description>
+    <Copyright>Copyright ©  2018</Copyright>    
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Key\TransMock.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net40'">
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--<Compile Include="..\VersionInfo.cs" Link="VersionInfo.cs" />-->
+    <Compile Update="BizTalkProperties\AppStream.Designer.cs">
+      <DependentUpon>AppStream.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\Namespaces.Designer.cs">
+      <DependentUpon>Namespaces.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\MIME.Designer.cs">
+      <DependentUpon>MIME.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\SBMessaging.Designer.cs">
+      <DependentUpon>SBMessaging.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\SMTP.Designer.cs">
+      <DependentUpon>SMTP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\WSS.Designer.cs">
+      <DependentUpon>WSS.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\WCF.Designer.cs">
+      <DependentUpon>WCF.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\SQL.Designer.cs">
+      <DependentUpon>SQL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\SOAP.Designer.cs">
+      <DependentUpon>SOAP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\SFTP.Designer.cs">
+      <DependentUpon>SFTP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\ServiceBus.Designer.cs">
+      <DependentUpon>ServiceBus.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\POP3.Designer.cs">
+      <DependentUpon>POP3.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\MSMQT.Designer.cs">
+      <DependentUpon>MSMQT.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\MSMQ.Designer.cs">
+      <DependentUpon>MSMQ.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\MQSeries.Designer.cs">
+      <DependentUpon>MQSeries.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\HTTP.Designer.cs">
+      <DependentUpon>HTTP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\FTP.Designer.cs">
+      <DependentUpon>FTP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\FILE.Designer.cs">
+      <DependentUpon>FILE.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\EDIV2.Designer.cs">
+      <DependentUpon>EDIV2.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\EDIAS2.Designer.cs">
+      <DependentUpon>EDIAS2.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\EDI.Designer.cs">
+      <DependentUpon>EDI.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="BizTalkProperties\BTS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BTS.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="BizTalkProperties\AppStream.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppStream.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\Namespaces.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Namespaces.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\MIME.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MIME.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\SBMessaging.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SBMessaging.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\SMTP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SMTP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\WSS.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WSS.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\WCF.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WCF.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\SQL.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SQL.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\SOAP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SOAP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\SFTP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SFTP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\ServiceBus.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ServiceBus.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\POP3.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>POP3.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\MSMQT.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MSMQT.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\MSMQ.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MSMQ.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\MQSeries.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MQSeries.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\HTTP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>HTTP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\FTP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FTP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\FILE.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FILE.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\EDIV2.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EDIV2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\EDIAS2.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EDIAS2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\EDI.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EDI.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BizTalkProperties\BTS.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BTS.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Key\TransMock.snk">
+      <Link>TransMock.snk</Link>
+    </None>
+    <None Include="Resources\appstream-properties.xsd" />
+    <None Include="Resources\edi-properties.xsd" />
+    <None Include="Resources\edias2-properties.xsd" />
+    <None Include="Resources\ediv2-properties.xsd" />
+    <None Include="Resources\file-properties.xsd" />
+    <None Include="Resources\ftp-properties.xsd" />
+    <None Include="Resources\http-properties.xsd" />
+    <None Include="Resources\mqs-properties.xsd" />
+    <None Include="Resources\msmq-properties.xsd" />
+    <None Include="Resources\msmqt-properties.xsd" />
+    <None Include="Resources\pop3-properties.xsd" />
+    <None Include="Resources\sb-properties.xsd" />
+    <None Include="Resources\sftp-properties.xsd" />
+    <None Include="Resources\soap-properties.xsd" />
+    <None Include="Resources\sql-properties.xsd" />
+    <None Include="Resources\wcf-properties.xsd" />
+    <None Include="Resources\wss-properties.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertySchemaToClass.xslt" />
+    <None Include="Resources\PropertySchemaToResx.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PropertySchemaToMD.xslt">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+</Project>

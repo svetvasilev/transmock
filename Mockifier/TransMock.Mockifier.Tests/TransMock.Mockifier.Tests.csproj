@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProductVersion />
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock.Mockifier.Tests</AssemblyTitle>
+    <Product>TransMock.Mockifier.Tests</Product>
+    <Copyright>Copyright ©  2014</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.2.1408.0717" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\TestApplication.BindingInfo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransMock.Mockifier\TransMock.Mockifier.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="TestData\TestApplicationMockAddresses.cs" />
+  </ItemGroup>
+</Project>

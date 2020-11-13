@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock.Integration.BizUnit.Tests</AssemblyTitle>
+    <Product>TransMock.Integration.BizUnit.Tests</Product>
+    <Copyright>Copyright © 2014</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BizUnit.Core" Version="5.0.5" />
+    <PackageReference Include="BizUnit.TestSteps" Version="5.0.5" />
+    <PackageReference Include="Moq" Version="4.2.1408.0717" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\references\WCF LOB SDK\2010\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\references\WCF LOB SDK\2013\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\references\WCF LOB SDK\2013R2\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\references\WCF LOB SDK\2016\Microsoft.ServiceModel.Channels.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>        
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.csproj" />
+    <ProjectReference Include="..\..\..\Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.csproj" />
+    <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.csproj" />
+    <ProjectReference Include="..\..\..\Test\TransMock.TestUtils\TransMock.TestUtils.csproj" />
+    <ProjectReference Include="..\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\CustomFault.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestRequest.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestRequest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse0.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\TestResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

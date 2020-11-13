@@ -21,6 +21,7 @@ using System.Text;
 
 namespace TransMock.Communication.NamedPipes
 {
+#if !NET40
     /// <summary>
     /// Event arguments for the AsyncReadEvent
     /// </summary>
@@ -52,4 +53,5 @@ namespace TransMock.Communication.NamedPipes
         /// </summary>
         public int ConnectionId { get; set; }
     }
+#endif
 }

@@ -122,7 +122,7 @@ namespace TransMock.Wcf.Adapter
         } 
 #endregion
 
-#region IOutboundHandler Members
+        #region IOutboundHandler Members
         /// <summary>
         /// Executes the request message on the target system and returns a response message.
         /// If there isn’t a response, this method should return null
@@ -165,16 +165,31 @@ namespace TransMock.Wcf.Adapter
 
             CopyPromotedProperties(message, mockMessage);
 
+#if NET40 || NET45 || NET451
             using (StreamingNamedPipeClient pipeClient = new StreamingNamedPipeClient(
                 Connection.ConnectionFactory.ConnectionUri.Uri))
+#elif NET462 || NET48
+            using (StreamingNamedPipeClientAsync pipeClient = new StreamingNamedPipeClientAsync(
+                Connection.ConnectionFactory.ConnectionUri.Uri))        
+#endif
             {
+#if NET40 || NET45 || NET451
                 pipeClient.Connect((int)timeout.TotalMilliseconds);
+#elif NET462 || NET48
+                var connectTask = pipeClient.ConnectAsync((int)timeout.TotalMilliseconds);
+                connectTask.Wait((int)timeout.TotalMilliseconds);
+#endif
 
                 System.Diagnostics.Debug.WriteLine(
                     "The pipe client was connected!Sending the outbound message over the pipe",
                     "TransMock.Wcf.Adapter.MockAdapterOutboundHandler");
 
+#if NET40 || NET45 || NET451
                 pipeClient.WriteMessage(mockMessage);
+#elif NET462 || NET48
+                var writeTask = pipeClient.WriteMessageAsync(mockMessage);
+                writeTask.Wait((int)timeout.TotalMilliseconds);
+#endif
 
                 System.Diagnostics.Debug.WriteLine(
                     "Outbound message sent!",
@@ -205,8 +220,13 @@ namespace TransMock.Wcf.Adapter
 
                     // We proceed with waiting for the response                    
                     Message responseMsg = null;
+#if NET40 || NET45 || NET451
                     var responseMockMessage = pipeClient.ReadMessage();
-
+#elif NET462 || NET48
+                    var readTask = pipeClient.ReadMessageAsync();
+                    readTask.Wait((int)timeout.TotalMilliseconds);
+                    var responseMockMessage = readTask.Result;
+#endif
                     respContents = string.Format(
                         CultureInfo.InvariantCulture,
                         "<MessageContent>{0}</MessageContent>",

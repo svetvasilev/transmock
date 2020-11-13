@@ -23,6 +23,7 @@ using System.Xml;
 
 namespace TransMock.Wcf.Adapter
 {
+#if NET40
     /// <summary>
     /// This class implements logic for promoting properties in a message context that are related to the original receive adapter that is mocked
     /// </summary>
@@ -242,4 +243,5 @@ namespace TransMock.Wcf.Adapter
             }
         }
     }
+#endif
 }

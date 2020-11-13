@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
+#if NET40 || NET45 || NET451
     /// <summary>
     /// This class implements the logic of a client streaming data over named pipe
     /// </summary>
@@ -463,4 +464,5 @@ namespace TransMock.Communication.NamedPipes
                 "TransMock.Communication.NamedPipes.StreamingNamedPipeClient");
         }
     }
+#endif
 }

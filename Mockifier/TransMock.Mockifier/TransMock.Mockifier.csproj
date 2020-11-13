@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <Configurations>Debug;Release</Configurations>
+	<Platforms>x86</Platforms>
+    <AssemblyTitle>TransMock.Mockifier</AssemblyTitle>
+    <Product>TransMock</Product>
+    <Description>The tool that mockifies a BizTalk bindings file so that an integration application can be tested with TransMock</Description>
+    <Copyright>Copyright ©  2014</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TransMock.Mockifier.Mockifier</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="1.9.71" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\VersionInfo.cs" Link="VersionInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings.StyleCop" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.csproj" />
+  </ItemGroup>
+</Project>

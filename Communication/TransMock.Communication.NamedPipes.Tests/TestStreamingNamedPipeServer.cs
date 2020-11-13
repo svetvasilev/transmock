@@ -31,6 +31,7 @@ using TransMock.Communication.NamedPipes;
 
 namespace TransMock.Communication.NamedPipes.Tests
 {
+#if NET40 || NET45 || NET451
     [TestClass]
     public class TestStreamingNamedPipeServer
     {
@@ -626,4 +627,5 @@ namespace TransMock.Communication.NamedPipes.Tests
                 NamedPipeMessageUtils.EndOfMessage.Length);
         }
     }
+#endif
 }

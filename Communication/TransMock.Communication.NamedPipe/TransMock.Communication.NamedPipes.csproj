@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock Communication Library</AssemblyTitle>
+    <Product>TransMock</Product>
+    <Description>TransMock Adapter allows for mocking transports in BizTalk server receive locations and send ports in order to easily perform automated integration testing</Description>
+    <Copyright>Copyright ©  2014</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Key\TransMock.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <!--<ItemGroup>
+    <Compile Include="..\..\Adapter\VersionInfo.cs" Link="VersionInfo.cs" />
+  </ItemGroup>-->
+  <ItemGroup>
+    <None Include="..\..\Key\TransMock.snk">
+      <Link>TransMock.snk</Link>
+    </None>
+  </ItemGroup>
+</Project>

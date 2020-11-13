@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 using TransMock.Communication.NamedPipes;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TransMock.Tests.BTS2016
 {
+#if NET40 || NET45 || NET451
     public class ComplexFlowMock
     {
         IAsyncStreamingServer mockServer;
@@ -305,4 +306,5 @@ namespace TransMock.Tests.BTS2016
             return mockClient;
         }
     }
+#endif
 }

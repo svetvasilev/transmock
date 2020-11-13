@@ -30,7 +30,11 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// The instance of the pipe server
         /// </summary>
+#if NET40 || NET45 || NET451
         private IAsyncStreamingServer pipeServer;
+#elif NET462 || NET48
+        private IStreamingServerAsync pipeServer;
+#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MockAdapterInboundReply"/> class
@@ -38,7 +42,11 @@ namespace TransMock.Wcf.Adapter
         /// <param name="pipeServer">The instance of the pipe server</param>
         /// <param name="connectionId">The Id of the connection on which the reply should be sent back</param>        
         public MockAdapterInboundReply(
-            IAsyncStreamingServer pipeServer,
+#if NET40 || NET45 || NET451
+        IAsyncStreamingServer pipeServer,
+#elif NET462 || NET48
+        IStreamingServerAsync pipeServer,
+#endif
             int connectionId,
             Encoding encoding)
         {
@@ -117,8 +125,12 @@ namespace TransMock.Wcf.Adapter
                     "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
 
                 // Write it to the pipe server
-                //this.pipeServer.WriteAllBytes(this.connectionId, msgBuffer);
+#if NET40 || NET45 || NET451
                 this.pipeServer.WriteMessage(connectionId, mockMessage);
+#elif NET462 || NET48
+                var writeTask = this.pipeServer.WriteMessageAsync(connectionId, mockMessage);
+                writeTask.Wait();
+#endif
 
                 System.Diagnostics.Debug.WriteLine(
                     "The response message was sent to the client",
@@ -136,8 +148,14 @@ namespace TransMock.Wcf.Adapter
             }
             finally
             {
-                // Disconnecting the pipe connection
+#if NET40 || NET45 || NET451
                 this.pipeServer.Disconnect(this.connectionId);
+#elif NET462 || NET48
+                var disconnectTask = this.pipeServer.DisconnectAsync(this.connectionId);
+                disconnectTask.Wait();
+#endif
+                // Disconnecting the pipe connection
+
             }
         }
         #endregion InboundReply Members

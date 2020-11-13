@@ -35,6 +35,7 @@ using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
+#if NET462 || NET48
     /// <summary>
     /// This class implements the logic of an async streaming named pipe server
     /// </summary>
@@ -87,7 +88,7 @@ namespace TransMock.Communication.NamedPipes
             this.URL = url;
         }
 
-        #region IStreamingServer events
+    #region IStreamingServer events
         /// <summary>
         /// The event fired when a client connects to the server endpoint
         /// </summary>
@@ -97,7 +98,7 @@ namespace TransMock.Communication.NamedPipes
         /// The event fired when reading data from the client completed
         /// </summary>
         public event EventHandler<AsyncReadEventArgs> ReadCompleted;
-        #endregion
+    #endregion
 
         /// <summary>
         /// Gets or sets the URL of the server endpoint
@@ -107,7 +108,7 @@ namespace TransMock.Communication.NamedPipes
             get; set; 
         }
 
-        #region IStreamingServerAsync Implementation
+    #region IStreamingServerAsync Implementation
         /// <summary>
         /// Gets the connection id for this server instance
         /// </summary>
@@ -286,7 +287,7 @@ namespace TransMock.Communication.NamedPipes
                        
         }
 
-        #region Write methods
+    #region Write methods
         /// <summary>
         /// Writes an instance of a MockMessage to a given pipe stream connection
         /// </summary>
@@ -391,10 +392,10 @@ namespace TransMock.Communication.NamedPipes
                 throw;
             }
         }
-        #endregion
-        #endregion
+    #endregion
+    #endregion
 
-        #region IDisposable implementation
+    #region IDisposable implementation
         /// <summary>
         /// Disposes the pipe server
         /// </summary>
@@ -402,7 +403,7 @@ namespace TransMock.Communication.NamedPipes
         {
             this.Dispose(true);
         }
-        #endregion
+    #endregion
 
         /// <summary>
         /// Implements specific disposal logic
@@ -756,5 +757,6 @@ namespace TransMock.Communication.NamedPipes
                 this.serverStopEvent.Set();
             }
         }
-    }       
+    }
+#endif
 }

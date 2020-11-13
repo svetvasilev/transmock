@@ -23,12 +23,13 @@ using System.Xml;
 
 namespace TransMock.Wcf.Adapter
 {
+#if !NET40
     /// <summary>
     /// This class implements logic for promoting properties in a message context that are related to the original receive adapter that is mocked
     /// </summary>
     internal class AdapterPropertyParser
     {
-        #region Constants
+#region Constants
         /// <summary>
         /// Namespace used for promoting header properties to the BizTalk message context
         /// </summary>
@@ -40,7 +41,7 @@ namespace TransMock.Wcf.Adapter
         private const string PropertiesToWriteKey = "http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties/WriteToContext";
 
         private const string UtilsAssemblyName = "TransMock.Wcf.Adapter.Utils";
-        #endregion
+#endregion
 
         /// <summary>
         /// Dictionary containing a list of properties to be promoted
@@ -253,4 +254,5 @@ namespace TransMock.Wcf.Adapter
             }
        }        
     }
+#endif
 }

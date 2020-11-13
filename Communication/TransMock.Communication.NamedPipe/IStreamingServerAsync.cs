@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
+#if NET462 || NET48
     /// <summary>
     /// Defines the operations of a streaming server
     /// </summary>
@@ -86,4 +87,5 @@ namespace TransMock.Communication.NamedPipes
         /// <param name="message">The message instance that will be written to the connection</param>
         Task WriteMessageAsync(int connectionId, MockMessage message);
     }    
+#endif
 }

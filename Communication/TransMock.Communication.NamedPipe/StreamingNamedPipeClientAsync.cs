@@ -31,6 +31,8 @@ using System.Threading.Tasks;
 
 namespace TransMock.Communication.NamedPipes
 {
+
+#if NET462 || NET48
     /// <summary>
     /// This class implements the logic of a client streaming data over named pipe
     /// </summary>
@@ -78,7 +80,7 @@ namespace TransMock.Communication.NamedPipes
         /// </summary>
         public string PipeName { get; set; }
                 
-        #region Public methods
+    #region Public methods
         /// <summary>
         /// Connects to the configured server named pipe endpoint
         /// </summary>
@@ -171,7 +173,7 @@ namespace TransMock.Communication.NamedPipes
             });          
         }
 
-        #region Read methods
+    #region Read methods
         /// <summary>
         /// Reads the data sent from the server named pipe endpoint as a stream
         /// </summary>
@@ -275,9 +277,9 @@ namespace TransMock.Communication.NamedPipes
                 throw;
             }
         }
-        #endregion
+    #endregion
 
-        #region Write methods
+    #region Write methods
         /// <summary>
         /// Wrties a message instance to the underlying named pipe
         /// </summary>
@@ -373,8 +375,8 @@ namespace TransMock.Communication.NamedPipes
                 throw;
             }
         }       
-        #endregion
-        #endregion
+    #endregion
+    #endregion
 
         /// <summary>
         /// Disposing the client
@@ -404,4 +406,5 @@ namespace TransMock.Communication.NamedPipes
                 "TransMock.Communication.NamedPipes.StreamingNamedPipeClientAsync");
         }
     }
+#endif
 }

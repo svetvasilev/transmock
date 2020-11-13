@@ -47,7 +47,12 @@ namespace TransMock.Wcf.Adapter
         /// <summary>
         /// The streaming named pipe server used for communication
         /// </summary>
+    #if NET40 || NET45 || NET451
         private IAsyncStreamingServer pipeServer;
+    #elif NET462 || NET48
+        private IStreamingServerAsync pipeServer;
+    #endif
+        
 
         /// <summary>
         /// The internal queue where messages are put when received from an external system
@@ -88,7 +93,7 @@ namespace TransMock.Wcf.Adapter
             this.propertyParser = new AdapterPropertyParser();
         }
 
-        #region IInboundHandler Members
+#region IInboundHandler Members
 
         /// <summary>
         /// Start the listener
@@ -104,16 +109,28 @@ namespace TransMock.Wcf.Adapter
                 this.inboundQueue = new Queue<MessageConnectionPair>(3);
             }
 
+#if NET40 || NET45 || NET451
             this.pipeServer = new StreamingNamedPipeServer(
                 this.Connection.ConnectionFactory.ConnectionUri
                     .Uri.AbsolutePath);
+#elif NET462 || NET48
+        this.pipeServer = new StreamingNamedPipeServerAsync(
+                this.Connection.ConnectionFactory.ConnectionUri
+                    .Uri.AbsolutePath);           
+#endif
 
             this.pipeServer.ClientConnected += this.pipeServer_ClientConnected;
             this.pipeServer.ReadCompleted += this.pipeServer_ReadCompleted;
 
+#if NET40 || NET45 || NET451
             this.pipeServer.Start();
+#elif NET462 || NET48
+        var task = this.pipeServer.StartAsync()
+            .ConfigureAwait(false);            
+#endif
+
         }
-        
+
         /// <summary>
         /// Stop the listener
         /// </summary>
@@ -143,7 +160,12 @@ namespace TransMock.Wcf.Adapter
             }
             finally
             {
+#if NET40 || NET45 || NET451
                 this.pipeServer.Stop();
+#elif NET462 || NET48
+                this.pipeServer.StopAsync()
+                    .ConfigureAwait(false);            
+#endif
             }
         }
 
@@ -234,9 +256,9 @@ namespace TransMock.Wcf.Adapter
             }
         }
 
-        #endregion IInboundHandler Members
+#endregion IInboundHandler Members
 
-        #region Dispose implementation
+#region Dispose implementation
         
         /// <summary>
         /// Disposes the object
@@ -247,9 +269,9 @@ namespace TransMock.Wcf.Adapter
             base.Dispose(disposing);
         }
 
-        #endregion
+#endregion
 
-        #region Pipe server event handlers
+#region Pipe server event handlers
         /// <summary>
         /// Event handler for the ReadCompleted event
         /// </summary>
@@ -317,9 +339,9 @@ namespace TransMock.Wcf.Adapter
                 "ClientConnected event handler called with connection Id: " + e.ConnectionId,
                 "TransMock.Wcf.Adapter.MockAdapterInboundHandler");
         }
-        #endregion
+#endregion
 
-        #region Property promotion methods
+#region Property promotion methods
         /// <summary>
         /// Parses the properties that were provided for promotion
         /// </summary>
@@ -337,6 +359,6 @@ namespace TransMock.Wcf.Adapter
             }
         } 
    
-        #endregion        
+#endregion
     }
 }

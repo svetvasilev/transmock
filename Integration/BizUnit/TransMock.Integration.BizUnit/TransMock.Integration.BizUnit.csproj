@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
+    <AssemblyTitle>TransMock.Integration.BizUnit</AssemblyTitle>
+    <Product>TransMock</Product>
+    <Description>Contains the BizUnit steps for utilizinng the TransMock capabilities</Description>
+    <Copyright>Copyright ©  2014</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BizUnit.Core" Version="5.0.5" />
+    <PackageReference Include="BizUnit.TestSteps" Version="5.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\VersionInfo.cs" Link="VersionInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.csproj" />
+  </ItemGroup>
+</Project>

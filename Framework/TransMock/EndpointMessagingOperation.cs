@@ -35,6 +35,7 @@ namespace TransMock
     /// <summary>
     /// Implements the logic for handling messaging operations against a mocked endpoint
     /// </summary>
+#if NET462 || NET48
     internal class EndpointMessagingOperation
     {
         /// <summary>
@@ -393,4 +394,5 @@ namespace TransMock
 
         }
     }
+#endif
 }
