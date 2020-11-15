@@ -21,9 +21,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Include="..\..\..\VersionInfo.cs" Link="VersionInfo.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <ProjectReference Include="..\..\..\Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.csproj" />
   </ItemGroup>

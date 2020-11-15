@@ -10,25 +10,116 @@
     <Copyright>Copyright ©  2014</Copyright>    
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="TestDynamicSendPortMockHelper.orig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestDynamicSendPortMockHelper.orig.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Moq" Version="4.2.1408.0717" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
     <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2020\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2020\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.BaseTypes.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2020\Microsoft.XLANGs.Engine.dll</HintPath>
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.Engine.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.Engine.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+    <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\references\BizTalk\2016\Microsoft.XLANGs.Engine.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.XLANGs.Engine.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="Microsoft.BizTalk.GlobalPropertySchemas, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.BizTalk.GlobalPropertySchemas.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.XLANGs.Engine, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server\Microsoft.XLANGs.Engine.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.1.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.1.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.1.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>2.1.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

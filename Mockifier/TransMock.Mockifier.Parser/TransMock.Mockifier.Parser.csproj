@@ -11,7 +11,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\VersionInfo.cs" Link="VersionInfo.cs" />
+    <!--<Compile Include="..\..\VersionInfo.cs" Link="VersionInfo.cs" />-->
     <Compile Update="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
