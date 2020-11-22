@@ -36,6 +36,10 @@ function InstallTestUtils{
 			$TargetNetVersion = "net46"
 			$WinSDKFilter="NETFX 4.6 Tools"
 		}
+		"2020" { 
+			$TargetNetVersion = "net48"
+			$WinSDKFilter="NETFX 4.8 Tools"
+		}
 	}
 
 	Write-Debug "TargetNetVersion is:$TargetNetVersion,  WinSDKFilter is: $WinSDKFilter"
@@ -91,6 +95,8 @@ if ((Test-Path $bizTalkRegistryPath) -eq $true){
 		{ $productVersion -match "3.11.*" } { InstallTestUtils "2013R2" }
 		# BizTalk 2016
 		{ $productVersion -match "3.12.*" } { InstallTestUtils "2016" }
+		# BizTalk 2020
+		{ $productVersion -match "3.13.*" } { InstallTestUtils "2020" }
 		# deafult
 		default { Write-Error "No suitable adapter version found for the currently installed BizTalk Server version";break }
 	}

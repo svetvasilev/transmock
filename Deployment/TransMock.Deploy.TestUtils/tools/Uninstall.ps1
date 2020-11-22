@@ -32,6 +32,9 @@ function UninstallTestUtils{
 		"2016" { 
 			$WinSDKFilter="NETFX 4.6 Tools"
 		}
+		"2020" { 
+			$WinSDKFilter="NETFX 4.8 Tools"
+		}
 	}
 
 	Write-Debug "WinSDKFilter is: $WinSDKFilter"
@@ -82,6 +85,8 @@ if ((Test-Path $bizTalkRegistryPath) -eq $true){
 		{ $productVersion -match "3.11.*" } { UninstallTestUtils "2013R2" }
 		# BizTalk 2016
 		{ $productVersion -match "3.12.*" } { UninstallTestUtils "2016" }
+		# BizTalk 2020
+		{ $productVersion -match "3.13.*" } { UninstallTestUtils "2020" }
 		# deafult
 		default { Write-Error "No suitable adapter version found for the currently installed BizTalk Server version";break }
 		}

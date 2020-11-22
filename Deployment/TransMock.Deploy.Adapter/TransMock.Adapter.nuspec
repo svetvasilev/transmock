@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>TransMock.Adapter</id>
-    <version>1.6.1</version>
+    <version>1.0.0</version>
     <title>TransMock Adapter</title>
     <authors>Svetoslav Vasilev</authors>
     <owners>Svetoslav Vasilev</owners>
@@ -36,6 +36,28 @@
         <dependency id="TransMock.Communication.NamedPipes" version="1.0.0" exclude="Build,Analyzers" />-->
       </group>
     </dependencies>
+    <references>
+      <group targetFramework="net40">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net45">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net451">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net462">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net48">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>      
+    </references>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Configuration" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
       <frameworkAssembly assemblyName="System.IdentityModel" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
@@ -46,27 +68,37 @@
   <files>
     <!-- .NET 4.0 assemblies -->
     <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net40\TransMock.Communication.NamedPipes.dll" target="lib\net40"/>
+    <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net40\TransMock.Communication.NamedPipes.dll" target="ref\net40"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net40\TransMock.Wcf.Adapter.Utils.dll" target="lib\net40"/>
+    <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net40\TransMock.Wcf.Adapter.Utils.dll" target="ref\net40"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter\bin\Release\net40\TransMock.Wcf.Adapter.dll" target="lib\net40"/>
 
     <!-- .NET 4.5 assemblies -->
     <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net45\TransMock.Communication.NamedPipes.dll" target="lib\net45"/>
+    <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net45\TransMock.Communication.NamedPipes.dll" target="ref\net45"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net45\TransMock.Wcf.Adapter.Utils.dll" target="lib\net45"/>
+    <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net45\TransMock.Wcf.Adapter.Utils.dll" target="ref\net45"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter\bin\Release\net45\TransMock.Wcf.Adapter.dll" target="lib\net45"/>
 
     <!-- .NET 4.5.1 assemblies -->
     <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net451\TransMock.Communication.NamedPipes.dll" target="lib\net451"/>
+    <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net451\TransMock.Communication.NamedPipes.dll" target="ref\net451"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net451\TransMock.Wcf.Adapter.Utils.dll" target="lib\net451"/>
+    <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net451\TransMock.Wcf.Adapter.Utils.dll" target="ref\net451"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter\bin\Release\net451\TransMock.Wcf.Adapter.dll" target="lib\net451"/>
-
+ 
     <!-- .NET 4.6.2 assemblies -->
     <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net462\TransMock.Communication.NamedPipes.dll" target="lib\net462"/>
+    <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net462\TransMock.Communication.NamedPipes.dll" target="ref\net462"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net462\TransMock.Wcf.Adapter.Utils.dll" target="lib\net462"/>
+    <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net462\TransMock.Wcf.Adapter.Utils.dll" target="ref\net462"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter\bin\Release\net462\TransMock.Wcf.Adapter.dll" target="lib\net462"/>
 
     <!-- .NET 4.8 assemblies -->
     <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net48\TransMock.Communication.NamedPipes.dll" target="lib\net48"/>
+    <file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net48\TransMock.Communication.NamedPipes.dll" target="ref\net48"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net48\TransMock.Wcf.Adapter.Utils.dll" target="lib\net48"/>
+    <file src="..\..\Adapter\TransMock.Wcf.Adapter.Utils\bin\Release\net48\TransMock.Wcf.Adapter.Utils.dll" target="ref\net48"/>
     <file src="..\..\Adapter\TransMock.Wcf.Adapter\bin\Release\net48\TransMock.Wcf.Adapter.dll" target="lib\net48"/>
     
     <!-- Install/Uninstall scripts -->

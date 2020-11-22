@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter", "Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.csproj", "{1F8B806E-B479-4DB0-9896-1D29E288A2F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Wcf.Adapter", "Adapter\TransMock.Wcf.Adapter\TransMock.Wcf.Adapter.csproj", "{1F8B806E-B479-4DB0-9896-1D29E288A2F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Tests", "Adapter\TransMock.Wcf.Adapter.Tests\TransMock.Wcf.Adapter.Tests.csproj", "{43289D5B-19BD-4FD1-A8A7-05996A688BEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Wcf.Adapter.Tests", "Adapter\TransMock.Wcf.Adapter.Tests\TransMock.Wcf.Adapter.Tests.csproj", "{43289D5B-19BD-4FD1-A8A7-05996A688BEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8CCED02-CA1A-4408-9A80-BA606A66CE24}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,19 +16,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VersionInfo.cs = VersionInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Mockifier.Parser", "Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.csproj", "{B3EDC765-D278-420D-8E10-E408ACF1067A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Mockifier.Parser", "Mockifier\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.csproj", "{B3EDC765-D278-420D-8E10-E408ACF1067A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Mockifier.Parser.Tests", "Mockifier\TransMock.Mockifier.Parser.Tests\TransMock.Mockifier.Parser.Tests.csproj", "{1AE03E84-CD2E-4F67-B953-6D3CEE410315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Mockifier.Parser.Tests", "Mockifier\TransMock.Mockifier.Parser.Tests\TransMock.Mockifier.Parser.Tests.csproj", "{1AE03E84-CD2E-4F67-B953-6D3CEE410315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Mockifier", "Mockifier\TransMock.Mockifier\TransMock.Mockifier.csproj", "{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Mockifier", "Mockifier\TransMock.Mockifier\TransMock.Mockifier.csproj", "{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Mockifier.Tests", "Mockifier\TransMock.Mockifier.Tests\TransMock.Mockifier.Tests.csproj", "{F4E6707A-1B29-4F36-A5B8-92C8BAE0FF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Mockifier.Tests", "Mockifier\TransMock.Mockifier.Tests\TransMock.Mockifier.Tests.csproj", "{F4E6707A-1B29-4F36-A5B8-92C8BAE0FF3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Integration.BizUnit", "Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.csproj", "{B32C1509-3952-4492-B097-6886CEC675FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Integration.BizUnit", "Integration\BizUnit\TransMock.Integration.BizUnit\TransMock.Integration.BizUnit.csproj", "{B32C1509-3952-4492-B097-6886CEC675FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Integration.BizUnit.Tests", "Integration\BizUnit\TransMock.Integration.BizUnit.Tests\TransMock.Integration.BizUnit.Tests.csproj", "{FCBD2200-2998-4A52-8D49-FC17F21A4750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Integration.BizUnit.Tests", "Integration\BizUnit\TransMock.Integration.BizUnit.Tests\TransMock.Integration.BizUnit.Tests.csproj", "{FCBD2200-2998-4A52-8D49-FC17F21A4750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils", "Test\TransMock.TestUtils\TransMock.TestUtils.csproj", "{5891035F-5346-4A15-BB61-09018D5CC4AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.TestUtils", "Test\TransMock.TestUtils\TransMock.TestUtils.csproj", "{5891035F-5346-4A15-BB61-09018D5CC4AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapter", "Adapter", "{189E31A8-1E3E-4C46-808F-C85B47A37FC7}"
 EndProject
@@ -47,34 +47,58 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BTDF", "BTDF", "{2E880E69-F
 		Integration\BTDF\TransMock.targets = Integration\BTDF\TransMock.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk", "Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.csproj", "{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.TestUtils.BizTalk", "Test\TransMock.TestUtils.BizTalk\TransMock.TestUtils.BizTalk.csproj", "{42F57394-8F3E-47E7-B1E6-ACDEA505AF23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.TestUtils.BizTalk.Tests", "Test\TransMock.TestUtils.BizTalk.Tests\TransMock.TestUtils.BizTalk.Tests.csproj", "{CBA39921-3716-4CBE-8742-086727D383B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.TestUtils.BizTalk.Tests", "Test\TransMock.TestUtils.BizTalk.Tests\TransMock.TestUtils.BizTalk.Tests.csproj", "{CBA39921-3716-4CBE-8742-086727D383B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{2D9F1B46-84E3-44E6-B46A-AB5B9E079560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes", "Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.csproj", "{6C9E0C6C-4E2B-40A1-8413-980538762DDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Communication.NamedPipes", "Communication\TransMock.Communication.NamedPipe\TransMock.Communication.NamedPipes.csproj", "{6C9E0C6C-4E2B-40A1-8413-980538762DDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Communication.NamedPipes.Tests", "Communication\TransMock.Communication.NamedPipes.Tests\TransMock.Communication.NamedPipes.Tests.csproj", "{B08F87E7-B580-4E42-BAF0-7F8233153230}"
-EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "TransMock.Deploy.Adapter", "Deployment\TransMock.Deploy.Adapter\TransMock.Deploy.Adapter.nuproj", "{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}"
-EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "TransMock.Deploy.Framework", "Deployment\TransMock.Deploy.Framework\TransMock.Deploy.Framework.nuproj", "{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C24D4710-ABF8-48AC-BA22-E6BE75E50EAD} = {C24D4710-ABF8-48AC-BA22-E6BE75E50EAD}
-		{B3EDC765-D278-420D-8E10-E408ACF1067A} = {B3EDC765-D278-420D-8E10-E408ACF1067A}
-		{C2E611CF-808C-4F25-9619-3247E02BB2F9} = {C2E611CF-808C-4F25-9619-3247E02BB2F9}
-	EndProjectSection
-EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "TransMock.Deploy.TestUtils", "Deployment\TransMock.Deploy.TestUtils\TransMock.Deploy.TestUtils.nuproj", "{8FF018CC-6EAD-486A-8A11-BFE352E064CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Communication.NamedPipes.Tests", "Communication\TransMock.Communication.NamedPipes.Tests\TransMock.Communication.NamedPipes.Tests.csproj", "{B08F87E7-B580-4E42-BAF0-7F8233153230}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{0404B32B-460F-4292-8CC3-C7A307C9617D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Wcf.Adapter.Utils", "Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Wcf.Adapter.Utils", "Adapter\TransMock.Wcf.Adapter.Utils\TransMock.Wcf.Adapter.Utils.csproj", "{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock", "Framework\TransMock\TransMock.csproj", "{903FE5FB-23B0-4E7A-940B-C19F198676D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock", "Framework\TransMock\TransMock.csproj", "{903FE5FB-23B0-4E7A-940B-C19F198676D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransMock.Tests", "Framework\TransMock.Tests\TransMock.Tests.csproj", "{E8AA05A0-D521-41CF-ABD5-41716159397A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Tests", "Framework\TransMock.Tests\TransMock.Tests.csproj", "{E8AA05A0-D521-41CF-ABD5-41716159397A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapter", "Adapter", "{85A5BD66-151D-4DC9-A65D-33C878C8D6EC}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.Adapter\Readme.txt = Deployment\TransMock.Deploy.Adapter\Readme.txt
+		Deployment\TransMock.Deploy.Adapter\TransMock.Adapter.nuspec = Deployment\TransMock.Deploy.Adapter\TransMock.Adapter.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E2F01645-3884-4DE5-A502-C7BF83896189}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.Adapter\tools\Install.ps1 = Deployment\TransMock.Deploy.Adapter\tools\Install.ps1
+		Deployment\TransMock.Deploy.Adapter\tools\Uninstall.ps1 = Deployment\TransMock.Deploy.Adapter\tools\Uninstall.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{D2E8414C-F792-4109-8168-25FB1F2BEBE5}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.Framework\Readme.txt = Deployment\TransMock.Deploy.Framework\Readme.txt
+		Deployment\TransMock.Deploy.Framework\TransMock.Framework.nuspec = Deployment\TransMock.Deploy.Framework\TransMock.Framework.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{19C1024F-D59E-45A3-B826-52668722523C}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.Framework\tools\Install.ps1 = Deployment\TransMock.Deploy.Framework\tools\Install.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestUtils", "TestUtils", "{71181A70-D0AF-4DD8-BB9B-49CAD2B32848}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.TestUtils\Readme.txt = Deployment\TransMock.Deploy.TestUtils\Readme.txt
+		Deployment\TransMock.Deploy.TestUtils\TransMock.TestUtils.BizTalk.nuspec = Deployment\TransMock.Deploy.TestUtils\TransMock.TestUtils.BizTalk.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{18E9C9EB-3B13-4E22-A51C-BBD8D45FB829}"
+	ProjectSection(SolutionItems) = preProject
+		Deployment\TransMock.Deploy.TestUtils\tools\Install.ps1 = Deployment\TransMock.Deploy.TestUtils\tools\Install.ps1
+		Deployment\TransMock.Deploy.TestUtils\tools\Uninstall.ps1 = Deployment\TransMock.Deploy.TestUtils\tools\Uninstall.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -216,42 +240,6 @@ Global
 		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B08F87E7-B580-4E42-BAF0-7F8233153230}.Release|x86.ActiveCfg = Release|Any CPU				
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Debug|x86.Build.0 = Debug|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|x86.ActiveCfg = Release|Any CPU
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF}.Release|x86.Build.0 = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Debug|x86.Build.0 = Debug|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|x86.ActiveCfg = Release|Any CPU
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E}.Release|x86.Build.0 = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Debug|x86.Build.0 = Debug|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|x86.ActiveCfg = Release|Any CPU
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE}.Release|x86.Build.0 = Release|Any CPU
 		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -308,12 +296,18 @@ Global
 		{CBA39921-3716-4CBE-8742-086727D383B0} = {FBD50BDD-DD90-4C0C-8D96-DAAFD2493734}
 		{6C9E0C6C-4E2B-40A1-8413-980538762DDE} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
 		{B08F87E7-B580-4E42-BAF0-7F8233153230} = {2D9F1B46-84E3-44E6-B46A-AB5B9E079560}
-		{A9525F96-F88E-4BCA-9E9E-F49E06EDD7DF} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
-		{F8B1849D-8252-45FE-BA8A-6C6828DA1D6E} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
-		{8FF018CC-6EAD-486A-8A11-BFE352E064CE} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
 		{35F5C7FA-4EE0-4E03-849E-FC7EA463C2EC} = {189E31A8-1E3E-4C46-808F-C85B47A37FC7}
 		{903FE5FB-23B0-4E7A-940B-C19F198676D9} = {0404B32B-460F-4292-8CC3-C7A307C9617D}
 		{E8AA05A0-D521-41CF-ABD5-41716159397A} = {0404B32B-460F-4292-8CC3-C7A307C9617D}
+		{85A5BD66-151D-4DC9-A65D-33C878C8D6EC} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
+		{E2F01645-3884-4DE5-A502-C7BF83896189} = {85A5BD66-151D-4DC9-A65D-33C878C8D6EC}
+		{D2E8414C-F792-4109-8168-25FB1F2BEBE5} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
+		{19C1024F-D59E-45A3-B826-52668722523C} = {D2E8414C-F792-4109-8168-25FB1F2BEBE5}
+		{71181A70-D0AF-4DD8-BB9B-49CAD2B32848} = {4D7DAFFB-5E3F-48C1-8736-7313FF509477}
+		{18E9C9EB-3B13-4E22-A51C-BBD8D45FB829} = {71181A70-D0AF-4DD8-BB9B-49CAD2B32848}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F17E665D-3F94-440C-8205-2E29572111E8}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TransMock.vsmdi

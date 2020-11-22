@@ -23,9 +23,6 @@
     <Compile Include="..\..\VersionInfo.cs" Link="VersionInfo.cs" />
   </ItemGroup>-->
   <ItemGroup>
-    <None Include="Settings.StyleCop" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\TransMock.Mockifier.Parser\TransMock.Mockifier.Parser.csproj" />
   </ItemGroup>
 </Project>
