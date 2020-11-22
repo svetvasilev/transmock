@@ -55,7 +55,7 @@
     <!-- .NET 4.0 assemblies -->
     <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net40\TransMock.Communication.NamedPipes.dll" target="lib\net45"/>-->    
     <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net40\TransMock.Integration.BizUnit.dll" target="lib\net40"/>
-    <file src="..\..\Framework\TransMock\bin\Release\net40\TransMock.dll" target="lib\net40"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net40\TransMock.dll" target="lib\net40"/>    
 
     <!-- .NET 4.5 assemblies -->
     <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net45\TransMock.Communication.NamedPipes.dll" target="lib\net45"/>-->
@@ -91,5 +91,9 @@
     
     <!-- Readme -->
     <file src="Readme.txt" target=""/>
+    
+    <!-- IntelliSense documentation -->
+    <file src="..\..\Framework\TransMock\bin\Release\TransMock.xml" target="lib"/>
+    
   </files>
 </package>

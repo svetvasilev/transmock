@@ -9,6 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransMock.Wcf.Adapter.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8CCED02-CA1A-4408-9A80-BA606A66CE24}"
 	ProjectSection(SolutionItems) = preProject
+		BuildAndPackAdapter.cmd = BuildAndPackAdapter.cmd
+		BuildAndPackFramework.cmd = BuildAndPackFramework.cmd
+		BuildAndPackTestUtils.cmd = BuildAndPackTestUtils.cmd
 		Local.testsettings = Local.testsettings
 		Settings.StyleCop = Settings.StyleCop
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings

@@ -3,7 +3,7 @@
     <TargetFrameworks>net40;net45;net451;net462;net48</TargetFrameworks>
     <AssemblyTitle>TransMock</AssemblyTitle>
     <Product>TransMock</Product>
-    <Copyright>Copyright ©  2017</Copyright>
+    <Copyright>Copyright © 2017-2020 Svetoslav Vasilev</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

@@ -21,7 +21,7 @@
     <AssemblyTitle>TransMock.Adapter</AssemblyTitle>
     <Product>TransMock Mock Adapter</Product>
     <Description>TransMock Adapter allows for mocking transports in BizTalk server receive locations and send ports in order to easily perform automated integration testing</Description>
-    <Copyright>Copyright �  2014</Copyright>
+    <Copyright>Copyright © 2017-2020 Svetoslav Vasilev</Copyright>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,13 +35,16 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\Key\TransMock.snk</AssemblyOriginatorKeyFile>
-    <Version>1.6.1</Version>
+    <Version>0.0.0</Version>
     <PackageId>TransMock.Adapter</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://www.github.com/svetvasilev/transmock</PackageProjectUrl>
     <PackageTags>BizTalk testing mocking test mock adapter</PackageTags>
     <Authors>Svetoslav Vasilev</Authors>
     <Company>TransMock community</Company>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net40|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <!--<ItemGroup>
     <Compile Include="..\VersionInfo.cs" Link="VersionInfo.cs" />
