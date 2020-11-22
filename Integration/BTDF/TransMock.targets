@@ -49,7 +49,7 @@ execute the TransMock.Mockifier.exe which will mock the tagged endpoints accordi
 		<PropertyGroup>
       <!-- The macros PkgVersion and BizTalkVersion are updated during deploy time to point to the 
            correct location of the mockifier depending on those 2 values -->
-			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.{PkgVersion}\tools\{BizTalkVersion}</TransMockHomeDir>			
+			<TransMockHomeDir Condition="'$(TransMockHomeDir)' == ''">$(MSBuildProjectDirectory)\..\packages\TransMock.Framework.{PkgVersion}\tools\mockify</TransMockHomeDir>			
 		</PropertyGroup>
     
     <CreateProperty Value="$(TransMockAddressClassDir)" Condition="'$(TransMockAddressClassDir)' != ''">

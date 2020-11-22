@@ -101,7 +101,12 @@ namespace TransMock.Integration.BizUnit
                 "Sending response to the mocked endpoint",
                 "TransMock.Integration.BizUnit.MockRequestResponseStep");
 
-            this.pipeServer.WriteMessage(this.connectionId, mockMessage);            
+#if NET40 || NET45 || NET451
+            this.pipeServer.WriteMessage(this.connectionId, mockMessage);
+#elif NET462 || NET48
+            var task = this.pipeServer.WriteMessageAsync(this.connectionId, mockMessage);
+            task.Wait();
+#endif
 
             context.LogInfo("Done sending the response");
         }

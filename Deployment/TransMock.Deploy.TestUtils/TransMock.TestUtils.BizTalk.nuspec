@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>TransMock.TestUtils.BizTalk</id>
+    <version>1.3.1</version>
+    <title>TransMock TestUtils for BizTalk</title>
+    <authors>Svetoslav Vasilev</authors>
+    <owners>Svetoslav Vasilev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>TransMock test utils for dynamic send ports</summary>
+    <description>Enables testing of BizTalk integrations with dynamic send ports</description>
+    <copyright>Copyright © 2014-2020 Svetoslav Vasilev</copyright>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0" />
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETFramework4.5.1" />
+      <group targetFramework=".NETFramework4.6.2" />
+      <group targetFramework=".NETFramework4.8" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
+      <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <!-- .NET 4.0 assemblies -->
+    <file src="..\..\Test\TransMock.TestUtils.BizTalk\bin\Release\net40\TransMock.TestUtils.BizTalk.dll" target="lib\net40" />
+    <!-- .NET 4.5 assemblies -->
+    <file src="..\..\Test\TransMock.TestUtils.BizTalk\bin\Release\net40\TransMock.TestUtils.BizTalk.dll" target="lib\net45" />
+    <!-- .NET 4.5.1 assemblies -->
+    <file src="..\..\Test\TransMock.TestUtils.BizTalk\bin\Release\net40\TransMock.TestUtils.BizTalk.dll" target="lib\net451" />
+    <!-- .NET 4.6.2 assemblies -->
+    <file src="..\..\Test\TransMock.TestUtils.BizTalk\bin\Release\net40\TransMock.TestUtils.BizTalk.dll" target="lib\net462" />
+    <!-- .NET 4.8 assemblies -->
+    <file src="..\..\Test\TransMock.TestUtils.BizTalk\bin\Release\net40\TransMock.TestUtils.BizTalk.dll" target="lib\net48" />
+  </files>
+</package>

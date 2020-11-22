@@ -38,7 +38,11 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// The named pipe client stream used to communicate with the mocked endpoint
         /// </summary>
+#if NET40 || NET45 || NET451
         protected StreamingNamedPipeClient pipeClient;
+#elif NET462 || NET48
+        protected StreamingNamedPipeClientAsync pipeClient;
+#endif
 
         /// <summary>
         /// Gets or sets the path to the file containing the request to be sent
@@ -119,15 +123,25 @@ namespace TransMock.Integration.BizUnit
                 "Creating a pipe client instance", 
                 "TransMock.Integration.BizUnit.MockSendStep");
 
+#if NET40 || NET45 || NET451
             this.pipeClient = new StreamingNamedPipeClient(
-                endpointUri.Host, 
-                endpointUri.AbsolutePath);
-
+                    endpointUri.Host,
+                    endpointUri.AbsolutePath);
+#elif NET462 || NET48
+            this.pipeClient = new StreamingNamedPipeClientAsync(
+                    endpointUri.Host,
+                    endpointUri.AbsolutePath);
+#endif
             System.Diagnostics.Debug.WriteLine(
                 "Connecting to the pipe server", 
                 "TransMock.Integration.BizUnit.MockSendStep");
 
+#if NET40 || NET45 || NET451
             this.pipeClient.Connect(1000 * this.Timeout);
+#elif NET462 || NET48
+            var task = this.pipeClient.ConnectAsync(1000 * this.Timeout);
+            task.Wait();
+#endif
 
             System.Diagnostics.Debug.WriteLine(
                 "Connected to the pipe server", 
@@ -159,7 +173,12 @@ namespace TransMock.Integration.BizUnit
 
             mockMessage.Properties = this.MessageProperties;
 
+#if NET40 || NET45 || NET451
             this.pipeClient.WriteMessage(mockMessage);
+#elif NET462 || NET48
+            var task = this.pipeClient.WriteMessageAsync(mockMessage);
+            task.Wait();
+#endif
 
             System.Diagnostics.Debug.WriteLine(
                 "Request sent to the pipe server", 
@@ -186,8 +205,14 @@ namespace TransMock.Integration.BizUnit
 
             if (this.pipeClient != null)
             {
-                // Closing the pipe server                            
+                // Closing the pipe connection
+#if NET40 || NET45 || NET451
                 this.pipeClient.Disconnect();
+#elif NET462 || NET48
+                var task = this.pipeClient.DisconnectAsync();
+                
+                task.Wait();
+#endif
             }
 
             System.Diagnostics.Trace.WriteLine(

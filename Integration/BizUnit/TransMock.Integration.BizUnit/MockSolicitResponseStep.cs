@@ -101,7 +101,14 @@ namespace TransMock.Integration.BizUnit
 
             context.LogInfo("Reading the response from the endpoint");
 
+#if NET40 || NET45 || NET451
             this.responseMessage = this.pipeClient.ReadMessage();
+#elif NET462 || NET48
+            var task = this.pipeClient.ReadMessageAsync();
+            task.Wait();
+            this.responseMessage = task.Result;
+#endif
+
 
             System.Diagnostics.Debug.WriteLine(
                 "Response read!",

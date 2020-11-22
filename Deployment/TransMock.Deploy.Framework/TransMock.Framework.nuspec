@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>TransMock.Framework</id>
+    <version>1.6.1</version>
+    <title>TransMock Framework</title>
+    <authors>Svetoslav Vasilev</authors>
+    <owners>Svetoslav Vasilev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <!--<licenseUrl>https://www.apache.org/licenses/LICENSE-2.0</licenseUrl>-->
+    <projectUrl>https://github.com/svetvasilev/transmock</projectUrl>
+    <description>Fast and easy testing of BizTalk server integrations by mocking the communication to and from the external systems.</description>
+    <summary>TransMock Framework enabling one to test BizTalk integrations through modern mocking techniques.</summary>
+    <copyright>Copyright 2017-2020 © Svetoslav Vasilev</copyright>
+    <tags>TransMock BizTalk testing mocking</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">        
+        <dependency id="BizUnit.Core" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="BizUnit.TestSteps" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl" version="1.1.8" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.Async" version="1.0.168" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.14" exclude="Build,Analyzers" />
+        <dependency id="TransMock.Adapter" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="BizUnit.Core" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="BizUnit.TestSteps" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="TransMock.Adapter" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="BizUnit.Core" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="BizUnit.TestSteps" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="TransMock.Adapter" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="BizUnit.Core" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="BizUnit.TestSteps" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="TransMock.Adapter" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.8">
+        <dependency id="BizUnit.Core" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="BizUnit.TestSteps" version="5.0.5" exclude="Build,Analyzers" />
+        <dependency id="TransMock.Adapter" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <!--<references>
+      <group targetFramework="net40">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net45">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net451">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net462">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>
+      <group targetFramework="net48">
+        <reference file="TransMock.Wcf.Adapter.Utils.dll" />
+        <reference file="TransMock.Communication.NamedPipes.dll" />
+      </group>      
+    </references>-->
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
+      <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
+      <frameworkAssembly assemblyName="System.Net" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.6.2, .NETFramework4.8" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <!-- .NET 4.0 assemblies -->
+    <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net40\TransMock.Communication.NamedPipes.dll" target="lib\net45"/>-->    
+    <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net40\TransMock.Integration.BizUnit.dll" target="lib\net40"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net40\TransMock.dll" target="lib\net40"/>
+
+    <!-- .NET 4.5 assemblies -->
+    <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net45\TransMock.Communication.NamedPipes.dll" target="lib\net45"/>-->
+    <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net45\TransMock.Integration.BizUnit.dll" target="lib\net45"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net45\TransMock.dll" target="lib\net45"/>
+
+    <!-- .NET 4.5.1 assemblies -->
+    <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net451\TransMock.Communication.NamedPipes.dll" target="lib\net451"/>-->
+    <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net451\TransMock.Integration.BizUnit.dll" target="lib\net451"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net451\TransMock.dll" target="lib\net451"/>
+
+    <!-- .NET 4.6.2 assemblies -->
+    <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net462\TransMock.Communication.NamedPipes.dll" target="lib\net462"/>-->
+    <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net462\TransMock.Integration.BizUnit.dll" target="lib\net462"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net462\TransMock.dll" target="lib\net462"/>
+
+    <!-- .NET 4.8 assemblies -->
+    <!--<file src="..\..\Communication\TransMock.Communication.NamedPipe\bin\Release\net48\TransMock.Communication.NamedPipes.dll" target="lib\net48"/>-->
+    <file src="..\..\Integration\BizUnit\TransMock.Integration.BizUnit\bin\Release\net48\TransMock.Integration.BizUnit.dll" target="lib\net48"/>
+    <file src="..\..\Framework\TransMock\bin\Release\net48\TransMock.dll" target="lib\net48"/>
+    
+    <!-- Install/Uninstall scripts -->
+    <file src="tools\Install.ps1" target="tools"/>
+    <!--<file src="tools\Uninstall.ps1" target="tools"/>-->
+    
+    <!-- Mockifier tooling -->
+    <file src="..\..\Mockifier\TransMock.Mockifier\bin\x86\Release\net45\CommandLine.dll" target="tools\mockify"/>
+    <file src="..\..\Mockifier\TransMock.Mockifier\bin\x86\Release\net45\TransMock.Mockifier.Parser.dll" target="tools\mockify"/>
+    <file src="..\..\Mockifier\TransMock.Mockifier\bin\x86\Release\net45\TransMock.Mockifier.exe" target="tools\mockify"/>
+
+    <!-- BTDF targets -->    
+    <file src="..\..\Integration\BTDF\TransMock.targets" target="BTDF"/>
+    
+    <!-- Readme -->
+    <file src="Readme.txt" target=""/>
+  </files>
+</package>

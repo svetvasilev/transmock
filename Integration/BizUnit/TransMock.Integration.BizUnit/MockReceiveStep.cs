@@ -42,7 +42,11 @@ namespace TransMock.Integration.BizUnit
         /// <summary>
         /// The named pipe server instance
         /// </summary>
+#if NET40 || NET45 || NET451
         protected IAsyncStreamingServer pipeServer;
+#elif NET462 || NET48
+        protected IStreamingServerAsync pipeServer;           
+#endif
 
         /// <summary>
         /// The memory stream keeping the received message
@@ -192,7 +196,12 @@ namespace TransMock.Integration.BizUnit
         {
             if (pipeServer != null)
             {
+#if NET40 || NET45 || NET451
                 this.pipeServer.Stop();
+#elif NET462 || NET48
+                this.pipeServer.StopAsync()
+                    .ConfigureAwait(false);
+#endif
             }
 
             if (this.CascadingSubSteps != null)
@@ -243,14 +252,25 @@ namespace TransMock.Integration.BizUnit
             // We create and start the server
             lock (this.syncRoot)
             {
+
+#if NET40 || NET45 || NET451
                 this.pipeServer = new StreamingNamedPipeServer(
-                this.endpointUri.AbsolutePath);
+                    this.endpointUri.AbsolutePath);
 
                 this.pipeServer.ReadCompleted += this.pipeServer_ReadCompleted;
-
                 this.pipeServer.Start();
+#elif NET462 || NET48
+                this.pipeServer = new StreamingNamedPipeServerAsync(
+                    this.endpointUri.AbsolutePath);
+
+                this.pipeServer.ReadCompleted += this.pipeServer_ReadCompleted;
+                var task = this.pipeServer.StartAsync()
+                    .ConfigureAwait(false);          
+
+#endif
+
             }
-            
+
         }
 
         /// <summary>
@@ -285,7 +305,13 @@ namespace TransMock.Integration.BizUnit
         /// </summary>
         protected virtual void ClosePipeServer()
         {
+#if NET40 || NET45 || NET451
             this.pipeServer.Stop();
+#elif NET462 || NET48
+            this.pipeServer.StopAsync()
+                .ConfigureAwait(false);         
+
+#endif
         }
 
         /// <summary>
