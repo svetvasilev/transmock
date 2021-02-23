@@ -153,7 +153,7 @@ function InstallAdapter{
 	Write-Debug "TargetNetVersion is:$TargetNetVersion,  WinSDKFilter is: $WinSDKFilter"
 
 	# here we install the adapter for the correct .NET version
-	$TargetDirectory = Get-ChildItem $installPath -Filter "*$TargetNetVersion*" -Recurse -Directory
+	$TargetDirectory = Get-ChildItem "$installPath\lib" -Filter "*$TargetNetVersion*" -Recurse -Directory
 	if($TargetDirectory)
 	{
 		Write-Host "TargetDirectory is: $($TargetDirectory.FullName)"
